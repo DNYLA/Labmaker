@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id
+  username      String
+  discriminator String
+  avatar        String
+  accessToken   String
+  refreshToken  String
+  tokenVersion  Int            @default(0)
+  nodes         RedditConfig[]
+}
+
+model RedditConfig {
+  id             Int      @id @default(autoincrement())
+  clientId       String
+  clientSecret   String
+  username       String
+  password       String
+  userAgent      String
+  title          String
+  pmBody         String
+  subreddits     String[]
+  forbiddenWords String[]
+  blockedUsers   String[]
+  userId         String
+  nodeEditors    String[]
+  delay          Int      @default(60)
+  creator        User     @relation(fields: [userId], references: [id])
+  logs           Log[]
+}
+
+//Commented Out Relations as Payment Configs can be used across Multiple
+//Discord Configs
+model DiscordConfig {
+  id              String   @id
+  name            String?
+  icon            String?
+  prefix          String   @default("?")
+  embedImageUrl   String   @default("https://i.imgur.com/rDzblHE.gif")
+  autoSwicher     Boolean  @default(false)
+  autoTicket      Boolean  @default(false)
+  autoReact       Boolean  @default(false)
+  // payment Payment[]
+  paymentConfigId String
+  tickets         Ticket[]
+}
+
+model Payment {
+  id       Int    @id @default(autoincrement())
+  name     String
+  value    String
+  type     String
+  // discordConfig DiscordConfig @relation(fields: [serverId], references: [id])
+  serverId String
+}
+
+//Update Client side to not Post ticket until
+//It is Finished.
+model Ticket {
+  id            Int           @id @default(autoincrement())
+  ticketId      Int //Ticket ID is the ID of the Channel Name not database ID
+  serverId      String
+  channelId     String
+  type          String        @default("")
+  subject       String        @default("")
+  time          String        @default("")
+  level         String        @default("")
+  budget        String        @default("")
+  submitted     Boolean       @default(false)
+  discordConfig DiscordConfig @relation(fields: [serverId], references: [id])
+  transactionId String?
+}
+
+model Log {
+  id           Int          @id @default(autoincrement())
+  nodeId       Int
+  message      String
+  subId        String
+  username     String
+  subreddit    String
+  pm           Boolean
+  createdAt    DateTime     @default(now())
+  redditConfig RedditConfig @relation(fields: [nodeId], references: [id])
+}
