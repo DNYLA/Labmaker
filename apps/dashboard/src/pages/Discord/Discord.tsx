@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { updateDiscord } from '../../utils/slices/configSlices';
-import { Guild, PaymentDto } from 'labmaker-api-wrapper';
+import { Guild, PaymentDto } from '@labmaker/wrapper';
 import { Spinner } from '../../components/Spinner';
 import { Labmaker } from '../../utils/APIHandler';
 import { Selector } from '../../components/Selector';

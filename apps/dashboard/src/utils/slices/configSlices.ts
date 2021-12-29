@@ -18,7 +18,6 @@ export const redditConfigSlice = createSlice({
   name: 'redditConfig',
   initialState: {
     value: loadingRedditConfig,
-    // value: LabmakerAPI.Reddit.getOne('3630aeb2-38c5-4c36-a0d5-5c2d95fa35b0'),
   },
   reducers: {
     updateReddit: (state, action: PayloadAction<Node>) => {

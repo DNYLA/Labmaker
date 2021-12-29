@@ -2,7 +2,7 @@ import Snoowrap from 'snoowrap';
 import { Labmaker } from './app/APIHandler';
 import * as dotenv from 'dotenv';
 import APISocket from './app/APISocket';
-import { RedditConfigDto } from 'labmaker-api-wrapper';
+import { RedditConfigDto } from '@labmaker/wrapper';
 import { Client } from './app/Client';
 import { Events } from './app/APISocket';
 

@@ -13,7 +13,7 @@ import { MainSettings } from './MainSettings';
 import { NodeConfigList } from '../../components/NodeConfigList';
 import { Node } from '../../utils/types';
 import { nodeTemplate } from '../../utils/LoadingTypes';
-import { RedditConfigDto } from 'labmaker-api-wrapper';
+import { RedditConfigDto } from '@labmaker/wrapper';
 import { DialogButton } from '../../components/DialogButton';
 
 function useNodeLogic() {

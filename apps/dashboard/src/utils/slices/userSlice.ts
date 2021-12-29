@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserDto } from 'labmaker-api-wrapper';
-// import { UserDto } from '@labmaker/wrapper';
-// import { UserDto } from '@labmaker/wrapper';
+import { UserDto } from '@labmaker/wrapper';
 
 const loadingUser: UserDto & { loading?: boolean } = {
   id: '0',

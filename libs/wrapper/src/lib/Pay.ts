@@ -1,4 +1,4 @@
-import { CreateOrderDto } from '.';
+import { CreateOrderDto } from './types';
 import { API } from './utils/BaseAPI';
 
 export class PayAPI extends API {

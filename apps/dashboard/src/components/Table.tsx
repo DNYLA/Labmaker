@@ -1,4 +1,4 @@
-import { LogDto } from 'labmaker-api-wrapper';
+import { LogDto } from '@labmaker/wrapper';
 import { useState } from 'react';
 import styled from 'styled-components';
 const moment = require('moment');

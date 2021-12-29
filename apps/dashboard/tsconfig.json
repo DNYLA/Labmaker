@@ -10,7 +10,7 @@
     "strict": true,
     "noImplicitOverride": true, //Change to true,
     "noImplicitAny": false, //Enable Later
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },

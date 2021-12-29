@@ -30,7 +30,6 @@
     "cookie-parser": "^1.4.6",
     "core-js": "^3.6.5",
     "discord.js": "^13.4.0",
-    "labmaker-api-wrapper": "^2.5.7",
     "moment": "^2.29.1",
     "os-browserify": "^0.3.0",
     "passport": "^0.4.1",
@@ -50,8 +49,7 @@
     "socket.io-client": "^4.4.0",
     "styled-components": "^5.3.3",
     "tslib": "^2.0.0",
-    "web-vitals": "^2.1.2",
-    "webpack-notifier": "^1.15.0"
+    "web-vitals": "^2.1.2"
   },
   "devDependencies": {
     "@nestjs/schematics": "^8.0.0",

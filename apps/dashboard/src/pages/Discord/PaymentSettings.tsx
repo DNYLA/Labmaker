@@ -1,4 +1,4 @@
-import { PaymentDto } from 'labmaker-api-wrapper';
+import { PaymentDto } from '@labmaker/wrapper';
 import { Payment } from './Payment';
 import { GuildConfig } from '../../utils/types';
 import {

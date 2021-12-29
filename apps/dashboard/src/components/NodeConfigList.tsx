@@ -1,5 +1,5 @@
 import { Selector } from '../components/Selector';
-import { RedditConfigDto } from 'labmaker-api-wrapper';
+import { RedditConfigDto } from '@labmaker/wrapper';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { SelectorContainer } from '../styles/Styles';

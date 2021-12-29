@@ -1,5 +1,5 @@
 import { Client, ClientOptions, Collection, Intents } from 'discord.js';
-import LabmakerAPI, { GuildConfigDto, PaymentDto } from 'labmaker-api-wrapper';
+import { LabmakerAPI, GuildConfigDto, PaymentDto } from '@labmaker/wrapper';
 import Command from './Base/Command';
 import Event from './Base/Event';
 

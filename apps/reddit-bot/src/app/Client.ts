@@ -1,4 +1,4 @@
-import { LogDto, RedditConfigDto } from 'labmaker-api-wrapper';
+import { LogDto, RedditConfigDto } from '@labmaker/wrapper';
 import { SubmissionStream } from 'snoostorm';
 import Snoowrap from 'snoowrap';
 import { Labmaker } from './APIHandler';

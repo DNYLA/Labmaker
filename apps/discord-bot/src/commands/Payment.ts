@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import { GuildConfigDto } from 'labmaker-api-wrapper';
+import { GuildConfigDto } from '@labmaker/wrapper';
 import Command from '../utils/Base/Command';
 import DiscordClient from '../utils/client';
 import Payments from '../utils/GeneratePayment';

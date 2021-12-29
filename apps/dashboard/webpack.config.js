@@ -1,7 +1,8 @@
+//This webpack file is currently not loaded in
+//To load it in go to Project.json and change the webpack file to this files locations
 const nrwlConfig = require('@nrwl/react/plugins/webpack.js');
-const WebpackNotifierPlugin = require('webpack-notifier');
 const Dotenv = require('dotenv-webpack');
-
+const webpack = require('webpack');
 module.exports = (config, context) => {
   nrwlConfig(config);
   return {
@@ -16,8 +17,13 @@ module.exports = (config, context) => {
     // },
     plugins: [
       ...config.plugins,
-      new Dotenv(),
-      new WebpackNotifierPlugin({ title: 'Frontend Project build completed' }),
+      //   new webpack.DefinePlugin({
+      //     'process.env': {
+      //       // This has effect on the react lib size
+      //       NODE_ENV: JSON.stringify('development'),
+      //     },
+      //   }),
+      //   new Dotenv({ systemvars: true, path: './.env' }),
     ],
   };
 };

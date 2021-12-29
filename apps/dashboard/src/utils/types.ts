@@ -4,7 +4,7 @@ import {
   PaymentDto,
   RedditConfigDto,
   UserDto,
-} from 'labmaker-api-wrapper';
+} from '@labmaker/wrapper';
 
 export type Node = RedditConfigDto & {
   loading?: boolean;

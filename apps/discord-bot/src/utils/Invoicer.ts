@@ -4,7 +4,7 @@ import {
   MessageActionRow,
   MessageButton,
 } from 'discord.js';
-import { GuildConfigDto, PaymentDto } from 'labmaker-api-wrapper';
+import { GuildConfigDto, PaymentDto } from '@labmaker/wrapper';
 import { getArgsFromMsg } from './Helpers';
 
 export default class Invoicer {

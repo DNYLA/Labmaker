@@ -1,5 +1,5 @@
 import { MessageActionRow, MessageButton } from 'discord.js';
-import { GuildConfigDto } from 'labmaker-api-wrapper';
+import { GuildConfigDto } from '@labmaker/wrapper';
 import DiscordClient from './client';
 
 export default class Payments {
