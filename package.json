@@ -6,7 +6,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "postinstall": "npx nx build api && npx nx build discord-bot"
+    "postinstall": "npx prisma generate && npx nx build api && npx nx build discord-bot"
   },
   "private": true,
   "dependencies": {
