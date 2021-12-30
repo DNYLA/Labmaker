@@ -1,3 +1,3 @@
 web: node dist/apps/api/main.js
-worker: node dist/apps/discord-bot/main.js
-worker: node dist/apps/reddit-bot/main.js
+discord: node dist/apps/discord-bot/main.js
+reddit: node dist/apps/reddit-bot/main.js
