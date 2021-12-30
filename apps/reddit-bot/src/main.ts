@@ -1,17 +1,12 @@
 import Snoowrap from 'snoowrap';
 import { Labmaker } from './app/APIHandler';
 import * as dotenv from 'dotenv';
-import APISocket from './app/APISocket';
-import { RedditConfigDto } from '@labmaker/wrapper';
 import { Client } from './app/Client';
-import { Events } from './app/APISocket';
-
+import { APISocket, Events, RedditConfigDto } from '@labmaker/wrapper';
 dotenv.config();
-// socket.connect();
-console.log(process.env.API_TOKEN);
-Labmaker.setAccessToken(process.env.API_TOKEN);
 
-const sHandler = new APISocket();
+Labmaker.setAccessToken(process.env.API_TOKEN);
+const sHandler = new APISocket(process.env.API_URL, process.env.API_TOKEN);
 let clients: Client[] = [];
 
 function socketCallback(event: Events, data?: any) {
@@ -54,11 +49,11 @@ function initClient(config: RedditConfigDto) {
   try {
     if (client && config.subreddits.length > 0) {
       console.log(`${config.id}: ${config.username}: Updated()`);
-      // client.updateClient(snooClient, config);
+      client.updateClient(snooClient, config);
     } else if (config.subreddits.length > 0) {
       console.log(`${config.id}: ${config.username}: Creating()`);
       const c = new Client(snooClient, config);
-      // c.createEvent();
+      c.createEvent();
       clients.push(c);
     }
   } catch (err) {

@@ -1,5 +1,5 @@
-import { API } from './utils/BaseAPI';
-import { UserDto } from './types';
+import { API } from '../utils/BaseAPI';
+import { UserDto } from '../types';
 
 export class UserAPI extends API {
   constructor(apiUrl: string) {

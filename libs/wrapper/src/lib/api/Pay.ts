@@ -1,5 +1,5 @@
-import { CreateOrderDto } from './types';
-import { API } from './utils/BaseAPI';
+import { CreateOrderDto } from '../types';
+import { API } from '../utils/BaseAPI';
 
 export class PayAPI extends API {
   constructor(apiUrl: string) {

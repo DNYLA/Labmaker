@@ -1,23 +1,19 @@
-import { Labmaker } from './APIHandler';
 import { io } from 'socket.io-client';
+import { ICallback, Events } from './types';
 
-interface ICallback {
-  (error: Events, result?: any): void;
-}
+//Could Split up into
+export class APISocket {
+  constructor(private APIUrl: string, private accessToken: string) {}
 
-export enum Events {
-  Config = 'config',
-  Delete = 'deleteConfig',
-}
-
-export default class APISocket {
-  public socket = io(`${process.env.API_URL}/reddit`, {
-    extraHeaders: {
-      Authorization: Labmaker.accessToken,
-    },
-  });
+  public socket = io();
 
   public listen(callback: ICallback) {
+    this.socket = io(this.APIUrl, {
+      extraHeaders: {
+        Authorization: this.accessToken,
+      },
+    });
+
     this.socket.on('connect', () => {
       console.log('Socket Conected');
     });

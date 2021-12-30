@@ -9,13 +9,11 @@ import { GuildsAPI } from './Guilds';
 import { LogAPI } from './Log';
 import { RedditConfigAPI } from './RedditConfig';
 import { TicketAPI } from './TicketConfig';
-import { APIOptions } from './types';
+import { APIOptions } from '../types';
 import { UserAPI } from './User';
 import { PayAPI } from './Pay';
-import { API } from './utils/BaseAPI';
-import { refreshToken } from './utils/refreshToken';
-
-export * from './types';
+import { API } from '../utils/BaseAPI';
+import { refreshToken } from '../utils/refreshToken';
 
 export class LabmakerAPI {
   constructor(private apiURL: string, private options?: APIOptions) {

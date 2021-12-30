@@ -118,3 +118,12 @@ export type APIOptions = {
   logFullErr?: boolean;
   logObject?: boolean;
 };
+
+export interface ICallback {
+  (error: Events, result?: any): void;
+}
+
+export enum Events {
+  Config = 'config',
+  Delete = 'deleteConfig',
+}

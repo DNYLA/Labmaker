@@ -77,14 +77,14 @@ export class Client {
       this.localLogs.splice(0, 150); //Removes first 150 Logs as they should be useless
     }
     this.localLogs.push({ username: name, createdAt: new Date() });
-    setTimeout(() => {
+    setTimeout(async () => {
       try {
         if (valid) {
-          // await this.client.composeMessage({
-          //   to: item.author,
-          //   subject: newConfig.title,
-          //   text: newConfig.pmBody,
-          // });
+          await this.client.composeMessage({
+            to: item.author,
+            subject: config.title,
+            text: config.pmBody,
+          });
 
           console.log(
             `${this.postCounter} : ${name} : ${display_name}  : ${config.pmBody}`

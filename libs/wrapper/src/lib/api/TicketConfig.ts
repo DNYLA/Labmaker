@@ -1,5 +1,5 @@
-import { API } from './utils/BaseAPI';
-import { TicketDto } from './types';
+import { API } from '../utils/BaseAPI';
+import { TicketDto } from '../types';
 
 export class TicketAPI extends API {
   constructor(apiUrl: string) {

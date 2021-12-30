@@ -1,5 +1,5 @@
-import { API } from './utils/BaseAPI';
-import { LogDto, RedditConfigDto } from './types';
+import { API } from '../utils/BaseAPI';
+import { LogDto, RedditConfigDto } from '../types';
 
 export class LogAPI extends API {
   constructor(apiUrl: string) {

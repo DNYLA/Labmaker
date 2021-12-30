@@ -1,5 +1,5 @@
-import { API } from './utils/BaseAPI';
-import { GuildConfigDto, PaymentDto } from './types';
+import { API } from '../utils/BaseAPI';
+import { GuildConfigDto, PaymentDto } from '../types';
 
 export class DiscordConfigAPI extends API {
   constructor(apiUrl: string) {

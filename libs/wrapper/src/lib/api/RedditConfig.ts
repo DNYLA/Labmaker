@@ -1,5 +1,5 @@
-import { API } from './utils/BaseAPI';
-import { RedditConfigDto } from './types';
+import { API } from '../utils/BaseAPI';
+import { RedditConfigDto } from '../types';
 
 export class RedditConfigAPI extends API {
   constructor(apiUrl: string) {
