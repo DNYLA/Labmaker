@@ -1,1 +1,1 @@
-web: nx run api:build
+web: npx nx run api:build
