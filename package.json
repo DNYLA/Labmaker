@@ -2,14 +2,11 @@
   "name": "labmaker",
   "version": "0.0.0",
   "license": "MIT",
-  "engines": {
-    "node": ">=14.x"
-  },
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "heroku-postinstall": "npx prisma generate && npx nx build discord-bot && npx nx build reddit-bot"
+    "heroku-prebuild": "npx prisma generate && npx nx build discord-bot && npx nx build reddit-bot"
   },
   "private": true,
   "dependencies": {
