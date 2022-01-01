@@ -27,9 +27,9 @@ export class JwtBotStrategy extends PassportStrategy(Strategy, 'jwtbot') {
   }
 
   async validate(payload: any) {
-    if (payload.type !== 'Bot') {
+    if (payload.type !== TokenType.Bot) {
       throw new UnauthorizedException(
-        'You arent authorized to access this data',
+        'You arent authorized to access this data'
       );
     }
     return payload;

@@ -10,7 +10,7 @@ import { UserDto } from './dto/User.dto';
 export class UserService {
   constructor(
     private prismaService: PrismaService,
-    @Inject(HttpService) private readonly httpService: HttpService,
+    @Inject(HttpService) private readonly httpService: HttpService
   ) {}
   private logger = new Logger(UserService.name);
 
@@ -26,7 +26,7 @@ export class UserService {
         headers: {
           Authorization: `Bearer ${user.accessToken}`,
         },
-      },
+      }
     );
 
     const discordUser = await (await lastValueFrom(fetchedUser)).data;
@@ -59,7 +59,12 @@ export class UserService {
     };
   }
 
-  async getUserDetails(id: string): Promise<User> {
-    return await this.prismaService.user.findUnique({ where: { id } });
+  async getUserDetails(id: string): Promise<UserDto> {
+    const user = await this.prismaService.user.findUnique({
+      where: { id },
+      include: { nodes: true },
+    });
+
+    return user;
   }
 }

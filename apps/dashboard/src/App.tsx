@@ -26,6 +26,7 @@ function App() {
           if (userDetails.nodes.length > 0) {
             dispatch(updateReddit(userDetails.nodes[0]));
           }
+          // Socket =
 
           setLoading(false);
         });

@@ -6,7 +6,11 @@ import { APISocket, Events, RedditConfigDto } from '@labmaker/wrapper';
 dotenv.config();
 
 Labmaker.setAccessToken(process.env.API_TOKEN);
-const sHandler = new APISocket(process.env.API_URL, process.env.API_TOKEN);
+const sHandler = new APISocket(
+  `${process.env.API_URL}/reddit`,
+  process.env.API_TOKEN
+);
+
 let clients: Client[] = [];
 
 function socketCallback(event: Events, data?: any) {
@@ -49,11 +53,11 @@ function initClient(config: RedditConfigDto) {
   try {
     if (client && config.subreddits.length > 0) {
       console.log(`${config.id}: ${config.username}: Updated()`);
-      client.updateClient(snooClient, config);
+      // client.updateClient(snooClient, config);
     } else if (config.subreddits.length > 0) {
       console.log(`${config.id}: ${config.username}: Creating()`);
       const c = new Client(snooClient, config);
-      c.createEvent();
+      // c.createEvent();
       clients.push(c);
     }
   } catch (err) {

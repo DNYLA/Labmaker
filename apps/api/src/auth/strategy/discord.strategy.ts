@@ -24,7 +24,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
       avatar,
       accessToken,
       refreshToken,
-      type: 'User',
+      type: TokenType.User,
     };
 
     const jwtToken = await this.authService.validateUser(details);

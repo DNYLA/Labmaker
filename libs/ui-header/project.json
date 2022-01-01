@@ -1,0 +1,23 @@
+{
+  "root": "libs/ui-header",
+  "sourceRoot": "libs/ui-header/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui-header/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ui-header"],
+      "options": {
+        "jestConfig": "libs/ui-header/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

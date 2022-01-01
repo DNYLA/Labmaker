@@ -8,7 +8,6 @@ import {
   OnGatewayConnection,
   WsException,
 } from '@nestjs/websockets';
-import { Server } from 'ws';
 
 import {} from '@nestjs/platform-socket.io';
 import { IncomingMessage } from 'http';
@@ -17,19 +16,33 @@ import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from '../auth/guards/Jwt.guard';
 import { WSGuard } from '../auth/guards/WSAuth.guard';
-import { RedditConfig } from '.prisma/client';
+import { Log, RedditConfig } from '.prisma/client';
 import RedditGatewayMessage from './dtos/RedditGatewayMessage.dto';
+import { Server, Socket } from 'socket.io';
+import { UserService } from 'apps/api/src/user/user.service';
+import { LogDto } from '@labmaker/wrapper';
 
 @WebSocketGateway({ namespace: 'reddit' })
 export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
 
   @WebSocketServer() server: Server;
 
-  async handleConnection(client: any, ...args: any[]) {
-    const token = client.handshake.headers.authorization.split(' ')[1];
+  async handleConnection(client: Socket, ...args: any[]) {
+    const token = client.handshake.headers.authorization.split(' ')[0];
+
     const result = await this.authService.verify(token);
-    !result && client.disconnect();
+    if (!result) {
+      client.disconnect();
+    } else if (result.type === TokenType.Bot) {
+      client.join('bot');
+    } else {
+      const user = await this.userService.getUserDetails(result.id);
+      user.nodes.forEach((node) => client.join(node.id.toString()));
+    }
   }
 
   afterInit(server: any) {
@@ -37,21 +50,26 @@ export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
   }
 
   public notifyConfig(config: RedditConfig) {
-    // this.server.clients.forEach((client) => {
-    //   client.send(JSON.stringify(config));
-    // });
-    console.log('Emitting Config');
-    this.server.emit('config', JSON.stringify(config));
+    this.server
+      .to('bot')
+      .to(config.id.toString())
+      .emit('config', JSON.stringify(config));
+  }
+
+  public notifyLogs(log: Log) {
+    this.server.to(log.nodeId.toString()).emit('log', JSON.stringify(log));
   }
 
   public notifyDelete(id: number) {
-    console.log('Emitting Delete');
-    this.server.emit('deleteConfig', id);
+    this.server.to('bot').emit('deleteConfig', id);
   }
 
   @UseGuards(WSGuard)
   @SubscribeMessage('config')
-  handleConfig(@MessageBody() message: string): void {
+  handleConfig(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() message: string
+  ): void {
     console.log('Sent');
     this.server.emit('message', message);
   }

@@ -10,7 +10,7 @@ import { WsException } from '@nestjs/websockets';
 export class AuthService {
   constructor(
     private prismaService: PrismaService,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
   private readonly logger = new Logger(AuthService.name);
 
@@ -18,9 +18,11 @@ export class AuthService {
     if (!token) return false;
 
     try {
-      return await this.jwtService.verifyAsync(token, {
+      const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
+
+      return payload;
     } catch (err) {
       // console.error('Attempted to verify invalid token:', token, err.message);
       // throw new WsException('Invalid Token');
@@ -49,7 +51,7 @@ export class AuthService {
       create: userData,
     });
 
-    return this.createRefreshToken(user, 'user');
+    return this.createRefreshToken(user, TokenType.User);
   }
 
   async createBotToken() {
@@ -93,7 +95,7 @@ export class AuthService {
       data: user,
     });
 
-    res.cookie('jid', this.createRefreshToken(updatedUser, 'user'), {
+    res.cookie('jid', this.createRefreshToken(updatedUser, TokenType.User), {
       sameSite: 'none',
       httpOnly: true,
       secure: true,
@@ -102,22 +104,22 @@ export class AuthService {
 
     return res.send({
       ok: true,
-      accessToken: this.createAccessToken(updatedUser, 'user'),
+      accessToken: this.createAccessToken(updatedUser, TokenType.User),
     });
   }
 
-  createRefreshToken(user: User, type: string) {
+  createRefreshToken(user: User, type: TokenType) {
     return this.jwtService.sign(
       {
         sub: user.id,
         type: type,
         tokenVersion: user.tokenVersion,
       },
-      { secret: process.env.JWT_REFRESH_SECRET, expiresIn: '7d' },
+      { secret: process.env.JWT_REFRESH_SECRET, expiresIn: '7d' }
     );
   }
 
-  createAccessToken(user: User, type: string) {
+  createAccessToken(user: User, type: TokenType) {
     return this.jwtService.sign(
       {
         sub: user.id,
@@ -125,7 +127,7 @@ export class AuthService {
         discriminator: user.discriminator,
         type: type,
       },
-      { secret: process.env.JWT_SECRET, expiresIn: '15m' },
+      { secret: process.env.JWT_SECRET, expiresIn: '15m' }
     );
   }
 
@@ -133,9 +135,9 @@ export class AuthService {
     return this.jwtService.sign(
       {
         sub: '10019',
-        type: 'Bot',
+        type: TokenType.Bot,
       },
-      { secret: process.env.JWT_SECRET, expiresIn: '1y' },
+      { secret: process.env.JWT_SECRET, expiresIn: '1y' }
     );
   }
 }
