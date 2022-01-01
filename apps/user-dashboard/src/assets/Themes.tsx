@@ -6,7 +6,14 @@ interface Navbar {
   titleHover: string;
 }
 
+interface Base {
+  backCol: string;
+}
+
 export const DarkTheme: DefaultTheme = {
+  base: {
+    backCol: '#202225',
+  },
   navbar: {
     base: '#1A1A1D',
     item: '#8d8d8e',
@@ -32,7 +39,7 @@ import { DefaultTheme } from 'styled-components';
 declare module 'styled-components' {
   export interface DefaultTheme {
     navbar: Navbar;
-    base?: any;
+    base: Base;
     text?: any;
     height?: any;
     padding?: any;
