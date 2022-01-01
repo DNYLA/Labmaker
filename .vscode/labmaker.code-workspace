@@ -1,0 +1,37 @@
+{
+  "folders": [
+    {
+      "name": "Monorepo",
+      "path": "./../"
+    },
+    {
+      "name": "API",
+      "path": "./../apps/api/src"
+    },
+    {
+      "name": "Discord Bot",
+      "path": "./../apps/discord-bot/src"
+    },
+    {
+      "name": "Dashboard",
+      "path": "./../apps/dashboard/src"
+    },
+    {
+      "name": "Wrapper",
+      "path": "./../libs/wrapper/src"
+    },
+    {
+      "name": "All Apps",
+      "path": "./../apps"
+    },
+    {
+      "name": "All Libs",
+      "path": "./../libs"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "node_modules/": true
+    }
+  }
+}
