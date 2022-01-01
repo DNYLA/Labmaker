@@ -17,12 +17,14 @@ import { refreshToken } from '../utils/refreshToken';
 
 export class LabmakerAPI {
   constructor(private apiURL: string, private options?: APIOptions) {
-    if (this.options) {
-      API.options = this.options;
-    }
+    if (!this.apiURL) throw new Error('API URL is undefined!');
 
     if (this.apiURL.endsWith('/')) {
       this.apiURL = this.apiURL.slice(0, this.apiURL.length - 2);
+    }
+
+    if (this.options) {
+      API.options = this.options;
     }
   }
 
