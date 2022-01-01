@@ -3,9 +3,7 @@ import styled from 'styled-components';
 /* eslint-disable-next-line */
 export interface UiHeaderProps {}
 
-const StyledUiHeader = styled.div`
-  color: pink;
-`;
+const StyledUiHeader = styled.div``;
 
 export function UiHeader(props: UiHeaderProps) {
   return (

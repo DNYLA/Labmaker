@@ -99,9 +99,6 @@ const StyledLink = styled(NavLink)`
     font-size: 30px;
     margin: 0px;
     color: ${(p) => p.theme.navbar.item};
-    &.${(p) => p.activeClassName} {
-      color: pink;
-    }
     :hover {
       color: ${(p) => p.theme.navbar.active};
     }

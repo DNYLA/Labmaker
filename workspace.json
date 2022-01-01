@@ -7,6 +7,7 @@
     "discord-bot": "apps/discord-bot",
     "reddit-bot": "apps/reddit-bot",
     "ui-header": "libs/ui-header",
+    "ui-inputs": "libs/ui-inputs",
     "user-dashboard": "apps/user-dashboard",
     "user-dashboard-e2e": "apps/user-dashboard-e2e",
     "wrapper": "libs/wrapper"

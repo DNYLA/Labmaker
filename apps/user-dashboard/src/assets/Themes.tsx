@@ -10,6 +10,13 @@ interface Base {
   backCol: string;
 }
 
+interface Input {
+  borderCol: string;
+  backCol: string;
+  activeCol: string;
+  text: string;
+}
+
 export const DarkTheme: DefaultTheme = {
   base: {
     backCol: '#202225',
@@ -20,6 +27,12 @@ export const DarkTheme: DefaultTheme = {
     active: '#FFF',
     title: '#ff9929',
     titleHover: '#ffaf29',
+  },
+  input: {
+    backCol: '#141617',
+    borderCol: '#141617',
+    activeCol: '#141617',
+    text: '#EEE',
   },
   // text: {
   //   main: '#FFF',
@@ -40,6 +53,7 @@ declare module 'styled-components' {
   export interface DefaultTheme {
     navbar: Navbar;
     base: Base;
+    input: Input;
     text?: any;
     height?: any;
     padding?: any;
