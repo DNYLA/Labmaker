@@ -42,7 +42,7 @@ export function MainSettings(props: MainSettingsProps) {
         onChange={(e: any) => console.log(e)}
       />
       <SwitchToggle
-        message="Log Bot Activity"
+        message="Log Activity"
         toggled={isLogging}
         onToggle={() => setIsLogging(!isLogging)}
       />

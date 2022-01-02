@@ -11,6 +11,10 @@ export function AccountSettings({}: AccountSettingsProps) {
       <InputBox
         message="Client ID"
         value={'My Id'}
+        infoEnabled={true}
+        infoMessage={
+          'Enter Your Client ID for your script from https://reddit.com/prefs/apps'
+        }
         onChange={(e: any) => console.log(e)}
       />
       <InputBox
