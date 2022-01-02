@@ -1,3 +1,4 @@
+export * from './lib/tag-input-box';
 // export * from './lib/info-box';
 export * from './lib/ui-inputs';
 export * from './lib/input-box/input-box';

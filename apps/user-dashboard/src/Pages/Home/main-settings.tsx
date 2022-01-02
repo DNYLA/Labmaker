@@ -1,4 +1,4 @@
-import { InputBox } from '@labmaker/ui-inputs';
+import { InputBox, TagInputBox } from '@labmaker/ui-inputs';
 import { ContainerStyle } from 'apps/user-dashboard/src/assets/styles';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -11,7 +11,7 @@ const StyledMainSettings = styled.div`
 `;
 
 export function MainSettings(props: MainSettingsProps) {
-  const [isLogging, setIsLogging] = useState(false);
+  const [isLogging, setIsLogging] = useState(true);
 
   return (
     <GeneralSettingContainer>
@@ -26,21 +26,11 @@ export function MainSettings(props: MainSettingsProps) {
         value={'My Message'}
         onChange={(e: any) => console.log(e)}
       />
-      <InputBox
-        message="Subreddits"
-        value={'Convert Into New Component'}
-        onChange={(e: any) => console.log(e)}
-      />
-      <InputBox
-        message="Blocked Words"
-        value={'Convert Into New Component'}
-        onChange={(e: any) => console.log(e)}
-      />
-      <InputBox
-        message="Node Editors"
-        value={'Convert Into New Component'}
-        onChange={(e: any) => console.log(e)}
-      />
+      <TagContainer>
+        <TagInputBox title={'Subreddits'} /> <span>-</span>
+        <TagInputBox title={'Blocked Users'} /> <span>-</span>
+        <TagInputBox title={'Node Editors'} />
+      </TagContainer>
       <SwitchToggle
         message="Log Activity"
         toggled={isLogging}
@@ -50,6 +40,19 @@ export function MainSettings(props: MainSettingsProps) {
     </GeneralSettingContainer>
   );
 }
+
+const TagContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  div {
+    margin-right: 10px;
+    list-style-type: disc;
+  }
+  span {
+    margin: 0px 5px;
+  }
+`;
 
 const GeneralSettingContainer = styled(ContainerStyle)`
   display: flex;

@@ -11,7 +11,10 @@ export interface InputBoxProps {
   onChange: Function;
 }
 
-const StyledInputBox = styled.div``;
+const StyledInputBox = styled.div`
+  user-select: none;
+  /* margin-top: 10px; */
+`;
 
 export function InputBox({
   message,
