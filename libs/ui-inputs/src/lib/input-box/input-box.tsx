@@ -32,6 +32,7 @@ const InputContainer = styled.div`
   display: flex;
   height: 23px;
   padding-bottom: 10px;
+  margin-bottom: 15px;
   margin-top: 3px;
 
   span {
@@ -45,6 +46,7 @@ const InputContainer = styled.div`
     width: 100%;
     height: 30px;
     background: ${(p) => p.theme.input.backCol};
+    border-radius: 5px;
     border: 2px solid ${(p) => p.theme.input.borderCol};
     /* border-radius: 5px; */
     transition: 340ms;

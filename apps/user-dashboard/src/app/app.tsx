@@ -1,11 +1,13 @@
 import styled from 'styled-components';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 import { Navbar as Nav } from '@labmaker/ui-header';
 import { InputBox } from '@labmaker/ui-inputs';
+import { Home } from 'apps/user-dashboard/src/Pages/Home/Home';
 const StyledApp = styled.div`
   // Your style here
   background-color: ${(p) => p.theme.base.backCol};
   height: 1080px;
+  color: ${(p) => p.theme.text};
 `;
 
 export function App() {
@@ -27,11 +29,9 @@ export function App() {
           'https://cdn.discordapp.com/avatars/827212859447705610/3b000789b7b21736d58db29c923c0020.png?size=1024'
         }
       />
-      <InputBox
-        message={'Name'}
-        value={''}
-        onChange={() => console.log('hi')}
-      />
+      <Switch>
+        <Route path="/" exact component={Home}></Route>
+      </Switch>
     </StyledApp>
   );
 }

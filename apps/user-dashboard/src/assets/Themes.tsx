@@ -15,6 +15,7 @@ interface Input {
   backCol: string;
   activeCol: string;
   text: string;
+  switchActive?: string;
 }
 
 export const DarkTheme: DefaultTheme = {
@@ -33,7 +34,9 @@ export const DarkTheme: DefaultTheme = {
     borderCol: '#141617',
     activeCol: '#141617',
     text: '#EEE',
+    switchActive: '#ff9929',
   },
+  text: '#EEE',
   // text: {
   //   main: '#FFF',
   // },
