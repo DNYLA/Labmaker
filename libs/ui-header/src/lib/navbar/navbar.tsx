@@ -20,9 +20,9 @@ export function Navbar({ title, items, avatarUrl }: NavbarProps) {
         <Title>{title}</Title>
       </StyledLink>
       <ul>
-        {items.map((item) => {
+        {items.map((item, i) => {
           return (
-            <NavItem>
+            <NavItem key={i}>
               <StyledLink
                 exact={true}
                 activeClassName="active"

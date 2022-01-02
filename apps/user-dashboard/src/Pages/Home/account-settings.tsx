@@ -1,10 +1,10 @@
 import { InputBox } from '@labmaker/ui-inputs';
-import { ContainerStyle } from 'apps/user-dashboard/src/assets/styles';
-import React from 'react';
+import { ContainerStyle } from '../../assets/styles';
 import styled from 'styled-components';
-interface AccountSettingsProps {}
+import React from 'react';
+// interface AccountSettingsProps {}
 
-export function AccountSettings({}: AccountSettingsProps) {
+export function AccountSettings() {
   return (
     <GeneralSettingContainer>
       <h1>Account</h1>
@@ -14,7 +14,7 @@ export function AccountSettings({}: AccountSettingsProps) {
         infoMessage={
           'Enter Your Client ID for your script from https://reddit.com/prefs/apps'
         }
-        onChange={(e: any) => console.log(e)}
+        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
       />
       <InputBox
         message="Client Secret"
@@ -22,22 +22,22 @@ export function AccountSettings({}: AccountSettingsProps) {
         infoMessage={
           'Enter Your Client Secret for your script from https://reddit.com/prefs/apps'
         }
-        onChange={(e: any) => console.log(e)}
+        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
       />
       <InputBox
         message="Username"
         value={'Username'}
-        onChange={(e: any) => console.log(e)}
+        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
       />
       <InputBox
         message="Password"
         value={'asdasda3q'}
-        onChange={(e: any) => console.log(e)}
+        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
       />
       <InputBox
         message="User Agent"
         value={'<platform: firefox>'}
-        onChange={(e: any) => console.log(e)}
+        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
       />
     </GeneralSettingContainer>
   );

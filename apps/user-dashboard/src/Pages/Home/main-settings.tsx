@@ -1,14 +1,10 @@
 import { InputBox, TagInputBox } from '@labmaker/ui-inputs';
-import { ContainerStyle } from 'apps/user-dashboard/src/assets/styles';
+import { ContainerStyle } from '../../assets/styles';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { SwitchToggle } from '@labmaker/ui-inputs';
 /* eslint-disable-next-line */
 export interface MainSettingsProps {}
-
-const StyledMainSettings = styled.div`
-  color: pink;
-`;
 
 export function MainSettings(props: MainSettingsProps) {
   const [isLogging, setIsLogging] = useState(true);
@@ -32,12 +28,12 @@ export function MainSettings(props: MainSettingsProps) {
       <InputBox
         message="Title"
         value={'My Title'}
-        onChange={(e: any) => console.log(e)}
+        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
       />
       <InputBox
         message="Body"
         value={'My Message'}
-        onChange={(e: any) => console.log(e)}
+        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
       />
       <TagContainer>
         <TagInputBox

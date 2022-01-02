@@ -1,18 +1,18 @@
-import { ComboContainer } from 'apps/user-dashboard/src/assets/styles';
-import { AccountSettings } from 'apps/user-dashboard/src/Pages/Home/account-settings';
-import { MainSettings } from 'apps/user-dashboard/src/Pages/Home/main-settings';
+import { ComboContainer } from '../../assets/styles';
+import { AccountSettings } from './account-settings';
+import { MainSettings } from './main-settings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faUndo } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { DropDown } from '@labmaker/ui-inputs';
-interface HomeProps {}
+// interface HomeProps {}
 
 const StyledHome = styled.div`
   margin: 0 250px;
 `;
 
-export function Home({}: HomeProps) {
+export function Home() {
   const items = [
     { id: 0, title: 'Dans Config', selected: true, key: 'DanID' },
     { id: 1, title: 'Bobs Config', selected: true, key: 'BobID' },

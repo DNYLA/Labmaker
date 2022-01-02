@@ -1,3 +1,5 @@
+import 'styled-components';
+import { DefaultTheme } from 'styled-components';
 interface Navbar {
   base: string;
   item: string;
@@ -37,15 +39,6 @@ export const DarkTheme: DefaultTheme = {
     switchActive: '#ff9929',
   },
   text: '#EEE',
-  // text: {
-  //   main: '#FFF',
-  // },
-  // height: {
-  //   topContent: '85px',
-  // },
-  // padding: {
-  //   content: '20px 0px',
-  // },
 };
 
 export const TestTheme: DefaultTheme = {
@@ -67,19 +60,7 @@ export const TestTheme: DefaultTheme = {
     switchActive: '#ff9929',
   },
   text: '#EDEDED',
-  // text: {
-  //   main: '#FFF',
-  // },
-  // height: {
-  //   topContent: '85px',
-  // },
-  // padding: {
-  //   content: '20px 0px',
-  // },
 };
-
-import 'styled-components';
-import { DefaultTheme } from 'styled-components';
 
 // and extend them!
 declare module 'styled-components' {
@@ -87,8 +68,8 @@ declare module 'styled-components' {
     navbar: Navbar;
     base: Base;
     input: Input;
-    text?: any;
-    height?: any;
-    padding?: any;
+    text?: string;
+    height?: string;
+    padding?: string;
   }
 }
