@@ -2,7 +2,13 @@ import { ComboContainer } from '../../assets/styles';
 import { AccountSettings } from './account-settings';
 import { MainSettings } from './main-settings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faUndo } from '@fortawesome/free-solid-svg-icons';
+import {
+  faRemoveFormat,
+  faSave,
+  faTrash,
+  faTrashAlt,
+  faUndo,
+} from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { DropDown } from '@labmaker/ui-inputs';
@@ -29,8 +35,12 @@ export function Home() {
         <DropDown items={items} selected={selected} setSelected={setSelected} />
         <ButtonContainer>
           <IconButton>
+            <FontAwesomeIcon icon={faTrashAlt} size="1x" color="#FFF" />
+          </IconButton>
+          <IconButton>
             <FontAwesomeIcon icon={faUndo} size="1x" color="#FFF" />
           </IconButton>
+
           <IconButton>
             <FontAwesomeIcon icon={faSave} size="1x" color="#FFF" />
           </IconButton>
