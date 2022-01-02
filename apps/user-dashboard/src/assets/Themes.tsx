@@ -32,7 +32,7 @@ export const DarkTheme: DefaultTheme = {
   input: {
     backCol: '#141617',
     borderCol: '#141617',
-    activeCol: '#141617',
+    activeCol: '#3B3B3B',
     text: '#EEE',
     switchActive: '#ff9929',
   },

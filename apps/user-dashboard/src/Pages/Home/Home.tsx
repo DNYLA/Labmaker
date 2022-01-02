@@ -14,9 +14,12 @@ const StyledHome = styled.div`
 
 export function Home({}: HomeProps) {
   const items = [
-    { id: 0, title: 'Dan', selected: true, key: 'DanID' },
-    { id: 1, title: 'Bob', selected: true, key: 'BobID' },
-    { id: 2, title: 'JimCon', selected: true, key: 'JimID' },
+    { id: 0, title: 'Dans Config', selected: true, key: 'DanID' },
+    { id: 1, title: 'Bobs Config', selected: true, key: 'BobID' },
+    { id: 2, title: 'Jim', selected: true, key: 'JimID' },
+    { id: 3, title: 'Larry', selected: true, key: 'JimID' },
+    { id: 4, title: 'Bobby', selected: true, key: 'JimID' },
+    { id: 5, title: 'Bibb', selected: true, key: 'JimID' },
   ];
 
   const [selected, setSelected] = useState(items[0]);
@@ -26,10 +29,10 @@ export function Home({}: HomeProps) {
         <DropDown items={items} selected={selected} setSelected={setSelected} />
         <ButtonContainer>
           <IconButton>
-            <FontAwesomeIcon icon={faSave} size="1x" color="#FFF" />
+            <FontAwesomeIcon icon={faUndo} size="1x" color="#FFF" />
           </IconButton>
           <IconButton>
-            <FontAwesomeIcon icon={faUndo} size="1x" color="#FFF" />
+            <FontAwesomeIcon icon={faSave} size="1x" color="#FFF" />
           </IconButton>
         </ButtonContainer>
       </ControlsContainer>
@@ -56,10 +59,11 @@ const ButtonContainer = styled.div`
 const IconButton = styled.div`
   display: inline;
   width: 30px;
-  height: 10px;
+  height: 30px;
   display: flex;
   justify-content: center;
-  padding: 20px 0;
+  align-items: center;
+  /* padding: 20px 0; */
   margin-right: 5px;
   transition: 250ms all;
   background-color: ${(props) => props.theme.input.backCol};

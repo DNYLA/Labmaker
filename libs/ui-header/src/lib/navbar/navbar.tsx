@@ -34,9 +34,7 @@ export function Navbar({ title, items, avatarUrl }: NavbarProps) {
           );
         })}
       </ul>
-      <a href="">
-        <IconStyle src={avatarUrl} alt="Avatar" />
-      </a>
+      <IconStyle src={avatarUrl} alt="Avatar" />
     </StyledNavbar>
   );
 }
@@ -51,6 +49,9 @@ const IconStyle = styled.img`
   align-items: center;
   transition: 0.2s all;
   border-radius: 50%;
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const StyledNavbar = styled.nav`
