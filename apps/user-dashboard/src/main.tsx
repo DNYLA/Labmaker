@@ -1,4 +1,4 @@
-import { DarkTheme } from 'apps/user-dashboard/src/assets/Themes';
+import { DarkTheme, TestTheme } from 'apps/user-dashboard/src/assets/Themes';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';

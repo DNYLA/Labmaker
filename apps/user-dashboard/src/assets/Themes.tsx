@@ -48,6 +48,36 @@ export const DarkTheme: DefaultTheme = {
   // },
 };
 
+export const TestTheme: DefaultTheme = {
+  base: {
+    backCol: '#1A1A1D',
+  },
+  navbar: {
+    base: '#4E4E50',
+    item: '#8d8d8e',
+    active: '#FFF',
+    title: '#ff9929',
+    titleHover: '#ffaf29',
+  },
+  input: {
+    backCol: '#2B2B2B',
+    borderCol: '#2B2B2B',
+    activeCol: '#2B2B2B',
+    text: '#EDEDED',
+    switchActive: '#ff9929',
+  },
+  text: '#EDEDED',
+  // text: {
+  //   main: '#FFF',
+  // },
+  // height: {
+  //   topContent: '85px',
+  // },
+  // padding: {
+  //   content: '20px 0px',
+  // },
+};
+
 import 'styled-components';
 import { DefaultTheme } from 'styled-components';
 

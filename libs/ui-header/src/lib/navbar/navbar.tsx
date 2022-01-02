@@ -59,6 +59,9 @@ const StyledNavbar = styled.nav`
   display: flex;
   justify-content: space-between;
   background-color: ${(p) => p.theme.navbar.base};
+  opacity: 90%;
+  box-shadow: 0px 1px 25px 0px rgba(0, 0, 0, 0.2);
+
   ul {
     list-style-type: none;
     padding: 0;

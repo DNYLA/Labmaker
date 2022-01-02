@@ -54,7 +54,7 @@ const GeneralSettingContainer = styled(ContainerStyle)`
   display: flex;
   flex-direction: column;
   padding: 25px;
-
+  padding-top: 5px;
   h1 {
     text-align: center;
     border-radius: 5px;
