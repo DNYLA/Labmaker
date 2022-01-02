@@ -1,3 +1,5 @@
+import { InfoTitle } from 'libs/ui-inputs/src/lib/info-box';
+import { BaseInputProps } from 'libs/ui-inputs/src/lib/types';
 import styled, { css } from 'styled-components';
 
 /* eslint-disable-next-line */
@@ -5,11 +7,15 @@ export interface SwitchProps {
   square?: boolean;
   toggled: boolean;
   onToggle: any;
-  message?: String;
+  infoMessage?: string;
+  message: string;
 }
 
 const StyledSwitch = styled.div`
   margin: 2px 0px;
+  /* background-color: black; */
+  width: 100%;
+  display: flex;
 `;
 
 //If you use a switch add it to the bottom of the Container its inside as it looks better
@@ -18,10 +24,15 @@ export function SwitchToggle({
   toggled,
   onToggle,
   message,
+  infoMessage,
 }: SwitchProps) {
   return (
     <StyledSwitch>
-      <StyledSpan>{message}</StyledSpan>
+      <InfoTitle
+        title={message}
+        infoMessage={infoMessage}
+        enabled={infoMessage ? true : false}
+      />
       <SwitchStyle>
         <input type="checkbox" checked={toggled} onChange={onToggle} />
         <Slider rounded={square} checked={toggled} onChange={onToggle} />

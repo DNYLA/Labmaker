@@ -45,6 +45,7 @@ export function MainSettings(props: MainSettingsProps) {
         message="Log Activity"
         toggled={isLogging}
         onToggle={() => setIsLogging(!isLogging)}
+        infoMessage="Activity is currently logged regardless of this value"
       />
     </GeneralSettingContainer>
   );
