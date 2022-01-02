@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Route, Link, Switch } from 'react-router-dom';
 import { Navbar as Nav } from '@labmaker/ui-header';
 import { InputBox } from '@labmaker/ui-inputs';
-import { Home } from 'apps/user-dashboard/src/Pages/Home/Home';
+import { Home } from 'apps/user-dashboard/src/Pages/Home/home';
 const StyledApp = styled.div`
   // Your style here
   background-color: ${(p) => p.theme.base.backCol};
