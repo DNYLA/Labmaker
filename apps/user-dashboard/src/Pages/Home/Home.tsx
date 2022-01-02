@@ -76,6 +76,12 @@ const IconButton = styled.div`
   /* padding: 20px 0; */
   margin-right: 5px;
   transition: 250ms all;
+  &:hover .fa-trash-alt {
+    color: rgba(255, 0, 0, 0.8);
+  }
+  /* &:hover .fa-save {
+    color: rgba(0, 255, 0, 0.8);
+  } */
   background-color: ${(props) => props.theme.input.backCol};
   :hover {
     background-color: ${(props) => props.theme.input.activeCol};
