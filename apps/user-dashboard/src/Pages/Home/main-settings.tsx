@@ -3,55 +3,56 @@ import { ContainerStyle } from '../../assets/styles';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { SwitchToggle } from '@labmaker/ui-inputs';
+import { RedditConfig } from 'apps/user-dashboard/src/utils/types';
 /* eslint-disable-next-line */
-export interface MainSettingsProps {}
+export interface MainSettingsProps {
+  config: RedditConfig;
+  setConfig: Function;
+}
 
-export function MainSettings(props: MainSettingsProps) {
+export function MainSettings({ config, setConfig }: MainSettingsProps) {
   const [isLogging, setIsLogging] = useState(true);
-  const [items, setItems] = useState([
-    'name1',
-    'name2',
-    'name1',
-    'name2',
-    'name1',
-    'name2',
-    'name1',
-    'name2',
-    'name1',
-    'name2',
-    'name1',
-    'name2',
-  ]);
+
   return (
     <GeneralSettingContainer>
       <h1>Main</h1>
       <InputBox
         message="Title"
-        value={'My Title'}
-        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
+        value={config.title}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setConfig({ ...config, title: e.target.value })
+        }
       />
       <InputBox
         message="Body"
-        value={'My Message'}
-        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
+        value={config.pmBody}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setConfig({ ...config, pmBody: e.target.value })
+        }
       />
       <TagContainer>
         <TagInputBox
           title={'Subreddits'}
-          items={items}
-          onChange={(updatedValues: string[]) => setItems(updatedValues)}
+          items={config.subreddits}
+          onChange={(updatedValues: string[]) =>
+            setConfig({ ...config, subreddits: updatedValues })
+          }
         />
         <span>-</span>
         <TagInputBox
           title={'Blocked Users'}
-          items={items}
-          onChange={(updatedValues: string[]) => setItems(updatedValues)}
+          items={config.blockedUsers}
+          onChange={(updatedValues: string[]) =>
+            setConfig({ ...config, blockedUsers: updatedValues })
+          }
         />
         <span>-</span>
         <TagInputBox
           title={'Node Editors'}
-          items={items}
-          onChange={(updatedValues: string[]) => setItems(updatedValues)}
+          items={config.nodeEditors}
+          onChange={(updatedValues: string[]) =>
+            setConfig({ ...config, nodeEditors: updatedValues })
+          }
         />
       </TagContainer>
       <SwitchToggle

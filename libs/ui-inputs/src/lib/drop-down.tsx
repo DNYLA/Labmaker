@@ -7,7 +7,6 @@ export interface Item {
   id: number;
   title: string;
   selected: boolean;
-  key: string;
 }
 
 /* eslint-disable-next-line */
@@ -49,7 +48,7 @@ export function DropDown({ items, selected, setSelected }: DropDownProps) {
           {items.map((item) => {
             if (item.id !== selected.id)
               return (
-                <DropDownItem onClick={() => setItem(item.id)}>
+                <DropDownItem onClick={() => setItem(item.id)} key={item.id}>
                   {item.title}
                 </DropDownItem>
               );

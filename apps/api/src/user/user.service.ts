@@ -59,7 +59,7 @@ export class UserService {
     };
   }
 
-  async getUserDetails(id: string): Promise<UserDto> {
+  async getUserDetails(id: string): Promise<User> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
       include: { nodes: true },

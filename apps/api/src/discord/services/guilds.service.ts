@@ -13,7 +13,7 @@ export class GuildsService {
     private prismaService: PrismaService,
     private userService: UserService,
     private readonly paymentService: PaymentService,
-    @Inject(HttpService) private readonly httpService: HttpService,
+    @Inject(HttpService) private readonly httpService: HttpService
   ) {}
 
   async fetchGuilds(user: UserDetails): Promise<Guild[]> {
@@ -25,7 +25,7 @@ export class GuildsService {
         headers: {
           Authorization: `Bearer ${userDetails.accessToken}`,
         },
-      },
+      }
     );
 
     const guilds = await (await lastValueFrom(fetchedGuilds)).data;
@@ -73,7 +73,7 @@ export class GuildsService {
           // validGuilds.filter((lGuild) => lGuild.id !== guild.id);
           spliceIndex++;
         }
-      }),
+      })
     );
 
     return validGuilds;

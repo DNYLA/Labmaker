@@ -5,6 +5,7 @@ import { User } from '.prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
+import { TokenType } from 'apps/api/src/utils/types';
 
 @Injectable()
 export class AuthService {

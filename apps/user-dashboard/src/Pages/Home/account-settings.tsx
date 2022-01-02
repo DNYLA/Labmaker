@@ -2,42 +2,57 @@ import { InputBox } from '@labmaker/ui-inputs';
 import { ContainerStyle } from '../../assets/styles';
 import styled from 'styled-components';
 import React from 'react';
-// interface AccountSettingsProps {}
+import { RedditConfig } from 'apps/user-dashboard/src/utils/types';
 
-export function AccountSettings() {
+interface AccountSettingsProps {
+  config: RedditConfig;
+  setConfig: Function;
+}
+
+export function AccountSettings({ config, setConfig }: AccountSettingsProps) {
   return (
     <GeneralSettingContainer>
       <h1>Account</h1>
       <InputBox
         message="Client ID"
-        value={'My Id'}
+        value={config.clientId}
         infoMessage={
           'Enter Your Client ID for your script from https://reddit.com/prefs/apps'
         }
-        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setConfig({ ...config, clientId: e.target.value })
+        }
       />
       <InputBox
         message="Client Secret"
-        value={'My Secret'}
+        value={config.clientSecret}
         infoMessage={
           'Enter Your Client Secret for your script from https://reddit.com/prefs/apps'
         }
-        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setConfig({ ...config, clientSecret: e.target.value })
+        }
       />
       <InputBox
         message="Username"
-        value={'Username'}
-        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
+        value={config.username}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setConfig({ ...config, username: e.target.value })
+        }
       />
       <InputBox
         message="Password"
-        value={'asdasda3q'}
-        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
+        value={config.password}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setConfig({ ...config, password: e.target.value })
+        }
       />
       <InputBox
         message="User Agent"
-        value={'<platform: firefox>'}
-        onChange={(e: React.FormEvent<EventTarget>) => console.log(e)}
+        value={config.userAgent}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setConfig({ ...config, userAgent: e.target.value })
+        }
       />
     </GeneralSettingContainer>
   );
