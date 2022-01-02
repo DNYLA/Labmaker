@@ -51,6 +51,7 @@ const TagContainer = styled.div`
   }
   span {
     margin: 0px 5px;
+    padding-bottom: 15px;
   }
 `;
 

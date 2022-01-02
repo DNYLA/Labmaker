@@ -1,5 +1,5 @@
 import { ComboContainer } from 'apps/user-dashboard/src/assets/styles';
-import { AccountSettings } from 'apps/user-dashboard/src/Pages/Home/AccountSettings';
+import { AccountSettings } from 'apps/user-dashboard/src/Pages/Home/account-settings';
 import { MainSettings } from 'apps/user-dashboard/src/Pages/Home/main-settings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faUndo } from '@fortawesome/free-solid-svg-icons';

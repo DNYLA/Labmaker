@@ -11,6 +11,7 @@ export interface TagInputBoxProps {
 const StyledTagInputBox = styled.div`
   color: #eee;
   /* padding-bottom: 10px; */
+  margin-bottom: 15px;
 `;
 //Currently Broken Fix CSS
 export function TagInputBox({ title }: TagInputBoxProps) {
@@ -81,6 +82,7 @@ const StyledSpan = styled.span`
     color: ${(p) => p.theme.navbar.title};
     cursor: pointer;
   }
+  margin-bottom: 15px;
 `;
 
 const TitleContainer = styled.span`
