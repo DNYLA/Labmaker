@@ -12,7 +12,20 @@ const StyledMainSettings = styled.div`
 
 export function MainSettings(props: MainSettingsProps) {
   const [isLogging, setIsLogging] = useState(true);
-
+  const [items, setItems] = useState([
+    'name1',
+    'name2',
+    'name1',
+    'name2',
+    'name1',
+    'name2',
+    'name1',
+    'name2',
+    'name1',
+    'name2',
+    'name1',
+    'name2',
+  ]);
   return (
     <GeneralSettingContainer>
       <h1>Main</h1>
@@ -27,9 +40,23 @@ export function MainSettings(props: MainSettingsProps) {
         onChange={(e: any) => console.log(e)}
       />
       <TagContainer>
-        <TagInputBox title={'Subreddits'} /> <span>-</span>
-        <TagInputBox title={'Blocked Users'} /> <span>-</span>
-        <TagInputBox title={'Node Editors'} />
+        <TagInputBox
+          title={'Subreddits'}
+          items={items}
+          onChange={(updatedValues: string[]) => setItems(updatedValues)}
+        />
+        <span>-</span>
+        <TagInputBox
+          title={'Blocked Users'}
+          items={items}
+          onChange={(updatedValues: string[]) => setItems(updatedValues)}
+        />
+        <span>-</span>
+        <TagInputBox
+          title={'Node Editors'}
+          items={items}
+          onChange={(updatedValues: string[]) => setItems(updatedValues)}
+        />
       </TagContainer>
       <SwitchToggle
         message="Log Activity"

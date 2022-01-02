@@ -6,6 +6,8 @@ import styled from 'styled-components';
 /* eslint-disable-next-line */
 export interface TagInputBoxProps {
   title: string;
+  items: string[];
+  onChange: Function;
 }
 
 const StyledTagInputBox = styled.div`
@@ -14,28 +16,28 @@ const StyledTagInputBox = styled.div`
   margin-bottom: 15px;
 `;
 //Currently Broken Fix CSS
-export function TagInputBox({ title }: TagInputBoxProps) {
+export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const items = [
-    'name1',
-    'name2',
-    'name1',
-    'name2',
-    'name1',
-    'name2',
-    'name1',
-    'name2',
-    'name1',
-    'name2',
-    'name1',
-    'name2',
-  ];
+
+  const handleKeyDown = (event: any) => {
+    const value = event.target.value;
+
+    if (event.key === 'Enter' && value) {
+      if (items.find((tag) => tag.toLowerCase() === value.toLowerCase()))
+        return;
+
+      onChange([...items, value]);
+      event.target.value = '';
+    } else if (event.key === 'Backspace' && !value) {
+      removeTag(items.length - 1);
+    }
+  };
 
   const removeTag = (index: number) => {
     const tagsArray = [...items];
 
     tagsArray.splice(index, 1);
-    // onChange(tagsArray);
+    onChange(tagsArray);
   };
 
   return (
@@ -52,8 +54,8 @@ export function TagInputBox({ title }: TagInputBoxProps) {
             <InputTag>
               <input
                 type="text"
-                value={'Enter a Subreddit'}
-                onKeyDown={() => {}}
+                // value={'Enter a Subreddit'}
+                onKeyDown={handleKeyDown}
               />
               <span>
                 <FontAwesomeIcon icon={faPlus} />
@@ -63,7 +65,7 @@ export function TagInputBox({ title }: TagInputBoxProps) {
               <ul className="tags">
                 {items.map((tag, i) => {
                   return (
-                    <li className="tags-li">
+                    <li className="tags-li" key={i}>
                       {tag} <button onClick={() => removeTag(i)}> x </button>
                     </li>
                   );
