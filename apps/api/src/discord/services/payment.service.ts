@@ -1,11 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
-  CreatePaymentDto,
   CreatePaymentDtoArray,
-  UpdatePaymentDto,
   UpdatePaymentDtoArray,
 } from '../dtos/create-payment.dto';
-import { v4 as uuidv4 } from 'uuid';
 import { Payment } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -31,8 +28,8 @@ export class PaymentService {
   }
 
   async createPayments(
-    paymentArray: CreatePaymentDtoArray,
-  ): Promise<Payment[] | any> {
+    paymentArray: CreatePaymentDtoArray
+  ): Promise<Payment[] | undefined> {
     //CreateMany doesnt return created objects which we need.
 
     /* return await this.prismaService.payment.createMany({
@@ -42,14 +39,14 @@ export class PaymentService {
 
     return await this.prismaService.$transaction(
       paymentArray.payments.map((payment) =>
-        this.prismaService.payment.create({ data: payment }),
-      ),
+        this.prismaService.payment.create({ data: payment })
+      )
     );
   }
 
   async updatPayments(
-    updatedPayments: UpdatePaymentDtoArray,
-  ): Promise<Payment[] | any> {
+    updatedPayments: UpdatePaymentDtoArray
+  ): Promise<Payment[] | undefined> {
     const savedPayments = [];
     const { payments } = updatedPayments;
 
@@ -60,7 +57,7 @@ export class PaymentService {
           data: payment,
         });
         savedPayments.push(updatedPayment);
-      }),
+      })
     );
 
     return savedPayments;
@@ -68,7 +65,7 @@ export class PaymentService {
 
   async deletePayments(deleteIds: number[]): Promise<void> {
     deleteIds.forEach(
-      async (id) => await this.prismaService.payment.delete({ where: { id } }),
+      async (id) => await this.prismaService.payment.delete({ where: { id } })
     );
   }
 }

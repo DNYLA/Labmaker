@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { TokenType } from 'apps/api/src/utils/types';
+import { TokenType } from '../../utils/types';
+import { UserDetails } from 'apps/api/src/auth/userDetails.dto';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor() {
@@ -12,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: any) {
+  async validate(payload: UserDetails) {
     return payload;
   }
 }
@@ -27,7 +28,7 @@ export class JwtBotStrategy extends PassportStrategy(Strategy, 'jwtbot') {
     });
   }
 
-  async validate(payload: any) {
+  async validate(payload: UserDetails) {
     if (payload.type !== TokenType.Bot) {
       throw new UnauthorizedException(
         'You arent authorized to access this data'

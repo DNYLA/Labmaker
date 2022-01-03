@@ -3,7 +3,7 @@ import { CreateLogDto } from '../dtos/create-log.dto';
 import { LogQueryParms } from '../controllers/logs.controller';
 import { Log } from '.prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { RedditGateway } from 'apps/api/src/reddit/reddit.gateway';
+import { RedditGateway } from '../../reddit/reddit.gateway';
 
 @Injectable()
 export class LogsService {
@@ -24,7 +24,7 @@ export class LogsService {
   }
 
   async queryGetLogs(nodeId: number, query: LogQueryParms): Promise<Log[]> {
-    let filter = { nodeId, pm: false };
+    const filter = { nodeId, pm: false };
 
     if (query.pmOnly) {
       filter.pm = true;
@@ -40,7 +40,7 @@ export class LogsService {
   async getSubmissionIds(nodeId: number): Promise<string[]> {
     const logs = await this.getLogs(nodeId);
 
-    let submissionIds = [];
+    const submissionIds = [];
 
     logs.forEach((log) => {
       submissionIds.push(log.subId);

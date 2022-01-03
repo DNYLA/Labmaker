@@ -6,22 +6,16 @@ import {
   ConnectedSocket,
   OnGatewayInit,
   OnGatewayConnection,
-  WsException,
 } from '@nestjs/websockets';
 
 import {} from '@nestjs/platform-socket.io';
-import { IncomingMessage } from 'http';
 import { AuthService } from '../auth/auth.service';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { JwtAuthGuard } from '../auth/guards/Jwt.guard';
 import { WSGuard } from '../auth/guards/WSAuth.guard';
 import { Log, RedditConfig } from '.prisma/client';
-import RedditGatewayMessage from './dtos/RedditGatewayMessage.dto';
 import { Server, Socket } from 'socket.io';
-import { UserService } from 'apps/api/src/user/user.service';
-import { LogDto } from '@labmaker/wrapper';
-import { TokenType } from 'apps/api/src/utils/types';
+import { UserService } from '../user/user.service';
+import { TokenType } from '../utils/types';
 
 @WebSocketGateway({ namespace: 'reddit' })
 export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
@@ -32,7 +26,8 @@ export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
 
   @WebSocketServer() server: Server;
 
-  async handleConnection(client: Socket, ...args: any[]) {
+  async handleConnection(client: Socket, ...args: string[]) {
+    console.log(args);
     const token = client.handshake.headers.authorization.split(' ')[0];
 
     const result = await this.authService.verify(token);
@@ -46,7 +41,8 @@ export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
     }
   }
 
-  afterInit(server: any) {
+  afterInit(server: Server) {
+    console.log(server);
     console.log('Connected');
   }
 
@@ -71,6 +67,7 @@ export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
     @ConnectedSocket() client: Socket,
     @MessageBody() message: string
   ): void {
+    console.log(client);
     console.log('Sent');
     this.server.emit('message', message);
   }

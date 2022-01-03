@@ -53,9 +53,4 @@ export class ConfigController {
   deleteConfig(@Param('id') id: number) {
     return this.configService.deleteConfig(id);
   }
-
-  @Get('image/profile')
-  getProfile(): Promise<any> {
-    return this.configService.getProfile('chikybacon');
-  }
 }

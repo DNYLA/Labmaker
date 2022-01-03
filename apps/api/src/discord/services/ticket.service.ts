@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTicketDto, UpdateTicketDto } from '../dtos/create-ticket.dto';
-import { v4 as uuidv4 } from 'uuid';
 import { Ticket } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -23,7 +22,7 @@ export class TicketService {
     return await this.prismaService.ticket.create({ data: newTicketDto });
   }
 
-  async updateConfig(updateTicketDto: UpdateTicketDto): Promise<any> {
+  async updateConfig(updateTicketDto: UpdateTicketDto): Promise<Ticket> {
     return await this.prismaService.ticket.update({
       where: { id: updateTicketDto.id },
       data: updateTicketDto,

@@ -4,8 +4,7 @@ import { Response, Request } from 'express';
 import { User } from '.prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { WsException } from '@nestjs/websockets';
-import { TokenType } from 'apps/api/src/utils/types';
+import { TokenType } from '../utils/types';
 
 @Injectable()
 export class AuthService {
@@ -44,7 +43,7 @@ export class AuthService {
       tokenVersion: details.tokenVersion,
     };
 
-    let user = await this.prismaService.user.upsert({
+    const user = await this.prismaService.user.upsert({
       where: {
         id,
       },

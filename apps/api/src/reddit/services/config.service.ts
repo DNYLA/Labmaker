@@ -1,13 +1,5 @@
 import { RedditConfig } from '.prisma/client';
-import { HttpService } from '@nestjs/axios';
-import {
-  Inject,
-  Injectable,
-  Logger,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { lastValueFrom } from 'rxjs';
-import { UserDetails } from '../../auth/userDetails.dto';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import {
   CreateConfigDto,
@@ -19,8 +11,7 @@ import { RedditGateway } from '../reddit.gateway';
 export class ConfigService {
   constructor(
     private prismaService: PrismaService,
-    private readonly redditGateway: RedditGateway,
-    @Inject(HttpService) private readonly httpService: HttpService,
+    private readonly redditGateway: RedditGateway // @Inject(HttpService) private readonly httpService: HttpService
   ) {}
   private readonly logger = new Logger(ConfigService.name);
 
@@ -65,7 +56,7 @@ export class ConfigService {
     }
   }
 
-  async updateConfig(ucd: UpdateConfigDto): Promise<any> {
+  async updateConfig(ucd: UpdateConfigDto): Promise<RedditConfig | undefined> {
     const filter = { id: ucd.id };
     ucd.nodeEditors = ucd.nodeEditors.filter((userId) => userId !== ucd.userId);
 
@@ -81,7 +72,10 @@ export class ConfigService {
     }
   }
 
-  async updateMessage(id: number, message: string): Promise<any> {
+  async updateMessage(
+    id: number,
+    message: string
+  ): Promise<RedditConfig | undefined> {
     const config = await this.prismaService.redditConfig.update({
       where: { id },
       data: { pmBody: message },
@@ -93,25 +87,9 @@ export class ConfigService {
     }
   }
 
-  async deleteConfig(id: number): Promise<any> {
+  async deleteConfig(id: number): Promise<void> {
     await this.prismaService.redditConfig.delete({ where: { id } });
     this.redditGateway.notifyDelete(id);
     return;
-  }
-
-  //Fix Function
-  async getProfile(username: string): Promise<any> {
-    const xPathValue = `//*[@id="SHORTCUT_FOCUSABLE_DIV"]/div[2]/div/div/div/div[2]/div[3]/div[2]/div/div[1]/div/div[2]/img`;
-    // const htmlPage = this.httpService
-    // .get(`https://reddit.com/user/${username}`)
-    // .pipe(map((response) => response.data));
-
-    const data = this.httpService.get(`https://reddit.com/user/${username}`);
-    const htmlPage = await (await lastValueFrom(data)).data;
-
-    // this.logger.log(data);
-
-    return htmlPage;
-    //*[@id="SHORTCUT_FOCUSABLE_DIV"]/div[2]/div/div/div/div[2]/div[3]/div[2]/div/div[1]/div/div[2]/img
   }
 }

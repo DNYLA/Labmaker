@@ -1,9 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CreateConfigDto } from '../dtos/create-guildconfig.dto';
-import { UpdateConfigDto } from '../dtos/update-guildconfig.dto';
 import { DiscordConfig } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CurrentUser } from '../../utils/getUser.decorator';
 import { UserDetails } from '../../auth/userDetails.dto';
 
 @Injectable()
@@ -42,7 +40,7 @@ export class ConfigService {
     });
   }
 
-  async updateConfig(updateConfigDto: CreateConfigDto): Promise<any> {
+  async updateConfig(updateConfigDto: CreateConfigDto): Promise<DiscordConfig> {
     return await this.prismaService.discordConfig.update({
       where: { id: updateConfigDto.id },
       data: updateConfigDto,

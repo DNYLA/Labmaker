@@ -1,10 +1,9 @@
 import { Profile, Strategy } from 'passport-discord';
 import { PassportStrategy } from '@nestjs/passport';
-import { Inject, Injectable, Res } from '@nestjs/common';
-import { AuthenticationProvider } from '../auth.interface';
+import { Injectable } from '@nestjs/common';
 import { AuthService } from '../auth.service';
-import { TokenType } from 'apps/api/src/utils/types';
-import { UserDetails } from 'apps/api/src/auth/userDetails.dto';
+import { TokenType } from '../../utils/types';
+import { UserDetails } from '../../auth/userDetails.dto';
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {

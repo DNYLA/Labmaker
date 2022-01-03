@@ -14,7 +14,7 @@ export class PayPalService {
   constructor(
     private readonly payGateway: PayGateway,
     private httpService: HttpService,
-    private prismaService: PrismaService,
+    private prismaService: PrismaService
   ) {}
 
   private get credentials() {
@@ -40,7 +40,7 @@ export class PayPalService {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: 'PayPal app credentials are not defined.',
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
 
@@ -60,7 +60,7 @@ export class PayPalService {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: 'PayPal WHID is not defined.',
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
 
@@ -85,7 +85,7 @@ export class PayPalService {
    */
   public async createOrder(
     channelId: string,
-    price: number,
+    price: number
   ): Promise<{ url: string }> {
     if (isNaN(price)) {
       Logger.log('Throwing Error for invalid price');
@@ -94,7 +94,7 @@ export class PayPalService {
           status: HttpStatus.BAD_REQUEST,
           error: 'Price for the order must be a number!',
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -110,11 +110,11 @@ export class PayPalService {
           status: HttpStatus.BAD_REQUEST,
           error: 'Ticket does not exist!',
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
-    let request = new paypal.orders.OrdersCreateRequest();
+    const request = new paypal.orders.OrdersCreateRequest();
     request.prefer('return=representation');
     request.requestBody({
       intent: 'CAPTURE',
@@ -139,8 +139,8 @@ export class PayPalService {
       },
     });
 
-    let response = await this.client.execute(request);
-    let order = response.result;
+    const response = await this.client.execute(request);
+    const order = response.result;
 
     // Add order id to ticket.
     // TODO: After postgres migration, orders should be added to their own table linking back to
@@ -151,15 +151,15 @@ export class PayPalService {
     });
 
     // Return checkout link if it exists
-    let checkoutLink = order.links.find((e) => e.rel == 'approve').href;
+    const checkoutLink = order.links.find((e) => e.rel == 'approve').href;
     if (checkoutLink) {
       return { url: checkoutLink };
     } else {
       Logger.warn(
         `Couldn't find checkout link amongst these links: ${JSON.stringify(
-          order.links,
+          order.links
         )}`,
-        this.context,
+        this.context
       );
 
       throw new HttpException(
@@ -167,7 +167,7 @@ export class PayPalService {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: `Was unable to retrieve checkout link from PayPal.`,
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -185,7 +185,7 @@ export class PayPalService {
 
     Logger.log(
       `Capturing Order: ${JSON.stringify(response.result)}`,
-      this.context,
+      this.context
     );
   }
 
@@ -208,7 +208,7 @@ export class PayPalService {
 
         Logger.log(
           `Checkout completed, attempting to capture funds..`,
-          this.context,
+          this.context
         );
       }
 
@@ -219,7 +219,7 @@ export class PayPalService {
 
         Logger.log(
           `Payment of ${amount.value} ${amount.currency_code} is **processing**.`,
-          this.context,
+          this.context
         );
       }
 
@@ -233,7 +233,7 @@ export class PayPalService {
 
         Logger.log(
           `Captured A Payment. Net: ${netStr}, Paypal Fee: ${feeStr}`,
-          this.context,
+          this.context
         );
 
         // doesn't give us the purchase_units, only the tx id, so use that to get ticket again in db
@@ -269,9 +269,9 @@ export class PayPalService {
         } else {
           Logger.error(
             `Payment Capture Completed, but couldn't find relating ticket! ${JSON.stringify(
-              oinfo,
+              oinfo
             )}`,
-            this.context,
+            this.context
           );
         }
       }
@@ -293,7 +293,7 @@ export class PayPalService {
     // base64 encode our credentials to form our token to send to paypal
     const cred = this.credentials;
     const authTkn = Buffer.from(
-      `${cred.clientID}:${cred.clientSecret}`,
+      `${cred.clientID}:${cred.clientSecret}`
     ).toString('base64');
 
     try {
@@ -317,8 +317,8 @@ export class PayPalService {
               Authorization: `Basic ${authTkn}`,
               'User-Agent': 'LabMaker-PIPN-Verifier/0.1',
             },
-          },
-        ),
+          }
+        )
       );
 
       if (resp.data.verification_status == 'SUCCESS') {

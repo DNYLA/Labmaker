@@ -1,17 +1,7 @@
-import {
-  Controller,
-  Get,
-  Inject,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { DiscordAuthGuard } from './guards/DiscordAuth.guard';
-import { AuthenticationProvider } from './auth.interface';
 import { AuthService } from './auth.service';
-import { UserDetails } from 'apps/api/src/auth/userDetails.dto';
 
 interface IUserAuthRequest extends Request {
   user: string;
@@ -23,7 +13,7 @@ export class AuthController {
 
   @Get('login')
   @UseGuards(DiscordAuthGuard)
-  login() {}
+  // login() {}
 
   @Get('redirect')
   @UseGuards(DiscordAuthGuard)

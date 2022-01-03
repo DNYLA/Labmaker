@@ -1,12 +1,5 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { CanActivate, Injectable } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
-import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 
 @Injectable()
