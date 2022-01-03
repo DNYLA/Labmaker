@@ -1,13 +1,16 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useState, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 
+export interface IOnChage {
+  (updatedValues: string[]): void;
+}
 /* eslint-disable-next-line */
 export interface TagInputBoxProps {
   title: string;
   items: string[];
-  onChange: Function;
+  onChange: IOnChage;
 }
 
 const StyledTagInputBox = styled.div`
@@ -20,6 +23,7 @@ export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleKeyDown = (event: any) => {
+    console.log(typeof event);
     const value = event.target.value;
 
     if (event.key === 'Enter' && value) {
