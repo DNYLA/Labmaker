@@ -6,8 +6,10 @@ import { Home } from '../Pages/Home/home';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Labmaker } from 'apps/user-dashboard/src/utils/APIHandler';
-import { setUser } from 'apps/user-dashboard/src/utils/slices/userSlice';
-import { addRedditConfigs } from 'apps/user-dashboard/src/utils/slices/configSlices';
+import {
+  addConfigs,
+  setUser,
+} from 'apps/user-dashboard/src/utils/slices/userSlice';
 const StyledApp = styled.div`
   // Your style here
   background-color: ${(p) => p.theme.base.backCol};
@@ -39,7 +41,7 @@ export function App() {
       console.log(user);
       dispatch(setUser(user));
       if (user.nodes.length > 0) {
-        dispatch(addRedditConfigs(user.nodes));
+        dispatch(addConfigs(user.nodes));
       }
 
       setLoading(false);

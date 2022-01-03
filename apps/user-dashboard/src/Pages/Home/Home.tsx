@@ -17,11 +17,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'apps/user-dashboard/src/store';
 import { RedditConfig } from 'apps/user-dashboard/src/utils/types';
 import { redditTemplate } from 'apps/user-dashboard/src/utils/LoadingTypes';
+// import {
+//   addRedditConfigs,
+//   setRedditConfig,
+// } from 'apps/user-dashboard/src/utils/slices/configSlices';
 import {
-  addRedditConfigs,
-  setRedditConfig,
-} from 'apps/user-dashboard/src/utils/slices/configSlices';
-import { setUser } from 'apps/user-dashboard/src/utils/slices/userSlice';
+  addConfigs,
+  setConfig,
+  setUser,
+} from 'apps/user-dashboard/src/utils/slices/userSlice';
 import { Labmaker } from 'apps/user-dashboard/src/utils/APIHandler';
 
 // interface HomeProps {}
@@ -34,10 +38,8 @@ function useRedditLogic() {
   const dispatch = useDispatch();
   const [reload, setReload] = useState(true);
   const user = useSelector((state: RootState) => state.user.value);
-  const redditConfigs = useSelector(
-    (state: RootState) => state.redditConfig.value
-  );
-  const [selectedConfig, setSelectedConfig] = useState(redditConfigs[0]);
+  // const redditConfigs = [...user.nodes];
+  const [selectedConfig, setSelectedConfig] = useState(user.nodes[0]);
 
   const handleClick = async (node: RedditConfig) => {
     if (node.id === selectedConfig.id && node.id !== -1) {
@@ -49,8 +51,8 @@ function useRedditLogic() {
       console.log('Creating New');
       //Create Node
       const newNode: RedditConfig = { ...redditTemplate, id: -1 };
-      dispatch(addRedditConfigs([{ ...newNode, id: -1, userId: user.id }]));
-      const config = redditConfigs.find((c) => c.id === -1);
+      dispatch(addConfigs([{ ...newNode, id: -1, userId: user.id }]));
+      const config = user.nodes.find((c) => c.id === -1);
       if (config) setSelectedConfig(config);
     } else {
       const config: RedditConfig = node;
@@ -64,7 +66,7 @@ function useRedditLogic() {
   };
 
   const loadConfig = async () => {
-    if (redditConfigs.length === 0) {
+    if (user.nodes.length === 0) {
       const templateConf = redditTemplate;
       setSelectedConfig(templateConf);
       return;
@@ -80,11 +82,11 @@ function useRedditLogic() {
   }, []);
 
   const saveNode = async () => {
-    const oldConfig = redditConfigs.find((c) => c.id === selectedConfig.id);
+    const oldConfig = user.nodes.find((c) => c.id === selectedConfig.id);
     if (oldConfig === selectedConfig) return;
     if (!selectedConfig.newNode) {
       Labmaker.Reddit.update(selectedConfig);
-      dispatch(setRedditConfig(selectedConfig));
+      dispatch(setConfig(selectedConfig));
     } else {
       const newNode = await Labmaker.Reddit.create({
         ...selectedConfig,
@@ -92,8 +94,7 @@ function useRedditLogic() {
       });
 
       if (newNode) {
-        dispatch(addRedditConfigs([newNode]));
-        dispatch(setUser({ ...user, nodes: [...user.nodes, newNode] }));
+        dispatch(addConfigs([newNode]));
         // setReload(true);
       }
     }
@@ -123,7 +124,6 @@ function useRedditLogic() {
   return {
     selectedConfig,
     setSelectedConfig,
-    redditConfigs,
     handleClick,
     saveNode,
     deleteNode,
@@ -133,14 +133,8 @@ function useRedditLogic() {
 }
 
 export function Home() {
-  const {
-    selectedConfig,
-    setSelectedConfig,
-    redditConfigs,
-    createNode,
-    saveNode,
-    user,
-  } = useRedditLogic();
+  const { selectedConfig, setSelectedConfig, createNode, saveNode, user } =
+    useRedditLogic();
 
   const itemLoad: Item = {
     id: 0,
@@ -176,7 +170,7 @@ export function Home() {
   }, []);
 
   const refreshItem = () => {
-    const config = redditConfigs.find((c) => c.id === selected.id);
+    const config = user.nodes.find((c) => c.id === selected.id);
     if (!config) return;
     setSelectedConfig(config);
   };
@@ -186,7 +180,7 @@ export function Home() {
     const foundItem = items.find((item) => item.id === id);
     if (!foundItem) return;
 
-    const config = redditConfigs.find((c) => c.id === foundItem.id);
+    const config = user.nodes.find((c) => c.id === foundItem.id);
     setSelected(foundItem);
     setSelectedConfig(config!); //Force Unwrap because we know it exists
   };

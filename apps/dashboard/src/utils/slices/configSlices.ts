@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { loadingDiscordConfig, loadingRedditConfig } from '../LoadingTypes';
-import { GuildConfig, Node } from '../types';
+import { loadingDiscordConfig } from '../LoadingTypes';
+import { GuildConfig } from '../types';
 
 export const discordConfigSlice = createSlice({
   name: 'discordConfig',
@@ -14,17 +14,4 @@ export const discordConfigSlice = createSlice({
   },
 });
 
-export const redditConfigSlice = createSlice({
-  name: 'redditConfig',
-  initialState: {
-    value: loadingRedditConfig,
-  },
-  reducers: {
-    updateReddit: (state, action: PayloadAction<Node>) => {
-      state.value = action.payload;
-    },
-  },
-});
-
-export const { updateReddit } = redditConfigSlice.actions;
 export const { updateDiscord } = discordConfigSlice.actions;
