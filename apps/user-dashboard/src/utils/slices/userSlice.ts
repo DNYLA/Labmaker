@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserDto } from '@labmaker/wrapper';
-import { defaultUser } from 'apps/user-dashboard/src/utils/LoadingTypes';
-import { RedditConfig } from 'apps/user-dashboard/src/utils/types';
+import { defaultUser } from '../../utils/LoadingTypes';
+import { RedditConfig } from '../../utils/types';
 
 export const userSlice = createSlice({
   name: 'user',

@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components';
 
 import App from './app/app';
 import { Provider } from 'react-redux';
-import { store } from 'apps/user-dashboard/src/store';
+import { store } from './store';
 
 ReactDOM.render(
   <StrictMode>

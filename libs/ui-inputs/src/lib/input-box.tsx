@@ -1,14 +1,15 @@
-import { InfoTitle } from 'libs/ui-inputs/src/lib/info-box';
-import { BaseInputProps } from 'libs/ui-inputs/src/lib/types';
-import { createRef, useRef, useState } from 'react';
+import { InfoTitle } from './info-box';
 import styled from 'styled-components';
 
+export interface IOnChange {
+  (event: React.ChangeEvent<HTMLInputElement>): void;
+}
 /* eslint-disable-next-line */
 export interface InputBoxProps {
   value: string | string[];
   infoMessage?: string;
   message: string;
-  onChange: Function;
+  onChange: IOnChange;
 }
 
 const StyledInputBox = styled.div`

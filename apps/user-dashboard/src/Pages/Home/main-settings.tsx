@@ -1,34 +1,31 @@
 import { InputBox, TagInputBox } from '@labmaker/ui-inputs';
-import { ContainerStyle } from '../../assets/styles';
+import { SettingsContainer } from '../../assets/styles';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { SwitchToggle } from '@labmaker/ui-inputs';
-import { RedditConfig } from 'apps/user-dashboard/src/utils/types';
+import { RedditConfig } from '../../utils/types';
+
 /* eslint-disable-next-line */
 export interface MainSettingsProps {
   config: RedditConfig;
-  setConfig: Function;
+  setConfig: React.Dispatch<React.SetStateAction<RedditConfig>>;
 }
 
 export function MainSettings({ config, setConfig }: MainSettingsProps) {
   const [isLogging, setIsLogging] = useState(true);
 
   return (
-    <GeneralSettingContainer>
+    <SettingsContainer>
       <h1>Main</h1>
       <InputBox
         message="Title"
         value={config.title}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setConfig({ ...config, title: e.target.value })
-        }
+        onChange={(e) => setConfig({ ...config, title: e.target.value })}
       />
       <InputBox
         message="Body"
         value={config.pmBody}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setConfig({ ...config, pmBody: e.target.value })
-        }
+        onChange={(e) => setConfig({ ...config, pmBody: e.target.value })}
       />
       <TagContainer>
         <TagInputBox
@@ -69,7 +66,7 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
         onToggle={() => setIsLogging(!isLogging)}
         infoMessage="Activity is currently logged regardless of this value"
       />
-    </GeneralSettingContainer>
+    </SettingsContainer>
   );
 }
 
@@ -84,27 +81,5 @@ const TagContainer = styled.div`
   span {
     margin: 0px 5px;
     padding-bottom: 15px;
-  }
-`;
-
-const GeneralSettingContainer = styled(ContainerStyle)`
-  display: flex;
-  flex-direction: column;
-  padding: 25px;
-  padding-top: 5px;
-  h1 {
-    text-align: center;
-    border-radius: 5px;
-    width: 100%;
-    font-size: 24px;
-    user-select: none;
-  }
-
-  .inputBox {
-    width: 100%;
-    padding-bottom: 10px;
-  }
-  @media (max-width: 812px) {
-    display: block;
   }
 `;

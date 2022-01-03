@@ -1,17 +1,12 @@
 import styled from 'styled-components';
-import { Route, Link, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Navbar as Nav } from '@labmaker/ui-header';
-import { InputBox } from '@labmaker/ui-inputs';
 import { Home } from '../Pages/Home/home';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Labmaker } from 'apps/user-dashboard/src/utils/APIHandler';
-import {
-  addConfigs,
-  setUser,
-} from 'apps/user-dashboard/src/utils/slices/userSlice';
+import { Labmaker } from '../utils/APIHandler';
+import { addConfigs, setUser } from '../utils/slices/userSlice';
 const StyledApp = styled.div`
-  // Your style here
   background-color: ${(p) => p.theme.base.backCol};
   height: 1080px;
   color: ${(p) => p.theme.text};
@@ -31,7 +26,7 @@ export function App() {
     { name: 'Logs' },
   ];
 
-  const loadUser = async () => {
+  const fetchUser = useCallback(async () => {
     const result = await Labmaker.refreshAccesToken();
     console.log(result);
     if (!result.ok) {
@@ -46,18 +41,11 @@ export function App() {
 
       setLoading(false);
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
-    const asyncLoad = async () => {
-      await loadUser();
-    };
-
-    asyncLoad();
-
-    // Labmaker.refreshAccesToken().then((result) => {
-    // }
-  }, []);
+    fetchUser();
+  }, [fetchUser]);
 
   if (loginFailed) {
     window.location.href = Labmaker.loginURL();

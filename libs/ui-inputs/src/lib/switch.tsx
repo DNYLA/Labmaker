@@ -1,5 +1,4 @@
-import { InfoTitle } from 'libs/ui-inputs/src/lib/info-box';
-import { BaseInputProps } from 'libs/ui-inputs/src/lib/types';
+import { InfoTitle } from './info-box';
 import styled, { css } from 'styled-components';
 
 /* eslint-disable-next-line */
@@ -40,10 +39,6 @@ export function SwitchToggle({
     </StyledSwitch>
   );
 }
-
-const StyledSpan = styled.span`
-  padding-right: 5px;
-`;
 
 const SwitchStyle = styled.label`
   position: relative;

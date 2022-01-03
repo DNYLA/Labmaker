@@ -1,17 +1,16 @@
 import { InputBox } from '@labmaker/ui-inputs';
-import { ContainerStyle } from '../../assets/styles';
-import styled from 'styled-components';
+import { SettingsContainer } from '../../assets/styles';
 import React from 'react';
-import { RedditConfig } from 'apps/user-dashboard/src/utils/types';
+import { RedditConfig } from '../../utils/types';
 
 interface AccountSettingsProps {
   config: RedditConfig;
-  setConfig: Function;
+  setConfig: React.Dispatch<React.SetStateAction<RedditConfig>>;
 }
 
 export function AccountSettings({ config, setConfig }: AccountSettingsProps) {
   return (
-    <GeneralSettingContainer>
+    <SettingsContainer>
       <h1>Account</h1>
       <InputBox
         message="Client ID"
@@ -54,28 +53,6 @@ export function AccountSettings({ config, setConfig }: AccountSettingsProps) {
           setConfig({ ...config, userAgent: e.target.value })
         }
       />
-    </GeneralSettingContainer>
+    </SettingsContainer>
   );
 }
-
-const GeneralSettingContainer = styled(ContainerStyle)`
-  display: flex;
-  flex-direction: column;
-  padding: 25px;
-  padding-top: 5px;
-  h1 {
-    text-align: center;
-    border-radius: 5px;
-    width: 100%;
-    font-size: 24px;
-    user-select: none;
-  }
-
-  .inputBox {
-    width: 100%;
-    padding-bottom: 10px;
-  }
-  @media (max-width: 812px) {
-    display: block;
-  }
-`;

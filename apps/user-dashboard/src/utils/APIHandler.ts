@@ -1,5 +1,4 @@
-import { APISocket, LabmakerAPI } from '@labmaker/wrapper';
-import { io } from 'socket.io-client';
+import { LabmakerAPI } from '@labmaker/wrapper';
 
 export const Labmaker = new LabmakerAPI(
   process.env.NX_API_URL || 'http://localhost:3000',

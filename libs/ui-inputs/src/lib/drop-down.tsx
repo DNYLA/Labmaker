@@ -9,11 +9,15 @@ export interface Item {
   selected: boolean;
 }
 
+interface IOnChange {
+  (id: number): void;
+}
+
 /* eslint-disable-next-line */
 export interface DropDownProps {
   items: Item[];
   selected: Item;
-  onChange: any;
+  onChange: IOnChange;
 }
 
 const StyledDropDown = styled.div`
@@ -32,16 +36,10 @@ export function DropDown({ items, selected, onChange }: DropDownProps) {
     setOpen(false);
   };
 
-  console.log('ITEMS');
-  console.log(items);
-  console.log(selected);
-
   return (
     <StyledDropDown>
       <SelectedItem onClick={() => setOpen(!isOpen)}>
-        {selected ? selected.title : 'ABC'}
-        {/* {selected.title} */}
-
+        {selected.title}
         <FontAwesomeIcon
           pull={'right'}
           icon={isOpen ? faCaretUp : faCaretDown}
@@ -58,7 +56,7 @@ export function DropDown({ items, selected, onChange }: DropDownProps) {
                   {item.title}
                 </DropDownItem>
               );
-            return;
+            return <div></div>;
           })}
         </HiddenContainer>
       )}
@@ -67,17 +65,9 @@ export function DropDown({ items, selected, onChange }: DropDownProps) {
 }
 
 const HiddenContainer = styled.div`
-  /* margin-top: 10px; */
-  /* height: 100px; */
   z-index: 100;
   position: absolute;
   width: 200px;
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-  align-items: center; */
 `;
 
 const DropDownItem = styled.div`

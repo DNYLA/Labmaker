@@ -26,3 +26,53 @@ export const ContainerStyle = styled.div`
   border-radius: 5px;
   background-color: ${(props) => props.theme.base.backCol};
 `;
+
+export const SettingsContainer = styled(ContainerStyle)`
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  padding-top: 5px;
+  h1 {
+    /* text-align: center; */
+    border-radius: 5px;
+    width: 100%;
+    font-size: 24px;
+    user-select: none;
+    margin-bottom: 25px;
+  }
+
+  .inputBox {
+    width: 100%;
+    padding-bottom: 10px;
+  }
+  @media (max-width: 812px) {
+    display: block;
+  }
+`;
+
+export const IconButton = styled.div`
+  display: inline;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding: 20px 0; */
+  margin-right: 5px;
+  transition: 250ms all;
+  &:hover .fa-trash-alt {
+    color: rgba(255, 0, 0, 0.8);
+  }
+  background-color: ${(props) => props.theme.input.backCol};
+  :hover {
+    background-color: ${(props) => props.theme.input.activeCol};
+    cursor: pointer;
+  }
+  @media (max-width: 812px) {
+    width: 50px;
+    height: 45px;
+    svg {
+      padding-top: 10px;
+    }
+  }
+`;
