@@ -13,7 +13,7 @@ export interface Item {
 export interface DropDownProps {
   items: Item[];
   selected: Item;
-  setSelected: any;
+  onChange: any;
 }
 
 const StyledDropDown = styled.div`
@@ -24,18 +24,24 @@ const StyledDropDown = styled.div`
   user-select: none;
 `;
 
-export function DropDown({ items, selected, setSelected }: DropDownProps) {
+export function DropDown({ items, selected, onChange }: DropDownProps) {
   const [isOpen, setOpen] = useState(false);
 
   const setItem = (id: number) => {
-    setSelected(items[id]);
+    onChange(id);
     setOpen(false);
   };
+
+  console.log('ITEMS');
+  console.log(items);
+  console.log(selected);
 
   return (
     <StyledDropDown>
       <SelectedItem onClick={() => setOpen(!isOpen)}>
-        {selected.title}
+        {selected ? selected.title : 'ABC'}
+        {/* {selected.title} */}
+
         <FontAwesomeIcon
           pull={'right'}
           icon={isOpen ? faCaretUp : faCaretDown}

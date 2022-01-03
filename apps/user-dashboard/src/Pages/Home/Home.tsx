@@ -34,10 +34,10 @@ function useRedditLogic() {
   const dispatch = useDispatch();
   const [reload, setReload] = useState(true);
   const user = useSelector((state: RootState) => state.user.value);
-  const redditConfig = useSelector(
+  const redditConfigs = useSelector(
     (state: RootState) => state.redditConfig.value
   );
-  const [selectedConfig, setSelectedConfig] = useState(redditConfig[0]);
+  const [selectedConfig, setSelectedConfig] = useState(redditConfigs[0]);
 
   const handleClick = async (node: RedditConfig) => {
     if (node.id === selectedConfig.id && node.id !== -1) {
@@ -50,7 +50,7 @@ function useRedditLogic() {
       //Create Node
       const newNode: RedditConfig = { ...redditTemplate, id: -1 };
       dispatch(addRedditConfigs([{ ...newNode, id: -1, userId: user.id }]));
-      const config = redditConfig.find((c) => c.id === -1);
+      const config = redditConfigs.find((c) => c.id === -1);
       if (config) setSelectedConfig(config);
     } else {
       const config: RedditConfig = node;
@@ -64,7 +64,7 @@ function useRedditLogic() {
   };
 
   const loadConfig = async () => {
-    if (redditConfig.length === 0) {
+    if (redditConfigs.length === 0) {
       const templateConf = redditTemplate;
       setSelectedConfig(templateConf);
       return;
@@ -80,6 +80,8 @@ function useRedditLogic() {
   }, []);
 
   const saveNode = async () => {
+    const oldConfig = redditConfigs.find((c) => c.id === selectedConfig.id);
+    if (oldConfig === selectedConfig) return;
     if (!selectedConfig.newNode) {
       Labmaker.Reddit.update(selectedConfig);
       dispatch(setRedditConfig(selectedConfig));
@@ -121,7 +123,7 @@ function useRedditLogic() {
   return {
     selectedConfig,
     setSelectedConfig,
-    redditConfig,
+    redditConfigs,
     handleClick,
     saveNode,
     deleteNode,
@@ -134,7 +136,7 @@ export function Home() {
   const {
     selectedConfig,
     setSelectedConfig,
-    redditConfig,
+    redditConfigs,
     createNode,
     saveNode,
     user,
@@ -142,7 +144,7 @@ export function Home() {
 
   const itemLoad: Item = {
     id: 0,
-    title: 'New Config',
+    title: 'new Item?',
     selected: true,
   };
 
@@ -152,30 +154,45 @@ export function Home() {
   useEffect(() => {
     const parseConfigs = () => {
       const parsedData = new Array<Item>();
-      user.nodes.forEach((config) => {
+      const allConfigs = [...user.nodes];
+      for (let i = 0; i < allConfigs.length; i++) {
+        const config = allConfigs[i];
         parsedData.push({
           id: config.id,
           title: config.username,
-          selected: false,
+          selected: true,
         });
-      });
-      if (parsedData.length > 0) {
-        setParsedItems(parsedData);
-        setSelected(parsedItems[0]);
       }
 
-      console.log(parsedItems);
+      if (parsedData.length > 0) {
+        console.log('Cur Selected');
+        console.log(selected);
+        parsedData[0].selected = true;
+        setSelected(parsedData[0]);
+        setParsedItems(parsedData);
+      }
     };
     parseConfigs();
-  }, [redditConfig]);
+  }, []);
 
   const refreshItem = () => {
-    const config = redditConfig.find((c) => c.id === selected.id);
+    const config = redditConfigs.find((c) => c.id === selected.id);
     if (!config) return;
     setSelectedConfig(config);
   };
 
-  if (selectedConfig.id < -2) return <div>Invalid</div>;
+  const onChange = (id: number) => {
+    const items = [...parsedItems];
+    const foundItem = items.find((item) => item.id === id);
+    if (!foundItem) return;
+
+    const config = redditConfigs.find((c) => c.id === foundItem.id);
+    setSelected(foundItem);
+    setSelectedConfig(config!); //Force Unwrap because we know it exists
+  };
+
+  if (selectedConfig.id < -2 || parsedItems.length === 0)
+    return <div>Invalid</div>;
   else
     return (
       <StyledHome>
@@ -183,17 +200,17 @@ export function Home() {
           <DropDown
             items={parsedItems}
             selected={selected}
-            setSelected={setSelected}
+            onChange={onChange}
           />
           <ButtonContainer>
             <IconButton onClick={() => {}}>
               <FontAwesomeIcon icon={faTrashAlt} size="1x" color="#FFF" />
             </IconButton>
-            <IconButton onClick={createNode}>
-              <FontAwesomeIcon icon={faPlus} size="1x" color="#FFF" />
-            </IconButton>
             <IconButton onClick={refreshItem}>
               <FontAwesomeIcon icon={faUndo} size="1x" color="#FFF" />
+            </IconButton>
+            <IconButton onClick={createNode}>
+              <FontAwesomeIcon icon={faPlus} size="1x" color="#FFF" />
             </IconButton>
 
             <IconButton onClick={saveNode}>

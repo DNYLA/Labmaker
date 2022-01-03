@@ -68,6 +68,7 @@ const GeneralSettingContainer = styled(ContainerStyle)`
     border-radius: 5px;
     width: 100%;
     font-size: 24px;
+    user-select: none;
   }
 
   .inputBox {

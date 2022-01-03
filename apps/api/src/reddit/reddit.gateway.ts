@@ -21,6 +21,7 @@ import RedditGatewayMessage from './dtos/RedditGatewayMessage.dto';
 import { Server, Socket } from 'socket.io';
 import { UserService } from 'apps/api/src/user/user.service';
 import { LogDto } from '@labmaker/wrapper';
+import { TokenType } from 'apps/api/src/utils/types';
 
 @WebSocketGateway({ namespace: 'reddit' })
 export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
@@ -41,7 +42,7 @@ export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
       client.join('bot');
     } else {
       const user = await this.userService.getUserDetails(result.id);
-      user.nodes.forEach((node) => client.join(node.id.toString()));
+      // user.nodes.forEach((node) => client.join(node.id.toString()));
     }
   }
 

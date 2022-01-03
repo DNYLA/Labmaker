@@ -40,7 +40,15 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
         />
         <span>-</span>
         <TagInputBox
-          title={'Blocked Users'}
+          title={'Words'}
+          items={config.forbiddenWords}
+          onChange={(updatedValues: string[]) =>
+            setConfig({ ...config, forbiddenWords: updatedValues })
+          }
+        />
+        <span>-</span>
+        <TagInputBox
+          title={'Users'}
           items={config.blockedUsers}
           onChange={(updatedValues: string[]) =>
             setConfig({ ...config, blockedUsers: updatedValues })
@@ -48,7 +56,7 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
         />
         <span>-</span>
         <TagInputBox
-          title={'Node Editors'}
+          title={'Editors'}
           items={config.nodeEditors}
           onChange={(updatedValues: string[]) =>
             setConfig({ ...config, nodeEditors: updatedValues })
@@ -89,6 +97,7 @@ const GeneralSettingContainer = styled(ContainerStyle)`
     border-radius: 5px;
     width: 100%;
     font-size: 24px;
+    user-select: none;
   }
 
   .inputBox {
