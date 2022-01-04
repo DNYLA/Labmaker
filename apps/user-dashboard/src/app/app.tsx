@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Labmaker } from '../utils/APIHandler';
 import { addConfigs, setUser } from '../utils/slices/userSlice';
 import { RootState } from '../store';
+import { Discord } from '../Pages/Discord/discord';
 const StyledApp = styled.div`
   background-color: ${(p) => p.theme.base.backCol};
   height: 1080px;
@@ -63,10 +64,15 @@ export function App() {
         <Nav
           title={'LABMAKER'}
           items={items}
-          avatarUrl={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`}
+          avatarUrl={
+            user.avatar
+              ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`
+              : 'https://i.imgur.com/yrZKnwI.png'
+          }
         />
         <Switch>
           <Route path="/" exact component={Home}></Route>
+          <Route path="/discord" exact component={Discord}></Route>
         </Switch>
       </StyledApp>
     );

@@ -10,7 +10,7 @@
     },
     {
       "name": "User Dashboard",
-      "path": "./../apps/dashboard/src"
+      "path": "./../apps/user-dashboard/src"
     },
     {
       "name": "Dashboard",

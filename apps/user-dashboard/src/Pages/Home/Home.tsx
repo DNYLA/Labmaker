@@ -1,4 +1,3 @@
-import { ComboContainer, IconButton } from '../../assets/styles';
 import { AccountSettings } from './account-settings';
 import { MainSettings } from './main-settings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,7 +9,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { DropDown, Item } from '@labmaker/ui-inputs';
+import {
+  ComboContainer,
+  DropDown,
+  Item,
+  UserControls,
+} from '@labmaker/ui-inputs';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { redditTemplate } from '../../utils/LoadingTypes';
@@ -69,7 +73,7 @@ function useRedditLogic() {
     setSelectedConfig(user.nodes[0]);
   };
 
-  const createNode = async () => {
+  const createNode = () => {
     const templateNode = redditTemplate;
     setSelectedConfig(templateNode);
   };
@@ -145,22 +149,18 @@ export function Home() {
   return (
     <StyledHome>
       <ControlsContainer>
-        <DropDown items={parsedItems} selected={selected} onChange={onChange} />
-        <ButtonContainer>
-          <IconButton onClick={deleteNode}>
-            <FontAwesomeIcon icon={faTrashAlt} size="1x" color="#FFF" />
-          </IconButton>
-          <IconButton onClick={refreshItem}>
-            <FontAwesomeIcon icon={faUndo} size="1x" color="#FFF" />
-          </IconButton>
-          <IconButton onClick={createNode}>
-            <FontAwesomeIcon icon={faPlus} size="1x" color="#FFF" />
-          </IconButton>
-
-          <IconButton onClick={saveNode}>
-            <FontAwesomeIcon icon={faSave} size="1x" color="#FFF" />
-          </IconButton>
-        </ButtonContainer>
+        <DropDown
+          items={parsedItems}
+          selected={selected}
+          setSelected={setSelected}
+          onChange={onChange}
+        />
+        <UserControls
+          onDelete={deleteNode}
+          onRefresh={refreshItem}
+          onCreate={createNode}
+          onSave={saveNode}
+        />
       </ControlsContainer>
       <ComboContainer>
         <AccountSettings

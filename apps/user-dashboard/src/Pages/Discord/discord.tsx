@@ -8,11 +8,7 @@ const StyledDiscord = styled.div`
 `;
 
 export function Discord(props: DiscordProps) {
-  return (
-    <StyledDiscord>
-      <h1>Welcome to Discord!</h1>
-    </StyledDiscord>
-  );
+  return <StyledDiscord></StyledDiscord>;
 }
 
 export default Discord;

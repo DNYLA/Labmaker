@@ -171,8 +171,8 @@ function useGuildLogic() {
   };
 
   const parseGuilds = (guilds: Guild[]) => {
-    let parsedGuilds: string[] = [];
-    let parsed: DDProps[] = [];
+    const parsedGuilds: string[] = [];
+    const parsed: DDProps[] = [];
 
     if (!guilds) return parsed;
 

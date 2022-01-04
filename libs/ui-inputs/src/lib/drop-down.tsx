@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
 
 export interface Item {
   id: number;
@@ -17,6 +18,7 @@ interface IOnChange {
 export interface DropDownProps {
   items: Item[];
   selected: Item;
+  setSelected: React.Dispatch<React.SetStateAction<Item>>;
   onChange: IOnChange;
 }
 
@@ -30,39 +32,104 @@ const StyledDropDown = styled.div`
 
 export function DropDown({ items, selected, onChange }: DropDownProps) {
   const [isOpen, setOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [filteredItems, setFilteredItems] = useState(items);
+  const inputRef = React.createRef<HTMLInputElement>();
+
+  useEffect(() => {
+    setInputValue(selected.title);
+  }, [selected]);
 
   const setItem = (id: number) => {
+    console.log('Running');
     onChange(id);
+    inputRef.current?.blur();
+    setOpen(false);
+  };
+
+  const onKeyInput = (inputVal: string) => {
+    setOpen(true);
+    const alreadyInside = items.find(
+      (item) => item.title.toLowerCase() === inputVal
+    );
+    if (alreadyInside && selected.id === alreadyInside.id) {
+      console.log('Already inside');
+      setFilteredItems(items);
+      setInputValue(inputVal);
+      return;
+    }
+    const fItems = items.filter((item) =>
+      item.title.toLowerCase().includes(inputVal)
+    );
+    setFilteredItems(fItems);
+    setInputValue(inputVal);
+  };
+
+  const updateOpen = () => {
+    setFilteredItems(items);
+    if (isOpen && selected.title !== inputValue) {
+      setInputValue(selected.title);
+    }
+    setOpen(!isOpen);
+  };
+
+  const handleInputClick = () => {
+    setInputValue('');
+    setFilteredItems(items);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setInputValue(selected.title);
     setOpen(false);
   };
 
   return (
-    <StyledDropDown>
-      <SelectedItem onClick={() => setOpen(!isOpen)}>
-        {selected.title}
+    <StyledDropDown
+      tabIndex={0}
+      onFocus={handleInputClick}
+      onBlur={handleClose}
+    >
+      <SelectedItem>
+        {/* {selected.title} */}
+        <StyledInput
+          value={inputValue}
+          ref={inputRef}
+          onChange={(e) => onKeyInput(e.target.value.toLowerCase())}
+        />
         <FontAwesomeIcon
           pull={'right'}
           icon={isOpen ? faCaretUp : faCaretDown}
           size="1x"
           color="#FFF"
+          onClick={updateOpen}
         />
       </SelectedItem>
       {isOpen && (
         <HiddenContainer>
-          {items.map((item) => {
+          {filteredItems.map((item) => {
             if (item.id !== selected.id)
               return (
-                <DropDownItem onClick={() => setItem(item.id)} key={item.id}>
+                <DropDownItem
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => setItem(item.id)}
+                  key={item.id}
+                >
                   {item.title}
                 </DropDownItem>
               );
-            return <div></div>;
+            return <div key={item.id}></div>;
           })}
         </HiddenContainer>
       )}
     </StyledDropDown>
   );
 }
+
+const StyledInput = styled.input`
+  text-align: center;
+  font-size: 18px;
+`;
 
 const HiddenContainer = styled.div`
   z-index: 100;
@@ -84,23 +151,41 @@ const DropDownItem = styled.div`
 `;
 
 const SelectedItem = styled.div`
-  text-align: center;
+  /* text-align: center;
   border: 2px solid #141617;
   border-radius: 3px;
   background-color: #1a1a1d;
   padding-right: 10px;
-  height: 30px;
-  width: 200px;
-  align-items: center;
-  justify-content: center;
+  display: flex; */
   display: flex;
-  /* box-shadow: 0px 1px 25px 0px rgba(0, 0, 0, 1); */
+  justify-content: center;
+  align-items: center;
   div {
     color: pink;
   }
   svg {
-    /* position: relative; */
-    /* left: 30%; */
+    /* display: flex; */
+    /* position: absolute; */
+    /* left: 50%; */
     float: right;
+    padding-top: 0;
+    /* float: right; */
+  }
+  input {
+    padding-left: 10px;
+    color: white;
+    font-family: 'Lexend Deca';
+    width: 100%;
+    height: 30px;
+    background: #1a1a1d;
+    border-radius: 5px;
+    border: 2px solid #141617;
+    /* border-radius: 5px; */
+    transition: 340ms;
+    :focus {
+      opacity: 80%;
+      outline: 0;
+      transition: 340ms;
+    }
   }
 `;
