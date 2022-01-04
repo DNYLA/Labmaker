@@ -89,8 +89,18 @@ const SelectedItem = styled.div`
   border-radius: 3px;
   background-color: #1a1a1d;
   padding-right: 10px;
+  height: 30px;
+  width: 200px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
   /* box-shadow: 0px 1px 25px 0px rgba(0, 0, 0, 1); */
   div {
     color: pink;
+  }
+  svg {
+    /* position: relative; */
+    /* left: 30%; */
+    float: right;
   }
 `;

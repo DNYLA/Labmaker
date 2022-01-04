@@ -44,9 +44,7 @@ export default Navbar;
 const IconStyle = styled.img`
   height: 55px;
   width: 55px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-right: 15px;
   transition: 0.2s all;
   border-radius: 50%;
   :hover {
@@ -55,35 +53,27 @@ const IconStyle = styled.img`
 `;
 
 const StyledNavbar = styled.nav`
-  /* width: 100%; */
   height: 70px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: ${(p) => p.theme.navbar.base};
-  opacity: 90%;
-  box-shadow: 0px 1px 25px 0px rgba(0, 0, 0, 0.2);
-
+  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+  /* border-bottom: 2px solid #1a1a1d; */
   ul {
     list-style-type: none;
-    padding: 0;
-    /* margin: 0; */
-    margin-right: 100px;
   }
-  /* align-items: center; */
 `;
 
 const Title = styled.h1`
   font-family: 'Archivo Black', sans-serif;
   font-size: 30px;
-  margin-top: 0px;
   margin-left: 20px;
-  line-height: 70px;
   color: ${(p) => p.theme.navbar.title};
   width: 200px;
   :hover {
     color: ${(p) => p.theme.navbar.titleHover};
     font-size: 40px;
-    /* transition: font-size 600ms; */
   }
   transition: all 300ms ease-in-out;
 `;

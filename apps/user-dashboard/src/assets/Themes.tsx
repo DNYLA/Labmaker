@@ -25,7 +25,7 @@ export const DarkTheme: DefaultTheme = {
     backCol: '#202225',
   },
   navbar: {
-    base: '#1A1A1D',
+    base: '#202225',
     item: '#8d8d8e',
     active: '#FFF',
     title: '#ff9929',

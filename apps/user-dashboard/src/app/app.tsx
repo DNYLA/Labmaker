@@ -3,9 +3,10 @@ import { Route, Switch } from 'react-router-dom';
 import { Navbar as Nav } from '@labmaker/ui-header';
 import { Home } from '../Pages/Home/home';
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Labmaker } from '../utils/APIHandler';
 import { addConfigs, setUser } from '../utils/slices/userSlice';
+import { RootState } from '../store';
 const StyledApp = styled.div`
   background-color: ${(p) => p.theme.base.backCol};
   height: 1080px;
@@ -15,6 +16,8 @@ const StyledApp = styled.div`
 export function App() {
   const [loginFailed, setLoginFailed] = useState(false);
   const [isLoading, setLoading] = useState(true);
+  const user = useSelector((state: RootState) => state.user.value);
+
   const dispatch = useDispatch();
 
   const items = [
@@ -60,9 +63,7 @@ export function App() {
         <Nav
           title={'LABMAKER'}
           items={items}
-          avatarUrl={
-            'https://cdn.discordapp.com/avatars/827212859447705610/3b000789b7b21736d58db29c923c0020.png?size=1024'
-          }
+          avatarUrl={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`}
         />
         <Switch>
           <Route path="/" exact component={Home}></Route>

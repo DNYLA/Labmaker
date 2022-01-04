@@ -1,6 +1,6 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState, KeyboardEvent } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 export interface IOnChage {
@@ -197,7 +197,7 @@ const DialogBox = styled.div`
   /* z-index: 1001; */
   position: fixed;
   width: 30%;
-  height: 30%;
+  min-height: 30%;
   background-color: #202225;
   /* top: 35%; */
   /* left: 35%; */
