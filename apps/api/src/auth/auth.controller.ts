@@ -13,7 +13,7 @@ export class AuthController {
 
   @Get('login')
   @UseGuards(DiscordAuthGuard)
-  // login() {}
+  login() {}
 
   @Get('redirect')
   @UseGuards(DiscordAuthGuard)
