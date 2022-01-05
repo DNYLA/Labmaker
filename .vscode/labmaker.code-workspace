@@ -17,6 +17,10 @@
       "path": "./../apps/dashboard/src"
     },
     {
+      "name": "Reddit Bot",
+      "path": "./../apps/reddit-bot/src"
+    },
+    {
       "name": "Discord Bot",
       "path": "./../apps/discord-bot/src"
     },

@@ -51,13 +51,16 @@ export class Client {
       return;
     }
 
-    //Filter is Synchronous
-    config.blockedUsers.filter((u) => {
+    config.blockedUsers.forEach((u) => {
       if (u.toLowerCase() === name.toLowerCase()) valid = false;
     });
-    config.forbiddenWords.filter((word) => {
-      if (word.includes(item.title.toLowerCase())) valid = false;
-      else if (word.includes(item.selftext.toLowerCase())) valid = false;
+
+    config.forbiddenWords.forEach((word) => {
+      if (item.title.toLowerCase().includes(word.toLowerCase())) {
+        valid = false;
+      } else if (item.selftext.toLowerCase().includes(word.toLowerCase())) {
+        valid = false;
+      }
     });
 
     if (valid) {
@@ -67,6 +70,7 @@ export class Client {
           const minuteDiff = msDifference / (1000 * 60);
           if (minuteDiff < 60) {
             //Dont RePM within 60Mins
+            console.log(`Dont RePM : ${item.id}`);
             valid = false;
           }
         }
@@ -80,14 +84,16 @@ export class Client {
     setTimeout(async () => {
       try {
         if (valid) {
-          await this.client.composeMessage({
-            to: item.author,
-            subject: config.title,
-            text: config.pmBody,
-          });
+          if (!process.env.API_DEBUG) {
+            await this.client.composeMessage({
+              to: item.author,
+              subject: config.title,
+              text: config.pmBody,
+            });
+          }
 
           console.log(
-            `${this.postCounter} : ${name} : ${display_name}  : ${config.pmBody}`
+            `${this.postCounter} : ${name} : ${display_name}  : ${config.pmBody} : SentPM()`
           );
 
           didPm = true;
