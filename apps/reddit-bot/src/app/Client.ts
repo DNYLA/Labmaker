@@ -51,13 +51,16 @@ export class Client {
       return;
     }
 
-    //Filter is Synchronous
-    config.blockedUsers.filter((u) => {
+    config.blockedUsers.forEach((u) => {
       if (u.toLowerCase() === name.toLowerCase()) valid = false;
     });
-    config.forbiddenWords.filter((word) => {
-      if (word.includes(item.title.toLowerCase())) valid = false;
-      else if (word.includes(item.selftext.toLowerCase())) valid = false;
+
+    config.forbiddenWords.forEach((word) => {
+      if (item.title.toLowerCase().includes(word.toLowerCase())) {
+        valid = false;
+      } else if (item.selftext.toLowerCase().includes(word.toLowerCase())) {
+        valid = false;
+      }
     });
 
     if (valid) {
