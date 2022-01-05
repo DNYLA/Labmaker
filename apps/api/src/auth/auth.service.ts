@@ -71,6 +71,7 @@ export class AuthService {
     }
 
     let payload: any = null;
+
     try {
       payload = this.jwtService.verify(token, {
         secret: process.env.JWT_REFRESH_SECRET,

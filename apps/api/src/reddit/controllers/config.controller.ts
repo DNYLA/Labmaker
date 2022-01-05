@@ -45,6 +45,7 @@ export class ConfigController {
 
   @Put('/:id')
   updateMessage(@Param('id') id: number, @Body() body: any) {
+    console.log(body);
     return this.configService.updateMessage(id, body.pmBody);
   }
 

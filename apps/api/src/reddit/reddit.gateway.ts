@@ -36,13 +36,13 @@ export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
     } else if (result.type === TokenType.Bot) {
       client.join('bot');
     } else {
-      const user = await this.userService.getUserDetails(result.id);
+      // const user = await this.userService.getUserDetails(result.id);
       // user.nodes.forEach((node) => client.join(node.id.toString()));
     }
   }
 
-  afterInit(server: Server) {
-    console.log(server);
+  // afterInit(server: Server) {
+  afterInit() {
     console.log('Connected');
   }
 
@@ -62,13 +62,11 @@ export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
   }
 
   @UseGuards(WSGuard)
-  @SubscribeMessage('config')
+  @SubscribeMessage('message')
   handleConfig(
-    @ConnectedSocket() client: Socket,
+    // @ConnectedSocket() client: Socket,
     @MessageBody() message: string
   ): void {
-    console.log(client);
-    console.log('Sent');
     this.server.emit('message', message);
   }
 }

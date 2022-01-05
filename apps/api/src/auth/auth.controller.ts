@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Logger,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { DiscordAuthGuard } from './guards/DiscordAuth.guard';
 import { AuthService } from './auth.service';
@@ -10,10 +18,12 @@ interface IUserAuthRequest extends Request {
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
+  private logger = new Logger(AuthController.name);
   @Get('login')
   @UseGuards(DiscordAuthGuard)
-  login() {}
+  login() {
+    this.logger.log('Attempting to Login User'); //EsLint requires functions to not be empty even though we dont need anything in here.
+  }
 
   @Get('redirect')
   @UseGuards(DiscordAuthGuard)
