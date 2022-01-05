@@ -14,6 +14,6 @@ export default class MessageEvent extends Event {
       ],
       status: 'online',
     });
-    console.log(`${client.user.username} is running.`);
+    console.log(`${client.user.username} is running. ${message}`);
   }
 }

@@ -25,8 +25,8 @@ export class PaymentController {
 
   @Post()
   async createPayments(
-    @Body() body: CreatePaymentDtoArray,
-  ): Promise<Payment[] | any> {
+    @Body() body: CreatePaymentDtoArray
+  ): Promise<Payment[] | undefined> {
     return await this.paymentService.createPayments(body);
   }
 
@@ -36,7 +36,7 @@ export class PaymentController {
   }
 
   @Delete()
-  deletePayments(@Body() body: any): Promise<void> {
+  deletePayments(@Body() body: number[]): Promise<void> {
     return this.paymentService.deletePayments(body);
   }
 }

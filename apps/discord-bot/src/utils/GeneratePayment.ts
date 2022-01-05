@@ -7,8 +7,8 @@ export default class Payments {
     client: DiscordClient,
     guildConfig: GuildConfigDto
   ): Promise<MessageActionRow> {
-    let buttonTypes = [];
-    let types = [];
+    const buttonTypes = [];
+    const types = [];
 
     const paymentObject = client.getPayments(guildConfig.id);
     if (!paymentObject) {
@@ -17,7 +17,7 @@ export default class Payments {
 
     paymentObject.payments.forEach((payment) => {
       if (!types.includes(payment.type)) {
-        let tempButton = new MessageButton()
+        const tempButton = new MessageButton()
           .setStyle('PRIMARY')
           .setLabel(payment.type)
           .setCustomId(`paymentoption:${payment.type}`);

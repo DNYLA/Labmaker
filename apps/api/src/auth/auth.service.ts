@@ -70,7 +70,7 @@ export class AuthService {
       return res.send({ ok: false, accessToken: '' });
     }
 
-    let payload: any = null;
+    let payload = null;
 
     try {
       payload = this.jwtService.verify(token, {

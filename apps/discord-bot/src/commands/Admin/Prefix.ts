@@ -18,7 +18,6 @@ export default class Prefix extends Command {
       return message.channel.send('Invalid Permission to use command');
     }
 
-    const guildId = message.guild.id;
     const prefix = args[0];
 
     try {

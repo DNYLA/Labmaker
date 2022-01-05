@@ -44,9 +44,9 @@ export class ConfigController {
   }
 
   @Put('/:id')
-  updateMessage(@Param('id') id: number, @Body() body: any) {
+  updateMessage(@Param('id') id: number, @Body() body: string) {
     console.log(body);
-    return this.configService.updateMessage(id, body.pmBody);
+    return this.configService.updateMessage(id, body);
   }
 
   @Delete('/:id')

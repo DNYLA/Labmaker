@@ -6,6 +6,7 @@ import { Guild } from '../dtos/Guild.dto';
 import { UserService } from '../../user/user.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { PaymentService } from './payment.service';
+import { DiscordConfig, Payment } from '.prisma/client';
 
 @Injectable()
 export class GuildsService {
@@ -80,7 +81,7 @@ export class GuildsService {
   }
 
   //Grabs Guilds from Database instead of Discord API
-  async getLocalData(serverId: string): Promise<any> {
+  async getLocalData(serverId: string): Promise<LocalData> {
     const config = await this.prismaService.discordConfig.findUnique({
       where: { id: serverId },
     });
@@ -93,4 +94,9 @@ export class GuildsService {
       payments,
     };
   }
+}
+
+export interface LocalData {
+  config: DiscordConfig;
+  payments: Payment[];
 }

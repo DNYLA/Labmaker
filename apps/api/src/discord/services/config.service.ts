@@ -12,6 +12,8 @@ export class ConfigService {
   async getConfig(id: string, user: UserDetails): Promise<DiscordConfig> {
     //Authorization Requires More information (need to call discord API )
     //And see if user can access server
+    console.log(user);
+
     const config = await this.prismaService.discordConfig.findUnique({
       where: { id },
     });

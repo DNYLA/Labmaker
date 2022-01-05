@@ -1,4 +1,4 @@
-import { Message, Permissions, TextChannel } from 'discord.js';
+import { Message, Permissions } from 'discord.js';
 import { GuildConfigDto } from '@labmaker/wrapper';
 import Command from '../../utils/Base/Command';
 import DiscordClient from '../../utils/client';

@@ -11,8 +11,7 @@ export default class Prefix extends Command {
     if (message.channel.type == 'DM') return;
 
     const ticketId = message.channel.name.toLowerCase().replace('ticket-', '');
-
-    if (Number(ticketId) === NaN) {
+    if (isNaN(Number(ticketId))) {
       return message.channel.send(`Ticket doesnt exist ${message.member}`);
     }
 

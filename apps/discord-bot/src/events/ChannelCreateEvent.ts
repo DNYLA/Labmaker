@@ -18,7 +18,7 @@ export default class MessageEvent extends Event {
     const guildId = channel.guild.id;
     const channelId = channel.id;
 
-    let x = channel.guild.me.joinedTimestamp / 1000;
+    const x = channel.guild.me.joinedTimestamp / 1000;
     if (x >= x + 10) return; // if the bot just joined the server the channelcreate event will get activated after 10 sec
     if (
       channel.parent === null ||

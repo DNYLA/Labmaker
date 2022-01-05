@@ -20,14 +20,14 @@ export default class Invoicer {
       });
     }
 
-    let replyRef = (interaction.message as Message).reference;
+    const replyRef = (interaction.message as Message).reference;
     if (replyRef) {
-      let rmsg = await interaction.channel.messages.fetch(replyRef.messageId);
+      const rmsg = await interaction.channel.messages.fetch(replyRef.messageId);
 
       if (rmsg) {
         console.log(rmsg.content);
 
-        let { args } = getArgsFromMsg(rmsg.content, guildConfig.prefix.length);
+        const { args } = getArgsFromMsg(rmsg.content, guildConfig.prefix.length);
 
         const YES = new MessageButton()
           .setStyle('SUCCESS')

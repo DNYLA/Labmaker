@@ -17,7 +17,7 @@ export default class Prefix extends Command {
     // If couldn't get ticket id, return. `getTicketNo` handles everything for us.
     if (!ticketId) return;
 
-    let roles = message.member.roles.cache;
+    const roles = message.member.roles.cache;
     if (roles.find((r) => r.id === '863817773393379358')) return;
 
     const ticketDetails = await client.API.Ticket.getOne(guildId, ticketId);

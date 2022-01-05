@@ -38,7 +38,7 @@ export default class MessageEvent extends Event {
     }
 
     const guildId = interaction.guild.id;
-    let guildConfig = await client.API.Discord.getOne(guildId);
+    const guildConfig = await client.API.Discord.getOne(guildId);
 
     switch (areaId) {
       case 'paymentoption':
@@ -77,13 +77,13 @@ export default class MessageEvent extends Event {
     }
 
     const payments = client.getPayments(guildConfig.id).payments;
-    let paymentButtons = [];
+    const paymentButtons = [];
 
     payments.forEach((payment) => {
       if (interationCustomId === payment.name) {
         Invoicer.handlePaymentChoice(payment, interaction, guildConfig);
       } else if (interationCustomId === payment.type) {
-        let tempButton = new MessageButton()
+        const tempButton = new MessageButton()
           .setStyle('PRIMARY')
           .setLabel(payment.name)
           .setCustomId(`paymentoption:${payment.name}`);
@@ -124,11 +124,11 @@ export default class MessageEvent extends Event {
 
     if (interactionCustomId == 'yes') {
       try {
-        let replyRef = (interaction.message as Message).reference;
-        let rmsg = await interaction.channel.messages.fetch(replyRef.messageId);
-        let { args } = getArgsFromMsg(rmsg.content, guildConfig.prefix.length);
+        const replyRef = (interaction.message as Message).reference;
+        const rmsg = await interaction.channel.messages.fetch(replyRef.messageId);
+        const { args } = getArgsFromMsg(rmsg.content, guildConfig.prefix.length);
 
-        let checkout = await client.API.Pay.createOrder(
+        const checkout = await client.API.Pay.createOrder(
           interaction.channelId,
           args[0]
         );

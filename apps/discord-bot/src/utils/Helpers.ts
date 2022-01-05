@@ -6,7 +6,7 @@ export function getArgsFromMsg(
   prefixLn: number
 ): { commandName: string; args?: string[] } {
   // Args including the command name
-  let args = msg.slice(prefixLn).split(/ +/);
+  const args = msg.slice(prefixLn).split(/ +/);
 
   return {
     commandName: args[0],

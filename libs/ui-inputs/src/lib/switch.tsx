@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 export interface SwitchProps {
   square?: boolean;
   toggled: boolean;
-  onToggle: any;
+  onToggle: () => void;
   infoMessage?: string;
   message: string;
 }

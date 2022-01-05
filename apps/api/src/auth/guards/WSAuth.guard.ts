@@ -1,9 +1,4 @@
-import {
-  ArgumentMetadata,
-  ArgumentsHost,
-  CanActivate,
-  Injectable,
-} from '@nestjs/common';
+import { ArgumentsHost, CanActivate, Injectable } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
 import { AuthService } from '../auth.service';
 

@@ -1,9 +1,9 @@
-import { createRef, useRef, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 interface HoverProps {
-  handleMouseOver: any;
-  handleMouseOut: any;
+  handleMouseOver: () => void;
+  handleMouseOut: () => void;
 }
 
 function HoverBox({ handleMouseOver, handleMouseOut }: HoverProps) {

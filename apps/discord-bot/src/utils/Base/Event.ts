@@ -1,5 +1,4 @@
-import { Message } from "discord.js";
-import DiscordClient from "../client";
+import DiscordClient from '../client';
 
 export default abstract class Event {
   constructor(private name: string) {}

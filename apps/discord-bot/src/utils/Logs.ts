@@ -1,4 +1,4 @@
-import { Client, GuildChannel, Message, MessageEmbed } from 'discord.js';
+import { Client, Message, MessageEmbed } from 'discord.js';
 import { TicketDto } from '@labmaker/wrapper';
 
 export default class Logs {
@@ -26,7 +26,10 @@ export default class Logs {
       .setTimestamp();
   }
 
-  static async SendLog(client: Client, msg: string): Promise<any> {
+  static async SendLog(
+    client: Client,
+    msg: string
+  ): Promise<Message<boolean> | void> {
     //Rewrite to find Channel named logs inside servers
     //SERVERID | CHANNELID
     const servers = [['863423914230546462', '863424666052198410']]; //Big Baller

@@ -5,7 +5,7 @@ import fs from 'fs';
 
 export async function registerCommands(
   client: DiscordClient,
-  dir: string = ''
+  dir = ''
 ) {
   if (dir === '') dir = './commands';
 
@@ -34,7 +34,7 @@ export async function registerCommands(
   }
 }
 
-export async function registerEvents(client: DiscordClient, dir: string = '') {
+export async function registerEvents(client: DiscordClient, dir = '') {
   if (dir === '') dir = './events';
   const filePath = path.join(__dirname, dir);
   const files = await fs.promises.readdir(filePath);
