@@ -1,8 +1,9 @@
-import { Message, Permissions, TextChannel } from 'discord.js';
+import { Message, Permissions } from 'discord.js';
 import { GuildConfigDto } from '@labmaker/wrapper';
 import Command from '../../utils/Base/Command';
 import DiscordClient from '../../utils/client';
 import Payments from '../../utils/GeneratePayment';
+import { hasAnyPerms } from '../../utils/Helpers';
 
 export default class Invoice extends Command {
   constructor() {
@@ -18,13 +19,14 @@ export default class Invoice extends Command {
     // Only tutors/admins can call this command
     // TODO: add this check to button interaction
     if (
-      !message.member.roles.cache.find((r) => r.name === 'Tutor') ||
-      !message.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
-    ) {
-      return message.channel.send(
+      !hasAnyPerms(
+        message,
+        ['Tutor'],
+        [Permissions.FLAGS.ADMINISTRATOR],
         'Only a Tutor can create an invoice for you!'
-      );
-    }
+      )
+    )
+      return;
 
     // Do nothing if NOT ran in a ticket channel
     if (message.channel.type == 'DM') return;
@@ -44,7 +46,12 @@ export default class Invoice extends Command {
     client.setPayments({ serverId: guildConfig.id, payments });
 
     // pick payment method
-    const row = await Payments.GeneratePayments(client, guildConfig);
+    const row = await Payments.GeneratePayments(
+      client,
+      guildConfig,
+      'Tutor',
+      'paymentoption'
+    );
 
     if (!row) {
       return message.channel.send('No Payments Available.');

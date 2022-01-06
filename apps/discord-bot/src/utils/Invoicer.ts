@@ -20,24 +20,27 @@ export default class Invoicer {
       });
     }
 
-    let replyRef = (interaction.message as Message).reference;
+    const replyRef = (interaction.message as Message).reference;
     if (replyRef) {
-      let rmsg = await interaction.channel.messages.fetch(replyRef.messageId);
+      const rmsg = await interaction.channel.messages.fetch(replyRef.messageId);
 
       if (rmsg) {
         console.log(rmsg.content);
 
-        let { args } = getArgsFromMsg(rmsg.content, guildConfig.prefix.length);
+        const { args } = getArgsFromMsg(
+          rmsg.content,
+          guildConfig.prefix.length
+        );
 
         const YES = new MessageButton()
           .setStyle('SUCCESS')
           .setLabel('Yes')
-          .setCustomId('createinvoice:yes');
+          .setCustomId('Tutor:createinvoice:yes');
 
         const NO = new MessageButton()
           .setStyle('DANGER')
           .setLabel('No')
-          .setCustomId('createinvoice:no');
+          .setCustomId('Tutor:createinvoice:no');
 
         interaction.update({
           content: `Create PayPal invoice for $${args[0]}?`,
