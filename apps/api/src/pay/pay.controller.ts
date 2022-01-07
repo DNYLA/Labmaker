@@ -15,13 +15,14 @@ import { PayPalService } from './paypal.service';
 export class PayController {
   constructor(private payPalService: PayPalService) {}
 
-  @Get('create_order/:ticketId/:price')
+  @Get('create_order/:tutorId/:channelId/:price')
   @UseGuards(JwtAuthGuard)
   public async paypalCreateOrder(
-    @Param('ticketId') ticketId: string,
+    @Param('tutorId') tutorId: string,
+    @Param('channelId') channelId: string,
     @Param('price') price: number
   ): Promise<{ url: string }> {
-    return await this.payPalService.createOrder(ticketId, price);
+    return await this.payPalService.createOrder(tutorId, channelId, price);
   }
 
   @Post('ppwhnotif') // Sorta rando route to avoid randos spamming it

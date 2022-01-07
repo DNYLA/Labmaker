@@ -159,6 +159,7 @@ export default class MessageEvent extends Event {
         );
 
         const checkout = await client.API.Pay.createOrder(
+          interaction.member.user.id,
           interaction.channelId,
           args[0]
         );

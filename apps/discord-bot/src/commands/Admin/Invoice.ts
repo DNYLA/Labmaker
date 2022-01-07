@@ -17,7 +17,6 @@ export default class Invoice extends Command {
     guildConfig?: GuildConfigDto
   ) {
     // Only tutors/admins can call this command
-    // TODO: add this check to button interaction
     if (
       !hasAnyPerms(
         message,

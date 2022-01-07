@@ -65,6 +65,21 @@ model Payment {
   serverId String
 }
 
+enum OrderStatus {
+  // INITIALIZED // Order has been created in table to link tutor to it
+  CREATED // Actual invoice has been created (ie paypal order created)
+  PAID // Invoice has been paid
+}
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  status        OrderStatus
+  tutorId       String
+  transactionId String      @unique
+  ticket        Ticket?     @relation(fields: [ticketId], references: [id])
+  ticketId      Int? // Ticket id NOT `ticketid` in ticket
+}
+
 //Update Client side to not Post ticket until
 //It is Finished.
 model Ticket {
@@ -79,7 +94,7 @@ model Ticket {
   budget        String        @default("")
   submitted     Boolean       @default(false)
   discordConfig DiscordConfig @relation(fields: [serverId], references: [id])
-  transactionId String?
+  transactions  Order[]
 }
 
 model Log {

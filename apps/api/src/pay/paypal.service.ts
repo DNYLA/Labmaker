@@ -71,6 +71,7 @@ export class PayPalService {
    * @returns URL to checkout that customer should use to complete the order.
    */
   public async createOrder(
+    tutorId: string,
     channelId: string,
     price: number
   ): Promise<{ url: string }> {
@@ -89,7 +90,7 @@ export class PayPalService {
     const ticket = await this.prismaService.ticket.findFirst({
       where: { channelId: channelId },
     });
-    console.log(channelId);
+
     if (!ticket) {
       Logger.log('Throwing Error for ticket');
       throw new HttpException(
@@ -130,11 +131,13 @@ export class PayPalService {
     const order = response.result;
 
     // Add order id to ticket.
-    // TODO: After postgres migration, orders should be added to their own table linking back to
-    // the ticket incase we have multiple orders per ticket.
-    await this.prismaService.ticket.update({
-      where: { id: ticket.id },
-      data: { transactionId: order.id },
+    await this.prismaService.order.create({
+      data: {
+        status: 'CREATED',
+        tutorId: tutorId,
+        transactionId: order.id,
+        ticketId: ticket.id,
+      },
     });
 
     // Return checkout link if it exists
@@ -169,7 +172,7 @@ export class PayPalService {
     // Call API with your client and get a response for your call
     const response = await this.client.execute(request);
 
-    this.logger.log(`Capturing Order: ${JSON.stringify(response.result)}`);
+    this.logger.log(`Capturing Order: ${response.result.id}`);
   }
 
   /**
@@ -214,19 +217,22 @@ export class PayPalService {
           `Captured A Payment. Net: ${netStr}, Paypal Fee: ${feeStr}`
         );
 
-        // doesn't give us the purchase_units, only the tx id, so use that to get ticket again in db
-        // for now, dont create new table for orders, do it after dan finishes change to postgres+prisma
-        const ticket = await this.prismaService.ticket.findFirst({
+        // Get order from db again with tx id, for Ticket channelId
+        const order = await this.prismaService.order.update({
           where: {
             transactionId: oinfo.supplementary_data.related_ids.order_id,
           },
+          data: {
+            status: 'PAID',
+          },
+          include: { ticket: true },
         });
 
-        if (ticket) {
+        if (order) {
           this.payGateway.notifyAll({
             op: PayGatewayOperation.PaymentCompleted,
             data: {
-              channelId: ticket.channelId,
+              channelId: order.ticket.channelId,
               paid: true,
               breakdown: {
                 fee: {

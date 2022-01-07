@@ -54,7 +54,13 @@ export default class PayNotifications {
   private static sendPaymentCompletedMessage(client: DiscordClient, payload) {
     const channel = getChannelFromId(client, payload.channelId);
 
-    if (!channel) return;
+    if (!channel) {
+      console.log(
+        "Couldn't find channel to send payment completed message to:",
+        payload.channelId
+      );
+      return;
+    }
 
     const breakdown = payload.breakdown;
     const paidEmbed = new MessageEmbed()
