@@ -9,6 +9,20 @@
         "cwd": "./apps/api"
       },
       "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Prisma Migrate Dev",
+      "type": "shell",
+      "command": "prisma migrate dev --schema=./../../prisma/schema.prisma",
+      "options": {
+        "cwd": "./apps/api"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "type": "shell",
+      "command": "ngrok http http://localhost:3000",
+      "label": "Start ngrok on port 3000"
     }
   ]
 }

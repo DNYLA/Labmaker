@@ -5,6 +5,10 @@
       "path": "./../"
     },
     {
+      "name": "Prisma",
+      "path": "./../prisma"
+    },
+    {
       "name": "API",
       "path": "./../apps/api/src"
     },
