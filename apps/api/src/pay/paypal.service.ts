@@ -120,8 +120,8 @@ export class PayPalService {
         landing_page: 'NO_PREFERENCE',
         shipping_preference: 'NO_SHIPPING',
         user_action: 'PAY_NOW',
-        return_url: 'http://localhost:3000/pay/order/paid',
-        cancel_url: 'http://localhost:3000/pay/order/cancelled',
+        return_url: `${process.env.API_URL}/pay/order/paid`,
+        cancel_url: `${process.env.API_URL}/pay/order/cancelled`,
       },
     });
 
