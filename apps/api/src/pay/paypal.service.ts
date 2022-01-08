@@ -121,6 +121,7 @@ export class PayPalService {
         shipping_preference: 'NO_SHIPPING',
         user_action: 'PAY_NOW',
         return_url: 'http://localhost:3000/pay/order/paid',
+        cancel_url: 'http://localhost:3000/pay/order/cancelled',
       },
     });
 

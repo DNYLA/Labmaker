@@ -2,6 +2,24 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Serve API",
+      "type": "shell",
+      "command": "nx serve api",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Serve Discord Bot",
+      "type": "shell",
+      "command": "nx serve discord-bot",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Serve Dashboard",
+      "type": "shell",
+      "command": "nx serve dashboard",
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "Open Prisma Studio",
       "type": "shell",
       "command": "prisma studio --schema=./../../prisma/schema.prisma",
