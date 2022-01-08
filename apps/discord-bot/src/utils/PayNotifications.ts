@@ -27,7 +27,7 @@ export default class PayNotifications {
         console.log('WS', err.message);
       });
 
-      ws.on('message', (client: DiscordClient, msg: Buffer) => {
+      ws.on('pay', (msg: Buffer) => {
         this.handleWSMsg(client, msg);
       });
     } catch (err) {
