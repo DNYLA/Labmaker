@@ -108,9 +108,6 @@ export class PayPalService {
       intent: 'CAPTURE',
       purchase_units: [
         {
-          // Using reference id so we can refer back to ticket later.
-          // So we don't need an extra db read to find ticket from tx id.
-          // reference_id: channelId,
           amount: {
             currency_code: 'USD',
             value: price,
@@ -123,7 +120,7 @@ export class PayPalService {
         landing_page: 'NO_PREFERENCE',
         shipping_preference: 'NO_SHIPPING',
         user_action: 'PAY_NOW',
-        return_url: 'http://localhost', // TODO: Has to have return url set, so maybe link to a page that closes itself or has success msg?
+        return_url: 'http://localhost:3000/pay/order/paid',
       },
     });
 

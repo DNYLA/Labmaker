@@ -22,7 +22,8 @@
     {
       "type": "shell",
       "command": "ngrok http http://localhost:3000",
-      "label": "Start ngrok on port 3000"
+      "label": "Start ngrok on port 3000",
+      "problemMatcher": []
     }
   ]
 }
