@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 import { Route, Switch } from 'react-router-dom';
 import { Navbar as Nav } from '@labmaker/ui-header';
-import { Home } from '../Pages/Home/home';
+import { Home } from '../Pages/Home/Home';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Labmaker } from '../utils/APIHandler';
 import { addConfigs, setUser } from '../utils/slices/userSlice';
 import { RootState } from '../store';
 import { Discord } from '../Pages/Discord/discord';
+import { Logs } from '../Pages/Logs';
 const StyledApp = styled.div`
   background-color: ${(p) => p.theme.base.backCol};
   height: 1080px;
@@ -73,6 +74,7 @@ export function App() {
         <Switch>
           <Route path="/" exact component={Home}></Route>
           <Route path="/discord" exact component={Discord}></Route>
+          <Route path="/logs" exact component={Logs}></Route>
         </Switch>
       </StyledApp>
     );

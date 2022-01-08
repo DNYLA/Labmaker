@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Open Prisma Studio",
+      "type": "shell",
+      "command": "prisma studio --schema=./../../prisma/schema.prisma",
+      "options": {
+        "cwd": "./apps/api"
+      },
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

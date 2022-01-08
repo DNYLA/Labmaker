@@ -20,7 +20,7 @@ export const Logs = () => {
 
   const handleClick = async (node: Node) => {
     setLoading(true);
-    let data = await Labmaker.Log.getLogs(node.id);
+    const data = await Labmaker.Log.getLogs(node.id);
 
     dispatch(updateLogs(data));
     setLoading(false);
@@ -29,7 +29,7 @@ export const Logs = () => {
   useEffect(() => {
     const loadLogs = async () => {
       if (rConfig.id !== -1) {
-        let data = await Labmaker.Log.getLogs(rConfig.id);
+        const data = await Labmaker.Log.getLogs(rConfig.id);
         dispatch(updateLogs(data));
         setLoading(false);
       }
