@@ -9,7 +9,7 @@ export class PayAPI extends API {
   async createOrder(
     tutorId: string,
     channelId: string,
-    price: string
+    price: number
   ): Promise<CreateOrderDto> {
     return await this.get(
       this.getUrl() + `create_order/${tutorId}/${channelId}/${price}`

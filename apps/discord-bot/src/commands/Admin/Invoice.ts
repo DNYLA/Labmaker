@@ -31,10 +31,18 @@ export default class Invoice extends Command {
     if (message.channel.type == 'DM') return;
     if (!message.channel.name.includes('ticket-')) return;
 
+    const usage = '\n**Example:** ```!invoice <total>```';
+
     if (!args[0]) {
       // Command requires an argument with the amount of the invoice
       return message.channel.send(
-        'You need to pass the invoice total (defaults to USD). \n**Example:** ```!invoice <total>```'
+        `You need to pass the invoice total (defaults to USD). ${usage}`
+      );
+    }
+
+    if (isNaN(Number(args[0]))) {
+      return message.channel.send(
+        `The invoice total must be a number! **"${args[0]}" is not a number.** ${usage}`
       );
     }
 

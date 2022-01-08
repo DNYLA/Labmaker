@@ -43,7 +43,7 @@ export default class Invoicer {
           .setCustomId('Tutor:createinvoice:no');
 
         interaction.update({
-          content: `Create PayPal invoice for $${args[0]}?`,
+          content: `Create PayPal invoice for $${Number(args[0])}?`,
           components: [new MessageActionRow().addComponents([YES, NO])],
         });
       }

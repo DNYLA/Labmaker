@@ -138,13 +138,19 @@ export default class MessageEvent extends Event {
 
     // Go back to displaying payment options
     if (interactionCustomId == 'no') {
-      this.handlePaymentOptionEv(
-        client,
-        interaction,
-        'Tutor',
-        'paymentoption:back',
-        guildConfig
-      );
+      interaction.update({
+        content: 'Please Pick A Payment Method',
+        components: [
+          await Payments.GeneratePayments(
+            client,
+            guildConfig,
+            'Tutor',
+            'paymentoption'
+          ),
+        ],
+      });
+
+      return;
     }
 
     if (interactionCustomId == 'yes') {
@@ -161,11 +167,13 @@ export default class MessageEvent extends Event {
         const checkout = await client.API.Pay.createOrder(
           interaction.member.user.id,
           interaction.channelId,
-          args[0]
+          Number(args[0])
         );
         if (checkout) {
           interaction.update({
-            content: `Invoice created! Please click the checkout button below to complete your payment of **$${args[0]}**.`,
+            content: `Invoice created! Please click the checkout button below to complete your payment of **$${Number(
+              args[0]
+            )}**.`,
             components: [
               new MessageActionRow().addComponents([
                 new MessageButton()
