@@ -29,8 +29,7 @@ export class PayGateway implements OnGatewayInit, OnGatewayConnection {
   }
 
   public notifyAll(msg: PayGatewayMessage) {
-    console.log(msg);
-    this.server.emit('paymentNotification', JSON.stringify(msg));
+    this.server.emit('pay', JSON.stringify(msg));
   }
 
   // Not used for anything currently.
