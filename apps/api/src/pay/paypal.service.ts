@@ -116,7 +116,7 @@ export class PayPalService {
       ],
       // https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context
       application_context: {
-        brand_name: 'The best shop',
+        brand_name: process.env.PAYPAL_BRAND_NAME || 'LabMaker',
         landing_page: 'NO_PREFERENCE',
         shipping_preference: 'NO_SHIPPING',
         user_action: 'PAY_NOW',
