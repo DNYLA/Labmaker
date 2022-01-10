@@ -1,7 +1,6 @@
 import DiscordClient from './utils/client';
 import path from 'path';
 import fs from 'fs';
-// import * as fs from 'fs';
 
 export async function registerCommands(client: DiscordClient, dir = '') {
   if (dir === '') dir = 'commands';

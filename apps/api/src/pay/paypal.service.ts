@@ -8,30 +8,20 @@ import { PayGateway } from './pay.gateway';
 
 @Injectable()
 export class PayPalService {
-  private context = 'PayPal Service'; // For logger
   private client = new paypal.core.PayPalHttpClient(this.environment());
+  private logger = new Logger(PayPalService.name);
 
   constructor(
     private readonly payGateway: PayGateway,
     private httpService: HttpService,
-    private prismaService: PrismaService,
+    private prismaService: PrismaService
   ) {}
 
   private get credentials() {
-    let creds: { clientID: string; clientSecret: string };
-
-    // Set credentials depending on env
-    if (process.env.ENVIRONMENT === 'PRODUCTION') {
-      creds = {
-        clientID: process.env.PAYPAL_LIVE_CID,
-        clientSecret: process.env.PAYPAL_LIVE_CSECRET,
-      };
-    } else {
-      creds = {
-        clientID: process.env.PAYPAL_SBX_CID,
-        clientSecret: process.env.PAYPAL_SBX_CSECRET,
-      };
-    }
+    const creds: { clientID: string; clientSecret: string } = {
+      clientID: process.env.PAYPAL_CID,
+      clientSecret: process.env.PAYPAL_CSECRET,
+    };
 
     // If client id or secret are not present, return an error
     if (!creds || !creds.clientID || !creds.clientSecret) {
@@ -40,7 +30,7 @@ export class PayPalService {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: 'PayPal app credentials are not defined.',
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
 
@@ -49,10 +39,7 @@ export class PayPalService {
   }
 
   private get webhookID(): string {
-    const whid =
-      process.env.ENVIRONMENT === 'PRODUCTION'
-        ? process.env.PAYPAL_LIVE_WHID
-        : process.env.PAYPAL_SBX_WHID;
+    const whid = process.env.PAYPAL_WHID;
 
     if (!whid) {
       throw new HttpException(
@@ -60,7 +47,7 @@ export class PayPalService {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: 'PayPal WHID is not defined.',
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
 
@@ -84,8 +71,9 @@ export class PayPalService {
    * @returns URL to checkout that customer should use to complete the order.
    */
   public async createOrder(
+    tutorId: string,
     channelId: string,
-    price: number,
+    price: number
   ): Promise<{ url: string }> {
     if (isNaN(price)) {
       Logger.log('Throwing Error for invalid price');
@@ -94,7 +82,7 @@ export class PayPalService {
           status: HttpStatus.BAD_REQUEST,
           error: 'Price for the order must be a number!',
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -102,7 +90,7 @@ export class PayPalService {
     const ticket = await this.prismaService.ticket.findFirst({
       where: { channelId: channelId },
     });
-    console.log(channelId);
+
     if (!ticket) {
       Logger.log('Throwing Error for ticket');
       throw new HttpException(
@@ -110,19 +98,16 @@ export class PayPalService {
           status: HttpStatus.BAD_REQUEST,
           error: 'Ticket does not exist!',
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
-    let request = new paypal.orders.OrdersCreateRequest();
+    const request = new paypal.orders.OrdersCreateRequest();
     request.prefer('return=representation');
     request.requestBody({
       intent: 'CAPTURE',
       purchase_units: [
         {
-          // Using reference id so we can refer back to ticket later.
-          // So we don't need an extra db read to find ticket from tx id.
-          // reference_id: channelId,
           amount: {
             currency_code: 'USD',
             value: price,
@@ -131,35 +116,37 @@ export class PayPalService {
       ],
       // https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context
       application_context: {
-        brand_name: 'The best shop',
+        brand_name: process.env.PAYPAL_BRAND_NAME || 'LabMaker',
         landing_page: 'NO_PREFERENCE',
         shipping_preference: 'NO_SHIPPING',
         user_action: 'PAY_NOW',
-        return_url: 'http://localhost', // TODO: Has to have return url set, so maybe link to a page that closes itself or has success msg?
+        return_url: `${process.env.API_URL}/pay/order/paid`,
+        cancel_url: `${process.env.API_URL}/pay/order/cancelled`,
       },
     });
 
-    let response = await this.client.execute(request);
-    let order = response.result;
+    const response = await this.client.execute(request);
+    const order = response.result;
 
     // Add order id to ticket.
-    // TODO: After postgres migration, orders should be added to their own table linking back to
-    // the ticket incase we have multiple orders per ticket.
-    await this.prismaService.ticket.update({
-      where: { id: ticket.id },
-      data: { transactionId: order.id },
+    await this.prismaService.order.create({
+      data: {
+        status: 'CREATED',
+        tutorId: tutorId,
+        transactionId: order.id,
+        ticketId: ticket.id,
+      },
     });
 
     // Return checkout link if it exists
-    let checkoutLink = order.links.find((e) => e.rel == 'approve').href;
+    const checkoutLink = order.links.find((e) => e.rel == 'approve').href;
     if (checkoutLink) {
       return { url: checkoutLink };
     } else {
-      Logger.warn(
+      this.logger.warn(
         `Couldn't find checkout link amongst these links: ${JSON.stringify(
-          order.links,
-        )}`,
-        this.context,
+          order.links
+        )}`
       );
 
       throw new HttpException(
@@ -167,7 +154,7 @@ export class PayPalService {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: `Was unable to retrieve checkout link from PayPal.`,
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -177,16 +164,13 @@ export class PayPalService {
    * @param orderId ID to order that we need to capture.
    */
   private async captureOrder(orderId: string) {
-    let request = new paypal.orders.OrdersCaptureRequest(orderId);
+    const request = new paypal.orders.OrdersCaptureRequest(orderId);
     request.requestBody({});
 
     // Call API with your client and get a response for your call
-    let response = await this.client.execute(request);
+    const response = await this.client.execute(request);
 
-    Logger.log(
-      `Capturing Order: ${JSON.stringify(response.result)}`,
-      this.context,
-    );
+    this.logger.log(`Capturing Order: ${response.result.id}`);
   }
 
   /**
@@ -202,53 +186,51 @@ export class PayPalService {
     if (isValid) {
       // Order approved by customer, now capture payment
       if (data.event_type == 'CHECKOUT.ORDER.APPROVED') {
-        let oinfo = data.resource;
+        const oinfo = data.resource;
 
         this.captureOrder(oinfo.id);
 
-        Logger.log(
-          `Checkout completed, attempting to capture funds..`,
-          this.context,
-        );
+        this.logger.log(`Checkout completed, attempting to capture funds..`);
       }
 
       // Checkout completed, but funds are still processing!
       if (data.event_type == 'CHECKOUT.ORDER.COMPLETED') {
-        let oinfo = data.resource;
-        let amount = oinfo.gross_amount;
+        const oinfo = data.resource;
+        const amount = oinfo.gross_amount;
 
-        Logger.log(
-          `Payment of ${amount.value} ${amount.currency_code} is **processing**.`,
-          this.context,
+        this.logger.log(
+          `Payment of ${amount.value} ${amount.currency_code} is **processing**.`
         );
       }
 
       // Funds have been captured from the payee, payment process fully completed
       if (data.event_type == 'PAYMENT.CAPTURE.COMPLETED') {
-        let oinfo = data.resource;
-        let breakdown = oinfo.seller_receivable_breakdown;
+        const oinfo = data.resource;
+        const breakdown = oinfo.seller_receivable_breakdown;
 
         const netStr = `${breakdown.net_amount.value}${breakdown.net_amount.currency_code}`;
         const feeStr = `${breakdown.paypal_fee.value}${breakdown.paypal_fee.currency_code}`;
 
-        Logger.log(
-          `Captured A Payment. Net: ${netStr}, Paypal Fee: ${feeStr}`,
-          this.context,
+        this.logger.log(
+          `Captured A Payment. Net: ${netStr}, Paypal Fee: ${feeStr}`
         );
 
-        // doesn't give us the purchase_units, only the tx id, so use that to get ticket again in db
-        // for now, dont create new table for orders, do it after dan finishes change to postgres+prisma
-        const ticket = await this.prismaService.ticket.findFirst({
+        // Get order from db again with tx id, for Ticket channelId
+        const order = await this.prismaService.order.update({
           where: {
             transactionId: oinfo.supplementary_data.related_ids.order_id,
           },
+          data: {
+            status: 'PAID',
+          },
+          include: { ticket: true },
         });
 
-        if (ticket) {
+        if (order) {
           this.payGateway.notifyAll({
             op: PayGatewayOperation.PaymentCompleted,
             data: {
-              channelId: ticket.channelId,
+              channelId: order.ticket.channelId,
               paid: true,
               breakdown: {
                 fee: {
@@ -267,11 +249,10 @@ export class PayPalService {
             },
           });
         } else {
-          Logger.error(
+          this.logger.error(
             `Payment Capture Completed, but couldn't find relating ticket! ${JSON.stringify(
-              oinfo,
-            )}`,
-            this.context,
+              oinfo
+            )}`
           );
         }
       }
@@ -293,7 +274,7 @@ export class PayPalService {
     // base64 encode our credentials to form our token to send to paypal
     const cred = this.credentials;
     const authTkn = Buffer.from(
-      `${cred.clientID}:${cred.clientSecret}`,
+      `${cred.clientID}:${cred.clientSecret}`
     ).toString('base64');
 
     try {
@@ -317,8 +298,8 @@ export class PayPalService {
               Authorization: `Basic ${authTkn}`,
               'User-Agent': 'LabMaker-PIPN-Verifier/0.1',
             },
-          },
-        ),
+          }
+        )
       );
 
       if (resp.data.verification_status == 'SUCCESS') {
@@ -335,12 +316,12 @@ export class PayPalService {
       // Just pass through whole json body if error doesn't conform to fields in if above, so atleast we have everything we need to handle an error
       else msg += JSON.stringify(data);
 
-      Logger.error(msg, this.context);
+      this.logger.error(msg);
       return false;
     }
 
     // If true isn't returned above, then we must have failed somewhere
-    Logger.warn('Invalid webhook recieved', this.context);
+    this.logger.warn('Invalid webhook recieved');
     return false;
   }
 }

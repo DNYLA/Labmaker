@@ -4,13 +4,13 @@ import {
   Message,
   MessageActionRow,
   MessageButton,
+  Permissions,
 } from 'discord.js';
 import { GuildConfigDto } from '@labmaker/wrapper';
 import Event from '../utils/Base/Event';
 import DiscordClient from '../utils/client';
 import Payments from '../utils/GeneratePayment';
-import { getArgsFromMsg } from '../utils/Helpers';
-import Invoicer from '../utils/Invoicer';
+import { getArgsFromMsg, hasAnyPerms } from '../utils/Helpers';
 
 export default class MessageEvent extends Event {
   constructor() {
@@ -25,11 +25,12 @@ export default class MessageEvent extends Event {
     // type and the right being its value (eg: area:value).
     const splitId = interaction.customId.split(':');
 
-    const areaId = splitId[0]?.toLowerCase();
-    const customId = splitId[1];
+    const roleIds = splitId[0]; // Split by "/" for each role
+    const areaId = splitId[1]?.toLowerCase();
+    const customId = splitId[2];
 
     // Ensure areaId and customId were set correctly.
-    if (!areaId || !customId) {
+    if (!roleIds || !areaId || !customId) {
       interaction.update({
         content: 'Unable to correctly get splitId of option.',
         components: [],
@@ -37,20 +38,32 @@ export default class MessageEvent extends Event {
       return;
     }
 
+    if (
+      !hasAnyPerms(
+        interaction,
+        [...roleIds.split('/')],
+        [Permissions.FLAGS.ADMINISTRATOR]
+      )
+    )
+      return;
+
     const guildId = interaction.guild.id;
-    let guildConfig = await client.API.Discord.getOne(guildId);
+    const guildConfig = await client.API.Discord.getOne(guildId);
 
     switch (areaId) {
+      // Normal pay commands that any one can interact with.
       case 'paymentoption':
         await this.handlePaymentOptionEv(
           client,
           interaction,
           customId,
+          areaId,
+          roleIds,
           guildConfig
         );
         break;
-      case 'createinvoice':
-        await this.handleCreateInvoiceEv(
+      case 'createpporder':
+        await this.createPayPalOrderEv(
           client,
           interaction,
           customId,
@@ -64,31 +77,39 @@ export default class MessageEvent extends Event {
     client: DiscordClient,
     interaction: ButtonInteraction,
     interationCustomId: string,
+    areaId: string,
+    roleIds: string,
     guildConfig: GuildConfigDto
   ) {
     // Go back to main menu if back button clicked
     if (interationCustomId == 'back') {
       interaction.update({
         content: 'Please Pick A Payment Method',
-        components: [await Payments.GeneratePayments(client, guildConfig)],
+        components: [
+          await Payments.GeneratePayments(client, guildConfig, roleIds, areaId),
+        ],
       });
 
       return;
     }
 
     const payments = client.getPayments(guildConfig.id).payments;
-    let paymentButtons = [];
+    const paymentButtons = [];
 
     payments.forEach((payment) => {
       if (interationCustomId === payment.name) {
-        Invoicer.handlePaymentChoice(payment, interaction, guildConfig);
+        // If selected payment, update interaction to show it
+        return interaction.update({
+          content: `${payment.name}: ${payment.value}`,
+          components: [],
+        });
       } else if (interationCustomId === payment.type) {
-        let tempButton = new MessageButton()
-          .setStyle('PRIMARY')
-          .setLabel(payment.name)
-          .setCustomId(`paymentoption:${payment.name}`);
-
-        paymentButtons.push(tempButton);
+        paymentButtons.push(
+          new MessageButton()
+            .setStyle('PRIMARY')
+            .setLabel(payment.name)
+            .setCustomId(`${roleIds}:${areaId}:${payment.name}`)
+        );
       }
     });
 
@@ -96,7 +117,7 @@ export default class MessageEvent extends Event {
       const backButton = new MessageButton()
         .setStyle('SECONDARY')
         .setLabel('<')
-        .setCustomId('paymentoption:back');
+        .setCustomId(`${roleIds}:${areaId}:back`);
       paymentButtons.push(backButton);
 
       interaction.update({
@@ -106,35 +127,45 @@ export default class MessageEvent extends Event {
     }
   }
 
-  private async handleCreateInvoiceEv(
+  private async createPayPalOrderEv(
     client: DiscordClient,
     interaction: ButtonInteraction,
     interactionCustomId: string,
     guildConfig: GuildConfigDto
   ) {
+    if (!hasAnyPerms(interaction, ['Tutor'], [Permissions.FLAGS.ADMINISTRATOR]))
+      return;
+
     // Go back to displaying payment options
     if (interactionCustomId == 'no') {
-      this.handlePaymentOptionEv(
-        client,
-        interaction,
-        'paymentoption:back',
-        guildConfig
-      );
+      interaction.update({
+        content: 'Cancelled request.',
+        components: [],
+      });
+      return;
     }
 
     if (interactionCustomId == 'yes') {
       try {
-        let replyRef = (interaction.message as Message).reference;
-        let rmsg = await interaction.channel.messages.fetch(replyRef.messageId);
-        let { args } = getArgsFromMsg(rmsg.content, guildConfig.prefix.length);
+        const replyRef = (interaction.message as Message).reference;
+        const rmsg = await interaction.channel.messages.fetch(
+          replyRef.messageId
+        );
+        const { args } = getArgsFromMsg(
+          rmsg.content,
+          guildConfig.prefix.length
+        );
 
-        let checkout = await client.API.Pay.createOrder(
+        const checkout = await client.API.Pay.createOrder(
+          interaction.member.user.id,
           interaction.channelId,
-          args[0]
+          Number(args[0])
         );
         if (checkout) {
           interaction.update({
-            content: `Invoice created! Please click the checkout button below to complete your payment of **$${args[0]}**.`,
+            content: `Order created! Please click the checkout button below to complete your payment of **$${Number(
+              args[0]
+            )}**.`,
             components: [
               new MessageActionRow().addComponents([
                 new MessageButton()
@@ -146,9 +177,11 @@ export default class MessageEvent extends Event {
           });
         }
       } catch (err) {
-        interaction.update(
-          "Error fetching original message. Couldn't get price of invoice."
-        );
+        interaction.update({
+          content:
+            "Error fetching original message. Couldn't get price of order.",
+          components: [],
+        });
       }
     }
   }

@@ -21,7 +21,12 @@ export default class Payment extends Command {
 
     client.setPayments({ serverId: guildConfig.id, payments });
 
-    const row = await Payments.GeneratePayments(client, guildConfig);
+    const row = await Payments.GeneratePayments(
+      client,
+      guildConfig,
+      'anyone',
+      'paymentoption'
+    );
 
     if (!row) {
       return message.channel.send('No Payments Available.');

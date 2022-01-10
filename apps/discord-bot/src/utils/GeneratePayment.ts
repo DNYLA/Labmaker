@@ -5,10 +5,12 @@ import DiscordClient from './client';
 export default class Payments {
   static async GeneratePayments(
     client: DiscordClient,
-    guildConfig: GuildConfigDto
+    guildConfig: GuildConfigDto,
+    roles: string,
+    area: string
   ): Promise<MessageActionRow> {
-    let buttonTypes = [];
-    let types = [];
+    const buttonTypes = [];
+    const types = [];
 
     const paymentObject = client.getPayments(guildConfig.id);
     if (!paymentObject) {
@@ -16,13 +18,15 @@ export default class Payments {
     }
 
     paymentObject.payments.forEach((payment) => {
-      if (!types.includes(payment.type)) {
-        let tempButton = new MessageButton()
-          .setStyle('PRIMARY')
-          .setLabel(payment.type)
-          .setCustomId(`paymentoption:${payment.type}`);
+      if (payment.type.toLowerCase() == 'unlisted') return;
 
-        buttonTypes.push(tempButton);
+      if (!types.includes(payment.type)) {
+        buttonTypes.push(
+          new MessageButton()
+            .setStyle('PRIMARY')
+            .setLabel(payment.type)
+            .setCustomId(`${roles}:${area}:${payment.type}`)
+        );
         types.push(payment.type);
       }
     });

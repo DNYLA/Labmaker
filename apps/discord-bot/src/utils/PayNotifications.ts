@@ -27,7 +27,7 @@ export default class PayNotifications {
         console.log('WS', err.message);
       });
 
-      ws.on('message', (client: DiscordClient, msg: Buffer) => {
+      ws.on('pay', (msg: Buffer) => {
         this.handleWSMsg(client, msg);
       });
     } catch (err) {
@@ -54,7 +54,13 @@ export default class PayNotifications {
   private static sendPaymentCompletedMessage(client: DiscordClient, payload) {
     const channel = getChannelFromId(client, payload.channelId);
 
-    if (!channel) return;
+    if (!channel) {
+      console.log(
+        "Couldn't find channel to send payment completed message to:",
+        payload.channelId
+      );
+      return;
+    }
 
     const breakdown = payload.breakdown;
     const paidEmbed = new MessageEmbed()

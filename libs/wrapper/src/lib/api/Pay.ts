@@ -6,7 +6,13 @@ export class PayAPI extends API {
     super(`${apiUrl}/pay/`);
   }
 
-  async createOrder(channelId: string, price: string): Promise<CreateOrderDto> {
-    return await this.get(this.getUrl() + `create_order/${channelId}/${price}`);
+  async createOrder(
+    tutorId: string,
+    channelId: string,
+    price: number
+  ): Promise<CreateOrderDto> {
+    return await this.get(
+      this.getUrl() + `create_order/${tutorId}/${channelId}/${price}`
+    );
   }
 }
