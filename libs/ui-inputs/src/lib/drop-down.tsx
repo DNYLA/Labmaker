@@ -5,8 +5,8 @@ import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 
 export interface Item {
-  id: number;
-  title: string;
+  value: number;
+  label: string;
   selected: boolean;
 }
 
@@ -17,31 +17,32 @@ interface IOnChange {
 /* eslint-disable-next-line */
 export interface DropDownProps {
   items: Item[];
-  selected: Item;
-  setSelected: React.Dispatch<React.SetStateAction<Item>>;
   onChange: IOnChange;
 }
 
 const StyledDropDown = styled.div`
   width: 200px;
-  /* height: 60px; */
   font-size: 18px;
   transition: all 2s ease-in;
   user-select: none;
 `;
 
-export function DropDown({ items, selected, onChange }: DropDownProps) {
+export function DropDown({ items, onChange }: DropDownProps) {
   const [isOpen, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [filteredItems, setFilteredItems] = useState(items);
+  const [selected, setSelected] = useState<Item>(items[0]);
   const inputRef = React.createRef<HTMLInputElement>();
 
   useEffect(() => {
-    setInputValue(selected.title);
+    setInputValue(selected.label);
   }, [selected]);
 
   const setItem = (id: number) => {
     console.log('Running');
+    const newItem = items.find((item) => item.value === id);
+    if (!newItem) return;
+    setSelected(newItem);
     onChange(id);
     inputRef.current?.blur();
     setOpen(false);
@@ -50,16 +51,16 @@ export function DropDown({ items, selected, onChange }: DropDownProps) {
   const onKeyInput = (inputVal: string) => {
     setOpen(true);
     const alreadyInside = items.find(
-      (item) => item.title.toLowerCase() === inputVal
+      (item) => item.label.toLowerCase() === inputVal
     );
-    if (alreadyInside && selected.id === alreadyInside.id) {
+    if (alreadyInside && selected.value === alreadyInside.value) {
       console.log('Already inside');
       setFilteredItems(items);
       setInputValue(inputVal);
       return;
     }
     const fItems = items.filter((item) =>
-      item.title.toLowerCase().includes(inputVal)
+      item.label.toLowerCase().includes(inputVal)
     );
     setFilteredItems(fItems);
     setInputValue(inputVal);
@@ -67,8 +68,8 @@ export function DropDown({ items, selected, onChange }: DropDownProps) {
 
   const updateOpen = () => {
     setFilteredItems(items);
-    if (isOpen && selected.title !== inputValue) {
-      setInputValue(selected.title);
+    if (isOpen && selected.label !== inputValue) {
+      setInputValue(selected.label);
     }
     setOpen(!isOpen);
   };
@@ -80,7 +81,7 @@ export function DropDown({ items, selected, onChange }: DropDownProps) {
   };
 
   const handleClose = () => {
-    setInputValue(selected.title);
+    setInputValue(selected.label);
     setOpen(false);
   };
 
@@ -108,17 +109,17 @@ export function DropDown({ items, selected, onChange }: DropDownProps) {
       {isOpen && (
         <HiddenContainer>
           {filteredItems.map((item) => {
-            if (item.id !== selected.id)
+            if (item.value !== selected.value)
               return (
                 <DropDownItem
                   onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => setItem(item.id)}
-                  key={item.id}
+                  onClick={() => setItem(item.value)}
+                  key={item.value}
                 >
-                  {item.title}
+                  {item.label}
                 </DropDownItem>
               );
-            return <div key={item.id}></div>;
+            return <div key={item.value}></div>;
           })}
         </HiddenContainer>
       )}
