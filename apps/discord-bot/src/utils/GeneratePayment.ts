@@ -18,6 +18,8 @@ export default class Payments {
     }
 
     paymentObject.payments.forEach((payment) => {
+      if (payment.type.toLowerCase() == 'unlisted') return;
+
       if (!types.includes(payment.type)) {
         buttonTypes.push(
           new MessageButton()

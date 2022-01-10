@@ -1,3 +1,4 @@
+import { GuildConfigDto } from '@labmaker/wrapper';
 import { Message, Permissions } from 'discord.js';
 import Command from '../../utils/Base/Command';
 import DiscordClient from '../../utils/client';
@@ -8,7 +9,12 @@ export default class PayPal extends Command {
     super('paypal', 'Pay', ['pp']);
   }
 
-  async run(client: DiscordClient, message: Message, args: string[]) {
+  async run(
+    client: DiscordClient,
+    message: Message,
+    args: string[],
+    guildConfig: GuildConfigDto
+  ) {
     // Only tutors/admins can call this command
     if (
       !hasAnyPerms(
@@ -23,6 +29,18 @@ export default class PayPal extends Command {
     // Do nothing if NOT ran in a ticket channel
     if (message.channel.type == 'DM') return;
     if (!message.channel.name.includes('ticket-')) return;
+
+    // Check if paypal is enabled.
+    // If it is not in the `Payment` table, then it will act as if it is disabled.
+    // Should have type as `Unlisted` unless you want to show it in `!pay` options.
+    const payments = await client.API.Discord.getPayments(
+      guildConfig.paymentConfigId
+    );
+
+    if (payments.filter((e) => e.name.toLowerCase() == 'paypal').length <= 0) {
+      message.channel.send('PayPal is disabled.');
+      return;
+    }
 
     const usage = '\n**Example:** ```!paypal <total>```';
 

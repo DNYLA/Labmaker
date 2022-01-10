@@ -60,7 +60,7 @@ model Payment {
   id       Int    @id @default(autoincrement())
   name     String
   value    String
-  type     String
+  type     String // Type 'Unlisted' will exclude it from being displayed. Used for paypal option.
   // discordConfig DiscordConfig @relation(fields: [serverId], references: [id])
   serverId String
 }
