@@ -2,8 +2,6 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
-    "dashboard": "apps/dashboard",
-    "dashboard-e2e": "apps/dashboard-e2e",
     "discord-bot": "apps/discord-bot",
     "reddit-bot": "apps/reddit-bot",
     "ui-header": "libs/ui-header",

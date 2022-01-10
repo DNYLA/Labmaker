@@ -13,10 +13,6 @@
       "path": "./../apps/user-dashboard/src"
     },
     {
-      "name": "Dashboard",
-      "path": "./../apps/dashboard/src"
-    },
-    {
       "name": "Reddit Bot",
       "path": "./../apps/reddit-bot/src"
     },
