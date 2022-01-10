@@ -1,5 +1,5 @@
 import { API } from '../utils/BaseAPI';
-import { Guild } from '../types';
+import { Guild, GuildConfigPayment } from '../types';
 
 export class GuildsAPI extends API {
   constructor(apiUrl: string) {
@@ -10,7 +10,7 @@ export class GuildsAPI extends API {
     return await this.get();
   }
 
-  async Config(serverId: string): Promise<any> {
+  async Config(serverId: string): Promise<GuildConfigPayment> {
     const url = this.getUrl() + serverId;
 
     return await this.get(url);

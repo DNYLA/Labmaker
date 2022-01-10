@@ -1,4 +1,5 @@
 import { User } from '@prisma/client';
+import { TokenType } from '../utils/types';
 
 export type UserDetails = {
   id: string;
@@ -8,7 +9,7 @@ export type UserDetails = {
   accessToken: string;
   refreshToken: string;
   tokenVersion?: number;
-  type: string;
+  type: TokenType;
 };
 
 export type Done = (err: Error, user: User) => void;

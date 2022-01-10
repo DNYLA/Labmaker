@@ -16,6 +16,7 @@ export class APISocket {
 
     this.socket.on('connect', () => {
       console.log('Socket Conected');
+      this.socket.send('message', 'hi');
     });
 
     this.socket.on('disconnect', () => {

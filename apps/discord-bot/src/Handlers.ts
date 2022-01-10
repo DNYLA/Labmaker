@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 
 export async function registerCommands(client: DiscordClient, dir = '') {
-  if (dir === '') dir = 'commands';
+  if (dir === '') dir = './commands';
 
   const filePath = path.join(__dirname, dir);
   const files = await fs.promises.readdir(filePath);

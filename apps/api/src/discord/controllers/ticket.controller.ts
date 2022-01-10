@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Inject,
   Param,
   Post,
   Put,
@@ -19,8 +18,8 @@ export class TicketController {
   @Get('/:serverId/:ticketId')
   getTicket(
     @Param('serverId') serverId: string,
-    @Param('ticketId') ticketId: number,
-  ): Promise<Ticket> | any {
+    @Param('ticketId') ticketId: number
+  ): Promise<Ticket> | undefined {
     return this.ticketService.getTicket(serverId, ticketId);
   }
 

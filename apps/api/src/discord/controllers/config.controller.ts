@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
   Param,
   Post,
   Put,
@@ -26,7 +25,7 @@ export class ConfigController {
   @Get('/:id')
   getConfig(
     @CurrentUser() user: UserDetails,
-    @Param('id') id: string,
+    @Param('id') id: string
   ): Promise<DiscordConfig> {
     return this.configService.getConfig(id, user);
   }

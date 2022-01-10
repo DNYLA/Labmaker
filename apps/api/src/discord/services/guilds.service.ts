@@ -6,6 +6,7 @@ import { Guild } from '../dtos/Guild.dto';
 import { UserService } from '../../user/user.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { PaymentService } from './payment.service';
+import { DiscordConfig, Payment } from '.prisma/client';
 
 @Injectable()
 export class GuildsService {
@@ -13,7 +14,7 @@ export class GuildsService {
     private prismaService: PrismaService,
     private userService: UserService,
     private readonly paymentService: PaymentService,
-    @Inject(HttpService) private readonly httpService: HttpService,
+    @Inject(HttpService) private readonly httpService: HttpService
   ) {}
 
   async fetchGuilds(user: UserDetails): Promise<Guild[]> {
@@ -25,7 +26,7 @@ export class GuildsService {
         headers: {
           Authorization: `Bearer ${userDetails.accessToken}`,
         },
-      },
+      }
     );
 
     const guilds = await (await lastValueFrom(fetchedGuilds)).data;
@@ -73,14 +74,14 @@ export class GuildsService {
           // validGuilds.filter((lGuild) => lGuild.id !== guild.id);
           spliceIndex++;
         }
-      }),
+      })
     );
 
     return validGuilds;
   }
 
   //Grabs Guilds from Database instead of Discord API
-  async getLocalData(serverId: string): Promise<any> {
+  async getLocalData(serverId: string): Promise<LocalData> {
     const config = await this.prismaService.discordConfig.findUnique({
       where: { id: serverId },
     });
@@ -93,4 +94,9 @@ export class GuildsService {
       payments,
     };
   }
+}
+
+export interface LocalData {
+  config: DiscordConfig;
+  payments: Payment[];
 }

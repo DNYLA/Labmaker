@@ -1,20 +1,15 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { ArgumentsHost, CanActivate, Injectable } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
-import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 
 @Injectable()
 export class WSGuard implements CanActivate {
   constructor(private authService: AuthService) {}
 
-  async canActivate(context: any): Promise<boolean | any> {
-    const token = context.args[0].handshake.headers.authorization.split(' ')[1];
+  async canActivate(context: ArgumentsHost): Promise<boolean> {
+    const args = context.getArgByIndex(0);
+    const token = args.handshake.headers.authorization.split(' ')[0];
+
     if (!token) return false;
     const result = await this.authService.verify(token);
 

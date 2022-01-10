@@ -38,7 +38,7 @@ export class LabmakerAPI {
 
   public async refreshAccesToken() {
     const url = `${this.apiURL}/auth/refresh_token`;
-
+    console.log(url);
     return await refreshToken(url);
   }
 

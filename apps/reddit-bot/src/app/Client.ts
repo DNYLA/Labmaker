@@ -33,9 +33,8 @@ export class Client {
     const { name } = item.author;
     const { display_name } = item.subreddit;
     const config = this.config;
-    let didPm = false;
     let valid = true;
-    config.delay = 0;
+    config.delay = 30;
 
     if (hourDiff > 24) {
       return;
@@ -51,17 +50,22 @@ export class Client {
       return;
     }
 
-    config.blockedUsers.forEach((u) => {
-      if (u.toLowerCase() === name.toLowerCase()) valid = false;
-    });
+    await Promise.all(
+      config.blockedUsers.map((u) => {
+        if (u.toLowerCase() === name.toLowerCase()) valid = false;
+      })
+    );
 
-    config.forbiddenWords.forEach((word) => {
-      if (item.title.toLowerCase().includes(word.toLowerCase())) {
-        valid = false;
-      } else if (item.selftext.toLowerCase().includes(word.toLowerCase())) {
-        valid = false;
-      }
-    });
+    await Promise.all(
+      config.forbiddenWords.map((word, i) => {
+        if (item.title.toLowerCase().includes(word.toLowerCase())) {
+          valid = false;
+          console.log(`${i} : ${word}`);
+        } else if (item.selftext.toLowerCase().includes(word.toLowerCase())) {
+          valid = false;
+        }
+      })
+    );
 
     if (valid) {
       this.localLogs.forEach((log) => {
@@ -70,6 +74,7 @@ export class Client {
           const minuteDiff = msDifference / (1000 * 60);
           if (minuteDiff < 60) {
             //Dont RePM within 60Mins
+            console.log(`Dont RePM : ${item.id}`);
             valid = false;
           }
         }
@@ -79,39 +84,52 @@ export class Client {
     if (this.localLogs.length > 300) {
       this.localLogs.splice(0, 150); //Removes first 150 Logs as they should be useless
     }
+
     this.localLogs.push({ username: name, createdAt: new Date() });
-    setTimeout(async () => {
-      try {
-        if (valid) {
+    setTimeout(() => this.sendPM(valid, item, config), config.delay * 1000);
+  }
+
+  private async sendPM(
+    valid: boolean,
+    item: Snoowrap.Submission,
+    config: RedditConfigDto
+  ) {
+    const { display_name } = item.subreddit;
+    const { name } = item.author;
+    let didPm = false;
+
+    try {
+      if (valid) {
+        if (!process.env.API_DEBUG) {
           await this.client.composeMessage({
             to: item.author,
             subject: config.title,
             text: config.pmBody,
           });
-
-          console.log(
-            `${this.postCounter} : ${name} : ${display_name}  : ${config.pmBody}`
-          );
-
-          didPm = true;
-          this.postCounter++;
         }
-      } catch (err) {
-        console.error(`Error Occured ${err.message}`);
+
+        console.log(
+          `${this.postCounter} : ${name} : ${display_name}  : ${config.pmBody} : SentPM()`
+        );
+
+        didPm = true;
+        this.postCounter++;
       }
+    } catch (err) {
+      console.error(`Error Occured ${err.message}`);
+    }
 
-      const log: LogDto = {
-        id: 0,
-        nodeId: config.id,
-        username: name,
-        message: config.pmBody,
-        subreddit: display_name,
-        subId: item.id,
-        pm: didPm,
-      };
+    const log: LogDto = {
+      id: 0,
+      nodeId: config.id,
+      username: name,
+      message: config.pmBody,
+      subreddit: display_name,
+      subId: item.id,
+      pm: didPm,
+    };
 
-      Labmaker.Log.create(log);
-    }, config.delay * 1000);
+    Labmaker.Log.create(log);
   }
 
   public updateClient(client: Snoowrap, config: RedditConfigDto) {

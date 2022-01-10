@@ -40,7 +40,7 @@ export class RedditConfigAPI extends API {
     message: string
   ): Promise<RedditConfigDto> {
     const url = this.getUrl() + nodeId;
-    return await this.put({ pmBody: message }, url);
+    return await this.put(message, url);
   }
 
   async deleteConfig(nodeId: number): Promise<any> {

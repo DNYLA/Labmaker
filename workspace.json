@@ -2,10 +2,12 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
-    "dashboard": "apps/dashboard",
-    "dashboard-e2e": "apps/dashboard-e2e",
     "discord-bot": "apps/discord-bot",
     "reddit-bot": "apps/reddit-bot",
+    "ui-header": "libs/ui-header",
+    "ui-inputs": "libs/ui-inputs",
+    "user-dashboard": "apps/user-dashboard",
+    "user-dashboard-e2e": "apps/user-dashboard-e2e",
     "wrapper": "libs/wrapper"
   },
   "models": {

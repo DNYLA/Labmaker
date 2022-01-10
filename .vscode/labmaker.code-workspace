@@ -5,32 +5,32 @@
       "path": "./../"
     },
     {
-      "name": "Prisma",
-      "path": "./../prisma"
-    },
-    {
       "name": "API",
       "path": "./../apps/api/src"
+    },
+    {
+      "name": "User Dashboard",
+      "path": "./../apps/user-dashboard/src"
+    },
+    {
+      "name": "Reddit Bot",
+      "path": "./../apps/reddit-bot/src"
     },
     {
       "name": "Discord Bot",
       "path": "./../apps/discord-bot/src"
     },
     {
-      "name": "Dashboard",
-      "path": "./../apps/dashboard/src"
-    },
-    {
       "name": "Wrapper",
       "path": "./../libs/wrapper/src"
     },
     {
-      "name": "All Apps",
-      "path": "./../apps"
-    },
-    {
       "name": "All Libs",
       "path": "./../libs"
+    },
+    {
+      "name": "All Apps",
+      "path": "./../apps"
     }
   ],
   "settings": {

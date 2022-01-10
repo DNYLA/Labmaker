@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Log } from '@prisma/client';
 import { CreateLogDto } from '../dtos/create-log.dto';
 import { LogsService } from '../services/logs.service';

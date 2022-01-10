@@ -44,18 +44,14 @@ export class ConfigController {
   }
 
   @Put('/:id')
-  updateMessage(@Param('id') id: number, @Body() body: any) {
-    return this.configService.updateMessage(id, body.pmBody);
+  updateMessage(@Param('id') id: number, @Body() body: string) {
+    console.log(body);
+    return this.configService.updateMessage(id, body);
   }
 
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
   deleteConfig(@Param('id') id: number) {
     return this.configService.deleteConfig(id);
-  }
-
-  @Get('image/profile')
-  getProfile(): Promise<any> {
-    return this.configService.getProfile('chikybacon');
   }
 }

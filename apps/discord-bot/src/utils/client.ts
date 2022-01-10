@@ -1,4 +1,4 @@
-import { Client, ClientOptions, Collection, Intents } from 'discord.js';
+import { Client, ClientOptions, Collection } from 'discord.js';
 import { LabmakerAPI, GuildConfigDto, PaymentDto } from '@labmaker/wrapper';
 import Command from './Base/Command';
 import Event from './Base/Event';
@@ -33,12 +33,12 @@ export default class DiscordClient extends Client {
     return this._events;
   }
 
-  get prefix(): string {
-    return this._prefix;
-  }
-
   get API(): LabmakerAPI {
     return this._apiHandler;
+  }
+
+  get prefix(): string {
+    return this._prefix;
   }
 
   set prefix(prefix: string) {
