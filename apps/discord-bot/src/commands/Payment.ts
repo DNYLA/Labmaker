@@ -24,7 +24,7 @@ export default class Payment extends Command {
     const row = await Payments.GeneratePayments(
       client,
       guildConfig,
-      'Tutor',
+      'anyone',
       'paymentoption'
     );
 

@@ -57,6 +57,7 @@ export default class MessageEvent extends Event {
           client,
           interaction,
           customId,
+          areaId,
           roleIds,
           guildConfig
         );
@@ -76,6 +77,7 @@ export default class MessageEvent extends Event {
     client: DiscordClient,
     interaction: ButtonInteraction,
     interationCustomId: string,
+    areaId: string,
     roleIds: string,
     guildConfig: GuildConfigDto
   ) {
@@ -84,12 +86,7 @@ export default class MessageEvent extends Event {
       interaction.update({
         content: 'Please Pick A Payment Method',
         components: [
-          await Payments.GeneratePayments(
-            client,
-            guildConfig,
-            roleIds,
-            interationCustomId
-          ),
+          await Payments.GeneratePayments(client, guildConfig, roleIds, areaId),
         ],
       });
 
@@ -101,15 +98,17 @@ export default class MessageEvent extends Event {
 
     payments.forEach((payment) => {
       if (interationCustomId === payment.name) {
-        return interaction.reply({
+        // If selected payment, update interaction to show it
+        return interaction.update({
           content: `${payment.name}: ${payment.value}`,
+          components: [],
         });
       } else if (interationCustomId === payment.type) {
         paymentButtons.push(
           new MessageButton()
             .setStyle('PRIMARY')
             .setLabel(payment.name)
-            .setCustomId(`paymentoption:${payment.name}`)
+            .setCustomId(`${roleIds}:${areaId}:${payment.name}`)
         );
       }
     });
@@ -118,7 +117,7 @@ export default class MessageEvent extends Event {
       const backButton = new MessageButton()
         .setStyle('SECONDARY')
         .setLabel('<')
-        .setCustomId('paymentoption:back');
+        .setCustomId(`${roleIds}:${areaId}:back`);
       paymentButtons.push(backButton);
 
       interaction.update({
