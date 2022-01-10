@@ -1,6 +1,6 @@
+import { GuildConfigDto } from '@labmaker/wrapper';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { loadingDiscordConfig } from '../LoadingTypes';
-import { GuildConfig } from '../types';
 
 export const discordConfigSlice = createSlice({
   name: 'discordConfig',
@@ -8,7 +8,7 @@ export const discordConfigSlice = createSlice({
     value: loadingDiscordConfig,
   },
   reducers: {
-    setDiscordConfig: (state, action: PayloadAction<GuildConfig>) => {
+    setDiscordConfig: (state, action: PayloadAction<GuildConfigDto>) => {
       state.value = action.payload;
     },
   },

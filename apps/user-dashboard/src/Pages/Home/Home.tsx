@@ -31,13 +31,17 @@ function useRedditLogic() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.value);
   const [selectedConfig, setSelectedConfig] = useState(user.nodes[0]);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     if (user.nodes.length === 0) {
       const templateConf = redditTemplate;
       setSelectedConfig(templateConf);
       return;
     }
+
+    setLoading(false);
   }, [user.nodes.length]);
 
   const saveNode = async () => {
@@ -85,6 +89,7 @@ function useRedditLogic() {
     deleteNode,
     createNode,
     user,
+    isLoading,
   };
 }
 
@@ -96,11 +101,12 @@ export function Home() {
     saveNode,
     deleteNode,
     user,
+    isLoading,
   } = useRedditLogic();
 
   const itemLoad: Item = {
-    id: 0,
-    title: '',
+    value: 0,
+    label: '',
     selected: true,
   };
 
@@ -114,8 +120,8 @@ export function Home() {
       for (let i = 0; i < allConfigs.length; i++) {
         const config = allConfigs[i];
         parsedData.push({
-          id: config.id,
-          title: config.username,
+          value: config.id,
+          label: config.username,
           selected: true,
         });
       }
@@ -130,31 +136,30 @@ export function Home() {
   }, [user.nodes]);
 
   const refreshItem = () => {
-    const config = user.nodes.find((c) => c.id === selected.id);
+    const config = user.nodes.find((c) => c.id === selected.value);
     if (!config) return;
     setSelectedConfig(config);
   };
 
   const onChange = (id: number) => {
     const items = [...parsedItems];
-    const foundItem = items.find((item) => item.id === id);
+    const foundItem = items.find((item) => item.value === id);
     if (!foundItem) return;
 
-    const config = user.nodes.find((c) => c.id === foundItem.id);
+    const config = user.nodes.find((c) => c.id === foundItem.value);
     setSelected(foundItem);
     if (!config) return;
     setSelectedConfig(config);
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <StyledHome>
       <ControlsContainer>
-        <DropDown
-          items={parsedItems}
-          selected={selected}
-          setSelected={setSelected}
-          onChange={onChange}
-        />
+        <DropDown items={parsedItems} onChange={onChange} />
         <UserControls
           onDelete={deleteNode}
           onRefresh={refreshItem}

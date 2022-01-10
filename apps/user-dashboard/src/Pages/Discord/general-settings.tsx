@@ -31,20 +31,18 @@ export function GeneralSettings({
       <SettingsContainer id="comboContainer">
         <h1>General</h1>
         <StyledSpan>Payment Config</StyledSpan>
-        <ReactDropdown
+        {/* <ReactDropdown
           options={
             parsedGuilds ? parsedGuilds : [{ value: 'Empty', label: 'Empty' }]
           }
           value={config.paymentConfigId}
           onChange={(e) => changeEvent(e)}
-        />
+        /> */}
         {/* <DropDown
-          items={parsedGuilds ? parsedGuilds : [{value: 'Empty'}]}
+          items={parsedGuilds ? parsedGuilds : [{ value: 'Empty' }]}
           selected={undefined}
-          setSelected={function (value: SetStateAction<Item>): void {
-            throw new Error('Function not implemented.');
-          }}
-          onChange={undefined}
+          setSelected={}
+          onChange={changeEvent}
         /> */}
         <br />
         <InputBox

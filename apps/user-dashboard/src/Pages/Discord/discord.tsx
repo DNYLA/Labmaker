@@ -1,107 +1,69 @@
-import { ComboContainer } from '@labmaker/ui-inputs';
+import { ComboContainer, Item, UserControls } from '@labmaker/ui-inputs';
 import { Guild, PaymentDto } from '@labmaker/wrapper';
 import { RootState } from '../../store';
 import { Labmaker } from '../../utils/APIHandler';
-import { loadingPayment } from '../../utils/LoadingTypes';
+import { loadingPayment, loadingServer } from '../../utils/LoadingTypes';
 import { setDiscordConfig } from '../../utils/slices/configSlices';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Selector } from '@labmaker/ui-header';
 import { GeneralSettings } from './general-settings';
 import { PaymentSettings } from './payment-settings';
-type DDProps = {
-  value: string;
-  label: string;
-};
+
+//Copied Interface from @ui-inputs. Replaced ID with string instead of Number. (Will update Component to string after Discord Page finished)
+interface ItemEdited {
+  id: string;
+  title: string;
+  selected: boolean;
+}
+
+function parseGuilds(guilds: Guild[]) {
+  const parsedGuild: ItemEdited[] = [];
+
+  guilds.forEach((guild) => {
+    parsedGuild.push({ id: guild.id, title: guild.name, selected: false });
+  });
+
+  console.log(parsedGuild);
+
+  parsedGuild[0].selected = true;
+
+  return parsedGuild;
+}
 
 function useGuildLogic() {
+  const [guilds, setGuilds] = useState<Guild[]>([]);
+  const [parsedGuilds, setParsedGuilds] = useState<ItemEdited[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [payments, setPayments] = useState([loadingPayment]);
   const dispatch = useDispatch();
   const discordConfig = useSelector(
     (state: RootState) => state.discordConfig.value
   );
 
-  const loadingServer: Guild = {
-    id: '0',
-    name: 'Name',
-    icon: 'Icon',
-    owner: false,
-    permissions: '1234',
-    features: [],
-    joined: false,
-  };
+  const fetchGuilds = useCallback(async () => {
+    const fGuilds = await Labmaker.Guild.Guilds();
+    if (!fGuilds) return;
+    setGuilds(fGuilds);
+    setParsedGuilds(parseGuilds(fGuilds));
+    const fetchedData = await Labmaker.Guild.Config(fGuilds[0].id); //Fetch First Config (Probably Update this to fetch All?)
 
-  const [guilds, setGuilds] = useState([loadingServer]);
-  const [parsedGuilds, setParsedGuilds] = useState([
-    { value: 'Loading...', label: 'Loading' },
-  ]);
-  const [reload, setReload] = useState(true);
-  const [payments, setPayments] = useState([loadingPayment]);
+    if (!fetchedData || !fetchedData.config) return;
+    dispatch(setDiscordConfig(fetchedData.config));
 
-  // const user = useSelector((state: RootState) => state.user.value);
+    if (!fetchedData.payments) return;
+    setPayments(fetchedData.payments);
+    setIsLoading(false);
+  }, [dispatch]);
 
   useEffect(() => {
-    const loadConfig = async () => {
-      setReload(false);
-      dispatch(setDiscordConfig({ ...discordConfig, loading: true }));
+    setIsLoading(true);
+    fetchGuilds();
+  }, [fetchGuilds]);
 
-      const fetchedGuilds = await Labmaker.Guild.Guilds();
-      if (!fetchedGuilds) {
-        // dispatch(
-        //   updateDiscord({
-        //     ...discordConfig,
-        //     name: 'No Servers Found',
-        //     loading: false,
-        //   })
-        // );
-        dispatch(
-          setDiscordConfig({
-            ...discordConfig,
-            name: 'No Servers Found',
-            loading: false,
-          })
-        );
-        setGuilds([]);
-        setParsedGuilds(parseGuilds([]));
-        return;
-      }
-
-      setGuilds(fetchedGuilds);
-      setParsedGuilds(parseGuilds(fetchedGuilds));
-
-      const fetchedData = await Labmaker.Guild.Config(fetchedGuilds[0].id);
-
-      if (!fetchedData) {
-        dispatch(
-          setDiscordConfig({
-            ...discordConfig,
-            name: 'No Servers Found',
-            loading: false,
-          })
-        );
-        return;
-      }
-
-      if (!fetchedData.config) return;
-      dispatch(setDiscordConfig(fetchedData.config));
-
-      if (!fetchedData.payments) return;
-      setPayments(fetchedData.payments);
-    };
-
-    if (reload) {
-      loadConfig();
-    }
-  }, [dispatch, discordConfig, reload]);
-
-  const saveData = async () => {
-    //Add Functionality to see what was updated and only update that.
-    await savePayments();
-    await Labmaker.Discord.update(discordConfig);
-  };
-
-  const handleClick = async (server: string) => {
-    const fetchedData = await Labmaker.Guild.Config(server);
+  const onGuildSelected = async (serverId: string) => {
+    const fetchedData = await Labmaker.Guild.Config(serverId);
 
     if (!fetchedData) {
       window.open(
@@ -113,9 +75,15 @@ function useGuildLogic() {
     }
   };
 
+  const onConfigIdChanged = async (serverId: string) => {
+    const fetchedPayments = await Labmaker.Discord.getPayments(serverId);
+    setPayments(fetchedPayments);
+    dispatch(setDiscordConfig({ ...discordConfig, paymentConfigId: serverId }));
+  };
+
   const createPayment = async () => {
     const newPayment: PaymentDto = {
-      id: Math.random(),
+      id: Math.random(), //This gets overridden on Server-Side (Create new DTOS for items yet to be created)
       name: 'Payment Name',
       value: 'Payment Value',
       type: 'FIAT',
@@ -123,26 +91,22 @@ function useGuildLogic() {
       newPayment: true,
     };
 
-    // const savedPayment = await Labmaker.Discord.createPayments([newPayment]);
     const _payments = [...payments];
-
-    // _payments.push(savedPayment[0]);
     _payments.push(newPayment);
-    // console.log(savedPayment);
     setPayments(_payments);
   };
 
   const savePayments = async () => {
     if (payments.length === 0) return;
 
-    // await Labmaker.Discord.updatePayments(payments);
-
     //Add Functionality to see what was updated and only send them
+    //Or Merge this into one API call and just figure out what is new and what needs to be deleted on the server-side?
     const newPayments: PaymentDto[] = [];
     const updatePayments: PaymentDto[] = [];
     const deletedIds: number[] = [];
 
-    //Should this be moved to the API under one route?
+    //this is what should be moved to the API under one route
+    //shouldnt be too hard to do it just replace current PUT with this.
     payments.forEach((payment) => {
       if (payment.newPayment) {
         newPayments.push(payment);
@@ -161,40 +125,22 @@ function useGuildLogic() {
       await Labmaker.Discord.deletePayments(deletedIds);
   };
 
-  const parseGuilds = (guilds: Guild[]) => {
-    const parsedGuilds: string[] = [];
-    const parsed: DDProps[] = [];
-
-    if (!guilds) return parsed;
-
-    guilds.forEach((guild: Guild) => {
-      if (guild.joined) {
-        parsedGuilds.push(guild.name);
-        parsed.push({ value: guild.id, label: guild.name });
-      }
-    });
-    return parsed;
-  };
-
-  const handleChange = async (item: any) => {
-    const fetchedPayments = await Labmaker.Discord.getPayments(item.value);
-
-    setPayments(fetchedPayments);
-    dispatch(
-      setDiscordConfig({ ...discordConfig, paymentConfigId: item.value })
-    );
+  const saveData = async () => {
+    await savePayments();
+    await Labmaker.Discord.update(discordConfig);
   };
 
   return {
+    discordConfig,
     guilds,
     parsedGuilds,
-    saveData,
-    handleClick,
-    createPayment,
-    handleChange,
-    discordConfig,
     payments,
     setPayments,
+    createPayment,
+    saveData,
+    onGuildSelected,
+    onConfigIdChanged,
+    isLoading,
   };
 }
 
@@ -207,15 +153,16 @@ const StyledDiscord = styled.div`
 
 export function Discord(props: DiscordProps) {
   const {
+    discordConfig,
     guilds,
     parsedGuilds,
-    saveData,
-    handleClick,
-    createPayment,
-    handleChange,
-    discordConfig,
     payments,
     setPayments,
+    createPayment,
+    saveData,
+    onGuildSelected,
+    onConfigIdChanged,
+    isLoading,
   } = useGuildLogic();
 
   const GenerateGuilds = () => {
@@ -230,7 +177,7 @@ export function Discord(props: DiscordProps) {
       return (
         <Selector
           key={guild.id}
-          clickEvent={() => handleClick(guild.id)}
+          clickEvent={() => onGuildSelected(guild.id)}
           title={guild.joined ? guild.name : `${guild.name} - Invite`}
           imageUrl={
             guild.icon
@@ -242,15 +189,26 @@ export function Discord(props: DiscordProps) {
     });
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <StyledDiscord>
       <SelectorContainer>{GenerateGuilds()}</SelectorContainer>
-
+      <ControlsContainer>
+        <UserControls
+          // onDelete={deleteNode}
+          // onRefresh={refreshItem}
+          onCreate={createPayment}
+          onSave={saveData}
+        />
+      </ControlsContainer>
       <ComboContainer>
         <GeneralSettings
           config={discordConfig}
           parsedGuilds={parsedGuilds}
-          changeEvent={handleChange}
+          changeEvent={onConfigIdChanged}
         />
         <PaymentSettings
           payments={payments}
@@ -262,6 +220,12 @@ export function Discord(props: DiscordProps) {
       </ComboContainer>
     </StyledDiscord>
   );
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // } else {
+  //   return <div>This Is Discord</div>;
+  // }
 }
 
 const SelectorContainer = styled.div`
@@ -271,4 +235,13 @@ const SelectorContainer = styled.div`
   .selector {
     margin: 0px 15px;
   }
+`;
+
+//This is styled differently from the one inside Home
+const ControlsContainer = styled.div`
+  position: relative;
+  display: flex;
+  float: right;
+  display: inline-block;
+  z-index: 10000000;
 `;

@@ -12,60 +12,56 @@ const StyledLogs = styled.div`
 `;
 
 export function Logs() {
-  const [loading, setLoading] = useState(true);
+  const itemLoad: Item = {
+    value: 0,
+    label: '',
+    selected: true,
+  };
+
+  const [isLoading, setLoading] = useState(true);
+  const [parsedConfigs, setParsedConfigs] = useState([itemLoad]);
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.value);
   const logs = useSelector((state: RootState) => state.logs.value);
 
-  const itemLoad: Item = {
-    id: 0,
-    title: '',
-    selected: true,
-  };
+  const parseConfigs = () => {
+    const parsedData = new Array<Item>();
+    const allConfigs = [...user.nodes];
+    for (let i = 0; i < allConfigs.length; i++) {
+      const config = allConfigs[i];
+      parsedData.push({
+        value: config.id,
+        label: config.username,
+        selected: true,
+      });
+    }
 
-  const [selected, setSelected] = useState(itemLoad);
-  const [parsedItems, setParsedItems] = useState([itemLoad]);
+    if (parsedData.length > 0) {
+      parsedData[0].selected = true;
+      setParsedConfigs(parsedData);
+    }
+  };
 
   useEffect(() => {
     const loadLogs = async () => {
+      parseConfigs();
+
       if (user.nodes.length > 0) {
         const data = await Labmaker.Log.getLogs(user.nodes[0].id);
         dispatch(setLogs(data));
-        setLoading(false);
       }
-      const parseConfigs = () => {
-        const parsedData = new Array<Item>();
-        const allConfigs = [...user.nodes];
-        for (let i = 0; i < allConfigs.length; i++) {
-          const config = allConfigs[i];
-          parsedData.push({
-            id: config.id,
-            title: config.username,
-            selected: true,
-          });
-        }
 
-        if (parsedData.length > 0) {
-          parsedData[0].selected = true;
-          setSelected(parsedData[0]);
-          setParsedItems(parsedData);
-        }
-      };
-
-      parseConfigs();
-      loadLogs();
+      setLoading(false);
     };
-
     loadLogs();
-  }, [dispatch, user.nodes]);
+  }, []);
 
   const onChange = async (id: number) => {
-    const items = [...parsedItems];
-    const foundItem = items.find((item) => item.id === id);
+    const items = [...parsedConfigs];
+    const foundItem = items.find((item) => item.value === id);
     if (!foundItem) return;
 
-    const config = user.nodes.find((c) => c.id === foundItem.id);
-    setSelected(foundItem);
+    const config = user.nodes.find((c) => c.id === foundItem.value);
     if (!config) return;
 
     setLoading(true);
@@ -75,22 +71,21 @@ export function Logs() {
     setLoading(false);
   };
 
-  return (
-    <StyledLogs>
-      <ControlsContainer>
-        <DropDown
-          items={parsedItems}
-          selected={selected}
-          setSelected={setSelected}
-          onChange={onChange}
-        />
-      </ControlsContainer>
-      <SettingsContainer>
-        <h1>Logs</h1>
-        <LogTable logs={logs} />
-      </SettingsContainer>
-    </StyledLogs>
-  );
+  if (!isLoading) {
+    return (
+      <StyledLogs>
+        <ControlsContainer>
+          <DropDown items={parsedConfigs} onChange={onChange} />
+        </ControlsContainer>
+        <SettingsContainer>
+          <h1>Logs</h1>
+          <LogTable logs={logs} />
+        </SettingsContainer>
+      </StyledLogs>
+    );
+  } else {
+    return <div>Loading</div>;
+  }
 }
 
 const ControlsContainer = styled.div`

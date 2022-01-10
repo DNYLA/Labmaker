@@ -1,3 +1,4 @@
+import { Guild, GuildConfigDto, LogDto } from '@labmaker/wrapper';
 import { GuildConfig, Log, RedditConfig, Payment, User } from './types';
 
 export const defaultUser: User = {
@@ -10,7 +11,7 @@ export const defaultUser: User = {
   loading: true,
 };
 
-export const loadingLogs: Log = {
+export const loadingLogs: LogDto = {
   id: -1,
   nodeId: -1,
   message: 'Loading Logs...',
@@ -19,7 +20,6 @@ export const loadingLogs: Log = {
   subreddit: 'Homework',
   createdAt: new Date().toString(),
   pm: true,
-  loading: true,
 };
 
 export const loadingPayment: Payment = {
@@ -49,7 +49,7 @@ export const loadingRedditConfig: RedditConfig = {
   loading: true,
 };
 
-export const loadingDiscordConfig: GuildConfig = {
+export const loadingDiscordConfig: GuildConfigDto = {
   id: '-1',
   name: 'Loading Server',
   paymentConfigId: '0',
@@ -58,7 +58,16 @@ export const loadingDiscordConfig: GuildConfig = {
   autoSwitcher: false,
   autoReact: false,
   autoTicket: false,
-  loading: true,
+};
+
+export const loadingServer: Guild = {
+  id: '0',
+  name: 'Name',
+  icon: 'Icon',
+  owner: false,
+  permissions: '1234',
+  features: [],
+  joined: false,
 };
 
 export const redditTemplate: RedditConfig = {

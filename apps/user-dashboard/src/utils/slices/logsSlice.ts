@@ -1,6 +1,6 @@
+import { LogDto } from '@labmaker/wrapper';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { loadingLogs } from '../LoadingTypes';
-import { Log } from '../types';
 
 export const logsSlice = createSlice({
   name: 'logs',
@@ -8,10 +8,10 @@ export const logsSlice = createSlice({
     value: [loadingLogs],
   },
   reducers: {
-    setLogs: (state, action: PayloadAction<Log[]>) => {
+    setLogs: (state, action: PayloadAction<LogDto[]>) => {
       state.value = action.payload;
     },
-    addLog: (state, action: PayloadAction<Log>) => {
+    addLog: (state, action: PayloadAction<LogDto>) => {
       state.value.push(action.payload);
     },
   },

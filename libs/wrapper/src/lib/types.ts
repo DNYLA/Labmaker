@@ -127,3 +127,8 @@ export enum Events {
   Config = 'config',
   Delete = 'deleteConfig',
 }
+
+export type GuildConfigPayment = {
+  config: GuildConfigDto;
+  payments: PaymentDto[];
+};
