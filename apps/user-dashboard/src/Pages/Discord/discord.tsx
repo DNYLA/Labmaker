@@ -31,8 +31,10 @@ function parseGuilds(guilds: Guild[]) {
 }
 
 function useGuildLogic() {
-  const [guilds, setGuilds] = useState<Guild[]>([loadingServer]);
-  const [parsedGuilds, setParsedGuilds] = useState<Item[]>([]);
+  const [guilds, setGuilds] = useState([loadingServer]);
+  const [parsedGuilds, setParsedGuilds] = useState<Item[]>([
+    { value: '0', label: 'Loading...', selected: true },
+  ]);
   const [isLoading, setIsLoading] = useState(false);
   const [payments, setPayments] = useState([loadingPayment]);
   const dispatch = useDispatch();
@@ -240,5 +242,4 @@ const ControlsContainer = styled.div`
   display: flex;
   float: right;
   display: inline-block;
-  z-index: 10000000;
 `;

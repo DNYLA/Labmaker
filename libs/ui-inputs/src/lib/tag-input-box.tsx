@@ -18,6 +18,7 @@ const StyledTagInputBox = styled.div`
   /* padding-bottom: 10px; */
   margin-bottom: 15px;
 `;
+
 //Currently Broken Fix CSS
 export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,14 +56,10 @@ export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
               <span onClick={() => setIsOpen(false)}>X</span>
             </TitleContainer>
             <InputTag>
-              <input
-                type="text"
-                // value={'Enter a Subreddit'}
-                onKeyDown={handleKeyDown}
-              />
-              <span>
-                <FontAwesomeIcon icon={faPlus} />
-              </span>
+              <input type="text" onKeyDown={handleKeyDown} />
+              {/* <span> */}
+              <FontAwesomeIcon icon={faPlus} />
+              {/* </span> */}
             </InputTag>
             <ItemContainers>
               <ul className="tags">
@@ -93,7 +90,7 @@ const StyledSpan = styled.span`
 const TitleContainer = styled.span`
   display: flex;
   align-items: center;
-  padding-top: 15px;
+  padding-top: 5px;
   justify-content: center;
   align-content: center;
   span {
@@ -109,9 +106,11 @@ const TitleContainer = styled.span`
   }
 `;
 
-const ItemContainers = styled.span`
+const ItemContainers = styled.div`
+  margin: 15px 10px;
   ul {
     display: inline-flex;
+    justify-content: center;
     flex-wrap: wrap;
     width: 100%;
     margin: 0;
@@ -159,10 +158,12 @@ const InputTag = styled.div`
   height: 23px;
   position: relative;
   padding-bottom: 10px;
-  margin-top: 3px;
+  width: 100%;
+  justify-content: center;
+  /* margin-top: 3px; */
   input {
     padding-left: 10px;
-    color: gray;
+    color: white;
     font-family: 'Lexend Deca';
     width: 90%;
     height: 30px;
@@ -178,12 +179,14 @@ const InputTag = styled.div`
     }
   }
 
-  span {
+  svg {
     position: absolute;
-    left: 85%;
-    margin-top: 8px;
+    left: 92%;
+    float: right;
+    margin-top: 10px;
     :hover {
       cursor: pointer;
+      color: ${(p) => p.theme.navbar.titleHover};
     }
   }
 `;
