@@ -3,28 +3,20 @@ import path from 'path';
 import fs from 'fs';
 // import * as fs from 'fs';
 
-export async function registerCommands(
-  client: DiscordClient,
-  dir = ''
-) {
+export async function registerCommands(client: DiscordClient, dir = '') {
   if (dir === '') dir = './commands';
 
   const filePath = path.join(__dirname, dir);
-  console.log(filePath);
   const files = await fs.promises.readdir(filePath);
-
   for (const file of files) {
     if ((await fs.promises.lstat(path.join(filePath, file))).isDirectory()) {
-      const newPath = `./${path.join(dir, file)}`;
-      // console.log(newPath);
+      const newPath = `${path.join(dir, file)}`;
       registerCommands(client, newPath);
     }
 
     if (file.endsWith('.ts')) {
-      // console.log(file);
-      // console.log(dir);
-      // console.log(`${dir}/${file}`);
-      const { default: Command } = await import(`${dir}/${file}`);
+      const newPathFileName = path.join(`./${dir}/${file}`).replace(/\\/g, '/');
+      const { default: Command } = await import(`./${newPathFileName}`);
       const command = new Command();
       client.commands.set(command.getName(), command);
       command.getAliases().forEach((alias: string) => {
