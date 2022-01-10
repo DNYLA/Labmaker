@@ -3,14 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export interface IOnChage {
+export interface IOnTagChange {
   (updatedValues: string[]): void;
 }
 /* eslint-disable-next-line */
 export interface TagInputBoxProps {
   title: string;
   items: string[];
-  onChange: IOnChage;
+  onChange: IOnTagChange;
 }
 
 const StyledTagInputBox = styled.div`
@@ -49,7 +49,6 @@ export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
       <StyledSpan onClick={() => setIsOpen(true)}>{title}</StyledSpan>
       {isOpen && (
         <DialogContainer>
-          <Background />
           <DialogBox>
             <TitleContainer>
               <h1>{title}</h1>
@@ -94,9 +93,14 @@ const StyledSpan = styled.span`
 const TitleContainer = styled.span`
   display: flex;
   align-items: center;
+  padding-top: 15px;
+  justify-content: center;
+  align-content: center;
   span {
-    left: 90%;
-    position: relative;
+    left: 95%;
+    top: 3%;
+    /* bottom: 5px; */
+    position: absolute;
   }
 
   span:hover {
@@ -185,36 +189,68 @@ const InputTag = styled.div`
 `;
 
 const DialogContainer = styled.div`
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
-  align-content: center;
-  position: fixed;
   align-items: center;
-  z-index: 1002;
+  background-color: black;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  transform: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 `;
 
 const DialogBox = styled.div`
-  /* z-index: 1001; */
   position: fixed;
   width: 30%;
   min-height: 30%;
   background-color: #202225;
-  /* top: 35%; */
-  /* left: 35%; */
   z-index: 1001;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  align-content: center;
+  /* justify-content: center; */
+  /* align-content: center; */
 `;
 
 const Background = styled.div`
-  position: fixed;
+  /* position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
+  z-index: 1000; */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  transform: 0;
+  z-index: 1500000;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  h1 {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+  }
+  a {
+    color: white;
+  }
 `;

@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import {
   ComboContainer,
   DropDown,
+  IOnDropDownChange,
   Item,
   UserControls,
 } from '@labmaker/ui-inputs';
@@ -34,7 +35,6 @@ function useRedditLogic() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     if (user.nodes.length === 0) {
       const templateConf = redditTemplate;
       setSelectedConfig(templateConf);
@@ -141,7 +141,9 @@ export function Home() {
     setSelectedConfig(config);
   };
 
-  const onChange = (id: number) => {
+  const onChange = (id: number | string) => {
+    if (typeof id === 'string') return; //This will never happen however typescript requires i check
+
     const items = [...parsedItems];
     const foundItem = items.find((item) => item.value === id);
     if (!foundItem) return;

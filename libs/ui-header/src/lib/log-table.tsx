@@ -23,9 +23,10 @@ export function DateColumn({ createdAt }: DateColumnProps) {
 /* eslint-disable-next-line */
 export interface LogTableProps {
   logs: LogDto[];
+  title?: string;
 }
 
-const StyledLogTable = styled.div`
+const StyledLogTable = styled.table`
   a {
     text-decoration: none;
     color: #0e48e9;
@@ -40,10 +41,15 @@ const StyledLogTable = styled.div`
       cursor: pointer;
     }
   }
-  transition: all 1.5s ease-in-out;
+  transition: all 1.5s ease-in-out
+  width: 100%;
+
+  tbody {
+    width: 100%;
+  }
 `;
 
-export function LogTable({ logs }: LogTableProps) {
+export function LogTable({ logs, title }: LogTableProps) {
   const [isHidden, setIsHidden] = useState(true);
   return (
     <StyledLogTable>
@@ -69,12 +75,23 @@ export function LogTable({ logs }: LogTableProps) {
               </a>
             </td>
             <td>
+              {
+                //Hover Toggle seems better but may be annoying so ive commented it out for now
+              }
               {isHidden ? (
-                <span onClick={() => setIsHidden(!isHidden)}>
+                <span
+                  onClick={() => setIsHidden(!isHidden)}
+                  // onMouseEnter={() => setIsHidden(false)}
+                  // onMouseLeave={() => setIsHidden(true)}
+                >
                   Click To View
                 </span>
               ) : (
-                <span onClick={() => setIsHidden(!isHidden)}>
+                <span
+                  onClick={() => setIsHidden(!isHidden)}
+                  // onMouseEnter={() => setIsHidden(false)}
+                  // onMouseLeave={() => setIsHidden(true)}
+                >
                   {log.message}
                 </span>
               )}

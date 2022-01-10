@@ -1,4 +1,9 @@
-import { ComboContainer, Item, UserControls } from '@labmaker/ui-inputs';
+import {
+  ComboContainer,
+  IOnDropDownChange,
+  Item,
+  UserControls,
+} from '@labmaker/ui-inputs';
 import { Guild, PaymentDto } from '@labmaker/wrapper';
 import { RootState } from '../../store';
 import { Labmaker } from '../../utils/APIHandler';
@@ -7,22 +12,15 @@ import { setDiscordConfig } from '../../utils/slices/configSlices';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Selector } from '@labmaker/ui-header';
+import { LoadingSpinner, Selector } from '@labmaker/ui-header';
 import { GeneralSettings } from './general-settings';
 import { PaymentSettings } from './payment-settings';
 
-//Copied Interface from @ui-inputs. Replaced ID with string instead of Number. (Will update Component to string after Discord Page finished)
-interface ItemEdited {
-  id: string;
-  title: string;
-  selected: boolean;
-}
-
 function parseGuilds(guilds: Guild[]) {
-  const parsedGuild: ItemEdited[] = [];
+  const parsedGuild: Item[] = [];
 
   guilds.forEach((guild) => {
-    parsedGuild.push({ id: guild.id, title: guild.name, selected: false });
+    parsedGuild.push({ value: guild.id, label: guild.name, selected: false });
   });
 
   console.log(parsedGuild);
@@ -33,8 +31,8 @@ function parseGuilds(guilds: Guild[]) {
 }
 
 function useGuildLogic() {
-  const [guilds, setGuilds] = useState<Guild[]>([]);
-  const [parsedGuilds, setParsedGuilds] = useState<ItemEdited[]>([]);
+  const [guilds, setGuilds] = useState<Guild[]>([loadingServer]);
+  const [parsedGuilds, setParsedGuilds] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [payments, setPayments] = useState([loadingPayment]);
   const dispatch = useDispatch();
@@ -75,7 +73,9 @@ function useGuildLogic() {
     }
   };
 
-  const onConfigIdChanged = async (serverId: string) => {
+  const onConfigIdChanged = async (serverId: string | number) => {
+    if (typeof serverId === 'number') return; //This will never happen however typescript requires i check
+
     const fetchedPayments = await Labmaker.Discord.getPayments(serverId);
     setPayments(fetchedPayments);
     dispatch(setDiscordConfig({ ...discordConfig, paymentConfigId: serverId }));
@@ -166,7 +166,7 @@ export function Discord(props: DiscordProps) {
   } = useGuildLogic();
 
   const GenerateGuilds = () => {
-    if (guilds.length === 0)
+    if (guilds.length === 0 && !isLoading)
       return (
         <div>
           No Guilds with permissions found. Create a guild and come back!
@@ -189,12 +189,9 @@ export function Discord(props: DiscordProps) {
     });
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <StyledDiscord>
+      <LoadingSpinner loading={isLoading} message={'Loading Discord Config'} />
       <SelectorContainer>{GenerateGuilds()}</SelectorContainer>
       <ControlsContainer>
         <UserControls

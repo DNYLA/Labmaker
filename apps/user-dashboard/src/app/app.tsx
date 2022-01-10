@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Route, Switch } from 'react-router-dom';
-import { Navbar as Nav } from '@labmaker/ui-header';
+import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui-header';
 import { Home } from '../Pages/Home/home';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,9 +10,8 @@ import { RootState } from '../store';
 import { Discord } from '../Pages/Discord/discord';
 import { Logs } from '../Pages/logs';
 const StyledApp = styled.div`
-  background-color: ${(p) => p.theme.base.backCol};
-  height: 1080px;
-  color: ${(p) => p.theme.text};
+  /* background-color: ${(p) => p.theme.base.backCol};
+  color: ${(p) => p.theme.text}; */
 `;
 
 export function App() {
@@ -56,29 +55,31 @@ export function App() {
     window.location.href = Labmaker.loginURL();
   }
 
-  if (isLoading) {
-    //Update With Spinner
-    return <div>Loading User</div>;
-  } else {
+  if (isLoading)
     return (
-      <StyledApp>
-        <Nav
-          title={'LABMAKER'}
-          items={items}
-          avatarUrl={
-            user.avatar
-              ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`
-              : 'https://i.imgur.com/yrZKnwI.png'
-          }
-        />
-        <Switch>
-          <Route path="/" exact component={Home}></Route>
-          <Route path="/discord" exact component={Discord}></Route>
-          <Route path="/logs" exact component={Logs}></Route>
-        </Switch>
-      </StyledApp>
+      <div>
+        <LoadingSpinner loading={isLoading} message={'Logging In...'} />
+      </div>
     );
-  }
+
+  return (
+    <StyledApp>
+      <Nav
+        title={'LABMAKER'}
+        items={items}
+        avatarUrl={
+          user.avatar
+            ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`
+            : 'https://i.imgur.com/yrZKnwI.png'
+        }
+      />
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/discord" exact component={Discord} />
+        <Route path="/logs" exact component={Logs} />
+      </Switch>
+    </StyledApp>
+  );
 }
 
 export default App;

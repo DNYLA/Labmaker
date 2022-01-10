@@ -1,6 +1,6 @@
-/* * {
-  margin: 0;
-  padding: 0;
+* {
+  margin: 0px;
+  padding: 0px;
 }
 body {
   font-family: 'Lexend Deca', sans-serif;
@@ -10,4 +10,4 @@ body {
 
 #root {
   height: 100%;
-} */
+}

@@ -8,7 +8,6 @@ import { DarkTheme } from './styles/Themes';
 import { store } from './store';
 import { Provider } from 'react-redux';
 import App from './App';
-console.log(process.env['API_ROOT']);
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

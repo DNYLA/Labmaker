@@ -5,19 +5,19 @@ import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 
 export interface Item {
-  value: number;
+  value: number | string;
   label: string;
   selected: boolean;
 }
 
-interface IOnChange {
-  (id: number): void;
+export interface IOnDropDownChange {
+  (id: number | string): void;
 }
 
 /* eslint-disable-next-line */
 export interface DropDownProps {
   items: Item[];
-  onChange: IOnChange;
+  onChange: IOnDropDownChange;
 }
 
 const StyledDropDown = styled.div`
@@ -38,7 +38,7 @@ export function DropDown({ items, onChange }: DropDownProps) {
     setInputValue(selected.label);
   }, [selected]);
 
-  const setItem = (id: number) => {
+  const setItem = (id: number | string) => {
     console.log('Running');
     const newItem = items.find((item) => item.value === id);
     if (!newItem) return;
@@ -75,6 +75,7 @@ export function DropDown({ items, onChange }: DropDownProps) {
   };
 
   const handleInputClick = () => {
+    console.log('Opened Menu');
     setInputValue('');
     setFilteredItems(items);
     setOpen(true);
