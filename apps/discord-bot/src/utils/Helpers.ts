@@ -1,4 +1,11 @@
-import { GuildMember, Interaction, Message, TextChannel } from 'discord.js';
+import {
+  GuildMember,
+  Interaction,
+  Message,
+  MessageActionRow,
+  MessageButton,
+  TextChannel,
+} from 'discord.js';
 import DiscordClient from './client';
 
 /**
@@ -99,4 +106,33 @@ export function getChannelFromId(
   }
 
   return channel;
+}
+
+/**
+ * Show YES/NO confirmation buttons.
+ * @param message Message that triggered command.
+ * @param confirmationMsg Message to send along with confirmation.
+ * @param opts Options.
+ */
+export function showConfirmation(
+  message: Message,
+  confirmationMsg: string,
+  opts: { roleIds: string; areaId: string }
+) {
+  const { roleIds, areaId } = opts;
+
+  const YES = new MessageButton()
+    .setStyle('SUCCESS')
+    .setLabel('Yes')
+    .setCustomId(`${roleIds}:${areaId}:yes`);
+
+  const NO = new MessageButton()
+    .setStyle('DANGER')
+    .setLabel('No')
+    .setCustomId(`${roleIds}:${areaId}:no`);
+
+  message.reply({
+    content: confirmationMsg,
+    components: [new MessageActionRow().addComponents([YES, NO])],
+  });
 }

@@ -11,7 +11,6 @@ import Event from '../utils/Base/Event';
 import DiscordClient from '../utils/client';
 import Payments from '../utils/GeneratePayment';
 import { getArgsFromMsg, hasAnyPerms } from '../utils/Helpers';
-import Invoicer from '../utils/Invoicer';
 
 export default class MessageEvent extends Event {
   constructor() {
@@ -62,8 +61,8 @@ export default class MessageEvent extends Event {
           guildConfig
         );
         break;
-      case 'createinvoice':
-        await this.handleCreateInvoiceEv(
+      case 'createpporder':
+        await this.createPayPalOrderEv(
           client,
           interaction,
           customId,
@@ -102,7 +101,9 @@ export default class MessageEvent extends Event {
 
     payments.forEach((payment) => {
       if (interationCustomId === payment.name) {
-        Invoicer.handlePaymentChoice(payment, interaction, guildConfig);
+        return interaction.reply({
+          content: `${payment.name}: ${payment.value}`,
+        });
       } else if (interationCustomId === payment.type) {
         paymentButtons.push(
           new MessageButton()
@@ -127,7 +128,7 @@ export default class MessageEvent extends Event {
     }
   }
 
-  private async handleCreateInvoiceEv(
+  private async createPayPalOrderEv(
     client: DiscordClient,
     interaction: ButtonInteraction,
     interactionCustomId: string,
@@ -139,17 +140,9 @@ export default class MessageEvent extends Event {
     // Go back to displaying payment options
     if (interactionCustomId == 'no') {
       interaction.update({
-        content: 'Please Pick A Payment Method',
-        components: [
-          await Payments.GeneratePayments(
-            client,
-            guildConfig,
-            'Tutor',
-            'paymentoption'
-          ),
-        ],
+        content: 'Cancelled request.',
+        components: [],
       });
-
       return;
     }
 
@@ -171,7 +164,7 @@ export default class MessageEvent extends Event {
         );
         if (checkout) {
           interaction.update({
-            content: `Invoice created! Please click the checkout button below to complete your payment of **$${Number(
+            content: `Order created! Please click the checkout button below to complete your payment of **$${Number(
               args[0]
             )}**.`,
             components: [
@@ -185,9 +178,11 @@ export default class MessageEvent extends Event {
           });
         }
       } catch (err) {
-        interaction.update(
-          "Error fetching original message. Couldn't get price of invoice."
-        );
+        interaction.update({
+          content:
+            "Error fetching original message. Couldn't get price of order.",
+          components: [],
+        });
       }
     }
   }

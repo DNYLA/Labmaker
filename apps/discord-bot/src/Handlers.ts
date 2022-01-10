@@ -8,6 +8,7 @@ export async function registerCommands(client: DiscordClient, dir = '') {
 
   const filePath = path.join(__dirname, dir);
   const files = await fs.promises.readdir(filePath);
+
   for (const file of files) {
     if ((await fs.promises.lstat(path.join(filePath, file))).isDirectory()) {
       const newPath = `${path.join(dir, file)}`;
