@@ -67,7 +67,7 @@ export function App() {
   return (
     <StyledApp>
       <Nav
-        title={'LABMAKER'}
+        title={'LABMAKER '}
         items={items}
         avatarUrl={
           user.avatar
