@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui-header';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -75,11 +75,11 @@ export function App() {
             : 'https://i.imgur.com/yrZKnwI.png'
         }
       />
-      <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/discord" exact component={Discord} />
-        <Route path="/logs" exact component={Logs} />
-      </Switch>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/discord" element={<Discord />} />
+        <Route path="/logs" element={<Logs />} />
+      </Routes>
     </StyledApp>
   );
 }
