@@ -32,7 +32,7 @@ export function GeneralSettings({
   //   return <div></div>;
   // } else {
   return (
-    <SettingsContainer id="DiscordGeneralSettings">
+    <SettingsContainer id="GeneralSettings">
       <h1>General</h1>
       <StyledSpan>Payment Config</StyledSpan>
       {/* <ReactDropdown
