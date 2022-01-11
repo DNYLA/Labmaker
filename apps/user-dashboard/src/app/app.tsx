@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 import { Route, Switch } from 'react-router-dom';
 import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui-header';
-import { Home } from '../Pages/Home/home';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Labmaker } from '../utils/APIHandler';
 import { addConfigs, setUser } from '../utils/slices/userSlice';
 import { RootState } from '../store';
 import { Discord } from '../Pages/Discord/discord';
-import { Logs } from '../Pages/logs';
+import { Home } from '../Pages/Home/Home';
+import { Logs } from '../Pages/Logs';
 const StyledApp = styled.div`
   /* background-color: ${(p) => p.theme.base.backCol};
   color: ${(p) => p.theme.text}; */
@@ -30,6 +30,7 @@ export function App() {
     { name: 'Logs' },
   ];
 
+  //Fetches User from API
   const fetchUser = useCallback(async () => {
     const result = await Labmaker.refreshAccesToken();
     console.log(result);
@@ -55,6 +56,7 @@ export function App() {
     window.location.href = Labmaker.loginURL();
   }
 
+  //Usually Spinner is included under StyledApp however dont want to show navigation until logged in.
   if (isLoading)
     return (
       <div>
