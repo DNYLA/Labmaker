@@ -16,7 +16,7 @@ enum InputType {
 
 const StyledPayment = styled.div`
   display: flex;
-
+  width: 200%;
   padding-right: 20px;
   div {
     margin-right: 5px;

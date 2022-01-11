@@ -58,7 +58,7 @@ export function PaymentSettings({
   } else {
     return (
       <StyledPaymentSettings>
-        <SettingsContainer id="comboContainer">
+        <SettingsContainer>
           <h1>Payment</h1>
           <div>{renderPayments(payments)}</div>
 
