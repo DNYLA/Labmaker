@@ -14,9 +14,9 @@
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "Serve Dashboard",
+      "label": "Serve Admin Dashboard",
       "type": "shell",
-      "command": "nx serve dashboard",
+      "command": "nx serve user-dashboard",
       "problemMatcher": "$msCompile"
     },
     {

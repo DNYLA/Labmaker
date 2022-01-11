@@ -51,7 +51,7 @@ const InputContainer = styled.div`
   input {
     padding-left: 10px;
     color: white;
-    font-family: 'Lexend Deca';
+    font-family: 'Roboto';
     width: 100%;
     height: 30px;
     background: ${(p) => p.theme.input.backCol};

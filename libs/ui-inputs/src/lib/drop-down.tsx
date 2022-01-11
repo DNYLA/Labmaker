@@ -166,9 +166,11 @@ const SelectedItem = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   div {
     color: pink;
   }
+
   svg {
     /* display: flex; */
     /* position: absolute; */
@@ -177,10 +179,11 @@ const SelectedItem = styled.div`
     padding-top: 0;
     /* float: right; */
   }
+
   input {
     padding-left: 10px;
     color: white;
-    font-family: 'Lexend Deca';
+    font-family: 'Archivo Black';
     width: 100%;
     height: 30px;
     background: #1a1a1d;

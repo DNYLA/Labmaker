@@ -144,11 +144,12 @@ const ItemContainers = styled.div`
     border-radius: 50%;
     padding-left: 4px;
     padding-bottom: 1px;
-    font-family: 'Lexend Deca';
+    font-family: 'Roboto';
+
     :hover {
       color: #e31919;
       cursor: pointer;
-      font-family: 'Lexend Deca';
+      font-family: 'Roboto';
     }
   }
 `;
@@ -164,7 +165,7 @@ const InputTag = styled.div`
   input {
     padding-left: 10px;
     color: white;
-    font-family: 'Lexend Deca';
+    font-family: 'Roboto';
     width: 90%;
     height: 30px;
     background: ${(p) => p.theme.input.backCol};

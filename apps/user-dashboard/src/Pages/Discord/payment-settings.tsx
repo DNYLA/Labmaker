@@ -89,7 +89,7 @@ const CustomButton = styled.button`
   border-radius: 5px;
   justify-content: center;
   color: white;
-  font-family: 'Lexend Deca';
+  font-family: 'Roboto';
   font-size: 18px;
   outline: none;
 
