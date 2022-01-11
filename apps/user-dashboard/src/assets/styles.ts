@@ -32,7 +32,7 @@ export const SettingsContainer = styled(ContainerStyle)`
     display: block;
   }
 
-  &#DiscordGeneralSettings {
+  &#GeneralSettings {
     width: 50%;
   }
 `;
