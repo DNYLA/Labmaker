@@ -14,7 +14,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.16",
-    "@nestjs/axios": "^0.0.3",
+    "@nestjs/axios": "^0.0.4",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.1.5",
     "@nestjs/core": "^8.0.0",
@@ -59,17 +59,17 @@
   "devDependencies": {
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
-    "@nrwl/cli": "13.4.1",
-    "@nrwl/cypress": "13.4.1",
-    "@nrwl/eslint-plugin-nx": "13.4.1",
-    "@nrwl/jest": "13.4.1",
-    "@nrwl/linter": "13.4.1",
-    "@nrwl/nest": "13.4.1",
-    "@nrwl/node": "13.4.1",
-    "@nrwl/react": "^13.4.4",
-    "@nrwl/tao": "13.4.1",
-    "@nrwl/web": "^13.4.4",
-    "@nrwl/workspace": "13.4.1",
+    "@nrwl/cli": "13.4.4",
+    "@nrwl/cypress": "13.4.4",
+    "@nrwl/eslint-plugin-nx": "13.4.4",
+    "@nrwl/jest": "13.4.4",
+    "@nrwl/linter": "13.4.4",
+    "@nrwl/nest": "13.4.4",
+    "@nrwl/node": "13.4.4",
+    "@nrwl/react": "13.4.4",
+    "@nrwl/tao": "13.4.4",
+    "@nrwl/web": "13.4.4",
+    "@nrwl/workspace": "13.4.4",
     "@testing-library/react": "12.1.2",
     "@testing-library/react-hooks": "7.0.2",
     "@types/dotenv-webpack": "^7.0.3",
@@ -100,3 +100,4 @@
     "typescript": "~4.4.3"
   }
 }
+
