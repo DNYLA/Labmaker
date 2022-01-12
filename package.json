@@ -22,7 +22,7 @@
     "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/platform-socket.io": "^8.2.4",
-    "@nestjs/websockets": "^8.2.4",
+    "@nestjs/websockets": "^8.2.5",
     "@paypal/checkout-server-sdk": "^1.0.3",
     "@prisma/client": "^3.7.0",
     "@reduxjs/toolkit": "^1.7.1",

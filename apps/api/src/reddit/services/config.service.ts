@@ -1,6 +1,7 @@
 import { RedditConfig } from '.prisma/client';
 import { Injectable, Logger } from '@nestjs/common';
-import { UserGateway } from '../../user/user.gateway';
+import { WebSocketServer } from '@nestjs/websockets';
+import { Server } from 'socket.io';
 import { PrismaService } from '../../prisma/prisma.service';
 import {
   CreateConfigDto,
@@ -9,28 +10,13 @@ import {
 
 @Injectable()
 export class ConfigService {
-  constructor(
-    private prismaService: PrismaService,
-    private readonly userGateway: UserGateway // @Inject(HttpService) private readonly httpService: HttpService
-  ) {}
+  @WebSocketServer()
+  ws: Server;
+
+  constructor(private prismaService: PrismaService) {}
   private readonly logger = new Logger(ConfigService.name);
 
   async getConfig(id: number): Promise<RedditConfig> {
-    //Send Back X Amount OF Logs
-    //Not Sure if You can filter Logs Like This in Relationships (Could Manually Query Logs Instead?)
-    // let configs =  await this.prismaService.redditConfig.findUnique({
-    //   where: {
-    //     id,
-    //   },
-    //   include: {
-    //     _count: {
-    //       select: {
-    //         logs: true,
-    //       },
-    //     },
-    //   },
-    // });
-
     return await this.prismaService.redditConfig.findUnique({
       where: {
         id,
@@ -48,7 +34,7 @@ export class ConfigService {
       const config = await this.prismaService.redditConfig.create({
         data: newConfig,
       });
-      this.userGateway.newConfig(config);
+      this.newConfig(config);
 
       return config;
     } catch (err) {
@@ -68,7 +54,7 @@ export class ConfigService {
     });
 
     if (config) {
-      this.userGateway.notifyConfig(config);
+      this.notifyConfig(config);
       return config;
     }
   }
@@ -83,14 +69,41 @@ export class ConfigService {
     });
 
     if (config) {
-      this.userGateway.notifyConfig(config);
+      this.notifyConfig(config);
       return config;
     }
   }
 
-  async deleteConfig(id: number): Promise<void> {
-    await this.prismaService.redditConfig.delete({ where: { id } });
-    this.userGateway.notifyDelete(id);
-    return;
+  async deleteConfig(id: number): Promise<RedditConfig> {
+    const config = await this.prismaService.redditConfig.delete({
+      where: { id },
+    });
+    this.ws.to('bot').to(config.id.toString()).emit('deleteConfig', id);
+
+    return config;
+  }
+
+  //Websocket Functions Below
+  private notifyConfig(config: RedditConfig) {
+    this.ws
+      .to('bot')
+      .to(config.id.toString())
+      .emit('config', JSON.stringify(config));
+  }
+
+  private newConfig(config: RedditConfig) {
+    this.ws.sockets.sockets.forEach((socket) => {
+      if (config.userId === socket.data.id) {
+        socket.join(config.id.toString());
+      } else {
+        config.nodeEditors.forEach((id) => {
+          if (socket.data.id === id) {
+            socket.join(config.id.toString());
+          }
+        });
+      }
+    });
+
+    this.notifyConfig(config);
   }
 }

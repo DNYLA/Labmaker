@@ -6,9 +6,10 @@ import { LogsController } from './controllers/logs.controller';
 import { HttpModule } from '@nestjs/axios';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
+import { WebsocketModule } from '../websockets/websocket.module';
 
 @Module({
-  imports: [HttpModule, AuthModule, UserModule],
+  imports: [HttpModule, AuthModule, UserModule, WebsocketModule],
   providers: [ConfigService, LogsService],
   controllers: [ConfigController, LogsController],
 })
