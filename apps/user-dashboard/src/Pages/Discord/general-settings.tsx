@@ -19,10 +19,6 @@ export interface GeneralSettingsProps {
   changeEvent: IOnDropDownChange;
 }
 
-const StyledGeneralSettings = styled.div`
-  color: pink;
-`;
-
 export function GeneralSettings({
   config,
   parsedGuilds,
@@ -36,7 +32,7 @@ export function GeneralSettings({
   //   return <div></div>;
   // } else {
   return (
-    <SettingsContainer id="comboContainer">
+    <SettingsContainer id="GeneralSettings">
       <h1>General</h1>
       <StyledSpan>Payment Config</StyledSpan>
       {/* <ReactDropdown

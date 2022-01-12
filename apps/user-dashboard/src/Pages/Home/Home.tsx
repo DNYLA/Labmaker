@@ -20,7 +20,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { redditTemplate } from '../../utils/LoadingTypes';
 import { addConfigs, setConfig, setUser } from '../../utils/slices/userSlice';
-import { Labmaker } from '../../utils/APIHandler';
+import { Labmaker, LabmakerSocket } from '../../utils/APIHandler';
+import { RedditConfigDto } from '@labmaker/wrapper';
+import { toast } from 'react-toastify';
 
 // interface HomeProps {}
 
@@ -38,28 +40,65 @@ function useRedditLogic() {
     if (user.nodes.length === 0) {
       const templateConf = redditTemplate;
       setSelectedConfig(templateConf);
-      return;
     }
 
     setLoading(false);
   }, [user.nodes.length]);
 
+  useEffect(() => {
+    LabmakerSocket?.on('config', (data) => {
+      const configObj: RedditConfigDto = JSON.parse(data);
+      const oldConfig = user.nodes.find((c) => c.id === configObj.id);
+      if (oldConfig === configObj) return; //This means the user Invoked the update request
+
+      if (!selectedConfig || selectedConfig.id === configObj.id) {
+        setSelectedConfig(configObj);
+      }
+      if (oldConfig) {
+        dispatch(setConfig(configObj));
+      } else {
+        dispatch(addConfigs([configObj]));
+      }
+
+      // console.log(data);
+      // console.log(LabmakerSocket?.id);
+    });
+  }, [LabmakerSocket]);
+
   const saveNode = async () => {
     const oldConfig = user.nodes.find((c) => c.id === selectedConfig.id);
-    if (oldConfig === selectedConfig) return;
+    if (oldConfig === selectedConfig) {
+      toast.info('Edit the config before saving');
+      return;
+    }
     if (!selectedConfig.newNode) {
       const updatedConf = await Labmaker.Reddit.update(selectedConfig);
       if (!updatedConf) return;
       dispatch(setConfig(updatedConf));
+      setSelectedConfig(updatedConf);
+      toast.success(`Saved ${selectedConfig.username}`, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } else {
-      const newNode = await Labmaker.Reddit.create({
+      await Labmaker.Reddit.create({
         ...selectedConfig,
         userId: user.id,
+      }); //Once created the created object (with the id) will be sent through the socket
+      toast.success(`Created ${selectedConfig.username}`, {
+        position: 'top-right',
+        autoClose: 3500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
-
-      if (newNode) {
-        dispatch(addConfigs([newNode]));
-      }
     }
 
     return;
@@ -75,6 +114,8 @@ function useRedditLogic() {
       dispatch(setUser({ ...user, nodes }));
     }
     setSelectedConfig(user.nodes[0]);
+
+    toast.success(`Deleted ${selectedConfig.username}`);
   };
 
   const createNode = () => {

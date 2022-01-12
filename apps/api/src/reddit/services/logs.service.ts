@@ -3,13 +3,13 @@ import { CreateLogDto } from '../dtos/create-log.dto';
 import { LogQueryParms } from '../controllers/logs.controller';
 import { Log } from '.prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { RedditGateway } from '../../reddit/reddit.gateway';
+import { UserGateway } from '../../user/user.gateway';
 
 @Injectable()
 export class LogsService {
   constructor(
     private prismaService: PrismaService,
-    private readonly redditGateway: RedditGateway
+    private readonly userGateway: UserGateway
   ) {}
 
   async getLogs(nodeId: number): Promise<Log[]> {
@@ -51,7 +51,7 @@ export class LogsService {
 
   async createLog(newLog: CreateLogDto): Promise<Log> {
     const log = await this.prismaService.log.create({ data: newLog });
-    this.redditGateway.notifyLogs(log);
+    this.userGateway.notifyLogs(log);
     return log;
   }
 }

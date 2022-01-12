@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { RedditConfig, User } from '@prisma/client';
 import { lastValueFrom } from 'rxjs';
 import { UserDetails } from '../auth/userDetails.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -42,13 +42,7 @@ export class UserService {
       },
     });
 
-    const extraNodes = await this.prismaService.redditConfig.findMany({
-      where: { nodeEditors: { has: user.id } },
-    });
-
-    //Ensures Duplicate Nodes arent sent. (This is already handled on the client side + API endpoiint for updating but its better)
-    //To be safe if its only one line to check.
-    const userNodes = [...new Set(user.nodes)].concat(extraNodes);
+    const userNodes = await this.fetchExtraNodes(user);
 
     return {
       id: updatedUser.id,
@@ -59,11 +53,23 @@ export class UserService {
     };
   }
 
-  async getUserDetails(id: string): Promise<User> {
+  private async fetchExtraNodes(user: User & { nodes: RedditConfig[] }) {
+    const extraNodes = await this.prismaService.redditConfig.findMany({
+      where: { nodeEditors: { has: user.id } },
+    });
+
+    //Ensures Duplicate Nodes arent sent. (This is already handled on the client side + API endpoiint for updating but its better)
+    //To be safe if its only one line to check.
+    return [...new Set(user.nodes)].concat(extraNodes);
+  }
+
+  async getUserDetails(id: string): Promise<User & { nodes: RedditConfig[] }> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
       include: { nodes: true },
     });
+
+    user.nodes = await this.fetchExtraNodes(user);
 
     return user;
   }

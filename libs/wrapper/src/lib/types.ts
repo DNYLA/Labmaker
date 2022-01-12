@@ -120,7 +120,7 @@ export type APIOptions = {
 };
 
 export interface ICallback {
-  (error: Events, result?: any): void;
+  (event: Events, result?: any): void;
 }
 
 export enum Events {

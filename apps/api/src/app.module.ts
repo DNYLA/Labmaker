@@ -20,6 +20,6 @@ Logger.log(`Running in ${process.env.ENVIRONMENT ?? 'Development'}`);
   ],
   controllers: [],
   providers: [],
-  // exports: [PrismaService]
+  exports: [],
 })
 export class AppModule {}

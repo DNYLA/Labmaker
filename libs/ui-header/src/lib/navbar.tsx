@@ -16,7 +16,7 @@ export interface LinkProp {
 export function Navbar({ title, items, avatarUrl }: NavbarProps) {
   return (
     <StyledNavbar>
-      <StyledLink exact={true} to="/">
+      <StyledLink to="/">
         <Title>{title}</Title>
       </StyledLink>
       <ul>
@@ -24,8 +24,7 @@ export function Navbar({ title, items, avatarUrl }: NavbarProps) {
           return (
             <NavItem key={i}>
               <StyledLink
-                exact={true}
-                activeClassName="active"
+                className={(navData) => (navData.isActive ? 'active' : '')}
                 to={item.to ? item.to : item.name}
               >
                 <p>{item.name}</p>
@@ -79,7 +78,7 @@ const Title = styled.h1`
 `;
 
 const StyledLink = styled(NavLink)`
-  &.${(p) => p.activeClassName} {
+  &.active {
     p {
       color: ${(p) => p.theme.navbar.active};
     }

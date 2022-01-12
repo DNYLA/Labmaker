@@ -1,18 +1,19 @@
 import { io } from 'socket.io-client';
-import { ICallback, Events } from './types';
 
 //Could Split up into
 export class APISocket {
-  constructor(private APIUrl: string, private accessToken: string) {}
+  constructor(private APIUrl: string) {}
 
   public socket = io();
 
-  public listen(callback: ICallback) {
+  public listen(accessToken: string) {
     this.socket = io(this.APIUrl, {
       extraHeaders: {
-        Authorization: this.accessToken,
+        Authorization: accessToken,
       },
     });
+
+    if (!this.socket) return;
 
     this.socket.on('connect', () => {
       console.log('Socket Conected');
@@ -36,12 +37,18 @@ export class APISocket {
       }
     });
 
-    this.socket.on(Events.Config, (data) => {
-      callback(Events.Config, data);
-    });
+    // this.socket.on(Events.Config, (data) => {
+    //   callback(Events.Config, data);
+    // });
 
-    this.socket.on(Events.Delete, (data) => {
-      callback(Events.Delete, data);
-    });
+    // this.socket.on(Events.Delete, (data) => {
+    //   callback(Events.Delete, data);
+    // });
   }
+
+  // public listenFor(event: Events, callback: ICallback) {
+  // this.socket.on(event, (data) => {
+  //   callback(event, data);
+  // });
+  // }
 }

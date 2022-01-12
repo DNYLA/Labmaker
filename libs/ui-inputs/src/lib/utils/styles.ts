@@ -2,8 +2,10 @@ import styled from 'styled-components';
 
 export const ComboContainer = styled.div`
   display: flex;
+  justify-content: center;
+  align-content: center;
   margin-left: 5px;
-
+  width: 100%;
   #comboContainer {
     margin-left: 15px;
   }

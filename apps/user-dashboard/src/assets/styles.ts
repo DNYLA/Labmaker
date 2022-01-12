@@ -14,6 +14,7 @@ export const SettingsContainer = styled(ContainerStyle)`
   flex-direction: column;
   padding: 25px;
   padding-top: 5px;
+  /* width: 50%; */
   h1 {
     /* text-align: center; */
     border-radius: 5px;
@@ -29,5 +30,9 @@ export const SettingsContainer = styled(ContainerStyle)`
   }
   @media (max-width: 812px) {
     display: block;
+  }
+
+  &#GeneralSettings {
+    width: 50%;
   }
 `;

@@ -1,17 +1,17 @@
 import { RedditConfig } from '.prisma/client';
 import { Injectable, Logger } from '@nestjs/common';
+import { UserGateway } from '../../user/user.gateway';
 import { PrismaService } from '../../prisma/prisma.service';
 import {
   CreateConfigDto,
   UpdateConfigDto,
 } from '../dtos/create-redditconfig.dto';
-import { RedditGateway } from '../reddit.gateway';
 
 @Injectable()
 export class ConfigService {
   constructor(
     private prismaService: PrismaService,
-    private readonly redditGateway: RedditGateway // @Inject(HttpService) private readonly httpService: HttpService
+    private readonly userGateway: UserGateway // @Inject(HttpService) private readonly httpService: HttpService
   ) {}
   private readonly logger = new Logger(ConfigService.name);
 
@@ -48,7 +48,8 @@ export class ConfigService {
       const config = await this.prismaService.redditConfig.create({
         data: newConfig,
       });
-      this.redditGateway.notifyConfig(config);
+      this.userGateway.newConfig(config);
+
       return config;
     } catch (err) {
       this.logger.error(err);
@@ -67,7 +68,7 @@ export class ConfigService {
     });
 
     if (config) {
-      this.redditGateway.notifyConfig(config);
+      this.userGateway.notifyConfig(config);
       return config;
     }
   }
@@ -82,14 +83,14 @@ export class ConfigService {
     });
 
     if (config) {
-      this.redditGateway.notifyConfig(config);
+      this.userGateway.notifyConfig(config);
       return config;
     }
   }
 
   async deleteConfig(id: number): Promise<void> {
     await this.prismaService.redditConfig.delete({ where: { id } });
-    this.redditGateway.notifyDelete(id);
+    this.userGateway.notifyDelete(id);
     return;
   }
 }
