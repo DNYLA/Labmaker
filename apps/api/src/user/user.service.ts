@@ -1,16 +1,15 @@
-import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { lastValueFrom } from 'rxjs';
+import { Injectable, Logger } from '@nestjs/common';
 import { UserDetails } from '../auth/userDetails.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto/User.dto';
 import { User } from '../utils/types';
+import { DiscordHttpService } from '../discord/services/discord-http.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private prismaService: PrismaService,
-    @Inject(HttpService) private readonly httpService: HttpService
+    private discordHttpService: DiscordHttpService
   ) {}
   private logger = new Logger(UserService.name);
 
@@ -20,16 +19,9 @@ export class UserService {
       include: { nodes: true },
     });
 
-    const fetchedUser = this.httpService.get(
-      `https://discord.com/api/v9/users/@me`,
-      {
-        headers: {
-          Authorization: `Bearer ${user.accessToken}`,
-        },
-      }
+    const { data: discordUser } = await this.discordHttpService.fetchUser(
+      user.accessToken
     );
-
-    const discordUser = await (await lastValueFrom(fetchedUser)).data;
 
     const updatedUser = await this.prismaService.user.update({
       where: { id: discordUser.id },
@@ -37,13 +29,10 @@ export class UserService {
         username: discordUser.username,
         discriminator: discordUser.discriminator,
         avatar: discordUser.avatar,
-        accessToken: discordUser.accessToken,
-        refreshToken: discordUser.refreshToken,
       },
     });
 
     const userNodes = await this.fetchExtraNodes(user);
-    console.log(userNodes);
 
     return {
       id: updatedUser.id,

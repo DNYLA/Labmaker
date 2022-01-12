@@ -6,18 +6,25 @@ import { TicketService } from './services/ticket.service';
 import { PaymentController } from './controllers/payment.controller';
 import { PaymentService } from './services/payment.service';
 import { HttpModule } from '@nestjs/axios';
-import { UserModule } from '../user/user.module';
 import { GuildsController } from './controllers/guilds.controller';
 import { GuildsService } from './services/guilds.service';
+import { DiscordHttpService } from './services/discord-http.service';
 
 @Module({
-  imports: [UserModule, HttpModule],
+  imports: [HttpModule],
   controllers: [
     ConfigController,
     TicketController,
     PaymentController,
     GuildsController,
   ],
-  providers: [ConfigService, TicketService, PaymentService, GuildsService],
+  providers: [
+    ConfigService,
+    TicketService,
+    PaymentService,
+    GuildsService,
+    DiscordHttpService,
+  ],
+  exports: [DiscordHttpService],
 })
 export class DiscordModule {}

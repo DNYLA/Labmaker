@@ -18,7 +18,7 @@ export let LabmakerSocket: Socket | null = null;
 export function InitSocket(accessToken: string) {
   const socket = io(`${process.env.NX_API_URL}`, {
     extraHeaders: {
-      Authorization: accessToken,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 

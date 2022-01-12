@@ -3,9 +3,10 @@ import { UserController } from './user.controller';
 import { HttpModule } from '@nestjs/axios';
 import { UserService } from './user.service';
 import { AuthModule } from '../auth/auth.module';
+import { DiscordModule } from '../discord/discord.module';
 
 @Module({
-  imports: [HttpModule, AuthModule],
+  imports: [HttpModule, AuthModule, DiscordModule],
   providers: [UserService],
   controllers: [UserController],
   exports: [UserService],

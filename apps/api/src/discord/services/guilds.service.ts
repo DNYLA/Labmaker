@@ -12,19 +12,29 @@ import { DiscordConfig, Payment } from '.prisma/client';
 export class GuildsService {
   constructor(
     private prismaService: PrismaService,
-    private userService: UserService,
     private readonly paymentService: PaymentService,
     @Inject(HttpService) private readonly httpService: HttpService
   ) {}
 
   async fetchGuilds(user: UserDetails): Promise<Guild[]> {
-    const userDetails = await this.userService.getUserDetails(user.id);
+    // const { data: userGuilds } = await this.discordHttpService.fetchUserGuilds(
+    //   user.accessToken
+    // );
+    // const { data: botGuidls } = await this.discordHttpService.fetchBotGuilds();
+    // const adminGuilds = userGuilds.filter(
+    //   ({ permissions }) => (parseInt(permissions) & 0x8) === 0x8
+    // );
+    // const validGuilds = userGuilds.filter((guild) =>
+    //   botGuidls.some((botGuild) => botGuild.id === guild.id)
+    // );
+
+    // const userDetails = await this.userService.getUserDetails(user.id);
 
     const fetchedGuilds = this.httpService.get(
       'https://discord.com/api/v9/users/@me/guilds',
       {
         headers: {
-          Authorization: `Bearer ${userDetails.accessToken}`,
+          Authorization: `Bearer ${user.accessToken}`,
         },
       }
     );

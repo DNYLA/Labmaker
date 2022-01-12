@@ -38,7 +38,7 @@ export class AuthController {
     res.redirect(process.env.FRONT_END_URL);
   }
 
-  @Post('refresh_token')
+  @Get('refresh_token')
   refreshToken(@Res() res: Response, @Req() req: Request) {
     return this.authService.refreshToken(res, req);
   }
