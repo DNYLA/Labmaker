@@ -11,6 +11,11 @@ export class PaymentService {
   constructor(private prismaService: PrismaService) {}
   private readonly logger = new Logger(PaymentService.name);
 
+  /**
+   * Get all payments for a server.
+   * @param {string} serverId - string - The server ID to get payments for.
+   * @returns The array of payments.
+   */
   async getPayments(serverId: string): Promise<Payment[]> {
     return await this.prismaService.payment.findMany({
       where: { serverId },
@@ -18,25 +23,16 @@ export class PaymentService {
         type: 'asc',
       },
     });
-
-    // const groupedPayments = await this.prismaService.payment.groupBy({
-    //   by: ['type'],
-    //   where: { serverId },
-    // });
-
-    // return groupedPayments;
   }
 
+  /**
+   * Create multiple payments.
+   * @param {CreatePaymentDtoArray} paymentArray - CreatePaymentDtoArray
+   * @returns The created payment objects.
+   */
   async createPayments(
     paymentArray: CreatePaymentDtoArray
   ): Promise<Payment[] | undefined> {
-    //CreateMany doesnt return created objects which we need.
-
-    /* return await this.prismaService.payment.createMany({
-      data: paymentArray.payments,
-    });
-    */
-
     return await this.prismaService.$transaction(
       paymentArray.payments.map((payment) =>
         this.prismaService.payment.create({ data: payment })
@@ -44,6 +40,11 @@ export class PaymentService {
     );
   }
 
+  /**
+   * Update payments.
+   * @param {UpdatePaymentDtoArray} updatedPayments - UpdatePaymentDtoArray
+   * @returns The updated payments.
+   */
   async updatPayments(
     updatedPayments: UpdatePaymentDtoArray
   ): Promise<Payment[] | undefined> {
@@ -63,6 +64,11 @@ export class PaymentService {
     return savedPayments;
   }
 
+  /**
+   * `deletePayments` accepts an array of `deleteIds` and deletes all of them from the database.
+   * @param deleteIds - number[]
+   * @returns None
+   */
   async deletePayments(deleteIds: number[]): Promise<void> {
     deleteIds.forEach(
       async (id) => await this.prismaService.payment.delete({ where: { id } })

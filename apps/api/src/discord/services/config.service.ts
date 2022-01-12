@@ -9,6 +9,12 @@ export class ConfigService {
   constructor(private prismaService: PrismaService) {}
   private readonly logger = new Logger(ConfigService.name);
 
+  /**
+   * Gets Guild Config
+   * @param {string} id - string,
+   * @param {UserDetails} user - UserDetails
+   * @returns DiscordConfig
+   */
   async getConfig(id: string, user: UserDetails): Promise<DiscordConfig> {
     //Authorization Requires More information (need to call discord API )
     //And see if user can access server
@@ -29,19 +35,33 @@ export class ConfigService {
     return await this.prismaService.discordConfig.findMany();
   }
 
+  /**
+   * Create a new Discord Config
+   * @param {CreateConfigDto} newConfig - CreateConfigDto
+   * @returns A DiscordConfig Object
+   */
   async createConfig(newConfig: CreateConfigDto): Promise<DiscordConfig> {
     //Not Sure Why this is here Move Over to Client Side
     newConfig.paymentConfigId = newConfig.id;
-    this.logger.log('Attempting to Create New Server Config');
     return await this.prismaService.discordConfig.create({ data: newConfig });
   }
 
+  /**
+   * Create a new Discord configuration for a payment.
+   * @param {string} id - The id of the payment config to create.
+   * @returns The `DiscordConfig` object.
+   */
   private async createConfigFromId(id: string) {
     return await this.prismaService.discordConfig.create({
       data: { id, paymentConfigId: id },
     });
   }
 
+  /**
+   * Update the Discord configuration.
+   * @param {CreateConfigDto} updateConfigDto - CreateConfigDto
+   * @returns The updated DiscordConfig object.
+   */
   async updateConfig(updateConfigDto: CreateConfigDto): Promise<DiscordConfig> {
     return await this.prismaService.discordConfig.update({
       where: { id: updateConfigDto.id },

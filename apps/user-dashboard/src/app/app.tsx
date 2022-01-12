@@ -33,7 +33,7 @@ export function App() {
 
   return (
     <StyledApp>
-      {user && !error ? (
+      {user && !error && (
         <>
           <ToastContainer
             theme="dark"
@@ -62,8 +62,6 @@ export function App() {
             <Route path="/logs" element={<Logs />} />
           </Routes>
         </>
-      ) : (
-        <div>Invalid Login</div>
       )}
     </StyledApp>
   );

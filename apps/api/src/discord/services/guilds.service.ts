@@ -90,7 +90,11 @@ export class GuildsService {
     return validGuilds;
   }
 
-  //Grabs Guilds from Database instead of Discord API
+  /**
+   * Grabs Guilds from Database instead of Discord API
+   * @param {string} serverId - The ID of the server.
+   * @returns The local data.
+   */
   async getLocalData(serverId: string): Promise<LocalData> {
     const config = await this.prismaService.discordConfig.findUnique({
       where: { id: serverId },
