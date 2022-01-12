@@ -13,6 +13,9 @@ export class UserService {
   ) {}
   private logger = new Logger(UserService.name);
 
+  /**
+   * Get the user from the database, and fetch the extra nodes from the database.
+   */
   async getUser(userDetails: UserDetails): Promise<UserDto> {
     const user = await this.prismaService.user.findUnique({
       where: { id: userDetails.id },

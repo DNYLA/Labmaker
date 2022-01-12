@@ -23,10 +23,21 @@ export class ConfigService {
     });
   }
 
+  /**
+   * `async getConfigs(): Promise<RedditConfig[]>`
+   *
+   * This function returns a promise that resolves to an array of RedditConfig objects.
+   * @returns A list of all the configs.
+   */
   async getConfigs(): Promise<RedditConfig[]> {
     return await this.prismaService.redditConfig.findMany();
   }
 
+  /**
+   * Create a new config.
+   * @param {CreateConfigDto} newConfig - CreateConfigDto: The data to create the config with.
+   * @returns A new config object.
+   */
   async createConfig(newConfig: CreateConfigDto): Promise<RedditConfig> {
     this.logger.log(JSON.stringify(newConfig));
     try {
@@ -42,6 +53,11 @@ export class ConfigService {
     }
   }
 
+  /**
+   * Update the config for a subreddit.
+   * @param {UpdateConfigDto} ucd - UpdateConfigDto
+   * @returns The updated config.
+   */
   async updateConfig(ucd: UpdateConfigDto): Promise<RedditConfig | undefined> {
     const filter = { id: ucd.id };
     ucd.nodeEditors = ucd.nodeEditors.filter((userId) => userId !== ucd.userId);
@@ -58,6 +74,12 @@ export class ConfigService {
     }
   }
 
+  /**
+   * Update the message body of a RedditConfig.
+   * @param {number} id - number
+   * @param {string} message - string
+   * @returns The updated config object.
+   */
   async updateMessage(
     id: number,
     message: string
@@ -73,6 +95,11 @@ export class ConfigService {
     }
   }
 
+  /**
+   * delete a config.
+   * @param {number} id - number - The id of the config to delete.
+   * @returns The deleted config.
+   */
   async deleteConfig(id: number): Promise<RedditConfig> {
     const config = await this.prismaService.redditConfig.delete({
       where: { id },
