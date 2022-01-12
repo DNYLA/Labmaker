@@ -132,3 +132,8 @@ export type GuildConfigPayment = {
   config: GuildConfigDto;
   payments: PaymentDto[];
 };
+
+export type AuthResult = {
+  accessToken: string;
+  ok: boolean;
+};
