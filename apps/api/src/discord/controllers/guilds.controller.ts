@@ -1,7 +1,7 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { Guild } from '../dtos/Guild.dto';
-import { CurrentUser } from '../../utils/getUser.decorator';
+import { CurrentUser } from '../../utils/decorators';
 import { JwtAuthGuard } from '../../auth/guards/Jwt.guard';
 import { GuildsService } from '../services/guilds.service';
 

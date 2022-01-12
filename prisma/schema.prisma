@@ -14,7 +14,7 @@ model User {
   id            String         @id
   username      String
   discriminator String
-  avatar        String
+  avatar        String?        @default("")
   accessToken   String
   refreshToken  String
   tokenVersion  Int            @default(0)

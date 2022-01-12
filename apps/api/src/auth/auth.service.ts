@@ -42,7 +42,7 @@ export class AuthService {
       refreshToken: details.refreshToken,
       tokenVersion: details.tokenVersion,
     };
-
+    console.log(userData);
     const user = await this.prismaService.user.upsert({
       where: {
         id,

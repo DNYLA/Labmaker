@@ -43,17 +43,20 @@ function useRedditLogic() {
     }
 
     setLoading(false);
-  }, [user.nodes.length]);
+  }, [user.nodes]);
 
   useEffect(() => {
     LabmakerSocket?.on('config', (data) => {
       const configObj: RedditConfigDto = JSON.parse(data);
       const oldConfig = user.nodes.find((c) => c.id === configObj.id);
       if (oldConfig === configObj) return; //This means the user Invoked the update request
-
+      console.log(oldConfig);
       if (!selectedConfig || selectedConfig.id === configObj.id) {
-        setSelectedConfig(configObj);
+        toast.info(
+          `${selectedConfig.username} has been updated! Hit the refresh button for the latest edit.`
+        );
       }
+
       if (oldConfig) {
         dispatch(setConfig(configObj));
       } else {
@@ -68,10 +71,11 @@ function useRedditLogic() {
   const saveNode = async () => {
     const oldConfig = user.nodes.find((c) => c.id === selectedConfig.id);
     if (oldConfig === selectedConfig) {
-      toast.info('Edit the config before saving');
+      toast.info('Edit the config before saving', {});
       return;
     }
     if (!selectedConfig.newNode) {
+      dispatch(setConfig(selectedConfig)); //Need to set this here as Once Labmaker.Update() is  called the socket is notified but still thinks we are using the old config
       const updatedConf = await Labmaker.Reddit.update(selectedConfig);
       if (!updatedConf) return;
       dispatch(setConfig(updatedConf));

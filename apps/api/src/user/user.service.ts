@@ -1,10 +1,10 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { RedditConfig, User } from '@prisma/client';
 import { lastValueFrom } from 'rxjs';
 import { UserDetails } from '../auth/userDetails.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto/User.dto';
+import { User } from '../utils/types';
 
 @Injectable()
 export class UserService {
@@ -43,6 +43,7 @@ export class UserService {
     });
 
     const userNodes = await this.fetchExtraNodes(user);
+    console.log(userNodes);
 
     return {
       id: updatedUser.id,
@@ -53,7 +54,7 @@ export class UserService {
     };
   }
 
-  private async fetchExtraNodes(user: User & { nodes: RedditConfig[] }) {
+  private async fetchExtraNodes(user: User) {
     const extraNodes = await this.prismaService.redditConfig.findMany({
       where: { nodeEditors: { has: user.id } },
     });
@@ -63,7 +64,7 @@ export class UserService {
     return [...new Set(user.nodes)].concat(extraNodes);
   }
 
-  async getUserDetails(id: string): Promise<User & { nodes: RedditConfig[] }> {
+  async getUserDetails(id: string): Promise<User> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
       include: { nodes: true },
@@ -73,4 +74,8 @@ export class UserService {
 
     return user;
   }
+
+  // createUser(details: UserDetails) {
+  //   // return this.prismaService.user.create(details);
+  // }
 }

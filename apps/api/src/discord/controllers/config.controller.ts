@@ -10,7 +10,7 @@ import {
 import { CreateConfigDto } from '../dtos/create-guildconfig.dto';
 import { DiscordConfig } from '@prisma/client';
 import { JwtAuthGuard, JwtBotAuthGuard } from '../../auth/guards/Jwt.guard';
-import { CurrentUser } from '../../utils/getUser.decorator';
+import { CurrentUser } from '../../utils/decorators';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { ConfigService } from '../services/config.service';
 

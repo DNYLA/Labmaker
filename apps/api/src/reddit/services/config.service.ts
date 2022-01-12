@@ -1,7 +1,6 @@
 import { RedditConfig } from '.prisma/client';
 import { Injectable, Logger } from '@nestjs/common';
-import { WebSocketServer } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { WebsocketGateway } from '../../websockets/socket';
 import { PrismaService } from '../../prisma/prisma.service';
 import {
   CreateConfigDto,
@@ -10,10 +9,10 @@ import {
 
 @Injectable()
 export class ConfigService {
-  @WebSocketServer()
-  ws: Server;
-
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private wsGateway: WebsocketGateway
+  ) {}
   private readonly logger = new Logger(ConfigService.name);
 
   async getConfig(id: number): Promise<RedditConfig> {
@@ -34,7 +33,7 @@ export class ConfigService {
       const config = await this.prismaService.redditConfig.create({
         data: newConfig,
       });
-      this.newConfig(config);
+      this.wsGateway.newConfig(config);
 
       return config;
     } catch (err) {
@@ -54,7 +53,7 @@ export class ConfigService {
     });
 
     if (config) {
-      this.notifyConfig(config);
+      this.wsGateway.notifyConfig(config);
       return config;
     }
   }
@@ -69,7 +68,7 @@ export class ConfigService {
     });
 
     if (config) {
-      this.notifyConfig(config);
+      this.wsGateway.notifyConfig(config);
       return config;
     }
   }
@@ -78,32 +77,7 @@ export class ConfigService {
     const config = await this.prismaService.redditConfig.delete({
       where: { id },
     });
-    this.ws.to('bot').to(config.id.toString()).emit('deleteConfig', id);
-
+    this.wsGateway.deleteConfig(id.toString());
     return config;
-  }
-
-  //Websocket Functions Below
-  private notifyConfig(config: RedditConfig) {
-    this.ws
-      .to('bot')
-      .to(config.id.toString())
-      .emit('config', JSON.stringify(config));
-  }
-
-  private newConfig(config: RedditConfig) {
-    this.ws.sockets.sockets.forEach((socket) => {
-      if (config.userId === socket.data.id) {
-        socket.join(config.id.toString());
-      } else {
-        config.nodeEditors.forEach((id) => {
-          if (socket.data.id === id) {
-            socket.join(config.id.toString());
-          }
-        });
-      }
-    });
-
-    this.notifyConfig(config);
   }
 }

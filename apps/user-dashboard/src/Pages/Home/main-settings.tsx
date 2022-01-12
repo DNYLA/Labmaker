@@ -45,7 +45,7 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
         />
         <span>-</span>
         <TagInputBox
-          title={'Users'}
+          title={'Blocked Users'}
           items={config.blockedUsers}
           onChange={(updatedValues: string[]) =>
             setConfig({ ...config, blockedUsers: updatedValues })
