@@ -26,101 +26,123 @@ export interface LogTableProps {
   title?: string;
 }
 
-const StyledLogTable = styled.table`
-  a {
-    text-decoration: none;
-    color: #0e48e9;
-    transition: all 0.2s;
+export function LogTable({ logs, title }: LogTableProps) {
+  const [isHidden, setIsHidden] = useState(true);
+
+  return (
+    <TableWrapper>
+      <Table>
+        <tbody>
+          <tr>
+            <th>User</th>
+            <th>
+              <span onClick={() => setIsHidden(!isHidden)}>Message</span>
+            </th>
+            <th>Subreddit</th>
+            <th>Post</th>
+            <th>Time</th>
+          </tr>
+
+          {logs.map((log) => (
+            <tr key={log.id}>
+              <td>
+                <a
+                  href={`https://reddit.com/u/${log.username}/`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {log.username}
+                </a>
+              </td>
+
+              <td>
+                {
+                  //Hover Toggle seems better but may be annoying so ive commented it out for now
+                }
+                <span
+                  onClick={() => setIsHidden(!isHidden)}
+                  // onMouseEnter={() => setIsHidden(false)}
+                  // onMouseLeave={() => setIsHidden(true)}
+                >
+                  {isHidden ? 'Click To View' : log.message}
+                </span>
+              </td>
+
+              <td>
+                <a
+                  href={`https://reddit.com/r/${log.subreddit}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {log.subreddit}
+                </a>
+              </td>
+
+              <td>
+                <a
+                  href={`https://reddit.com/r/${log.subreddit}/comments/${log.subId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Here
+                </a>
+              </td>
+
+              <DateColumn createdAt={log.createdAt} />
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </TableWrapper>
+  );
+}
+
+const TableWrapper = styled.div`
+  overflow-x: auto;
+  border-radius: 5px;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  min-width: 550px;
+  text-align: center;
+  border-spacing: 0;
+  border-radius: 5px;
+
+  tbody {
+    width: 100%;
+
+    th,
+    td {
+      padding: 12px 5px;
+    }
+
+    tr {
+      transition: background-color 150ms ease-in;
+    }
+
+    tr:nth-child(odd) {
+      background-color: ${(p) => p.theme.input.backCol};
+    }
+
+    tr:hover {
+      background-color: ${(p) => p.theme.input.activeCol};
+    }
   }
 
-  a:hover {
-    color: #0ea4e9;
-  }
   span {
     :hover {
       cursor: pointer;
     }
   }
-  transition: all 1.5s ease-in-out
-  width: 100%;
 
-  tbody {
-    width: 100%;
+  a {
+    text-decoration: none;
+    color: #00afff;
+    transition: color 200ms ease-in-out;
+
+    :hover {
+      color: #0ea4e9b7;
+    }
   }
 `;
-
-export function LogTable({ logs, title }: LogTableProps) {
-  const [isHidden, setIsHidden] = useState(true);
-  return (
-    <StyledLogTable>
-      <tbody>
-        <tr>
-          <th>User</th>
-          <th>
-            <span onClick={() => setIsHidden(!isHidden)}>Message</span>
-          </th>
-          <th>Subreddit</th>
-          <th>Post</th>
-          <th>Time</th>
-        </tr>
-        {logs.map((log) => (
-          <tr key={log.id}>
-            <td>
-              <a
-                href={`https://reddit.com/u/${log.username}/`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {log.username}
-              </a>
-            </td>
-            <td>
-              {
-                //Hover Toggle seems better but may be annoying so ive commented it out for now
-              }
-              {isHidden ? (
-                <span
-                  onClick={() => setIsHidden(!isHidden)}
-                  // onMouseEnter={() => setIsHidden(false)}
-                  // onMouseLeave={() => setIsHidden(true)}
-                >
-                  Click To View
-                </span>
-              ) : (
-                <span
-                  onClick={() => setIsHidden(!isHidden)}
-                  // onMouseEnter={() => setIsHidden(false)}
-                  // onMouseLeave={() => setIsHidden(true)}
-                >
-                  {log.message}
-                </span>
-              )}
-            </td>
-            <td>
-              <a
-                href={`https://reddit.com/r/${log.subreddit}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {log.subreddit}
-              </a>
-            </td>
-            <td>
-              <a
-                href={`https://reddit.com/r/${log.subreddit}/comments/${log.subId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Here
-              </a>
-            </td>
-
-            <DateColumn createdAt={log.createdAt} />
-          </tr>
-        ))}
-      </tbody>
-    </StyledLogTable>
-  );
-}
-
-export default LogTable;
