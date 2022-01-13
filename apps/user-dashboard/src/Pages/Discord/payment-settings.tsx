@@ -13,8 +13,6 @@ export interface PaymentSettingsProps {
   createPayment: any;
 }
 
-const StyledPaymentSettings = styled.div``;
-
 export function PaymentSettings({
   payments,
   guilds,
@@ -57,16 +55,14 @@ export function PaymentSettings({
     return <div></div>;
   } else {
     return (
-      <StyledPaymentSettings>
-        <SettingsContainer>
-          <h1>Payment</h1>
-          <div>{renderPayments(payments)}</div>
+      <SettingsContainer>
+        <h1>Payment</h1>
+        <div>{renderPayments(payments)}</div>
 
-          <CenterDiv>
-            <CustomButton onClick={createPayment}>Add</CustomButton>
-          </CenterDiv>
-        </SettingsContainer>
-      </StyledPaymentSettings>
+        <CenterDiv>
+          <CustomButton onClick={createPayment}>Add</CustomButton>
+        </CenterDiv>
+      </SettingsContainer>
     );
   }
 }
