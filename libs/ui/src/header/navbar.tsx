@@ -19,6 +19,7 @@ export function Navbar({ title, items, avatarUrl }: NavbarProps) {
       <StyledLink to="/">
         <Title>{title}</Title>
       </StyledLink>
+
       <ul>
         {items.map((item, i) => {
           return (
@@ -33,6 +34,7 @@ export function Navbar({ title, items, avatarUrl }: NavbarProps) {
           );
         })}
       </ul>
+
       <IconStyle src={avatarUrl} alt="Avatar" />
     </StyledNavbar>
   );
@@ -100,7 +102,17 @@ const StyledNavbar = styled.nav`
   box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
 
   ul {
+    display: flex;
+    flex-flow: row;
     list-style-type: none;
+
+    @media (min-width: 900px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      width: 100vw;
+    }
   }
 
   @media (max-width: 800px) {
@@ -122,6 +134,10 @@ const StyledNavbar = styled.nav`
   @media (max-width: 500px) {
     ${StyledLink} {
       font-size: 20px;
+    }
+
+    ${NavItem} {
+      padding-right: 25px;
     }
   }
 `;
