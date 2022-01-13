@@ -1,10 +1,11 @@
 import {
   ComboContainer,
-  IOnDropDownChange,
   Item,
   UserControls,
   LoadingSpinner,
   Selector,
+  Page,
+  Content,
 } from '@labmaker/ui';
 import { Guild, PaymentDto } from '@labmaker/wrapper';
 import { RootState } from '../../store';
@@ -150,10 +151,6 @@ function useGuildLogic() {
 /* eslint-disable-next-line */
 export interface DiscordProps {}
 
-const StyledDiscord = styled.div`
-  margin: 50px 250px;
-`;
-
 export function Discord(props: DiscordProps) {
   const {
     discordConfig,
@@ -187,60 +184,63 @@ export function Discord(props: DiscordProps) {
               ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
               : `https://i.imgur.com/t5JIZ1M.png`
           }
+          isActive={guild.id === discordConfig.id}
         />
       );
     });
   };
 
   return (
-    <StyledDiscord>
-      <LoadingSpinner loading={isLoading} message={'Loading Discord Config'} />
-      <SelectorContainer>{GenerateGuilds()}</SelectorContainer>
-      <ControlsContainer>
-        <UserControls
-          // onDelete={deleteNode}
-          // onRefresh={refreshItem}
-          onCreate={createPayment}
-          onSave={saveData}
+    <Page>
+      <Content>
+        <LoadingSpinner
+          loading={isLoading}
+          message={'Loading Discord Config'}
         />
-      </ControlsContainer>
-      <ComboContainer>
-        <GeneralSettings
-          config={discordConfig}
-          parsedGuilds={parsedGuilds}
-          changeEvent={onConfigIdChanged}
-        />
-        <PaymentSettings
-          payments={payments}
-          guilds={parsedGuilds}
-          config={discordConfig}
-          setPayments={setPayments}
-          createPayment={createPayment}
-        />
-      </ComboContainer>
-    </StyledDiscord>
-  );
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // } else {
-  //   return <div>This Is Discord</div>;
-  // }
+        <SelectorContainer>{GenerateGuilds()}</SelectorContainer>
+
+        <ControlsContainer>
+          <UserControls
+            // onDelete={deleteNode}
+            // onRefresh={refreshItem}
+            onCreate={createPayment}
+            onSave={saveData}
+          />
+        </ControlsContainer>
+
+        <ComboContainer>
+          <GeneralSettings
+            config={discordConfig}
+            parsedGuilds={parsedGuilds}
+            changeEvent={onConfigIdChanged}
+          />
+
+          <PaymentSettings
+            payments={payments}
+            guilds={parsedGuilds}
+            config={discordConfig}
+            setPayments={setPayments}
+            createPayment={createPayment}
+          />
+        </ComboContainer>
+      </Content>
+    </Page>
+  );
 }
 
 const SelectorContainer = styled.div`
   display: flex;
   justify-content: center;
+  margin-bottom: 5px;
 
-  .selector {
+  & > * {
     margin: 0px 15px;
   }
 `;
 
-//This is styled differently from the one inside Home
+// This is styled differently from the one inside Home
 const ControlsContainer = styled.div`
-  position: relative;
   display: flex;
-  float: right;
-  display: inline-block;
+  position: relative;
 `;

@@ -92,6 +92,7 @@ const CustomButton = styled.button`
   font-family: 'Roboto';
   font-size: 18px;
   outline: none;
+  transition: 0.5s;
 
   :active {
     border: none;
@@ -102,5 +103,4 @@ const CustomButton = styled.button`
     transition: 0.5s;
     cursor: pointer;
   }
-  transition: 0.5s;
 `;

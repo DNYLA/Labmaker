@@ -15,37 +15,6 @@ enum InputType {
   Type,
 }
 
-const StyledPayment = styled.div`
-  display: flex;
-  width: 200%;
-  padding-right: 20px;
-  div {
-    margin-right: 5px;
-
-    span {
-    }
-  }
-
-  button {
-    color: white;
-    border: none;
-    border-radius: 15%;
-    background-color: #8d121c;
-    height: 25px;
-    width: 15px;
-    padding-right: 10px;
-    padding-left: 3px;
-    margin-top: 27px;
-    transition: all 0.6s ease-in-out;
-  }
-
-  button:hover {
-    cursor: pointer;
-    background-color: #e32132;
-    transition: all 0.3s ease-in-out;
-  }
-`;
-
 export function PaymentBox({ payment, payments, setPayment }: PaymentProps) {
   const updatePayments = (e: any, inputType: InputType) => {
     const details = {
@@ -117,3 +86,32 @@ export function PaymentBox({ payment, payments, setPayment }: PaymentProps) {
     </StyledPayment>
   );
 }
+
+const StyledPayment = styled.div`
+  display: flex;
+  width: 100%;
+  padding-right: 20px;
+
+  div {
+    margin-right: 5px;
+  }
+
+  button {
+    color: white;
+    border: none;
+    border-radius: 15%;
+    background-color: #8d121c;
+    height: 25px;
+    width: 15px;
+    padding-right: 10px;
+    padding-left: 3px;
+    margin-top: 27px;
+    transition: all 0.6s ease-in-out;
+  }
+
+  button:hover {
+    cursor: pointer;
+    background-color: #e32132;
+    transition: all 0.3s ease-in-out;
+  }
+`;

@@ -1,5 +1,28 @@
 import styled from 'styled-components';
 
+export const Page = styled.div`
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin: 20px 50px;
+`;
+
+export const Content = styled.div`
+  display: flex;
+  flex-flow: column;
+  min-width: 750px;
+  transition: min-width 200ms ease;
+
+  @media (min-width: 1000px) {
+    min-width: 900px;
+  }
+
+  @media (max-width: 800px) {
+    min-width: unset;
+    width: 100%;
+  }
+`;
+
 export const ComboContainer = styled.div`
   display: flex;
   width: 100%;
@@ -49,4 +72,12 @@ export const IconButton = styled.div`
     width: 48px;
     height: 48px;
   }
+`;
+
+export const DisableDrag = styled.div`
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 `;

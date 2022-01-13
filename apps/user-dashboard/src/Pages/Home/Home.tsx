@@ -2,7 +2,14 @@ import { AccountSettings } from './account-settings';
 import { MainSettings } from './main-settings';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ComboContainer, DropDown, Item, UserControls } from '@labmaker/ui';
+import {
+  ComboContainer,
+  DropDown,
+  Item,
+  UserControls,
+  Page,
+  Content,
+} from '@labmaker/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { redditTemplate } from '../../utils/LoadingTypes';
@@ -165,29 +172,6 @@ export function Home() {
     </Page>
   );
 }
-
-const Page = styled.div`
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  margin: 20px 50px;
-`;
-
-const Content = styled.div`
-  display: flex;
-  flex-flow: column;
-  min-width: 750px;
-  transition: min-width 200ms ease;
-
-  @media (min-width: 1000px) {
-    min-width: 900px;
-  }
-
-  @media (max-width: 800px) {
-    min-width: unset;
-    width: 100%;
-  }
-`;
 
 const ControlsContainer = styled.div`
   display: flex;
