@@ -106,12 +106,13 @@ const StyledNavbar = styled.nav`
     flex-flow: row;
     list-style-type: none;
 
-    @media (min-width: 900px) {
+    @media (min-width: 1000px) {
       display: flex;
       align-items: center;
       justify-content: center;
       position: absolute;
-      width: 100vw;
+      width: 100%;
+      left: 0;
     }
   }
 
