@@ -2,12 +2,7 @@ import { AccountSettings } from './account-settings';
 import { MainSettings } from './main-settings';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-  ComboContainer,
-  DropDown,
-  Item,
-  UserControls,
-} from '@labmaker/ui-inputs';
+import { ComboContainer, DropDown, Item, UserControls } from '@labmaker/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { redditTemplate } from '../../utils/LoadingTypes';

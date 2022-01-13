@@ -1,12 +1,10 @@
 import { RootState } from '../store';
 import { Labmaker } from '../utils/APIHandler';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogs } from '../utils/slices/logsSlice';
 import styled from 'styled-components';
-import { DropDown, Item, UserControls } from '@labmaker/ui-inputs';
-import { LogTable } from '@labmaker/ui-header';
-import { LoadingSpinner } from '@labmaker/ui-header';
+import { LogTable, DropDown, Item, LoadingSpinner } from '@labmaker/ui';
 import { RedditConfigDto } from '@labmaker/wrapper';
 
 const StyledLogs = styled.div`

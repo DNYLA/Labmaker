@@ -1,6 +1,7 @@
-import { InputBox } from '@labmaker/ui-inputs';
+import { InputBox } from '@labmaker/ui';
 import styled from 'styled-components';
 import { Payment } from '../../utils/types';
+
 /* eslint-disable-next-line */
 export interface PaymentProps {
   payment: Payment;

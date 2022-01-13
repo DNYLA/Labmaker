@@ -6,7 +6,7 @@ import {
   IOnDropDownChange,
   Item,
   SwitchToggle,
-} from '@labmaker/ui-inputs';
+} from '@labmaker/ui';
 import { useDispatch } from 'react-redux';
 import { GuildConfig } from '../../utils/types';
 import ReactDropdown from 'react-dropdown';

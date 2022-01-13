@@ -3,7 +3,9 @@ import {
   IOnDropDownChange,
   Item,
   UserControls,
-} from '@labmaker/ui-inputs';
+  LoadingSpinner,
+  Selector,
+} from '@labmaker/ui';
 import { Guild, PaymentDto } from '@labmaker/wrapper';
 import { RootState } from '../../store';
 import { Labmaker } from '../../utils/APIHandler';
@@ -12,7 +14,6 @@ import { setDiscordConfig } from '../../utils/slices/configSlices';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { LoadingSpinner, Selector } from '@labmaker/ui-header';
 import { GeneralSettings } from './general-settings';
 import { PaymentSettings } from './payment-settings';
 

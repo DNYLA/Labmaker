@@ -1,8 +1,7 @@
-import { InputBox, TagInputBox } from '@labmaker/ui-inputs';
+import { InputBox, TagInputBox, SwitchToggle } from '@labmaker/ui';
 import { SettingsContainer } from '../../assets/styles';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SwitchToggle } from '@labmaker/ui-inputs';
 import { RedditConfig } from '../../utils/types';
 
 /* eslint-disable-next-line */

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
-import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui-header';
+import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Labmaker } from '../utils/APIHandler';
