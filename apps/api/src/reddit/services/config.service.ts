@@ -1,5 +1,10 @@
 import { RedditConfig } from '.prisma/client';
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { WebsocketGateway } from '../../websockets/socket';
 import { PrismaService } from '../../prisma/prisma.service';
 import {
@@ -16,19 +21,9 @@ export class ConfigService {
   private readonly logger = new Logger(ConfigService.name);
 
   async getConfig(id: number): Promise<RedditConfig> {
-    return await this.prismaService.redditConfig.findUnique({
-      where: {
-        id,
-      },
-    });
+    return await this.prismaService.redditConfig.findUnique({ where: { id } });
   }
 
-  /**
-   * `async getConfigs(): Promise<RedditConfig[]>`
-   *
-   * This function returns a promise that resolves to an array of RedditConfig objects.
-   * @returns A list of all the configs.
-   */
   async getConfigs(): Promise<RedditConfig[]> {
     return await this.prismaService.redditConfig.findMany();
   }
@@ -39,18 +34,12 @@ export class ConfigService {
    * @returns A new config object.
    */
   async createConfig(newConfig: CreateConfigDto): Promise<RedditConfig> {
-    this.logger.log(JSON.stringify(newConfig));
-    try {
-      const config = await this.prismaService.redditConfig.create({
-        data: newConfig,
-      });
-      this.wsGateway.newConfig(config);
+    const config = await this.prismaService.redditConfig.create({
+      data: newConfig,
+    });
+    this.wsGateway.newConfig(config);
 
-      return config;
-    } catch (err) {
-      this.logger.error(err);
-      return;
-    }
+    return config;
   }
 
   /**
@@ -59,40 +48,17 @@ export class ConfigService {
    * @returns The updated config.
    */
   async updateConfig(ucd: UpdateConfigDto): Promise<RedditConfig | undefined> {
-    const filter = { id: ucd.id };
-    ucd.nodeEditors = ucd.nodeEditors.filter((userId) => userId !== ucd.userId);
+    const editors = ucd.nodeEditors.filter((userId) => userId !== ucd.userId);
+    ucd.nodeEditors = [...new Set(editors)]; //Dont store Duplicates
 
-    ucd.nodeEditors = [...new Set(ucd.nodeEditors)];
     const config = await this.prismaService.redditConfig.update({
-      where: filter,
+      where: { id: ucd.id },
       data: ucd,
     });
+    if (!config) throw new NotFoundException('Unable to locate config');
 
-    if (config) {
-      this.wsGateway.notifyConfig(config);
-      return config;
-    }
-  }
-
-  /**
-   * Update the message body of a RedditConfig.
-   * @param {number} id - number
-   * @param {string} message - string
-   * @returns The updated config object.
-   */
-  async updateMessage(
-    id: number,
-    message: string
-  ): Promise<RedditConfig | undefined> {
-    const config = await this.prismaService.redditConfig.update({
-      where: { id },
-      data: { pmBody: message },
-    });
-
-    if (config) {
-      this.wsGateway.notifyConfig(config);
-      return config;
-    }
+    this.wsGateway.notifyConfig(config);
+    return config;
   }
 
   /**

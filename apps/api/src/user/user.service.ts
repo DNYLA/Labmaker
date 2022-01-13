@@ -21,7 +21,6 @@ export class UserService {
       where: { id: userDetails.id },
       include: { nodes: true },
     });
-
     const { data: discordUser } = await this.discordHttpService.fetchUser(
       user.accessToken
     );
@@ -34,7 +33,6 @@ export class UserService {
         avatar: discordUser.avatar,
       },
     });
-
     const userNodes = await this.fetchExtraNodes(user);
 
     return {
@@ -61,7 +59,6 @@ export class UserService {
       where: { id },
       include: { nodes: true },
     });
-
     user.nodes = await this.fetchExtraNodes(user);
 
     return user;

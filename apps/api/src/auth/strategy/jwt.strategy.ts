@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { TokenType } from '../../utils/types';
-import { UserDetails } from '../../auth/userDetails.dto';
+import { UserDetails, UserPayload } from '../../auth/userDetails.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -14,14 +14,19 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: UserDetails) {
-    // if (payload.type === TokenType.Bot) return payload; //Bots dont have accounts in DB
+  async validate(payload: UserPayload) {
+    if (payload.type === TokenType.Bot) return payload; //Bots dont have accounts in DB
 
-    // return await this.prismaService.user.findUnique({
-    //   where: { id: payload.id },
-    // });
+    const user = await this.prismaService.user.findUnique({
+      where: { id: payload.id },
+    });
 
-    return payload;
+    if (!user)
+      throw new UnauthorizedException(
+        `You aren't authorized to access this data`
+      );
+
+    return user;
   }
 }
 
@@ -36,11 +41,11 @@ export class JwtBotStrategy extends PassportStrategy(Strategy, 'jwtbot') {
   }
 
   async validate(payload: UserDetails) {
-    if (payload.type !== TokenType.Bot) {
+    if (payload.type !== TokenType.Bot)
       throw new UnauthorizedException(
-        'You arent authorized to access this data'
+        `You aren't authorized to access this data`
       );
-    }
+
     return payload;
   }
 }

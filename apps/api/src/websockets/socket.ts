@@ -25,7 +25,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
     console.log('Client Connected to WebSocket');
     const token = client.handshake.headers.authorization.split(' ')[1];
     const result = await this.authService.verify(token);
-    console.log(result);
+    // console.log(result);
 
     if (!result) {
       console.log('Disconnected');
@@ -34,14 +34,14 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
       return client.join('bot');
     }
 
-    const user = await this.userService.getUserDetails(result.sub);
+    const user = await this.userService.getUserDetails(result.id);
     user.nodes.forEach((node) => {
-      console.log(`Joined Room ${node.id}`);
+      // console.log(`Joined Room ${node.id}`);
       client.join(node.id.toString());
     });
-    console.log(client.id);
+    // console.log(client.id);
     client.data = user;
-    console.log('Joined Node Rooms');
+    // console.log('Joined Node Rooms');
   }
 
   // afterInit(server: Server) {

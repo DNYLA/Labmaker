@@ -1,5 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
-import { UserDetails } from './userDetails.dto';
+import { UserPayload, UserDetails } from './userDetails.dto';
 import { Response, Request } from 'express';
 import { User } from '.prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
@@ -31,9 +31,7 @@ export class AuthService {
   }
 
   async validateUser(details: UserDetails) {
-    const { id } = details;
-
-    const userData = {
+    const userData: User = {
       id: details.id,
       username: details.username,
       discriminator: details.discriminator,
@@ -42,10 +40,10 @@ export class AuthService {
       refreshToken: details.refreshToken,
       tokenVersion: details.tokenVersion,
     };
-    console.log(userData);
+
     const user = await this.prismaService.user.upsert({
       where: {
-        id,
+        id: details.id,
       },
       update: userData,
       create: userData,
@@ -82,7 +80,7 @@ export class AuthService {
     }
 
     const user = await this.prismaService.user.findUnique({
-      where: { id: payload.sub },
+      where: { id: payload.id },
     });
 
     if (!user || user.tokenVersion !== payload.tokenVersion) {
@@ -112,7 +110,7 @@ export class AuthService {
   createRefreshToken(user: User, type: TokenType) {
     return this.jwtService.sign(
       {
-        sub: user.id,
+        id: user.id,
         type: type,
         tokenVersion: user.tokenVersion,
       },
@@ -121,21 +119,23 @@ export class AuthService {
   }
 
   createAccessToken(user: User, type: TokenType) {
-    return this.jwtService.sign(
-      {
-        sub: user.id,
-        username: user.username,
-        discriminator: user.discriminator,
-        type: type,
-      },
-      { secret: process.env.JWT_SECRET, expiresIn: '15m' }
-    );
+    const payload: UserPayload = {
+      id: user.id,
+      username: user.username,
+      discriminator: user.discriminator,
+      type: type,
+    };
+
+    return this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
+      expiresIn: '15m',
+    });
   }
 
   private createBotAccessToken() {
     return this.jwtService.sign(
       {
-        sub: '10019',
+        id: 'BOT',
         type: TokenType.Bot,
       },
       { secret: process.env.JWT_SECRET, expiresIn: '1y' }

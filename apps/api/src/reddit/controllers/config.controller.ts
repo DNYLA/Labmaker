@@ -43,12 +43,6 @@ export class ConfigController {
     return this.configService.updateConfig(body);
   }
 
-  @Put('/:id')
-  updateMessage(@Param('id') id: number, @Body() body: string) {
-    console.log(body);
-    return this.configService.updateMessage(id, body);
-  }
-
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
   deleteConfig(@Param('id') id: number) {

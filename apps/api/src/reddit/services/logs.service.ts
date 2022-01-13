@@ -20,8 +20,7 @@ export class LogsService {
       where: { nodeId },
     });
 
-    if (logs) return logs;
-    return [];
+    return logs;
   }
 
   async queryGetLogs(nodeId: number, query: LogQueryParms): Promise<Log[]> {
@@ -40,7 +39,6 @@ export class LogsService {
 
   async getSubmissionIds(nodeId: number): Promise<string[]> {
     const logs = await this.getLogs(nodeId);
-
     const submissionIds = [];
 
     logs.forEach((log) => {

@@ -12,4 +12,11 @@ export type UserDetails = {
   type: TokenType;
 };
 
+export type UserPayload = {
+  id: string;
+  username: string;
+  discriminator: string;
+  type: TokenType;
+};
+
 export type Done = (err: Error, user: User) => void;

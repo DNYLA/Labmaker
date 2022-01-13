@@ -12,7 +12,7 @@ import { DiscordConfig } from '@prisma/client';
 import { JwtAuthGuard, JwtBotAuthGuard } from '../../auth/guards/Jwt.guard';
 import { CurrentUser } from '../../utils/decorators';
 import { UserDetails } from '../../auth/userDetails.dto';
-import { ConfigService } from '../services/config.service';
+import { ConfigService, LocalData } from '../services/config.service';
 
 @Controller('discord/config')
 export class ConfigController {
@@ -22,12 +22,13 @@ export class ConfigController {
 
   // @UseGuards(AuthGuard('jwt'))
   @UseGuards(JwtAuthGuard)
-  @Get('/:id')
+  @Get('/:id/:payments')
   getConfig(
-    @CurrentUser() user: UserDetails,
-    @Param('id') id: string
-  ): Promise<DiscordConfig> {
-    return this.configService.getConfig(id, user);
+    @Param('id') id: string,
+    @Param('payments') payments: boolean,
+    @CurrentUser() user: UserDetails
+  ): Promise<DiscordConfig | LocalData> {
+    return this.configService.getConfig(id, payments, user);
   }
 
   @Get()

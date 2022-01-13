@@ -140,6 +140,8 @@ export class Client {
 
   async createEvent() {
     this.submissionIds = await Labmaker.Log.getSubmissionIds(this.config.id);
+    // const fetchedLogs = await Labmaker.Log.getLogs(this.config.id);
+    // this.localLogs.push(fetchedLogs);
     this.resetListener();
     const delay = CalculateMinimumDelay(this.config.subreddits.length, 5) * 3; //Minimum Delay is too little to poll anyways
 
