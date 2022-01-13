@@ -72,13 +72,9 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
 
 const TagContainer = styled.div`
   display: flex;
-  align-items: center;
   justify-content: center;
-  div {
-    margin-right: 10px;
-    list-style-type: disc;
-  }
-  span {
+
+  span:not(:last-child) {
     margin: 0px 5px;
     padding-bottom: 15px;
   }

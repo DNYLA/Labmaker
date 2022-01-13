@@ -1,18 +1,10 @@
 import { AccountSettings } from './account-settings';
 import { MainSettings } from './main-settings';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faSave,
-  faTrashAlt,
-  faUndo,
-} from '@fortawesome/free-solid-svg-icons';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   ComboContainer,
   DropDown,
-  IOnDropDownChange,
   Item,
   UserControls,
 } from '@labmaker/ui-inputs';
@@ -21,12 +13,6 @@ import { RootState } from '../../store';
 import { redditTemplate } from '../../utils/LoadingTypes';
 import { addConfigs, setConfig, setUser } from '../../utils/slices/userSlice';
 import { Labmaker } from '../../utils/APIHandler';
-
-// interface HomeProps {}
-
-const StyledHome = styled.div`
-  margin: 0 250px;
-`;
 
 function useRedditLogic() {
   const dispatch = useDispatch();
@@ -159,35 +145,68 @@ export function Home() {
   }
 
   return (
-    <StyledHome>
-      <ControlsContainer>
-        <DropDown items={parsedItems} onChange={onChange} />
-        <UserControls
-          onDelete={deleteNode}
-          onRefresh={refreshItem}
-          onCreate={createNode}
-          onSave={saveNode}
-        />
-      </ControlsContainer>
-      <ComboContainer>
-        <AccountSettings
-          config={selectedConfig}
-          setConfig={setSelectedConfig}
-        />
-        <MainSettings config={selectedConfig} setConfig={setSelectedConfig} />
-      </ComboContainer>
-    </StyledHome>
+    <Page>
+      <Content>
+        <ControlsContainer>
+          <DropDown items={parsedItems} onChange={onChange} />
+
+          <UserControls
+            onDelete={deleteNode}
+            onRefresh={refreshItem}
+            onCreate={createNode}
+            onSave={saveNode}
+          />
+        </ControlsContainer>
+
+        <ComboContainer>
+          <AccountSettings
+            config={selectedConfig}
+            setConfig={setSelectedConfig}
+          />
+
+          <MainSettings config={selectedConfig} setConfig={setSelectedConfig} />
+        </ComboContainer>
+      </Content>
+    </Page>
   );
 }
 
-const ControlsContainer = styled.div`
-  flex-direction: row;
-  justify-content: space-between;
+const Page = styled.div`
   display: flex;
-  padding-top: 25px;
+  flex-flow: column;
+  align-items: center;
+  margin: 20px 50px;
 `;
 
-const ButtonContainer = styled.div`
+const Content = styled.div`
   display: flex;
+  flex-flow: column;
+  min-width: 750px;
+  transition: min-width 200ms ease;
+
+  @media (min-width: 1000px) {
+    min-width: 900px;
+  }
+
+  @media (max-width: 800px) {
+    min-width: unset;
+    width: 100%;
+  }
+`;
+
+const ControlsContainer = styled.div`
+  display: flex;
+  flex-flow: row;
   justify-content: space-between;
+
+  @media (max-width: 800px) {
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    & > div:not(:last-child) {
+      margin-bottom: 15px;
+    }
+  }
 `;

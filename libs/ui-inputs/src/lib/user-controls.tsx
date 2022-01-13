@@ -54,5 +54,5 @@ export function UserControls({
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-flow: row;
 `;

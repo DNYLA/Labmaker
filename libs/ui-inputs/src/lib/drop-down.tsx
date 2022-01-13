@@ -171,7 +171,7 @@ const StyledDropDown = styled.div`
   position: relative;
   width: 200px;
   font-size: 18px;
-  transition: all 2s ease-in;
+  transition: all 200ms ease-in;
   user-select: none;
 
   &.open {

@@ -95,6 +95,7 @@ const StyledNavbar = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  margin-bottom: 25px;
   background-color: ${(p) => p.theme.navbar.base};
   box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
 
