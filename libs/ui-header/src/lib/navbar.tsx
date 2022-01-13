@@ -40,20 +40,6 @@ export function Navbar({ title, items, avatarUrl }: NavbarProps) {
 
 export default Navbar;
 
-const StyledNavbar = styled.nav`
-  height: 70px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  background-color: ${(p) => p.theme.navbar.base};
-  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
-
-  ul {
-    list-style-type: none;
-  }
-`;
-
 const IconStyle = styled.img`
   height: 40px;
   width: 40px;
@@ -78,6 +64,7 @@ const Title = styled.h1`
 
 const StyledLink = styled(NavLink)`
   text-decoration: none;
+  font-size: 30px;
 
   &.active {
     p {
@@ -86,7 +73,6 @@ const StyledLink = styled(NavLink)`
   }
 
   p {
-    font-size: 30px;
     margin: 0px;
     color: ${(p) => p.theme.navbar.item};
     transition: all 200ms ease-in-out;
@@ -101,4 +87,40 @@ const NavItem = styled.li`
   text-decoration: none;
   display: inline-block;
   padding-right: 50px;
+`;
+
+const StyledNavbar = styled.nav`
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background-color: ${(p) => p.theme.navbar.base};
+  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+
+  ul {
+    list-style-type: none;
+  }
+
+  @media (max-width: 800px) {
+    ${Title} {
+      display: none;
+    }
+
+    ${IconStyle} {
+      margin-left: auto;
+    }
+  }
+
+  @media (max-width: 600px) {
+    ${StyledLink} {
+      font-size: 25px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    ${StyledLink} {
+      font-size: 20px;
+    }
+  }
 `;
