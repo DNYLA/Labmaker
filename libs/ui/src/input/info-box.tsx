@@ -1,19 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-interface HoverProps {
-  handleMouseOver: () => void;
-  handleMouseOut: () => void;
-}
-
-function HoverBox({ handleMouseOver, handleMouseOut }: HoverProps) {
-  return (
-    <InfoSpan onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-      ?
-    </InfoSpan>
-  );
-}
-
 interface InfoTitleProps {
   enabled: boolean;
   title: string;
@@ -21,20 +8,15 @@ interface InfoTitleProps {
 }
 
 export function InfoTitle({ title, enabled, infoMessage }: InfoTitleProps) {
-  const [isHovering, setIsHovering] = useState(false);
-
   if (enabled) {
     return (
       <InfoTitleStyle>
         <StyledSpan>
           {title}
 
-          <HoverBox
-            handleMouseOver={() => setIsHovering(true)}
-            handleMouseOut={() => setIsHovering(false)}
-          />
+          <InfoSpan>?</InfoSpan>
 
-          {isHovering && <InfoBox>{infoMessage}</InfoBox>}
+          <InfoBox>{infoMessage}</InfoBox>
         </StyledSpan>
       </InfoTitleStyle>
     );
@@ -52,6 +34,10 @@ const StyledSpan = styled.span`
 const InfoTitleStyle = styled.div``;
 
 const InfoBox = styled.div`
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+
   display: flex;
   align-items: center;
   position: absolute;
@@ -78,7 +64,12 @@ const InfoSpan = styled.span`
   border-radius: 50%;
   background-color: black;
 
-  :hover {
-    cursor: pointer;
+  &:hover {
+    cursor: help;
+
+    & + ${InfoBox} {
+      visibility: visible;
+      opacity: 1;
+    }
   }
 `;
