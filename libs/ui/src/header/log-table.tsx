@@ -135,14 +135,4 @@ const Table = styled.table`
       cursor: pointer;
     }
   }
-
-  a {
-    text-decoration: none;
-    color: #00afff;
-    transition: color 200ms ease-in-out;
-
-    :hover {
-      color: #0ea4e9b7;
-    }
-  }
 `;

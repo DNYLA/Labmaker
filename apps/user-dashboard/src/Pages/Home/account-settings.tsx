@@ -9,29 +9,40 @@ interface AccountSettingsProps {
 }
 
 export function AccountSettings({ config, setConfig }: AccountSettingsProps) {
+  const redditAppsURL = (
+    <a href="https://reddit.com/prefs/apps" target="_blank" rel="noreferrer">
+      https://reddit.com/prefs/apps
+    </a>
+  );
+
   return (
     <SettingsContainer>
       <h1>Account</h1>
+
       <InputBox
         message="Client ID"
         value={config.clientId}
         infoMessage={
-          'Enter Your Client ID for your script from https://reddit.com/prefs/apps'
+          <span>Enter Your Client ID for your script from {redditAppsURL}</span>
         }
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setConfig({ ...config, clientId: e.target.value })
         }
       />
+
       <InputBox
         message="Client Secret"
         value={config.clientSecret}
         infoMessage={
-          'Enter Your Client Secret for your script from https://reddit.com/prefs/apps'
+          <span>
+            Enter Your Client Secret for your script from {redditAppsURL}
+          </span>
         }
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setConfig({ ...config, clientSecret: e.target.value })
         }
       />
+
       <InputBox
         message="Username"
         value={config.username}
@@ -39,6 +50,7 @@ export function AccountSettings({ config, setConfig }: AccountSettingsProps) {
           setConfig({ ...config, username: e.target.value })
         }
       />
+
       <InputBox
         message="Password"
         value={config.password}
@@ -46,6 +58,7 @@ export function AccountSettings({ config, setConfig }: AccountSettingsProps) {
           setConfig({ ...config, password: e.target.value })
         }
       />
+
       <InputBox
         message="User Agent"
         value={config.userAgent}

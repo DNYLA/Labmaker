@@ -7,7 +7,7 @@ export interface IOnChange {
 /* eslint-disable-next-line */
 export interface InputBoxProps {
   value: string | string[];
-  infoMessage?: string;
+  infoMessage?: string | React.ReactNode;
   message: string;
   onChange: IOnChange;
 }
