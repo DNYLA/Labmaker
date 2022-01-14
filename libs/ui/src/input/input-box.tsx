@@ -12,11 +12,6 @@ export interface InputBoxProps {
   onChange: IOnChange;
 }
 
-const StyledInputBox = styled.div`
-  user-select: none;
-  /* margin-top: 10px; */
-`;
-
 export function InputBox({
   message,
   infoMessage,
@@ -30,39 +25,32 @@ export function InputBox({
         infoMessage={infoMessage}
         enabled={infoMessage ? true : false}
       />
-      <InputContainer>
-        <input value={value} onChange={(e) => onChange(e)} />
-      </InputContainer>
+
+      <StyledInput value={value} onChange={(e) => onChange(e)} />
     </StyledInputBox>
   );
 }
 
-const InputContainer = styled.div`
+const StyledInputBox = styled.div`
+  user-select: none;
+`;
+
+const StyledInput = styled.input`
   display: flex;
-  height: 23px;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
-  margin-top: 3px;
+  padding: 0 10px;
+  color: white;
+  font-family: 'Roboto';
+  width: 100%;
+  height: 30px;
+  margin-top: 5px;
+  background: ${(p) => p.theme.input.backCol};
+  border: 2px solid ${(p) => p.theme.input.borderCol};
+  border-radius: 5px;
+  transition: 340ms;
 
-  span {
-    padding-right: 5px;
-  }
-
-  input {
-    padding-left: 10px;
-    color: white;
-    font-family: 'Roboto';
-    width: 100%;
-    height: 30px;
-    background: ${(p) => p.theme.input.backCol};
-    border-radius: 5px;
-    border: 2px solid ${(p) => p.theme.input.borderCol};
-    /* border-radius: 5px; */
+  :focus {
+    opacity: 80%;
+    outline: 0;
     transition: 340ms;
-    :focus {
-      opacity: 80%;
-      outline: 0;
-      transition: 340ms;
-    }
   }
 `;

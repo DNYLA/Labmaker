@@ -28,10 +28,12 @@ export function InfoTitle({ title, enabled, infoMessage }: InfoTitleProps) {
       <InfoTitleStyle>
         <StyledSpan>
           {title}
+
           <HoverBox
             handleMouseOver={() => setIsHovering(true)}
             handleMouseOut={() => setIsHovering(false)}
           />
+
           {isHovering && <InfoBox>{infoMessage}</InfoBox>}
         </StyledSpan>
       </InfoTitleStyle>
@@ -47,34 +49,35 @@ const StyledSpan = styled.span`
   color: ${(p) => p.theme.input.text};
 `;
 
-const InfoTitleStyle = styled.div`
-  /* z-index: 100; */
-`;
+const InfoTitleStyle = styled.div``;
 
 const InfoBox = styled.div`
-  padding: 5px 2px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  padding: 8px;
   margin-left: 75px;
   margin-top: 10px;
   width: 350px;
-  height: 50px;
-  background-color: black;
-  position: absolute;
+  min-height: 50px;
+  background-color: ${(p) => p.theme.input.backCol};
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.2);
   text-align: center;
 `;
 
 const InfoSpan = styled.span`
+  display: inline-block;
   margin-left: 5px;
   padding: 2px;
-  top: 25px;
   text-align: center;
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   font-size: 13px;
   border: 1px solid black;
   border-radius: 50%;
   background-color: black;
-  display: inline-block;
-  text-align: center;
+
   :hover {
     cursor: pointer;
   }

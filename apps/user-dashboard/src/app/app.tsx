@@ -9,6 +9,7 @@ import { RootState } from '../store';
 import { Discord } from '../Pages/Discord/discord';
 import { Home } from '../Pages/Home/Home';
 import { Logs } from '../Pages/Logs';
+
 const StyledApp = styled.div`
   /* background-color: ${(p) => p.theme.base.backCol};
   color: ${(p) => p.theme.text}; */
@@ -23,11 +24,11 @@ export function App() {
 
   const items = [
     {
-      name: 'Home',
+      name: 'reddit',
       to: '/',
     },
-    { name: 'Discord' },
-    { name: 'Logs' },
+    { name: 'discord' },
+    { name: 'logs' },
   ];
 
   //Fetches User from API
@@ -75,6 +76,7 @@ export function App() {
             : 'https://i.imgur.com/yrZKnwI.png'
         }
       />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/discord" element={<Discord />} />

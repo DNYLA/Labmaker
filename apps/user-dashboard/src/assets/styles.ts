@@ -12,6 +12,10 @@ export const SettingsContainer = styled(ContainerStyle)`
   flex-flow: column;
   padding-top: 5px;
 
+  & > * {
+    margin-bottom: 15px;
+  }
+
   h1 {
     border-radius: 5px;
     width: 100%;

@@ -66,6 +66,7 @@ const Title = styled.h1`
 
 const StyledLink = styled(NavLink)`
   text-decoration: none;
+  text-transform: capitalize;
   font-size: 30px;
 
   &.active {

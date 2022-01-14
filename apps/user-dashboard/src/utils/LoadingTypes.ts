@@ -1,5 +1,5 @@
 import { Guild, GuildConfigDto, LogDto } from '@labmaker/wrapper';
-import { GuildConfig, Log, RedditConfig, Payment, User } from './types';
+import { RedditConfig, Payment, User } from './types';
 
 export const defaultUser: User = {
   id: '-1',

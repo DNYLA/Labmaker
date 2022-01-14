@@ -13,12 +13,6 @@ export interface TagInputBoxProps {
   onChange: IOnTagChange;
 }
 
-const StyledTagInputBox = styled.div`
-  color: #eee;
-  /* padding-bottom: 10px; */
-  margin-bottom: 15px;
-`;
-
 //Currently Broken Fix CSS
 export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,12 +49,12 @@ export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
               <h1>{title}</h1>
               <span onClick={() => setIsOpen(false)}>X</span>
             </TitleContainer>
+
             <InputTag>
               <input type="text" onKeyDown={handleKeyDown} />
-              {/* <span> */}
               <FontAwesomeIcon icon={faPlus} />
-              {/* </span> */}
             </InputTag>
+
             <ItemContainers>
               <ul className="tags">
                 {items.map((tag, i) => {
@@ -79,12 +73,15 @@ export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
   );
 }
 
+const StyledTagInputBox = styled.div`
+  color: #eee;
+`;
+
 const StyledSpan = styled.span`
   :hover {
     color: ${(p) => p.theme.navbar.title};
     cursor: pointer;
   }
-  margin-bottom: 15px;
 `;
 
 const TitleContainer = styled.span`
@@ -93,10 +90,10 @@ const TitleContainer = styled.span`
   padding-top: 5px;
   justify-content: center;
   align-content: center;
+
   span {
     left: 95%;
     top: 3%;
-    /* bottom: 5px; */
     position: absolute;
   }
 
@@ -108,6 +105,7 @@ const TitleContainer = styled.span`
 
 const ItemContainers = styled.div`
   margin: 15px 10px;
+
   ul {
     display: inline-flex;
     justify-content: center;
@@ -161,7 +159,7 @@ const InputTag = styled.div`
   padding-bottom: 10px;
   width: 100%;
   justify-content: center;
-  /* margin-top: 3px; */
+
   input {
     padding-left: 10px;
     color: white;
@@ -171,8 +169,8 @@ const InputTag = styled.div`
     background: ${(p) => p.theme.input.backCol};
     border-radius: 5px;
     border: 2px solid ${(p) => p.theme.input.borderCol};
-    /* border-radius: 5px; */
     transition: 340ms;
+
     :focus {
       opacity: 80%;
       outline: 0;
@@ -185,6 +183,7 @@ const InputTag = styled.div`
     left: 92%;
     float: right;
     margin-top: 10px;
+
     :hover {
       cursor: pointer;
       color: ${(p) => p.theme.navbar.titleHover};
@@ -219,18 +218,9 @@ const DialogBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
-  /* align-content: center; */
 `;
 
 const Background = styled.div`
-  /* position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1000; */
   margin: 0;
   padding: 0;
   display: flex;
@@ -254,6 +244,7 @@ const Background = styled.div`
     align-items: center;
     margin-left: 10px;
   }
+
   a {
     color: white;
   }

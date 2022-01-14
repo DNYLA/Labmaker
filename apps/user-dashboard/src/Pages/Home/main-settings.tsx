@@ -16,16 +16,19 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
   return (
     <SettingsContainer>
       <h1>Main</h1>
+
       <InputBox
         message="Title"
         value={config.title}
         onChange={(e) => setConfig({ ...config, title: e.target.value })}
       />
+
       <InputBox
         message="Body"
         value={config.pmBody}
         onChange={(e) => setConfig({ ...config, pmBody: e.target.value })}
       />
+
       <TagContainer>
         <TagInputBox
           title={'Subreddits'}
@@ -34,7 +37,9 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
             setConfig({ ...config, subreddits: updatedValues })
           }
         />
+
         <span>-</span>
+
         <TagInputBox
           title={'Words'}
           items={config.forbiddenWords}
@@ -42,7 +47,9 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
             setConfig({ ...config, forbiddenWords: updatedValues })
           }
         />
+
         <span>-</span>
+
         <TagInputBox
           title={'Users'}
           items={config.blockedUsers}
@@ -50,7 +57,9 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
             setConfig({ ...config, blockedUsers: updatedValues })
           }
         />
+
         <span>-</span>
+
         <TagInputBox
           title={'Editors'}
           items={config.nodeEditors}
@@ -59,6 +68,7 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
           }
         />
       </TagContainer>
+
       <SwitchToggle
         message="Log Activity"
         toggled={isLogging}
@@ -75,6 +85,5 @@ const TagContainer = styled.div`
 
   span:not(:last-child) {
     margin: 0px 5px;
-    padding-bottom: 15px;
   }
 `;

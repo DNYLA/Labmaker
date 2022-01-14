@@ -57,7 +57,8 @@ export function PaymentSettings({
     return (
       <SettingsContainer>
         <h1>Payment</h1>
-        <div>{renderPayments(payments)}</div>
+
+        {renderPayments(payments)}
 
         <CenterDiv>
           <CustomButton onClick={createPayment}>Add</CustomButton>
@@ -70,7 +71,7 @@ export function PaymentSettings({
 const CenterDiv = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 10px;
 
   button {
     margin-right: 25px;

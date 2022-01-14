@@ -26,13 +26,13 @@ export function GeneralSettings({
 }: GeneralSettingsProps) {
   const dispatch = useDispatch();
 
-  console.log(parsedGuilds);
-
   return (
     <SettingsContainer id="GeneralSettings">
       <h1>General</h1>
+
       <StyledSpan>Payment Config</StyledSpan>
       <DropDown items={parsedGuilds} onChange={changeEvent} />
+
       <InputBox
         message="Bot Image URL"
         value={config.embedImageUrl}
@@ -45,6 +45,7 @@ export function GeneralSettings({
           );
         }}
       />
+
       <SwitchToggle
         message="Advanced User Switcher"
         toggled={config.autoSwitcher}
@@ -57,6 +58,7 @@ export function GeneralSettings({
           );
         }}
       />
+
       <SwitchToggle
         message="Auto Create Ticket"
         toggled={config.autoTicket}
@@ -69,6 +71,7 @@ export function GeneralSettings({
           );
         }}
       />
+
       <SwitchToggle
         message="Auto Reacter"
         toggled={config.autoReact}
@@ -88,4 +91,5 @@ export function GeneralSettings({
 const StyledSpan = styled.span`
   padding-right: 5px;
   margin-left: 2px;
+  margin-bottom: 5px;
 `;
