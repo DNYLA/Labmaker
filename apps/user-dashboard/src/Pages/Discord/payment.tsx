@@ -1,6 +1,7 @@
-import { InputBox } from '@labmaker/ui-inputs';
+import { InputBox } from '@labmaker/ui';
 import styled from 'styled-components';
 import { Payment } from '../../utils/types';
+
 /* eslint-disable-next-line */
 export interface PaymentProps {
   payment: Payment;
@@ -13,37 +14,6 @@ enum InputType {
   Value,
   Type,
 }
-
-const StyledPayment = styled.div`
-  display: flex;
-  width: 200%;
-  padding-right: 20px;
-  div {
-    margin-right: 5px;
-
-    span {
-    }
-  }
-
-  button {
-    color: white;
-    border: none;
-    border-radius: 15%;
-    background-color: #8d121c;
-    height: 25px;
-    width: 15px;
-    padding-right: 10px;
-    padding-left: 3px;
-    margin-top: 27px;
-    transition: all 0.6s ease-in-out;
-  }
-
-  button:hover {
-    cursor: pointer;
-    background-color: #e32132;
-    transition: all 0.3s ease-in-out;
-  }
-`;
 
 export function PaymentBox({ payment, payments, setPayment }: PaymentProps) {
   const updatePayments = (e: any, inputType: InputType) => {
@@ -102,17 +72,50 @@ export function PaymentBox({ payment, payments, setPayment }: PaymentProps) {
         value={payment.name}
         onChange={(e: any) => updatePayments(e, InputType.Name)}
       />
+
       <InputBox
         message="Value"
         value={payment.value}
         onChange={(e: any) => updatePayments(e, InputType.Value)}
       />
+
       <InputBox
         message="Type"
         value={payment.type}
         onChange={(e: any) => updatePayments(e, InputType.Type)}
       />
+
       <button onClick={deletePayment}>X</button>
     </StyledPayment>
   );
 }
+
+const StyledPayment = styled.div`
+  display: flex;
+  position: relative;
+  width: 100%;
+  padding-right: 30px;
+
+  div {
+    margin-right: 5px;
+  }
+
+  button {
+    position: absolute;
+    color: white;
+    border: none;
+    border-radius: 15%;
+    background-color: #8d121c;
+    height: 30px;
+    width: 30px;
+    bottom: 0px;
+    right: 0px;
+    transition: all 0.6s ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #e32132;
+      transition: all 0.3s ease-in-out;
+    }
+  }
+`;

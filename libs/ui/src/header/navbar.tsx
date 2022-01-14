@@ -19,6 +19,7 @@ export function Navbar({ title, items, avatarUrl }: NavbarProps) {
       <StyledLink to="/">
         <Title>{title}</Title>
       </StyledLink>
+
       <ul>
         {items.map((item, i) => {
           return (
@@ -33,6 +34,7 @@ export function Navbar({ title, items, avatarUrl }: NavbarProps) {
           );
         })}
       </ul>
+
       <IconStyle src={avatarUrl} alt="Avatar" />
     </StyledNavbar>
   );
@@ -41,14 +43,53 @@ export function Navbar({ title, items, avatarUrl }: NavbarProps) {
 export default Navbar;
 
 const IconStyle = styled.img`
-  height: 55px;
-  width: 55px;
-  margin-right: 15px;
-  transition: 0.2s all;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
+
   :hover {
     cursor: pointer;
   }
+`;
+
+const Title = styled.h1`
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 30px;
+  color: ${(p) => p.theme.navbar.title};
+  width: 200px;
+  transition: all 200ms ease-in-out;
+
+  :hover {
+    color: ${(p) => p.theme.navbar.titleHover};
+  }
+`;
+
+const StyledLink = styled(NavLink)`
+  text-decoration: none;
+  text-transform: capitalize;
+  font-size: 30px;
+
+  &.active {
+    p {
+      color: ${(p) => p.theme.navbar.active};
+    }
+  }
+
+  p {
+    margin: 0px;
+    color: ${(p) => p.theme.navbar.item};
+    transition: all 200ms ease-in-out;
+
+    :hover {
+      color: ${(p) => p.theme.navbar.active};
+    }
+  }
+`;
+
+const NavItem = styled.li`
+  text-decoration: none;
+  display: inline-block;
+  padding-right: 50px;
 `;
 
 const StyledNavbar = styled.nav`
@@ -56,52 +97,49 @@ const StyledNavbar = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 20px;
+  margin-bottom: 25px;
   background-color: ${(p) => p.theme.navbar.base};
   box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
-  /* border-bottom: 2px solid #1a1a1d; */
+
   ul {
+    display: flex;
+    flex-flow: row;
     list-style-type: none;
-  }
-`;
 
-const Title = styled.h1`
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 30px;
-  margin-left: 20px;
-  color: ${(p) => p.theme.navbar.title};
-  width: 200px;
-  :hover {
-    color: ${(p) => p.theme.navbar.titleHover};
-    font-size: 40px;
-  }
-  transition: all 300ms ease-in-out;
-`;
-
-const StyledLink = styled(NavLink)`
-  &.active {
-    p {
-      color: ${(p) => p.theme.navbar.active};
+    @media (min-width: 1000px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+      left: 0;
     }
   }
-  text-decoration: none;
 
-  h1 {
-  }
-
-  p {
-    font-size: 30px;
-    margin: 0px;
-    color: ${(p) => p.theme.navbar.item};
-    :hover {
-      color: ${(p) => p.theme.navbar.active};
+  @media (max-width: 800px) {
+    ${Title} {
+      display: none;
     }
-    transition: all 250ms ease-in;
+
+    ${IconStyle} {
+      margin-left: auto;
+    }
   }
-`;
 
-const NavItem = styled.li`
-  text-decoration: none;
+  @media (max-width: 600px) {
+    ${StyledLink} {
+      font-size: 25px;
+    }
+  }
 
-  display: inline-block;
-  padding-right: 50px;
+  @media (max-width: 500px) {
+    ${StyledLink} {
+      font-size: 20px;
+    }
+
+    ${NavItem} {
+      padding-right: 25px;
+    }
+  }
 `;

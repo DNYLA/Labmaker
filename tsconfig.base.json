@@ -15,8 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@labmaker/ui-header": ["libs/ui-header/src/index.ts"],
-      "@labmaker/ui-inputs": ["libs/ui-inputs/src/index.ts"],
+      "@labmaker/ui": ["libs/ui/src/index.ts"],
       "@labmaker/wrapper": ["libs/wrapper/src/index.ts"]
     }
   },

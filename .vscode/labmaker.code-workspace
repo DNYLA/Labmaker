@@ -1,6 +1,14 @@
 {
   "folders": [
     {
+      "name": "Monorepo",
+      "path": "./../"
+    },
+    {
+      "name": "Prisma",
+      "path": "./../prisma"
+    },
+    {
       "name": "API",
       "path": "./../apps/api/src"
     },
@@ -27,10 +35,6 @@
     {
       "name": "All Apps",
       "path": "./../apps"
-    },
-    {
-      "name": "Monorepo",
-      "path": "./../"
     }
   ],
   "settings": {

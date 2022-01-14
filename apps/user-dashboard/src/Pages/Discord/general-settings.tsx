@@ -6,7 +6,7 @@ import {
   IOnDropDownChange,
   Item,
   SwitchToggle,
-} from '@labmaker/ui-inputs';
+} from '@labmaker/ui';
 import { useDispatch } from 'react-redux';
 import { GuildConfig } from '../../utils/types';
 import ReactDropdown from 'react-dropdown';
@@ -26,24 +26,13 @@ export function GeneralSettings({
 }: GeneralSettingsProps) {
   const dispatch = useDispatch();
 
-  console.log(parsedGuilds);
-
-  // if (parsedGuilds.length === 0) {
-  //   return <div></div>;
-  // } else {
   return (
     <SettingsContainer id="GeneralSettings">
       <h1>General</h1>
+
       <StyledSpan>Payment Config</StyledSpan>
-      {/* <ReactDropdown
-          options={
-            parsedGuilds ? parsedGuilds : [{ value: 'Empty', label: 'Empty' }]
-          }
-          value={config.paymentConfigId}
-          onChange={(e) => changeEvent(e)}
-        /> */}
       <DropDown items={parsedGuilds} onChange={changeEvent} />
-      <br />
+
       <InputBox
         message="Bot Image URL"
         value={config.embedImageUrl}
@@ -56,8 +45,9 @@ export function GeneralSettings({
           );
         }}
       />
+
       <SwitchToggle
-        message="Advance User Switcher"
+        message="Advanced User Switcher"
         toggled={config.autoSwitcher}
         onToggle={() => {
           dispatch(
@@ -68,8 +58,9 @@ export function GeneralSettings({
           );
         }}
       />
+
       <SwitchToggle
-        message="Auto Creete Ticket"
+        message="Auto Create Ticket"
         toggled={config.autoTicket}
         onToggle={() => {
           dispatch(
@@ -80,6 +71,7 @@ export function GeneralSettings({
           );
         }}
       />
+
       <SwitchToggle
         message="Auto Reacter"
         toggled={config.autoReact}
@@ -94,10 +86,10 @@ export function GeneralSettings({
       />
     </SettingsContainer>
   );
-  // }
 }
 
 const StyledSpan = styled.span`
   padding-right: 5px;
   margin-left: 2px;
+  margin-bottom: 5px;
 `;

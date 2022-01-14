@@ -1,9 +1,9 @@
 module.exports = {
-  displayName: 'ui-inputs',
+  displayName: 'ui',
   preset: '../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/libs/ui-inputs',
+  coverageDirectory: '../../coverage/libs/ui',
 };

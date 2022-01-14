@@ -13,8 +13,6 @@ export interface PaymentSettingsProps {
   createPayment: any;
 }
 
-const StyledPaymentSettings = styled.div``;
-
 export function PaymentSettings({
   payments,
   guilds,
@@ -57,16 +55,15 @@ export function PaymentSettings({
     return <div></div>;
   } else {
     return (
-      <StyledPaymentSettings>
-        <SettingsContainer>
-          <h1>Payment</h1>
-          <div>{renderPayments(payments)}</div>
+      <SettingsContainer>
+        <h1>Payment</h1>
 
-          <CenterDiv>
-            <CustomButton onClick={createPayment}>Add</CustomButton>
-          </CenterDiv>
-        </SettingsContainer>
-      </StyledPaymentSettings>
+        {renderPayments(payments)}
+
+        <CenterDiv>
+          <CustomButton onClick={createPayment}>Add</CustomButton>
+        </CenterDiv>
+      </SettingsContainer>
     );
   }
 }
@@ -74,7 +71,7 @@ export function PaymentSettings({
 const CenterDiv = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 10px;
 
   button {
     margin-right: 25px;
@@ -89,9 +86,10 @@ const CustomButton = styled.button`
   border-radius: 5px;
   justify-content: center;
   color: white;
-  font-family: 'Lexend Deca';
+  font-family: 'Roboto';
   font-size: 18px;
   outline: none;
+  transition: 0.5s;
 
   :active {
     border: none;
@@ -102,5 +100,4 @@ const CustomButton = styled.button`
     transition: 0.5s;
     cursor: pointer;
   }
-  transition: 0.5s;
 `;
