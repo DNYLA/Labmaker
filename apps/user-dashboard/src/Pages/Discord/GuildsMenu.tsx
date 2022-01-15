@@ -50,7 +50,6 @@ const GuildSelector = styled.div`
   display: flex;
   cursor: pointer;
   justify-content: space-between;
-  text-align: center;
   width: 950px;
   height: 150px;
   background-color: ${(p) => p.theme.navbar.base};
@@ -64,32 +63,33 @@ const GuildSelector = styled.div`
     border-radius: 50%;
     transition: border-radius 150ms ease-in-out;
   }
-
   span {
     font-size: 25px;
   }
-
   :hover {
     img {
       border-radius: 30%;
     }
     button {
-      color: ${(p) => p.theme.input.switchActive};
+      color: ${(p) => p.theme.navbar.active};
     }
-    background-color: ${(p) => p.theme.input.activeCol};
+    /* span {
+      color: ${(p) => p.theme.navbar.title};
+    } */
+    /* background-color: ${(p) => p.theme.input.activeCol}; */
+    border: 2px solid ${(p) => p.theme.navbar.active};
   }
 `;
 
 const Menubutton = styled.button`
-  /* background-color: ${(p) => p.theme.input.switchActive}; */
-  background-color: ${(p) => p.theme.navbar.item};
-  color: ${(p) => p.theme.navbar.base};
+  /* background-color: ${(p) => p.theme.navbar.item}; */
+  background-color: #121212;
+  color: ${(p) => p.theme.navbar.title};
   font-size: 19px;
   margin-right: 20px;
   width: 100px;
   height: 50px;
   border: none;
   border-radius: 5px;
-  transition: border-radius 150ms ease-in-out;
   cursor: pointer;
 `;
