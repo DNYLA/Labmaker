@@ -1,20 +1,12 @@
-import { RootState } from '../store';
-import { Labmaker } from '../utils/APIHandler';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLogs } from '../utils/slices/logsSlice';
 import styled from 'styled-components';
 import {
   LogTable,
   DropDown,
-  Item,
   LoadingSpinner,
   Content,
   Page,
 } from '@labmaker/ui';
-import { RedditConfigDto } from '@labmaker/wrapper';
 import { useFetchLogs } from '../utils/hooks/useFetchLogs';
-import { parseConfigs } from '../utils/helpers';
 
 export function Logs() {
   const { logs, loading, parsedConfigs, handleChange } = useFetchLogs();
@@ -24,11 +16,9 @@ export function Logs() {
       {logs && (
         <Content>
           <LoadingSpinner loading={loading} message={'Loading Logs'} />
-
           <ControlsContainer>
             <DropDown items={parsedConfigs} onChange={handleChange} />
           </ControlsContainer>
-
           <SettingsContainer>
             <h1>Logs</h1>
             <LogTable logs={logs} title={'Logs'} />
