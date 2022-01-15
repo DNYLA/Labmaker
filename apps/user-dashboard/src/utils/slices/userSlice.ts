@@ -12,7 +12,7 @@ export const userSlice = createSlice({
     setUser: (state, action: PayloadAction<UserDto>) => {
       state.value = action.payload;
     },
-    addConfigs: (state, action: PayloadAction<RedditConfig[]>) => {
+    addNode: (state, action: PayloadAction<RedditConfig[]>) => {
       //Somewhere Inside Home.tsx RedditConfig Node gets duplicated
       //to prevent this we can loop through the payload and check if it already
       //exists before inserting it
@@ -28,18 +28,17 @@ export const userSlice = createSlice({
         // state.value.nodes.push(c);
       });
     },
-    setConfig: (state, action: PayloadAction<RedditConfig>) => {
+    setNode: (state, action: PayloadAction<RedditConfig>) => {
       state.value.nodes = state.value.nodes.map((c) =>
         c.id === action.payload.id ? action.payload : c
       );
     },
-    deleteConfig: (state, action: PayloadAction<RedditConfig>) => {
+    deleteNode: (state, action: PayloadAction<number>) => {
       state.value.nodes = state.value.nodes.filter(
-        (c) => c.id !== action.payload.id
+        (c) => c.id !== action.payload
       );
     },
   },
 });
 
-export const { setUser, addConfigs, setConfig, deleteConfig } =
-  userSlice.actions;
+export const { setUser, addNode, setNode, deleteNode } = userSlice.actions;

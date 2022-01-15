@@ -2,10 +2,11 @@ import { InputBox } from '@labmaker/ui';
 import { SettingsContainer } from '../../assets/styles';
 import React from 'react';
 import { RedditConfig } from '../../utils/types';
+import { RedditConfigDto } from '@labmaker/wrapper';
 
 interface AccountSettingsProps {
-  config: RedditConfig;
-  setConfig: React.Dispatch<React.SetStateAction<RedditConfig>>;
+  config: RedditConfigDto;
+  setConfig: React.Dispatch<React.SetStateAction<RedditConfigDto>>;
 }
 
 export function AccountSettings({ config, setConfig }: AccountSettingsProps) {

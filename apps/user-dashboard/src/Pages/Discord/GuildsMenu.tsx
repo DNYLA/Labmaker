@@ -9,8 +9,6 @@ export function GuildsMenu() {
   const { guilds, loading, error } = useFetchGuilds();
   const navigate = useNavigate();
   const defaultAvatar = 'https://i.imgur.com/t5JIZ1M.png'; //Could Generate Default Avatar (Its just the first letter from each word in guild.name)
-  const addBotUrl =
-    'https://discord.com/api/oauth2/authorize?client_id=863403711422660648&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fredirect&scope=bot'; //Move to ENV?
 
   const handleGuildClick = (guild: PartialGuild) => {
     console.log(`${guild.id} clicked`);
@@ -50,18 +48,21 @@ const GuildSelector = styled.div`
   display: flex;
   cursor: pointer;
   justify-content: space-between;
-  width: 950px;
-  height: 150px;
+  /* width: 700px; //950 */
+  /* height: 105px; // 150 */
+  width: 40%;
+  height: 100%;
   background-color: ${(p) => p.theme.navbar.base};
   border: 2px solid ${(p) => p.theme.input.borderCol};
   margin: 10px 0px;
-  padding-left: 10px;
+  padding: 5px 0px 5px 10px;
   align-items: center;
 
   img {
     user-select: none;
     border-radius: 50%;
     transition: border-radius 150ms ease-in-out;
+    width: 90px;
   }
   span {
     font-size: 25px;

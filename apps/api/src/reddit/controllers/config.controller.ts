@@ -16,7 +16,7 @@ import {
 } from '../dtos/create-redditconfig.dto';
 import { ConfigService } from '../services/config.service';
 
-@Controller('reddit/config')
+@Controller('reddit')
 export class ConfigController {
   constructor(private readonly configService: ConfigService) {}
 

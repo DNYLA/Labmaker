@@ -7,7 +7,6 @@ import React from 'react';
 export interface Item {
   value: number | string;
   label: string;
-  selected: boolean;
 }
 
 export interface IOnDropDownChange {

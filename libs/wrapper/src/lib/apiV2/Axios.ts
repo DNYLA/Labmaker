@@ -1,7 +1,7 @@
 //Update Actual API with this if the tests work
 
 import axios, { AxiosRequestConfig } from 'axios';
-import { AuthResult, UserDto } from '@labmaker/wrapper';
+import { AuthResult, UserDto } from '../types';
 
 const CONFIG: AxiosRequestConfig = { withCredentials: true };
 export const AXIOS = axios.create(CONFIG); //Axios Uses .defaults.baseURL to set/call the API this way we can change the API URL outside the library.
@@ -74,3 +74,4 @@ AXIOS.interceptors.response.use(
 );
 
 export * from './discord';
+export * from './reddit';

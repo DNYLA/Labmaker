@@ -1,113 +1,45 @@
 import { AccountSettings } from './account-settings';
 import { MainSettings } from './main-settings';
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   ComboContainer,
   Content,
   DropDown,
-  Item,
-  LoadingSpinner,
   Page,
   UserControls,
 } from '@labmaker/ui';
-import { useFetchReddit } from '../../utils/hooks/useFetchReddit';
-
-const StyledHome = styled.div`
-  margin: 0 250px;
-`;
+import { useRedditLogic } from '../../utils/hooks/useRedditLogic';
 
 export function Home() {
   const {
-    selectedConfig,
-    setSelectedConfig,
-    createNode,
-    saveNode,
-    deleteNode,
-    user,
+    config,
+    setConfig,
+    parsedConfigs,
     loading,
-  } = useFetchReddit();
-
-  const itemLoad: Item = {
-    value: 0,
-    label: '',
-    selected: true,
-  };
-
-  const [selected, setSelected] = useState(itemLoad);
-  const [parsedItems, setParsedItems] = useState([itemLoad]);
-
-  useEffect(() => {
-    const parseConfigs = () => {
-      const parsedData = new Array<Item>();
-      const allConfigs = [...user.nodes];
-      for (let i = 0; i < allConfigs.length; i++) {
-        const config = allConfigs[i];
-        parsedData.push({
-          value: config.id,
-          label: config.username,
-          selected: true,
-        });
-      }
-
-      if (parsedData.length > 0) {
-        parsedData[0].selected = true;
-        setSelected(parsedData[0]);
-        setParsedItems(parsedData);
-      }
-    };
-    parseConfigs();
-  }, [user.nodes]);
-
-  const refreshItem = () => {
-    const config = user.nodes.find((c) => c.id === selected.value);
-    if (!config) return;
-    setSelectedConfig(config);
-  };
-
-  const onChange = (id: number | string) => {
-    if (typeof id === 'string') return; //This will never happen however typescript requires i check
-
-    const items = [...parsedItems];
-    const foundItem = items.find((item) => item.value === id);
-    if (!foundItem) return;
-
-    const config = user.nodes.find((c) => c.id === foundItem.value);
-    setSelected(foundItem);
-    if (!config) return;
-    setSelectedConfig(config);
-  };
-
-  //This shows for less than a split second which isnt ideal for a user to experience
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+    handleCreate,
+    handleSave,
+    handleDelete,
+    handleRefresh,
+    handleChange,
+  } = useRedditLogic();
 
   return (
     <Page>
       {!loading && (
         <Content>
           <ControlsContainer>
-            <DropDown items={parsedItems} onChange={onChange} />
-
+            <DropDown items={parsedConfigs} onChange={handleChange} />
             <UserControls
-              onDelete={deleteNode}
-              onRefresh={refreshItem}
-              onCreate={createNode}
-              onSave={saveNode}
+              onDelete={handleDelete}
+              onRefresh={handleRefresh}
+              onCreate={handleCreate}
+              onSave={handleSave}
             />
           </ControlsContainer>
 
           <ComboContainer>
-            <AccountSettings
-              config={selectedConfig}
-              setConfig={setSelectedConfig}
-            />
-
-            <MainSettings
-              config={selectedConfig}
-              setConfig={setSelectedConfig}
-            />
+            <AccountSettings config={config} setConfig={setConfig} />
+            <MainSettings config={config} setConfig={setConfig} />
           </ComboContainer>
         </Content>
       )}

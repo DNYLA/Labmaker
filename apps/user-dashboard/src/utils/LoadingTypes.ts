@@ -1,4 +1,9 @@
-import { Guild, GuildConfigDto, LogDto } from '@labmaker/wrapper';
+import {
+  Guild,
+  GuildConfigDto,
+  LogDto,
+  RedditConfigDto,
+} from '@labmaker/wrapper';
 import { RedditConfig, Payment, User } from './types';
 
 export const defaultUser: User = {
@@ -70,7 +75,7 @@ export const loadingServer: Guild = {
   joined: false,
 };
 
-export const redditTemplate: RedditConfig = {
+export const redditTemplate: RedditConfigDto = {
   id: -1,
   userId: '0',
   clientId: '',
@@ -85,5 +90,4 @@ export const redditTemplate: RedditConfig = {
   forbiddenWords: [],
   blockedUsers: [],
   nodeEditors: [],
-  newNode: true,
 };

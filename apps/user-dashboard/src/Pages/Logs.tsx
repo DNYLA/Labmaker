@@ -22,12 +22,7 @@ function parseConfigs(configs: RedditConfigDto[]) {
     parsedData.push({
       value: config.id,
       label: config.username,
-      selected: true,
     });
-  }
-
-  if (parsedData.length > 0) {
-    parsedData[0].selected = true;
   }
 
   return parsedData;
@@ -37,7 +32,6 @@ export function Logs() {
   const itemLoad: Item = {
     value: 0,
     label: '',
-    selected: true,
   };
 
   const [isLoading, setLoading] = useState(true);
