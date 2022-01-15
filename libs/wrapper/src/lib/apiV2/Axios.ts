@@ -4,17 +4,17 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { AuthResult, UserDto } from '@labmaker/wrapper';
 
 const CONFIG: AxiosRequestConfig = { withCredentials: true };
-const API_URL = 'http://localhost:3000';
-const AXIOS = axios.create(CONFIG);
+export const AXIOS = axios.create(CONFIG); //Axios Uses .defaults.baseURL to set/call the API this way we can change the API URL outside the library.
 let ACCESS_TOKEN = '';
 
 export const getUser = () => {
-  return AXIOS.get<UserDto>(`${API_URL}/user/`, CONFIG);
+  return AXIOS.get<UserDto>(`/user/`);
 };
 
-export const refreshToken = () => {
-  const instance = axios.create(); //Dont want to use Interceptors when refreshing token
-  return instance.get<AuthResult>(`${API_URL}/auth/refresh_token`, CONFIG);
+const refreshToken = () => {
+  const instance = axios.create(CONFIG); //Dont want to use Interceptors when refreshing token
+  instance.defaults.baseURL = AXIOS.defaults.baseURL;
+  return instance.get<AuthResult>(`/auth/refresh_token`);
 };
 
 export const setToken = async () => {
@@ -72,3 +72,5 @@ AXIOS.interceptors.response.use(
     return Promise.reject(err);
   }
 );
+
+export * from './discord';

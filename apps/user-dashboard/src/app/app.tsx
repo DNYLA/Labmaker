@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
 import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui-header';
 import { Labmaker, LabmakerSocket, InitSocket } from '../utils/APIHandler';
-
+import { AXIOS } from '@labmaker/wrapper';
 import { Discord } from '../Pages/Discord/discord';
 import { Home } from '../Pages/Home/Home';
 import { Logs } from '../Pages/Logs';
@@ -10,6 +10,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFetchUser } from '../utils/hooks/useFetchUser';
 import { routes } from '../utils/routes';
+import { useEffect } from 'react';
+import { GuildsMenu } from '../Pages/Discord/GuildsMenu';
 
 const StyledApp = styled.div`
   /* background-color: ${(p) => p.theme.base.backCol};
@@ -48,7 +50,7 @@ export function App() {
             pauseOnHover
           />
           <Nav
-            title={'LABMAKER '}
+            title={'LABMAKER'}
             items={routes}
             avatarUrl={
               user.avatar
@@ -58,7 +60,7 @@ export function App() {
           />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/discord" element={<Discord />} />
+            <Route path="/discord" element={<GuildsMenu />} />
             <Route path="/logs" element={<Logs />} />
           </Routes>
         </>

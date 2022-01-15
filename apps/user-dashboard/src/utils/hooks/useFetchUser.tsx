@@ -1,10 +1,12 @@
-import { getUser, setToken } from '../api';
+// import { getUser, setToken } from '../api';
 import { User } from '../types';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setUser } from '../slices/userSlice';
 import { InitSocket, Labmaker } from '../APIHandler';
+// import { getUser, setToken } from '../../utils/api';
+import { getUser, setToken } from '@labmaker/wrapper';
 
 export function useFetchUser() {
   // const [user, setUser] = useState<User>();
@@ -21,18 +23,16 @@ export function useFetchUser() {
         setLoading(false);
         return;
       }
-      console.log(token);
-      Labmaker.setAccessToken(token);
 
+      Labmaker.setAccessToken(token);
       getUser()
         .then(({ data }) => {
-          // setUser(data);
           dispatch(setUser(data));
           InitSocket(token);
         })
         .catch((err) => {
           console.log(err);
-          setError(true);
+          setError(err);
         })
         .finally(() => setTimeout(() => setLoading(false), 1000));
     });
