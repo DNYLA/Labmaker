@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CreateConfigDto } from '../dtos/create-guildconfig.dto';
@@ -22,10 +23,10 @@ export class ConfigController {
 
   // @UseGuards(AuthGuard('jwt'))
   @UseGuards(JwtAuthGuard)
-  @Get('/:id/:payments')
+  @Get('/:id/')
   getConfig(
     @Param('id') id: string,
-    @Param('payments') payments: boolean,
+    @Query('payments') payments: boolean,
     @CurrentUser() user: UserDetails
   ): Promise<DiscordConfig | LocalData> {
     return this.configService.getConfig(id, payments, user);
@@ -37,9 +38,12 @@ export class ConfigController {
     return this.configService.getConfigs();
   }
 
-  @Post()
-  createConfig(@Body() body: CreateConfigDto): Promise<DiscordConfig> {
-    return this.configService.createConfig(body);
+  @Post('/:id/:name')
+  createConfig(
+    @Param('id') id: string,
+    @Param('name') name: string
+  ): Promise<DiscordConfig> {
+    return this.configService.createConfig(id, name);
   }
 
   @Put()

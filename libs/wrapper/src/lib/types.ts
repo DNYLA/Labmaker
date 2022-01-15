@@ -11,6 +11,11 @@ export type GuildConfigDto = {
   tickets?: TicketDto[];
 };
 
+export type GuildConfig = {
+  config: GuildConfigDto;
+  payments: PaymentDto[];
+};
+
 export type PaymentDto = {
   id?: number;
   name: string;

@@ -49,15 +49,9 @@ export class ConfigService {
     return await this.prismaService.discordConfig.findMany();
   }
 
-  async createConfig(newConfig: CreateConfigDto): Promise<DiscordConfig> {
-    //Not Sure Why this is here Move Over to Client Side
-    newConfig.paymentConfigId = newConfig.id;
-    return await this.prismaService.discordConfig.create({ data: newConfig });
-  }
-
-  private async createConfigFromId(id: string) {
+  async createConfig(id: string, name: string): Promise<DiscordConfig> {
     return await this.prismaService.discordConfig.create({
-      data: { id, paymentConfigId: id },
+      data: { id, name, paymentConfigId: id },
     });
   }
 

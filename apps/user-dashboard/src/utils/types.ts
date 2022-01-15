@@ -10,8 +10,6 @@ export type RedditConfig = RedditConfigDto & {
   newNode?: boolean;
 };
 
-export type GuildConfig = GuildConfigDto & { loading?: boolean };
-
 export type Payment = PaymentDto & { loading?: boolean };
 
 export type User = UserDto & { loading?: boolean };

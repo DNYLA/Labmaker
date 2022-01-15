@@ -44,6 +44,15 @@ export class PaymentService {
   ): Promise<Payment[] | undefined> {
     return await this.prismaService.$transaction(
       updatedPayments.payments.map((payment) => {
+        if (payment.newPayment) {
+          return this.prismaService.payment.create({
+            data: payment,
+          });
+        } else if (payment.deletedPayment) {
+          return this.prismaService.payment.delete({
+            where: { id: payment.id },
+          });
+        }
         return this.prismaService.payment.update({
           where: { id: payment.id },
           data: payment,

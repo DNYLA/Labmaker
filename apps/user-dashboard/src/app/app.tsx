@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useFetchUser } from '../utils/hooks/useFetchUser';
 import { routes } from '../utils/routes';
 import { GuildsMenu } from '../Pages/Discord/GuildsMenu';
+import { Discord } from '../Pages/Discord/DiscordPage';
 
 const StyledApp = styled.div`
   /* background-color: ${(p) => p.theme.base.backCol};
@@ -58,6 +59,7 @@ export function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/discord" element={<GuildsMenu />} />
+            <Route path="/discord/:id" element={<Discord />} />
             <Route path="/logs" element={<Logs />} />
           </Routes>
         </>

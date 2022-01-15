@@ -24,6 +24,14 @@ export class UpdatePaymentDto extends CreatePaymentDto {
   @IsOptional()
   @IsNumber()
   id: number;
+
+  @IsOptional()
+  @IsNumber()
+  newPayment?: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  deletedPayment?: boolean;
 }
 
 export class CreatePaymentDtoArray {

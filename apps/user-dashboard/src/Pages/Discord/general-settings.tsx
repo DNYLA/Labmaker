@@ -8,13 +8,14 @@ import {
   SwitchToggle,
 } from '@labmaker/ui';
 import { useDispatch } from 'react-redux';
-import { GuildConfig } from '../../utils/types';
 import ReactDropdown from 'react-dropdown';
 import { setDiscordConfig } from '../../utils/slices/configSlices';
+import { GuildConfig, GuildConfigDto } from '@labmaker/wrapper';
 
 /* eslint-disable-next-line */
 export interface GeneralSettingsProps {
-  config: GuildConfig;
+  config: GuildConfigDto;
+  setConfig: React.Dispatch<React.SetStateAction<GuildConfigDto>>;
   parsedGuilds: Item[];
   changeEvent: IOnDropDownChange;
 }
@@ -23,9 +24,8 @@ export function GeneralSettings({
   config,
   parsedGuilds,
   changeEvent,
+  setConfig,
 }: GeneralSettingsProps) {
-  const dispatch = useDispatch();
-
   return (
     <SettingsContainer id="GeneralSettings">
       <h1>General</h1>
@@ -36,13 +36,11 @@ export function GeneralSettings({
       <InputBox
         message="Bot Image URL"
         value={config.embedImageUrl}
-        onChange={(e: any) => {
-          dispatch(
-            setDiscordConfig({
-              ...config,
-              embedImageUrl: e.target.value,
-            })
-          );
+        onChange={(e) => {
+          setConfig({
+            ...config,
+            embedImageUrl: e.target.value,
+          });
         }}
       />
 
@@ -50,12 +48,10 @@ export function GeneralSettings({
         message="Advanced User Switcher"
         toggled={config.autoSwitcher}
         onToggle={() => {
-          dispatch(
-            setDiscordConfig({
-              ...config,
-              autoSwitcher: !config.autoSwitcher,
-            })
-          );
+          setConfig({
+            ...config,
+            autoSwitcher: !config.autoSwitcher,
+          });
         }}
       />
 
@@ -63,12 +59,10 @@ export function GeneralSettings({
         message="Auto Create Ticket"
         toggled={config.autoTicket}
         onToggle={() => {
-          dispatch(
-            setDiscordConfig({
-              ...config,
-              autoTicket: !config.autoTicket,
-            })
-          );
+          setConfig({
+            ...config,
+            autoTicket: !config.autoTicket,
+          });
         }}
       />
 
@@ -76,12 +70,10 @@ export function GeneralSettings({
         message="Auto Reacter"
         toggled={config.autoReact}
         onToggle={() => {
-          dispatch(
-            setDiscordConfig({
-              ...config,
-              autoReact: !config.autoReact,
-            })
-          );
+          setConfig({
+            ...config,
+            autoReact: !config.autoReact,
+          });
         }}
       />
     </SettingsContainer>

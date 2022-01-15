@@ -1,5 +1,4 @@
-import { PaymentDto } from '@labmaker/wrapper';
-import { GuildConfig } from '../../utils/types';
+import { GuildConfigDto, PaymentDto } from '@labmaker/wrapper';
 import styled from 'styled-components';
 import { SettingsContainer } from '../../assets/styles';
 import { PaymentBox } from './payment';
@@ -8,7 +7,7 @@ import { PaymentBox } from './payment';
 export interface PaymentSettingsProps {
   payments: any;
   guilds: any;
-  config: GuildConfig;
+  config: GuildConfigDto;
   setPayments: any;
   createPayment: any;
 }

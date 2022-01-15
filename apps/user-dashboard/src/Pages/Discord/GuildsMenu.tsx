@@ -11,8 +11,7 @@ export function GuildsMenu() {
   const defaultAvatar = 'https://i.imgur.com/t5JIZ1M.png'; //Could Generate Default Avatar (Its just the first letter from each word in guild.name)
 
   const handleGuildClick = (guild: PartialGuild) => {
-    console.log(`${guild.id} clicked`);
-    navigate('/discord/settings');
+    navigate(`/discord/${guild.id}`);
   };
 
   const handleAddClick = () => window.open(process.env.NX_DISCORD_BOTADD_URL);

@@ -74,3 +74,4 @@ AXIOS.interceptors.response.use(
 export * from './discord';
 export * from './reddit';
 export * from './logs';
+export * from './GuildConfig';
