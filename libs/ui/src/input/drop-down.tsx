@@ -72,10 +72,20 @@ export function DropDown({ items, onChange }: DropDownProps) {
   };
 
   const handleInputClick = () => {
-    console.log('Opened Menu');
     setInputValue('');
     setFilteredItems(items);
     setOpen(true);
+  };
+
+  const handleCloseClick = () => {
+    if (isOpen) {
+      setInputValue(selected.label);
+      setOpen(false);
+    } else {
+      setInputValue('');
+      setOpen(true);
+    }
+    setFilteredItems(items);
   };
 
   const handleClose = () => {
@@ -86,6 +96,7 @@ export function DropDown({ items, onChange }: DropDownProps) {
   return (
     <StyledDropDown
       tabIndex={0}
+      onMouseDown={handleCloseClick}
       onFocus={handleInputClick}
       onBlur={handleClose}
       className={isOpen ? 'open' : ''}
