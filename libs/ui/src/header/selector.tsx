@@ -28,16 +28,15 @@ export function Selector({
 }
 
 const StyledSelector = styled(DisableDrag)`
-  width: 100px;
-  height: 150px;
-  width: 6%;
-  height: 9%;
+  min-width: 60px;
+  max-width: 60px;
+  margin-bottom: 30px;
   cursor: pointer;
 
   img {
     user-select: none;
     width: 100%;
-    height: 100%;
+    height: auto;
     border-radius: 50%;
     transition: border-radius 150ms ease-in-out;
   }
@@ -61,7 +60,7 @@ const StyledSelector = styled(DisableDrag)`
     }
   }
 
-  :hover {
+  &:hover {
     img {
       border-radius: 30%;
     }

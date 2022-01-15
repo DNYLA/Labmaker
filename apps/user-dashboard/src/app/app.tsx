@@ -24,7 +24,7 @@ export function App() {
 
   const items = [
     {
-      name: 'reddit',
+      name: 'home',
       to: '/',
     },
     { name: 'discord' },
