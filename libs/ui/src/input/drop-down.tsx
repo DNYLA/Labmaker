@@ -77,16 +77,16 @@ export function DropDown({ items, onChange }: DropDownProps) {
     setOpen(true);
   };
 
-  const handleCloseClick = () => {
-    if (isOpen) {
-      setInputValue(selected.label);
-      setOpen(false);
-    } else {
-      setInputValue('');
-      setOpen(true);
-    }
-    setFilteredItems(items);
-  };
+  // const handleCloseClick = () => {
+  //   if (isOpen) {
+  //     setInputValue(selected.label);
+  //     setOpen(false);
+  //   } else {
+  //     setInputValue('');
+  //     setOpen(true);
+  //   }
+  //   setFilteredItems(items);
+  // };
 
   const handleClose = () => {
     setInputValue(selected.label);
@@ -96,7 +96,7 @@ export function DropDown({ items, onChange }: DropDownProps) {
   return (
     <StyledDropDown
       tabIndex={0}
-      onMouseDown={handleCloseClick}
+      // onMouseDown={handleCloseClick} //Bug Where Clicking an item closes menu
       onFocus={handleInputClick}
       onBlur={handleClose}
       className={isOpen ? 'open' : ''}

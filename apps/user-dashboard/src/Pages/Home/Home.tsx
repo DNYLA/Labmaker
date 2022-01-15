@@ -7,6 +7,7 @@ import {
   Content,
   DropDown,
   Item,
+  LoadingSpinner,
   Page,
   UserControls,
 } from '@labmaker/ui';
@@ -77,33 +78,39 @@ export function Home() {
     setSelectedConfig(config);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  //This shows for less than a split second which isnt ideal for a user to experience
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <Page>
-      <Content>
-        <ControlsContainer>
-          <DropDown items={parsedItems} onChange={onChange} />
+      {!loading && (
+        <Content>
+          <ControlsContainer>
+            <DropDown items={parsedItems} onChange={onChange} />
 
-          <UserControls
-            onDelete={deleteNode}
-            onRefresh={refreshItem}
-            onCreate={createNode}
-            onSave={saveNode}
-          />
-        </ControlsContainer>
+            <UserControls
+              onDelete={deleteNode}
+              onRefresh={refreshItem}
+              onCreate={createNode}
+              onSave={saveNode}
+            />
+          </ControlsContainer>
 
-        <ComboContainer>
-          <AccountSettings
-            config={selectedConfig}
-            setConfig={setSelectedConfig}
-          />
+          <ComboContainer>
+            <AccountSettings
+              config={selectedConfig}
+              setConfig={setSelectedConfig}
+            />
 
-          <MainSettings config={selectedConfig} setConfig={setSelectedConfig} />
-        </ComboContainer>
-      </Content>
+            <MainSettings
+              config={selectedConfig}
+              setConfig={setSelectedConfig}
+            />
+          </ComboContainer>
+        </Content>
+      )}
     </Page>
   );
 }

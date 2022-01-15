@@ -17,7 +17,7 @@ export function GuildsMenu() {
     navigate('/discord/settings');
   };
 
-  const handleAddClick = () => window.open(addBotUrl);
+  const handleAddClick = () => window.open(process.env.NX_DISCORD_BOTADD_URL);
 
   const getAvatar = (id: string, icon: string) =>
     `https://cdn.discordapp.com/icons/${id}/${icon}.png`;
