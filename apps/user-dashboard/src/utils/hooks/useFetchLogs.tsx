@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getLogs, LogDto } from '@labmaker/wrapper';
 import { Item } from '@labmaker/ui';
-import { parseConfigs } from '../helpers';
+import { findItem, parseConfigs } from '../helpers';
 
 export function useFetchLogs() {
   const [logs, setLogs] = useState<LogDto[]>();
@@ -32,9 +32,8 @@ export function useFetchLogs() {
   }, [fetchLogs, user.nodes]);
 
   const handleChange = (id: number | string) => {
-    const items = [...parsedConfigs];
-    const foundItem = items.find((item) => item.value === id);
-    const config = user.nodes.find((c) => c.id === foundItem?.value);
+    if (typeof id === 'string') return;
+    const config = findItem(parsedConfigs, user.nodes, id);
     if (!config) return;
     fetchLogs(config.id.toString());
   };

@@ -18,3 +18,12 @@ export const parseGuilds = (guilds: Guild[]) => {
 
   return parsedGuild;
 };
+
+export const findItem = (
+  items: Item[],
+  searchArray: RedditConfigDto[],
+  id: number
+) => {
+  const foundItem = items.find((item) => item.value === id);
+  return searchArray.find((c) => c.id === foundItem?.value);
+};

@@ -8,7 +8,7 @@ import { RootState } from '../../store';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { redditTemplate } from '../LoadingTypes';
-import { parseConfigs } from '../helpers';
+import { findItem, parseConfigs } from '../helpers';
 import { Item } from '@labmaker/ui';
 import { toast } from 'react-toastify';
 import { addNode, deleteNode, setNode } from '../slices/userSlice';
@@ -87,9 +87,7 @@ export function useRedditLogic() {
 
   const handleChange = (id: number | string) => {
     if (typeof id === 'string') return;
-    const items = [...parsedConfigs];
-    const foundItem = items.find((item) => item.value === id);
-    const foundConfig = user.nodes.find((c) => c.id === foundItem?.value);
+    const foundConfig = findItem(parsedConfigs, user.nodes, id);
     if (!foundConfig) return;
     setConfig(foundConfig);
   };

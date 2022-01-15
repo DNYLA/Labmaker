@@ -13,9 +13,9 @@ export function Logs() {
 
   return (
     <Page>
+      <LoadingSpinner loading={loading} message={'Loading Logs'} />
       {logs && (
         <Content>
-          <LoadingSpinner loading={loading} message={'Loading Logs'} />
           <ControlsContainer>
             <DropDown items={parsedConfigs} onChange={handleChange} />
           </ControlsContainer>
