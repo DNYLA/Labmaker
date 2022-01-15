@@ -7,9 +7,7 @@ const CONFIG: AxiosRequestConfig = { withCredentials: true };
 export const AXIOS = axios.create(CONFIG); //Axios Uses .defaults.baseURL to set/call the API this way we can change the API URL outside the library.
 let ACCESS_TOKEN = '';
 
-export const getUser = () => {
-  return AXIOS.get<UserDto>(`/user/`);
-};
+export const getUser = () => AXIOS.get<UserDto>(`/user/`);
 
 const refreshToken = () => {
   const instance = axios.create(CONFIG); //Dont want to use Interceptors when refreshing token
@@ -75,3 +73,4 @@ AXIOS.interceptors.response.use(
 
 export * from './discord';
 export * from './reddit';
+export * from './logs';
