@@ -22,12 +22,10 @@ function parseGuilds(guilds: Guild[]) {
   const parsedGuild: Item[] = [];
 
   guilds.forEach((guild) => {
-    parsedGuild.push({ value: guild.id, label: guild.name, selected: false });
+    parsedGuild.push({ value: guild.id, label: guild.name });
   });
 
   console.log(parsedGuild);
-
-  parsedGuild[0].selected = true;
 
   return parsedGuild;
 }
@@ -35,7 +33,7 @@ function parseGuilds(guilds: Guild[]) {
 function useGuildLogic() {
   const [guilds, setGuilds] = useState([loadingServer]);
   const [parsedGuilds, setParsedGuilds] = useState<Item[]>([
-    { value: '0', label: 'Loading...', selected: true },
+    { value: '0', label: 'Loading...' },
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [payments, setPayments] = useState([loadingPayment]);

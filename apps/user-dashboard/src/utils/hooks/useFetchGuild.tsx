@@ -3,7 +3,7 @@ import { Guild, PaymentDto } from '@labmaker/wrapper';
 import { RootState } from '../../store';
 import { Labmaker } from '../../utils/APIHandler';
 import { loadingPayment, loadingServer } from '../../utils/LoadingTypes';
-import { setDiscordConfig } from '../../utils/slices/configSlices';
+import { setDiscordConfig } from '../slices/configSlices';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,12 +11,10 @@ function parseGuilds(guilds: Guild[]) {
   const parsedGuild: Item[] = [];
 
   guilds.forEach((guild) => {
-    parsedGuild.push({ value: guild.id, label: guild.name, selected: false });
+    parsedGuild.push({ value: guild.id, label: guild.name });
   });
 
   console.log(parsedGuild);
-
-  parsedGuild[0].selected = true;
 
   return parsedGuild;
 }
@@ -24,7 +22,7 @@ function parseGuilds(guilds: Guild[]) {
 export function useFetchGuild() {
   const [guilds, setGuilds] = useState([loadingServer]);
   const [parsedGuilds, setParsedGuilds] = useState<Item[]>([
-    { value: '0', label: 'Loading...', selected: true },
+    { value: '0', label: 'Loading...' },
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [payments, setPayments] = useState([loadingPayment]);
