@@ -1,9 +1,4 @@
-import {
-  ComboContainer,
-  IOnDropDownChange,
-  Item,
-  UserControls,
-} from '@labmaker/ui-inputs';
+import { Item } from '@labmaker/ui';
 import { Guild, PaymentDto } from '@labmaker/wrapper';
 import { RootState } from '../../store';
 import { Labmaker } from '../../utils/APIHandler';
@@ -11,8 +6,6 @@ import { loadingPayment, loadingServer } from '../../utils/LoadingTypes';
 import { setDiscordConfig } from '../../utils/slices/configSlices';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { LoadingSpinner, Selector } from '@labmaker/ui-header';
 
 function parseGuilds(guilds: Guild[]) {
   const parsedGuild: Item[] = [];

@@ -1,26 +1,14 @@
 import styled from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
-import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui-header';
+import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui';
 import { Labmaker, LabmakerSocket, InitSocket } from '../utils/APIHandler';
-import { AXIOS } from '@labmaker/wrapper';
-import { Discord } from '../Pages/Discord/discord';
 import { Home } from '../Pages/Home/Home';
 import { Logs } from '../Pages/Logs';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFetchUser } from '../utils/hooks/useFetchUser';
 import { routes } from '../utils/routes';
-import { useEffect } from 'react';
 import { GuildsMenu } from '../Pages/Discord/GuildsMenu';
-import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui';
-import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Labmaker } from '../utils/APIHandler';
-import { addConfigs, setUser } from '../utils/slices/userSlice';
-import { RootState } from '../store';
-import { Discord } from '../Pages/Discord/discord';
-import { Home } from '../Pages/Home/Home';
-import { Logs } from '../Pages/Logs';
 
 const StyledApp = styled.div`
   /* background-color: ${(p) => p.theme.base.backCol};

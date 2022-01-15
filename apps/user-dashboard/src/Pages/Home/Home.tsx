@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   ComboContainer,
+  Content,
   DropDown,
   Item,
+  Page,
   UserControls,
-} from '@labmaker/ui-inputs';
+} from '@labmaker/ui';
 import { useFetchReddit } from '../../utils/hooks/useFetchReddit';
 
 const StyledHome = styled.div`

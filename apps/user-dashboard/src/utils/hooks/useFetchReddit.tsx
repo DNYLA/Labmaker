@@ -1,19 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faSave,
-  faTrashAlt,
-  faUndo,
-} from '@fortawesome/free-solid-svg-icons';
-import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import {
-  ComboContainer,
-  DropDown,
-  IOnDropDownChange,
-  Item,
-  UserControls,
-} from '@labmaker/ui-inputs';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { redditTemplate } from '../../utils/LoadingTypes';
@@ -21,6 +5,7 @@ import { addConfigs, setConfig, setUser } from '../../utils/slices/userSlice';
 import { Labmaker, LabmakerSocket } from '../../utils/APIHandler';
 import { RedditConfigDto } from '@labmaker/wrapper';
 import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
 
 export function useFetchReddit() {
   const dispatch = useDispatch();
