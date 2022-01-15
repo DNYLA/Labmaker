@@ -12,7 +12,7 @@ import { RootState } from '../../store';
 import { Labmaker } from '../../utils/APIHandler';
 import { loadingPayment, loadingServer } from '../../utils/LoadingTypes';
 import { setDiscordConfig } from '../../utils/slices/configSlices';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { GeneralSettings } from './general-settings';
@@ -188,6 +188,31 @@ export function Discord(props: DiscordProps) {
     });
   };
 
+  const selectorContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const windowResized = () => {
+    const selectorContainerEl = selectorContainerRef.current;
+
+    if (selectorContainerEl) {
+      // If has scrollbar then unset justifyContent, so all elements can be seen properly
+      if (selectorContainerEl.scrollWidth > selectorContainerEl.clientWidth) {
+        selectorContainerEl.style.justifyContent = 'unset';
+      } else {
+        selectorContainerEl.style.justifyContent = 'center';
+      }
+    }
+  };
+
+  useEffect(() => {
+    windowResized();
+    window.addEventListener('resize', windowResized);
+
+    // Cleanup after
+    return () => {
+      window.removeEventListener('resize', windowResized);
+    };
+  }, []);
+
   return (
     <Page>
       <Content>
@@ -196,7 +221,9 @@ export function Discord(props: DiscordProps) {
           message={'Loading Discord Config'}
         />
 
-        <SelectorContainer>{GenerateGuilds()}</SelectorContainer>
+        <SelectorContainer ref={selectorContainerRef}>
+          {GenerateGuilds()}
+        </SelectorContainer>
 
         <ControlsContainer>
           <UserControls
@@ -229,8 +256,11 @@ export function Discord(props: DiscordProps) {
 
 const SelectorContainer = styled.div`
   display: flex;
+  margin-bottom: 20px;
+  overflow-x: auto;
+
+  // This is changed depending on if there is overflow on x axis above in window resize event.
   justify-content: center;
-  margin-bottom: 5px;
 
   & > * {
     margin: 0px 15px;

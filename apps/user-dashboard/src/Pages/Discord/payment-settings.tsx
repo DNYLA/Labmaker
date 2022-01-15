@@ -22,9 +22,11 @@ export function PaymentSettings({
 }: PaymentSettingsProps) {
   const renderPayments = (payments: PaymentDto[]) => {
     let delKey = -2;
+
     if (guilds.length === 0) {
       return <div></div>;
     }
+
     if (config.id === config.paymentConfigId) {
       return payments.map((payment: PaymentDto, index) => {
         if (!payment.deletedPayment) {
@@ -43,9 +45,9 @@ export function PaymentSettings({
       });
     } else {
       return (
-        <p>
-          To edit payments go to the correct server settings or change the
-          payment config to use your own payments.
+        <p style={{ textAlign: 'center' }}>
+          Currently you have no payment options. You can add your first one with
+          the button below.
         </p>
       );
     }
