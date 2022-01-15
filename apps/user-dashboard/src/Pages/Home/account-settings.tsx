@@ -1,8 +1,9 @@
-import { InputBox } from '@labmaker/ui';
+import { InfoTitle, InputBox } from '@labmaker/ui';
 import { SettingsContainer } from '../../assets/styles';
 import React from 'react';
 import { RedditConfig } from '../../utils/types';
 import { RedditConfigDto } from '@labmaker/wrapper';
+import styled from 'styled-components';
 
 interface AccountSettingsProps {
   config: RedditConfigDto;
@@ -18,14 +19,16 @@ export function AccountSettings({ config, setConfig }: AccountSettingsProps) {
 
   return (
     <SettingsContainer>
-      <h1>Account</h1>
-
+      <InfoTitle
+        title={'Account'}
+        infoMessage={
+          <span>Enter the details your script from {redditAppsURL}</span>
+        }
+        header={true}
+      />
       <InputBox
         message="Client ID"
         value={config.clientId}
-        infoMessage={
-          <span>Enter Your Client ID for your script from {redditAppsURL}</span>
-        }
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setConfig({ ...config, clientId: e.target.value })
         }
@@ -34,11 +37,6 @@ export function AccountSettings({ config, setConfig }: AccountSettingsProps) {
       <InputBox
         message="Client Secret"
         value={config.clientSecret}
-        infoMessage={
-          <span>
-            Enter Your Client Secret for your script from {redditAppsURL}
-          </span>
-        }
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setConfig({ ...config, clientSecret: e.target.value })
         }

@@ -11,3 +11,4 @@ export * from './input/input-box';
 export * from './input/switch';
 export * from './input/drop-down';
 export * from './input/utils/types';
+export * from './input/info-box';

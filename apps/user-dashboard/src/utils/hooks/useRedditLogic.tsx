@@ -11,7 +11,7 @@ import { redditTemplate } from '../LoadingTypes';
 import { parseConfigs } from '../helpers';
 import { Item } from '@labmaker/ui';
 import { toast } from 'react-toastify';
-import { deleteNode, setNode } from '../slices/userSlice';
+import { addNode, deleteNode, setNode } from '../slices/userSlice';
 
 export function useRedditLogic() {
   const [config, setConfig] = useState<RedditConfigDto>(redditTemplate);
@@ -41,7 +41,8 @@ export function useRedditLogic() {
 
     if (newConfig) {
       try {
-        createRedditConfig(config);
+        const { data: savedConfig } = await createRedditConfig(config);
+        dispatch(addNode([savedConfig]));
         return toast.success(`Created ${config.username}`);
       } catch (err) {
         return console.log(err);

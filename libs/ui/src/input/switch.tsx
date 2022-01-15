@@ -27,11 +27,7 @@ export function SwitchToggle({
 }: SwitchProps) {
   return (
     <StyledSwitch>
-      <InfoTitle
-        title={message}
-        infoMessage={infoMessage}
-        enabled={infoMessage ? true : false}
-      />
+      <InfoTitle title={message} infoMessage={infoMessage} />
       <SwitchStyle>
         <input type="checkbox" checked={toggled} onChange={onToggle} />
         <Slider rounded={square} checked={toggled} onChange={onToggle} />

@@ -1,44 +1,46 @@
 import styled from 'styled-components';
 
 interface InfoTitleProps {
-  enabled: boolean;
   title: string;
   infoMessage?: string | React.ReactNode;
+  header?: boolean;
 }
 
-export function InfoTitle({ title, enabled, infoMessage }: InfoTitleProps) {
-  if (enabled) {
+export function InfoTitle({ title, infoMessage, header }: InfoTitleProps) {
+  if (infoMessage) {
     return (
-      <InfoTitleStyle>
-        <StyledSpan>
-          {title}
-
-          <InfoSpan>?</InfoSpan>
-
-          <InfoBoxWrapper>
-            <InfoBox>{infoMessage}</InfoBox>
-          </InfoBoxWrapper>
-        </StyledSpan>
-      </InfoTitleStyle>
+      <StyledSpan>
+        <TitleStyle className={header ? 'headerTitle' : ''}>{title}</TitleStyle>
+        <InfoSpan>?</InfoSpan>
+        <InfoBoxWrapper>
+          <InfoBox>{infoMessage}</InfoBox>
+        </InfoBoxWrapper>
+      </StyledSpan>
     );
   } else {
-    return <StyledSpan>{title}</StyledSpan>;
+    return (
+      <TitleStyle className={header ? 'headerTitle' : ''}>{title}</TitleStyle>
+    );
   }
 }
 
 const StyledSpan = styled.span`
+  user-select: none;
   display: flex;
+  align-items: center;
   padding-right: 5px;
   margin-left: 2px;
   color: ${(p) => p.theme.input.text};
 `;
 
-const InfoTitleStyle = styled.div``;
+const TitleStyle = styled.span`
+  user-select: none;
+  &.headerTitle {
+    font-size: 24px;
+  }
+`;
 
 const InfoBox = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 8px;
   width: 350px;
   min-height: 50px;
   background-color: ${(p) => p.theme.input.backCol};
@@ -53,7 +55,7 @@ const InfoBoxWrapper = styled.div`
   position: absolute;
   padding-top: 25px;
   margin-left: 35px;
-
+  z-index: 1;
   visibility: hidden;
   opacity: 0;
   transition: opacity 200ms ease-in;
@@ -66,8 +68,8 @@ const InfoBoxWrapper = styled.div`
 
 const InfoSpan = styled.span`
   display: inline-block;
-  margin-left: 5px;
-  padding: 2px;
+  margin-left: 8px;
+  /* padding: 2px; */
   text-align: center;
   width: 20px;
   height: 20px;

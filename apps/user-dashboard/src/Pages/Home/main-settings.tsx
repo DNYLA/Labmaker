@@ -1,4 +1,4 @@
-import { InputBox, TagInputBox, SwitchToggle } from '@labmaker/ui';
+import { InputBox, TagInputBox, SwitchToggle, InfoTitle } from '@labmaker/ui';
 import { SettingsContainer } from '../../assets/styles';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -15,7 +15,7 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
 
   return (
     <SettingsContainer>
-      <h1>Main</h1>
+      <InfoTitle title={'Main'} header={true} />
 
       <InputBox
         message="Title"

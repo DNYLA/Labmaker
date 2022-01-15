@@ -20,11 +20,7 @@ export function InputBox({
 }: InputBoxProps) {
   return (
     <StyledInputBox>
-      <InfoTitle
-        title={message}
-        infoMessage={infoMessage}
-        enabled={infoMessage ? true : false}
-      />
+      <InfoTitle title={message} infoMessage={infoMessage} />
 
       <StyledInput value={value} onChange={(e) => onChange(e)} />
     </StyledInputBox>
