@@ -14,7 +14,7 @@ import {
 } from '../dtos/create-payment.dto';
 import { PaymentService } from '../services/payment.service';
 
-@Controller('discord/payment')
+@Controller('guilds/payment')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 

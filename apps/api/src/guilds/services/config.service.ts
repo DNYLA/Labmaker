@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateConfigDto } from '../dtos/create-guildconfig.dto';
 import { DiscordConfig, Payment } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -30,12 +30,12 @@ export class ConfigService {
     user: UserDetails
   ): Promise<DiscordConfig | LocalData> {
     //Add Authorization to see if user has access to this data. ( This can be done via fetching mutual guilds )
-    console.log(user);
     const config = await this.prismaService.discordConfig.findUnique({
       where: { id },
     });
 
-    if (!config) return this.createConfigFromId(id);
+    // if (!config) return this.createConfigFromId(id);
+    if (!config) throw new NotFoundException('Unable to find config');
     if (!payments) return config;
 
     const fetchedPayments = await this.paymentService.getPayments(id);
@@ -49,33 +49,18 @@ export class ConfigService {
     return await this.prismaService.discordConfig.findMany();
   }
 
-  /**
-   * Create a new Discord Config
-   * @param {CreateConfigDto} newConfig - CreateConfigDto
-   * @returns A DiscordConfig Object
-   */
   async createConfig(newConfig: CreateConfigDto): Promise<DiscordConfig> {
     //Not Sure Why this is here Move Over to Client Side
     newConfig.paymentConfigId = newConfig.id;
     return await this.prismaService.discordConfig.create({ data: newConfig });
   }
 
-  /**
-   * Create a new Discord configuration for a payment.
-   * @param {string} id - The id of the payment config to create.
-   * @returns The `DiscordConfig` object.
-   */
   private async createConfigFromId(id: string) {
     return await this.prismaService.discordConfig.create({
       data: { id, paymentConfigId: id },
     });
   }
 
-  /**
-   * Update the Discord configuration.
-   * @param {CreateConfigDto} updateConfigDto - CreateConfigDto
-   * @returns The updated DiscordConfig object.
-   */
   async updateConfig(updateConfigDto: CreateConfigDto): Promise<DiscordConfig> {
     return await this.prismaService.discordConfig.update({
       where: { id: updateConfigDto.id },

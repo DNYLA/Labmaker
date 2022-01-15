@@ -14,7 +14,7 @@ import { CurrentUser } from '../../utils/decorators';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { ConfigService, LocalData } from '../services/config.service';
 
-@Controller('discord/config')
+@Controller('guilds/config')
 export class ConfigController {
   constructor(private readonly configService: ConfigService) {}
 

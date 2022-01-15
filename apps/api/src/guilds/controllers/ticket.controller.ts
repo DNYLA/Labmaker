@@ -11,7 +11,7 @@ import { Ticket } from '@prisma/client';
 import { CreateTicketDto, UpdateTicketDto } from '../dtos/create-ticket.dto';
 import { TicketService } from '../services/ticket.service';
 
-@Controller('discord/ticket')
+@Controller('guilds/ticket')
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 
