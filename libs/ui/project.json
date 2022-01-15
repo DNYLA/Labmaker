@@ -1,6 +1,6 @@
 {
-  "root": "libs/ui-inputs",
-  "sourceRoot": "libs/ui-inputs/src",
+  "root": "libs/ui",
+  "sourceRoot": "libs/ui/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -8,14 +8,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/ui-inputs/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["libs/ui/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui-inputs"],
+      "outputs": ["coverage/libs/ui"],
       "options": {
-        "jestConfig": "libs/ui-inputs/jest.config.js",
+        "jestConfig": "libs/ui/jest.config.js",
         "passWithNoTests": true
       }
     }

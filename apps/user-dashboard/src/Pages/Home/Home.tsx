@@ -80,35 +80,45 @@ export function Home() {
   }
 
   return (
-    <StyledHome>
-      <ControlsContainer>
-        <DropDown items={parsedItems} onChange={onChange} />
-        <UserControls
-          onDelete={deleteNode}
-          onRefresh={refreshItem}
-          onCreate={createNode}
-          onSave={saveNode}
-        />
-      </ControlsContainer>
-      <ComboContainer>
-        <AccountSettings
-          config={selectedConfig}
-          setConfig={setSelectedConfig}
-        />
-        <MainSettings config={selectedConfig} setConfig={setSelectedConfig} />
-      </ComboContainer>
-    </StyledHome>
+    <Page>
+      <Content>
+        <ControlsContainer>
+          <DropDown items={parsedItems} onChange={onChange} />
+
+          <UserControls
+            onDelete={deleteNode}
+            onRefresh={refreshItem}
+            onCreate={createNode}
+            onSave={saveNode}
+          />
+        </ControlsContainer>
+
+        <ComboContainer>
+          <AccountSettings
+            config={selectedConfig}
+            setConfig={setSelectedConfig}
+          />
+
+          <MainSettings config={selectedConfig} setConfig={setSelectedConfig} />
+        </ComboContainer>
+      </Content>
+    </Page>
   );
 }
 
 const ControlsContainer = styled.div`
-  flex-direction: row;
-  justify-content: space-between;
   display: flex;
-  padding-top: 25px;
-`;
+  flex-flow: row;
+  justify-content: space-between;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
+  @media (max-width: 800px) {
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    & > div:not(:last-child) {
+      margin-bottom: 15px;
+    }
+  }
 `;

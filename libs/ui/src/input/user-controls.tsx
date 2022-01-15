@@ -1,4 +1,4 @@
-import { IconButton } from './utils/styles';
+import { IconButton } from '../styles';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -54,5 +54,5 @@ export function UserControls({
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-flow: row;
 `;

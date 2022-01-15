@@ -1,26 +1,22 @@
 import { RootState } from '../store';
 import { Labmaker } from '../utils/APIHandler';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogs } from '../utils/slices/logsSlice';
 import styled from 'styled-components';
-import { DropDown, Item, UserControls } from '@labmaker/ui-inputs';
-import { LogTable } from '@labmaker/ui-header';
-import { LoadingSpinner } from '@labmaker/ui-header';
+import {
+  LogTable,
+  DropDown,
+  Item,
+  LoadingSpinner,
+  Content,
+  Page,
+} from '@labmaker/ui';
 import { RedditConfigDto } from '@labmaker/wrapper';
-
-const StyledLogs = styled.div`
-  margin: 0 250px;
-  transition: all 5s ease-in-out;
-
-  table {
-    width: 100%;
-    text-align: center;
-  }
-`;
 
 function parseConfigs(configs: RedditConfigDto[]) {
   const parsedData = new Array<Item>();
+
   for (let i = 0; i < configs.length; i++) {
     const config = configs[i];
     parsedData.push({
@@ -83,16 +79,20 @@ export function Logs() {
   };
 
   return (
-    <StyledLogs>
-      <LoadingSpinner loading={isLoading} message={'Loading Logs'} />
-      <ControlsContainer>
-        <DropDown items={parsedConfigs} onChange={onChange} />
-      </ControlsContainer>
-      <SettingsContainer>
-        <h1>Logs</h1>
-        <LogTable logs={logs} title={'Logs'} />
-      </SettingsContainer>
-    </StyledLogs>
+    <Page>
+      <Content>
+        <LoadingSpinner loading={isLoading} message={'Loading Logs'} />
+
+        <ControlsContainer>
+          <DropDown items={parsedConfigs} onChange={onChange} />
+        </ControlsContainer>
+
+        <SettingsContainer>
+          <h1>Logs</h1>
+          <LogTable logs={logs} title={'Logs'} />
+        </SettingsContainer>
+      </Content>
+    </Page>
   );
 }
 
@@ -100,13 +100,11 @@ const ControlsContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   display: flex;
-  padding-top: 25px;
 `;
 
 const SettingsContainer = styled.div`
-  padding-left: 25px;
-
   h1 {
     text-align: center;
+    margin: 20px 0;
   }
 `;

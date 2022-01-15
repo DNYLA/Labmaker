@@ -20,13 +20,6 @@ export interface DropDownProps {
   onChange: IOnDropDownChange;
 }
 
-const StyledDropDown = styled.div`
-  width: 200px;
-  font-size: 18px;
-  transition: all 2s ease-in;
-  user-select: none;
-`;
-
 export function DropDown({ items, onChange }: DropDownProps) {
   const [isOpen, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -95,14 +88,15 @@ export function DropDown({ items, onChange }: DropDownProps) {
       tabIndex={0}
       onFocus={handleInputClick}
       onBlur={handleClose}
+      className={isOpen ? 'open' : ''}
     >
       <SelectedItem>
-        {/* {selected.title} */}
         <StyledInput
           value={inputValue}
           ref={inputRef}
           onChange={(e) => onKeyInput(e.target.value.toLowerCase())}
         />
+
         <FontAwesomeIcon
           pull={'right'}
           icon={isOpen ? faCaretUp : faCaretDown}
@@ -111,6 +105,7 @@ export function DropDown({ items, onChange }: DropDownProps) {
           onClick={updateOpen}
         />
       </SelectedItem>
+
       {isOpen && (
         <HiddenContainer>
           {filteredItems.map((item) => {
@@ -133,65 +128,77 @@ export function DropDown({ items, onChange }: DropDownProps) {
 }
 
 const StyledInput = styled.input`
-  text-align: center;
-  font-size: 18px;
+  padding-left: 10px;
+  padding-right: 25px;
+  color: white;
+  font-family: 'Archivo Black';
+  width: 100%;
+  height: 30px;
+  background: #1a1a1d;
+  border-radius: 5px;
+  border: 2px solid #141617;
+  font-size: 16px;
+  transition: opacity 340ms ease;
+
+  :focus {
+    opacity: 80%;
+    outline: 0;
+  }
 `;
 
 const HiddenContainer = styled.div`
   z-index: 100;
   position: absolute;
-  width: 200px;
+  width: 196px;
+  border: 2px solid transparent;
+  border-top: 0;
 `;
 
 const DropDownItem = styled.div`
-  text-align: center;
-  padding-right: 25px;
-  /* margin: 10px 0 0 0; */
-  padding: 5px;
+  padding: 10px;
   z-index: 10;
   background-color: #1a1a1d;
+  font-family: 'Roboto';
+  font-size: 16px;
+
   :hover {
     cursor: pointer;
     background-color: #141617;
   }
 `;
 
+const StyledDropDown = styled.div`
+  position: relative;
+  width: 200px;
+  font-size: 18px;
+  transition: all 200ms ease-in;
+  user-select: none;
+
+  &.open {
+    ${StyledInput} {
+      border-bottom: 0;
+      border-radius: 5px 5px 0 0;
+    }
+
+    ${HiddenContainer} {
+      border-color: #141617;
+      border-radius: 0 0 5px 5px;
+    }
+  }
+`;
+
 const SelectedItem = styled.div`
-  /* text-align: center;
-  border: 2px solid #141617;
-  border-radius: 3px;
-  background-color: #1a1a1d;
-  padding-right: 10px;
-  display: flex; */
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+
   div {
     color: pink;
   }
+
   svg {
-    /* display: flex; */
-    /* position: absolute; */
-    /* left: 50%; */
-    float: right;
-    padding-top: 0;
-    /* float: right; */
-  }
-  input {
-    padding-left: 10px;
-    color: white;
-    font-family: 'Lexend Deca';
-    width: 100%;
-    height: 30px;
-    background: #1a1a1d;
-    border-radius: 5px;
-    border: 2px solid #141617;
-    /* border-radius: 5px; */
-    transition: 340ms;
-    :focus {
-      opacity: 80%;
-      outline: 0;
-      transition: 340ms;
-    }
+    position: absolute;
+    right: 10px;
   }
 `;

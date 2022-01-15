@@ -29,9 +29,13 @@
       "path": "./../apps"
     },
     {
+      "name": "Prisma",
+      "path": "./../prisma"
+    },
+    {
       "name": "Monorepo",
       "path": "./../"
-    }
+    },
   ],
   "settings": {
     "files.exclude": {
