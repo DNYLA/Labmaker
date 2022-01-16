@@ -9,6 +9,9 @@
     "heroku-postbuild": "npx prisma generate && npx nx build api && npx nx build discord-bot && npx nx build reddit-bot"
   },
   "private": true,
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
