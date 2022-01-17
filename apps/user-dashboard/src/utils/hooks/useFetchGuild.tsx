@@ -1,10 +1,9 @@
 import { Item } from '@labmaker/ui';
 import {
-  getDiscordConfig,
+  getGuildDetails,
   GuildConfig,
   GuildConfigDto,
   PaymentDto,
-  updateDiscordConfig,
   updatePayments,
 } from '@labmaker/wrapper';
 import React, { useEffect, useState } from 'react';
@@ -31,7 +30,7 @@ export function useFetchGuild() {
     setLoading(true);
     if (!id) return;
 
-    getDiscordConfig(id)
+    getGuildDetails(id)
       .then(({ data }) => {
         dispatch(setGuild(data));
       })

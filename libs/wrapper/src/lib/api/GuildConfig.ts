@@ -1,15 +1,23 @@
-import { GuildConfig, GuildConfigDto, PaymentDto } from '@labmaker/wrapper';
+import {
+  CreateOrderDto,
+  GuildConfig,
+  GuildConfigDto,
+  PaymentDto,
+} from '../types';
 import { AXIOS } from './Axios';
 
-export const getDiscordConfigs = () => AXIOS.get<GuildConfigDto[]>(`/guilds/`);
+export const getGuildConfigs = () => AXIOS.get<GuildConfigDto[]>(`/guilds/`);
 
-export const getDiscordConfig = (id: string) =>
+export const getGuildDetails = (id: string) =>
   AXIOS.get<GuildConfig>(`/guilds/${id}?payments=true`);
 
-export const createDiscordConfig = (id: string, name: string) =>
+export const getGuildConfig = (id: string) =>
+  AXIOS.get<GuildConfigDto>(`/guilds/${id}?payments=false`);
+
+export const createGuildConfig = (id: string, name: string) =>
   AXIOS.post<GuildConfigDto>(`/guilds/${id}/${name}`);
 
-export const updateDiscordConfig = (config: GuildConfigDto) =>
+export const updateGuildConfig = (config: GuildConfigDto) =>
   AXIOS.put<GuildConfigDto>(`guilds`, config);
 
 //Payment Stuff Below
@@ -25,3 +33,12 @@ export const updatePayments = (payments: PaymentDto[]) => {
 };
 export const deletePayments = (paymentIds: number[]) =>
   AXIOS.delete(`guilds/payments`, { data: paymentIds });
+
+export const createPaypalOrder = (
+  tutorId: string,
+  channelId: string,
+  price: number
+) =>
+  AXIOS.get<CreateOrderDto>(
+    `pay/create_order/${tutorId}/${channelId}/${price}`
+  );

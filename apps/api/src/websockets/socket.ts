@@ -39,19 +39,15 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
       console.log(`Joined Room ${node.id}`);
       client.join(node.id.toString());
     });
-    // console.log(client.id);
     client.data = user;
-    // console.log('Joined Node Rooms');
   }
 
-  // afterInit(server: Server) {
   afterInit() {
     console.log('Connected');
   }
 
   //Websocket Functions Below
   notifyConfig(config: RedditConfig) {
-    console.log('Emitting Update Config');
     this.ws
       .to('bot')
       .to(config.id.toString())

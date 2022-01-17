@@ -6,7 +6,11 @@ import {
   MessageButton,
   Permissions,
 } from 'discord.js';
-import { GuildConfigDto } from '@labmaker/wrapper';
+import {
+  createPaypalOrder,
+  getGuildConfig,
+  GuildConfigDto,
+} from '@labmaker/wrapper';
 import Event from '../utils/Base/Event';
 import DiscordClient from '../utils/client';
 import Payments from '../utils/GeneratePayment';
@@ -48,7 +52,7 @@ export default class MessageEvent extends Event {
       return;
 
     const guildId = interaction.guild.id;
-    const guildConfig = await client.API.Discord.getOne(guildId);
+    const { data: guildConfig } = await getGuildConfig(guildId);
 
     switch (areaId) {
       // Normal pay commands that any one can interact with.
@@ -156,11 +160,12 @@ export default class MessageEvent extends Event {
           guildConfig.prefix.length
         );
 
-        const checkout = await client.API.Pay.createOrder(
+        const { data: checkout } = await createPaypalOrder(
           interaction.member.user.id,
           interaction.channelId,
           Number(args[0])
         );
+
         if (checkout) {
           interaction.update({
             content: `Order created! Please click the checkout button below to complete your payment of **$${Number(

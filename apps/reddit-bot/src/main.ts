@@ -1,13 +1,18 @@
 import Snoowrap from 'snoowrap';
-import { Labmaker } from './app/APIHandler';
 import * as dotenv from 'dotenv';
 import { Client } from './app/Client';
-import { APISocket, Events, RedditConfigDto } from '@labmaker/wrapper';
+import {
+  APISocket,
+  Events,
+  getRedditConfigs,
+  RedditConfigDto,
+  setBaseURL,
+} from '@labmaker/wrapper';
 dotenv.config();
 
 let configs: RedditConfigDto[] = [];
-Labmaker.setAccessToken(process.env.API_TOKEN);
-const sHandler = new APISocket(`${process.env.API_URL}/reddit`);
+setBaseURL(process.env.API_URL, process.env.API_TOKEN);
+const sHandler = new APISocket(`${process.env.API_URL}`);
 
 let clients: Client[] = [];
 
@@ -51,19 +56,25 @@ function initClient(config: RedditConfigDto) {
     maxRetryAttempts: 3,
   });
 
-  try {
-    if (client && config.subreddits.length > 0) {
-      console.log(`${config.id}: ${config.username}: Updated()`);
-      client.updateClient(snooClient, config);
-    } else if (config.subreddits.length > 0) {
-      console.log(`${config.id}: ${config.username}: Creating()`);
-      const c = new Client(snooClient, config);
-      c.createEvent();
-      clients.push(c);
-    }
-  } catch (err) {
-    console.log('Error Occured');
-  }
+  //Fetching getMe ensures that the details provided by the user are working
+  snooClient
+    .getMe()
+    .then(() => {
+      try {
+        if (client && config.subreddits.length > 0) {
+          console.log(`${config.id}: ${config.username}: Updated()`);
+          client.updateClient(snooClient, config);
+        } else if (config.subreddits.length > 0) {
+          console.log(`${config.id}: ${config.username}: Creating()`);
+          const c = new Client(snooClient, config);
+          c.createEvent();
+          clients.push(c);
+        }
+      } catch (err) {
+        console.log('Error Occured');
+      }
+    })
+    .catch(() => console.log('Client Credentials Invalid'));
 }
 
 sHandler.listen(process.env.API_TOKEN);
@@ -71,26 +82,31 @@ socketCallback();
 
 async function createClients() {
   try {
-    configs = await Labmaker.Reddit.getAll();
+    const { data: fetchedConfigs } = await getRedditConfigs();
+    configs = fetchedConfigs;
+  } catch (err) {
+    console.log(err.message);
+  }
 
-    for (const key in configs) {
-      const config = configs[key];
+  for (const key in configs) {
+    const config = configs[key];
 
-      if (config.subreddits.length > 0) {
-        //Call Init client because during the time it takes to create clients (with the 60 second wait time inbetween each client)
-        //a user may update their node on the front end which calls the WS to update a config of a cliebt
-        //Which hasnt been initialised yet.
+    if (config.subreddits.length > 0) {
+      //Call Init client because during the time it takes to create clients (with the 60 second wait time inbetween each client)
+      //a user may update their node on the front end which calls the WS to update a config of a cliebt
+      //Which hasnt been initialised yet.
+      try {
         const client = clients.find((c) => c.config.id === config.id);
         if (!client && configs.includes(config)) initClient(config);
         else {
           console.log(`${config.id}: ${config.username}: +()`);
         }
-
         await new Promise((resolve) => setTimeout(resolve, 10 * 1000));
+      } catch (err) {
+        console.log(`Unable to Create Client for ${config.username}`);
+        console.log(err);
       }
     }
-  } catch (err) {
-    console.log(err.message);
   }
 }
 

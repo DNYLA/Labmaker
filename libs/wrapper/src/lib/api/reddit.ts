@@ -1,4 +1,4 @@
-import { RedditConfigDto } from '@labmaker/wrapper';
+import { RedditConfigDto } from '../types';
 import { AXIOS } from './Axios';
 
 export const getRedditConfig = (id: number) =>

@@ -1,3 +1,4 @@
+import { getTicket, updateTicket } from '@labmaker/wrapper';
 import { Message, TextChannel } from 'discord.js';
 import Command from '../../utils/Base/Command';
 import DiscordClient from '../../utils/client';
@@ -20,7 +21,7 @@ export default class Prefix extends Command {
     const roles = message.member.roles.cache;
     if (roles.find((r) => r.id === '863817773393379358')) return;
 
-    const ticketDetails = await client.API.Ticket.getOne(guildId, ticketId);
+    const { data: ticketDetails } = await getTicket(guildId, ticketId);
 
     if (ticketDetails.submitted) return;
     if (ticketDetails.channelId != message.channel.id) return;
@@ -46,7 +47,7 @@ export default class Prefix extends Command {
     } else if (!ticketDetails.budget) {
       ticketDetails.budget = message.content;
       ticketDetails.submitted = true;
-      await client.API.Ticket.update(ticketDetails);
+      await updateTicket(ticketDetails);
       const embeds = [await Logs.GenerateEmbed(ticketDetails, message)];
 
       message.channel.send({ embeds });
@@ -65,6 +66,6 @@ export default class Prefix extends Command {
       );
     }
 
-    if (!ticketDetails.submitted) await client.API.Ticket.update(ticketDetails);
+    if (!ticketDetails.submitted) await updateTicket(ticketDetails);
   }
 }

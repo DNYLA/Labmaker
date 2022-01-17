@@ -7,6 +7,11 @@ const CONFIG: AxiosRequestConfig = { withCredentials: true };
 export const AXIOS = axios.create(CONFIG); //Axios Uses .defaults.baseURL to set/call the API this way we can change the API URL outside the library.
 let ACCESS_TOKEN = '';
 
+export const setBaseURL = (baseURL: string, accessToken?: string) => {
+  AXIOS.defaults.baseURL = baseURL;
+  if (accessToken) ACCESS_TOKEN = accessToken;
+};
+
 export const loginURL = () => `/auth/login`;
 
 export const getUser = () => AXIOS.get<UserDto>(`/user/`);
@@ -20,7 +25,6 @@ const refreshToken = () => {
 export const setToken = async () => {
   try {
     const { data: result } = await refreshToken();
-
     if (!result.ok) {
       return null;
     }
@@ -77,3 +81,4 @@ export * from './discord';
 export * from './reddit';
 export * from './logs';
 export * from './GuildConfig';
+export * from './ticket';

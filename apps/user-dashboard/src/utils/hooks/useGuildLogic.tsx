@@ -14,11 +14,11 @@ import { Item } from '@labmaker/ui';
 import { toast } from 'react-toastify';
 import { addNode, deleteNode, setNode } from '../slices/userSlice';
 import {
-  getDiscordConfig,
+  getGuildConfig,
   GuildConfig,
   GuildConfigDto,
   PaymentDto,
-  updateDiscordConfig,
+  updateGuildConfig,
   updatePayments,
 } from '@labmaker/wrapper';
 import {
@@ -37,7 +37,7 @@ export function useGuildLogic() {
   const saveData = async () => {
     if (!guildConfig) return;
     try {
-      updateDiscordConfig(guildConfig);
+      updateGuildConfig(guildConfig);
       if (payments.length === 0) return;
       await updatePayments(payments);
     } catch (err) {

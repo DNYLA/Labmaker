@@ -1,7 +1,11 @@
-import { LogDto, RedditConfigDto } from '@labmaker/wrapper';
+import {
+  createLog,
+  getSubmissionIds,
+  LogDto,
+  RedditConfigDto,
+} from '@labmaker/wrapper';
 import { SubmissionStream } from 'snoostorm';
 import Snoowrap from 'snoowrap';
-import { Labmaker } from './APIHandler';
 
 type LocalLog = {
   username: string;
@@ -115,21 +119,21 @@ export class Client {
         didPm = true;
         this.postCounter++;
       }
+
+      const log: LogDto = {
+        id: 0,
+        nodeId: config.id,
+        username: name,
+        message: config.pmBody,
+        subreddit: display_name,
+        subId: item.id,
+        pm: didPm,
+      };
+
+      createLog(log);
     } catch (err) {
       console.error(`Error Occured ${err.message}`);
     }
-
-    const log: LogDto = {
-      id: 0,
-      nodeId: config.id,
-      username: name,
-      message: config.pmBody,
-      subreddit: display_name,
-      subId: item.id,
-      pm: didPm,
-    };
-
-    Labmaker.Log.create(log);
   }
 
   public updateClient(client: Snoowrap, config: RedditConfigDto) {
@@ -139,7 +143,13 @@ export class Client {
   }
 
   async createEvent() {
-    this.submissionIds = await Labmaker.Log.getSubmissionIds(this.config.id);
+    try {
+      const { data } = await getSubmissionIds(this.config.id);
+      this.submissionIds = data;
+    } catch (err) {
+      console.log('Unable to fetch SubmissionIDs');
+    }
+
     // const fetchedLogs = await Labmaker.Log.getLogs(this.config.id);
     // this.localLogs.push(fetchedLogs);
     this.resetListener();

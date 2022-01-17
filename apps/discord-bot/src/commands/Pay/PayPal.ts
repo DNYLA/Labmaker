@@ -1,4 +1,4 @@
-import { GuildConfigDto } from '@labmaker/wrapper';
+import { getDiscordPayments, GuildConfigDto } from '@labmaker/wrapper';
 import { Message, Permissions } from 'discord.js';
 import Command from '../../utils/Base/Command';
 import DiscordClient from '../../utils/client';
@@ -33,7 +33,7 @@ export default class PayPal extends Command {
     // Check if paypal is enabled.
     // If it is not in the `Payment` table, then it will act as if it is disabled.
     // Should have type as `Unlisted` unless you want to show it in `!pay` options.
-    const payments = await client.API.Discord.getPayments(
+    const { data: payments } = await getDiscordPayments(
       guildConfig.paymentConfigId
     );
 

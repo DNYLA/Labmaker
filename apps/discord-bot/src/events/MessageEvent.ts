@@ -1,3 +1,4 @@
+import { createGuildConfig, getGuildConfig } from '@labmaker/wrapper';
 import { Message } from 'discord.js';
 import Event from '../utils/Base/Event';
 import DiscordClient from '../utils/client';
@@ -25,10 +26,10 @@ export default class MessageEvent extends Event {
 
     const guildId = message.guild.id;
 
-    let guildConfig = await client.API.Discord.getOne(guildId);
+    let { data: guildConfig } = await getGuildConfig(guildId);
 
     if (!guildConfig) {
-      guildConfig = await client.API.Discord.create(guildId);
+      guildConfig = (await createGuildConfig(guildId, message.guild.name)).data;
     }
 
     if (!guildConfig) {

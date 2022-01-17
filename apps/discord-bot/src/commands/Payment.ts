@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import { GuildConfigDto } from '@labmaker/wrapper';
+import { getDiscordPayments, GuildConfigDto } from '@labmaker/wrapper';
 import Command from '../utils/Base/Command';
 import DiscordClient from '../utils/client';
 import Payments from '../utils/GeneratePayment';
@@ -15,7 +15,7 @@ export default class Payment extends Command {
     args?: string[],
     guildConfig?: GuildConfigDto
   ) {
-    const payments = await client.API.Discord.getPayments(
+    const { data: payments } = await getDiscordPayments(
       guildConfig.paymentConfigId
     );
 

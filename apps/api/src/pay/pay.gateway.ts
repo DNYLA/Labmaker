@@ -21,6 +21,7 @@ export class PayGateway implements OnGatewayInit, OnGatewayConnection {
   async handleConnection(client: any, ...args: any[]) {
     const token = client.handshake.headers.authorization.split(' ')[1];
     const result = await this.authService.verify(token);
+    console.log(token);
     !result && client.disconnect();
   }
 

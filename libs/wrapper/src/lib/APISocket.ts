@@ -9,7 +9,7 @@ export class APISocket {
   public listen(accessToken: string) {
     this.socket = io(this.APIUrl, {
       extraHeaders: {
-        Authorization: accessToken,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
