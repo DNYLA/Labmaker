@@ -5,13 +5,14 @@ import { Log } from '.prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { WebSocketServer } from '@nestjs/websockets';
 import { Server } from 'socket.io';
+import { WebsocketGateway } from '../../websockets/socket';
 
 @Injectable()
 export class LogsService {
-  @WebSocketServer()
-  ws: Server;
-
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private wsGateway: WebsocketGateway
+  ) {}
 
   async getLogs(nodeId: number): Promise<Log[]> {
     const logs = await this.prismaService.log.findMany({
@@ -50,7 +51,7 @@ export class LogsService {
 
   async createLog(newLog: CreateLogDto): Promise<Log> {
     const log = await this.prismaService.log.create({ data: newLog });
-    this.ws.to(log.nodeId.toString()).emit('log', JSON.stringify(log)); //Dont Notify BOT since thats the application type we received the log from.
+    this.wsGateway.notifyLog(log); //Dont Notify BOT since thats the application type we received the log from.
 
     return log;
   }

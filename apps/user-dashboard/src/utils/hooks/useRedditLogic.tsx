@@ -26,7 +26,7 @@ export function useRedditLogic() {
     setParsedConfigs(parseConfigs(user.nodes));
     setConfig(user.nodes[0]); //bug: Causes first config to show on save
     setLoading(false);
-  }, [user.nodes]);
+  }, [user.nodes, config]);
 
   const handleCreate = () => {
     setConfig({ ...redditTemplate, userId: user.id });

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setUser } from '../slices/userSlice';
-import { InitSocket, Labmaker } from '../APIHandler';
+import { InitSocket } from '../APIHandler';
 // import { getUser, setToken } from '../../utils/api';
 import { getUser, setToken } from '@labmaker/wrapper';
 
@@ -24,7 +24,6 @@ export function useFetchUser() {
         return;
       }
 
-      Labmaker.setAccessToken(token);
       getUser()
         .then(({ data }) => {
           dispatch(setUser(data));

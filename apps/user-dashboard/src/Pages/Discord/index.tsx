@@ -9,7 +9,6 @@ import {
 } from '@labmaker/ui';
 import { Guild, PaymentDto } from '@labmaker/wrapper';
 import { RootState } from '../../store';
-import { Labmaker } from '../../utils/APIHandler';
 import { loadingPayment, loadingServer } from '../../utils/LoadingTypes';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

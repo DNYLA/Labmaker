@@ -1,13 +1,4 @@
-import { LabmakerAPI } from '@labmaker/wrapper';
 import { io, Socket } from 'socket.io-client';
-
-export const Labmaker = new LabmakerAPI(
-  process.env.NX_API_URL || 'http://localhost:3000',
-  {
-    debug: true,
-    logFullErr: true,
-  }
-);
 
 // export const LabmakerSocket = new APISocket(
 //   `${process.env.NX_API_URL}/reddit` || 'http://localhost:3000/reddit'

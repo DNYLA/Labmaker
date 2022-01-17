@@ -10,7 +10,7 @@ import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user/user.service';
 import { Server, Socket } from 'socket.io';
 import { TokenType } from '../utils/types';
-import { RedditConfig } from '@prisma/client';
+import { Log, RedditConfig } from '@prisma/client';
 
 @WebSocketGateway({ cors: true })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
@@ -36,7 +36,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
 
     const user = await this.userService.getUserDetails(result.id);
     user.nodes.forEach((node) => {
-      // console.log(`Joined Room ${node.id}`);
+      console.log(`Joined Room ${node.id}`);
       client.join(node.id.toString());
     });
     // console.log(client.id);
@@ -76,6 +76,10 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
 
   deleteConfig(id: string) {
     this.ws.to('bot').to(id).emit('deleteConfig', id);
+  }
+
+  notifyLog(log: Log) {
+    this.ws.to(log.nodeId.toString()).emit('newLog', JSON.stringify(log));
   }
 
   // @UseGuards(WSGuard)
