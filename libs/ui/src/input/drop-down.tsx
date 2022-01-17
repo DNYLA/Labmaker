@@ -37,15 +37,17 @@ export function DropDown({ items, value, onChange }: DropDownProps) {
     const startItem = items.find((item) => item.value === value);
     if (!startItem) return; //Throw Error Instead?
     setSelected(startItem);
-  }, [items, value]);
+    setInputValue(startItem.label);
+  }, [items]);
 
   const setItem = (id: number | string) => {
+    onChange(id);
     console.log('Running');
     const newItem = items.find((item) => item.value === id);
     if (!newItem) return;
-    onChange(id);
     inputRef.current?.blur();
     setSelected(newItem);
+    // setInputValue(newItem.label);
     setOpen(false);
   };
 

@@ -26,7 +26,7 @@ export function useRedditLogic() {
     setParsedConfigs(parseConfigs(user.nodes));
     setConfig(user.nodes[0]); //bug: Causes first config to show on save
     setLoading(false);
-  }, [user.nodes, config]);
+  }, [user.nodes]);
 
   const handleCreate = () => {
     setConfig({ ...redditTemplate, userId: user.id });
@@ -88,7 +88,7 @@ export function useRedditLogic() {
   const handleChange = (id: number | string) => {
     if (typeof id === 'string') return;
     const foundConfig = findItem(parsedConfigs, user.nodes, id);
-    if (!foundConfig) return;
+    if (!foundConfig) return console.log('Not Found');
     setConfig(foundConfig);
   };
 
