@@ -66,9 +66,11 @@ export class PayPalService {
   }
 
   /**
-   * Create a new order.
-   * @param price Price of order.
-   * @returns URL to checkout that customer should use to complete the order.
+   * Create an order in the PayPal API and return the checkout link.
+   * @param {string} tutorId - string,
+   * @param {string} channelId - string,
+   * @param {number} price - number
+   * @returns The url to the checkout page.
    */
   public async createOrder(
     tutorId: string,
@@ -160,8 +162,9 @@ export class PayPalService {
   }
 
   /**
-   * Capture order after the customer has approved it.
-   * @param orderId ID to order that we need to capture.
+   * `captureOrder` calls the `OrdersCaptureRequest` API endpoint to capture an order.
+   * @param {string} orderId - The ID of the order to capture.
+   * @returns None
    */
   private async captureOrder(orderId: string) {
     const request = new paypal.orders.OrdersCaptureRequest(orderId);
@@ -174,10 +177,15 @@ export class PayPalService {
   }
 
   /**
-   * Handle webhook events.
-   * Checks if it is valid before using.
-   * @param data Webhook data.
-   * @param headers Webhook request headers.
+   * Verify the webhook data, and if it's valid, then capture the funds.
+   * 
+   * # **Step 4:** Create a webhook for the Payee.
+   * # 
+   * # **Note:** This is the webhook that will be used to notify the Payee that the funds have been
+  captured.
+   * @param {any} data - The data object that was sent by the webhook.
+   * @param {object} headers - object
+   * @returns None
    */
   public async handleWH(data: any, headers: object) {
     // Verify WH before accepting it as valid and using data in it.

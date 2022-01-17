@@ -5,8 +5,8 @@
     "discord-bot": "apps/discord-bot",
     "reddit-bot": "apps/reddit-bot",
     "ui": "libs/ui",
-    "user-dashboard": "apps/user-dashboard",
-    "user-dashboard-e2e": "apps/user-dashboard-e2e",
+    "admin-dashboard": "apps/admin-dashboard",
+    "admin-dashboard-e2e": "apps/admin-dashboard-e2e",
     "wrapper": "libs/wrapper"
   },
   "models": {

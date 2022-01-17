@@ -11,6 +11,11 @@ export type GuildConfigDto = {
   tickets?: TicketDto[];
 };
 
+export type GuildConfig = {
+  config: GuildConfigDto;
+  payments: PaymentDto[];
+};
+
 export type PaymentDto = {
   id?: number;
   name: string;
@@ -120,7 +125,7 @@ export type APIOptions = {
 };
 
 export interface ICallback {
-  (error: Events, result?: any): void;
+  (event: Events, result?: any): void;
 }
 
 export enum Events {
@@ -131,4 +136,28 @@ export enum Events {
 export type GuildConfigPayment = {
   config: GuildConfigDto;
   payments: PaymentDto[];
+};
+
+export type AuthResult = {
+  accessToken: string;
+  ok: boolean;
+};
+
+//Discord Types
+export type PartialGuild = {
+  id: string;
+  name: string;
+  icon: string;
+  owner: boolean;
+  permissions: string;
+  features: string[];
+};
+
+export type DiscordUser = {
+  id: string;
+  username: string;
+  avatar?: string;
+  discriminator: string;
+  mfa_enabled: boolean;
+  premium_type: number;
 };

@@ -11,7 +11,7 @@ export default class PayNotifications {
     try {
       const ws = io('http://localhost:3000/payments', {
         extraHeaders: {
-          Authorization: client.API.accessToken,
+          Authorization: `Bearer ${process.env.API_TOKEN}`,
         },
       });
 

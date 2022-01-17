@@ -1,0 +1,28 @@
+{
+  "root": "apps/admin-dashboard-e2e",
+  "sourceRoot": "apps/admin-dashboard-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/admin-dashboard-e2e/cypress.json",
+        "devServerTarget": "admin-dashboard:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "admin-dashboard:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/admin-dashboard-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["admin-dashboard"]
+}

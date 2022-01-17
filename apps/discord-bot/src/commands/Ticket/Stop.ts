@@ -1,3 +1,4 @@
+import { getTicket, updateTicket } from '@labmaker/wrapper';
 import { Message } from 'discord.js';
 import Command from '../../utils/Base/Command';
 import DiscordClient from '../../utils/client';
@@ -18,10 +19,10 @@ export default class Prefix extends Command {
     if (isNaN(Number(ticketIdMsg))) return;
     const ticketId = Number(ticketIdMsg);
 
-    const ticketDetails = await client.API.Ticket.getOne(guildId, ticketId);
+    const { data: ticketDetails } = await getTicket(guildId, ticketId);
     ticketDetails.submitted = true;
 
-    await client.API.Ticket.update(ticketDetails);
+    await updateTicket(ticketDetails);
 
     message.channel.send(
       `Stopped Ticket Creation. If you would like to restart type !start`

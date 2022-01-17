@@ -11,11 +11,7 @@ export type PaymentsType = {
 export default class DiscordClient extends Client {
   private _commands = new Collection<string, Command>();
   private _events = new Collection<string, Event>();
-  private _apiHandler = new LabmakerAPI(process.env.API_URL, {
-    debug: true,
-    logFullErr: true,
-    logObject: true,
-  });
+
   // public apiHandler = new LabmakerAPI(process.env.API_URL);
   private _payments = new Array<PaymentsType>();
   private _configs = new Array<GuildConfigDto>();
@@ -31,10 +27,6 @@ export default class DiscordClient extends Client {
 
   get events(): Collection<string, Event> {
     return this._events;
-  }
-
-  get API(): LabmakerAPI {
-    return this._apiHandler;
   }
 
   get prefix(): string {

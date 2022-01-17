@@ -7,7 +7,6 @@ import React from 'react';
 export interface Item {
   value: number | string;
   label: string;
-  selected: boolean;
 }
 
 export interface IOnDropDownChange {
@@ -17,10 +16,11 @@ export interface IOnDropDownChange {
 /* eslint-disable-next-line */
 export interface DropDownProps {
   items: Item[];
+  value: string | number;
   onChange: IOnDropDownChange;
 }
 
-export function DropDown({ items, onChange }: DropDownProps) {
+export function DropDown({ items, value, onChange }: DropDownProps) {
   const [isOpen, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [filteredItems, setFilteredItems] = useState(items);
@@ -29,19 +29,25 @@ export function DropDown({ items, onChange }: DropDownProps) {
 
   useEffect(() => {
     setInputValue(selected.label);
-  }, [selected.label]);
+  }, [selected]);
 
   useEffect(() => {
-    setSelected(items[0]);
+    // console.log(items);
+    // if (!items) return setSelected({ value: 'loading', label: 'loading' });
+    const startItem = items.find((item) => item.value === value);
+    if (!startItem) return; //Throw Error Instead?
+    setSelected(startItem);
+    setInputValue(startItem.label);
   }, [items]);
 
   const setItem = (id: number | string) => {
+    onChange(id);
     console.log('Running');
     const newItem = items.find((item) => item.value === id);
     if (!newItem) return;
-    setSelected(newItem);
-    onChange(id);
     inputRef.current?.blur();
+    setSelected(newItem);
+    // setInputValue(newItem.label);
     setOpen(false);
   };
 
@@ -72,11 +78,21 @@ export function DropDown({ items, onChange }: DropDownProps) {
   };
 
   const handleInputClick = () => {
-    console.log('Opened Menu');
     setInputValue('');
     setFilteredItems(items);
     setOpen(true);
   };
+
+  // const handleCloseClick = () => {
+  //   if (isOpen) {
+  //     setInputValue(selected.label);
+  //     setOpen(false);
+  //   } else {
+  //     setInputValue('');
+  //     setOpen(true);
+  //   }
+  //   setFilteredItems(items);
+  // };
 
   const handleClose = () => {
     setInputValue(selected.label);
@@ -86,6 +102,7 @@ export function DropDown({ items, onChange }: DropDownProps) {
   return (
     <StyledDropDown
       tabIndex={0}
+      // onMouseDown={handleCloseClick} //Bug Where Clicking an item closes menu
       onFocus={handleInputClick}
       onBlur={handleClose}
       className={isOpen ? 'open' : ''}

@@ -1,3 +1,4 @@
+import { createTicket } from '@labmaker/wrapper';
 import { DMChannel, NewsChannel, TextChannel } from 'discord.js';
 import Event from '../utils/Base/Event';
 import DiscordClient from '../utils/client';
@@ -35,9 +36,11 @@ export default class MessageEvent extends Event {
         `Welcome! I'm going to need some more information before I can find you a suitable tutor. (Enter !stop at Anytime to cancel).`
       );
 
-      await client.API.Ticket.create(guildId, ticketId, channelId);
-
-      channel.send(`**Is this an exam, assignment or homework sheet?**`);
+      createTicket(guildId, ticketId, channelId)
+        .then(() =>
+          channel.send(`**Is this an exam, assignment or homework sheet?**`)
+        )
+        .catch((err) => console.log(err));
     }, 1500);
   }
 }

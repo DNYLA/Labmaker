@@ -7,7 +7,7 @@ export type LogQueryParms = {
   pmOnly: boolean;
 };
 
-@Controller('reddit/log')
+@Controller('reddit/logs')
 export class LogsController {
   constructor(private readonly logService: LogsService) {}
 
