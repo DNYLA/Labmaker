@@ -16,7 +16,7 @@
     {
       "label": "Serve Admin Dashboard",
       "type": "shell",
-      "command": "nx serve user-dashboard",
+      "command": "nx serve admin-dashboard",
       "problemMatcher": "$msCompile"
     },
     {

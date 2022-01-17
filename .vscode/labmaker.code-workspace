@@ -5,8 +5,8 @@
       "path": "./../apps/api/src"
     },
     {
-      "name": "User Dashboard",
-      "path": "./../apps/user-dashboard/src"
+      "name": "Admin Dashboard",
+      "path": "./../apps/admin-dashboard/src"
     },
     {
       "name": "Reddit Bot",
@@ -35,7 +35,7 @@
     {
       "name": "Monorepo",
       "path": "./../"
-    },
+    }
   ],
   "settings": {
     "files.exclude": {
