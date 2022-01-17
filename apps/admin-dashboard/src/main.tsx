@@ -9,7 +9,10 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { setBaseURL } from '@labmaker/wrapper';
 
-setBaseURL('http://localhost:3000'); //Not Really sure where the best place to put this is but this seems like a suitable place since
+const apiURL = process.env.NX_API_URL;
+if (!apiURL) throw Error('Invalid API URL');
+setBaseURL(apiURL); //Not Really sure where the best place to put this is but this seems like a suitable place since
+
 //it is called before anything is rendered.
 
 ReactDOM.render(
