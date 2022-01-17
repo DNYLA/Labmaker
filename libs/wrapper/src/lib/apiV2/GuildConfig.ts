@@ -19,8 +19,9 @@ export const getDiscordPayments = (id: string) =>
 export const createDiscordPayments = (payments: PaymentDto[]) =>
   AXIOS.post(`guilds/payments`, payments);
 
-export const updatePayments = (payments: PaymentDto[]) =>
-  AXIOS.put(`guilds/payments`, payments);
-
+export const updatePayments = (payments: PaymentDto[]) => {
+  console.log(payments);
+  return AXIOS.put(`guilds/payments`, { payments });
+};
 export const deletePayments = (paymentIds: number[]) =>
   AXIOS.delete(`guilds/payments`, { data: paymentIds });

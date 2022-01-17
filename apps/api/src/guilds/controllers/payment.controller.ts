@@ -14,28 +14,28 @@ import {
 } from '../dtos/create-payment.dto';
 import { PaymentService } from '../services/payment.service';
 
-@Controller('guilds')
+@Controller('guilds/payments')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
-  @Get('/:id/payments')
+  @Get('/:id')
   getPayments(@Param('id') serverId: string): Promise<Payment[]> {
     return this.paymentService.getPayments(serverId);
   }
 
-  @Post('/:id/payments')
+  @Post('')
   async createPayments(
     @Body() body: CreatePaymentDtoArray
   ): Promise<Payment[] | undefined> {
     return await this.paymentService.createPayments(body);
   }
 
-  @Put('/:id/payments')
+  @Put('')
   updatePayments(@Body() body: UpdatePaymentDtoArray): Promise<Payment[]> {
     return this.paymentService.updatPayments(body);
   }
 
-  @Delete('/:id/payments')
+  @Delete('')
   deletePayments(@Body() body: number[]): Promise<void> {
     return this.paymentService.deletePayments(body);
   }

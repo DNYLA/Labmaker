@@ -11,66 +11,41 @@ import { Guild, PaymentDto } from '@labmaker/wrapper';
 import { RootState } from '../../store';
 import { Labmaker } from '../../utils/APIHandler';
 import { loadingPayment, loadingServer } from '../../utils/LoadingTypes';
-import { setDiscordConfig } from '../../utils/slices/configSlices';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { GeneralSettings } from './general-settings';
 import { PaymentSettings } from './payment-settings';
-import { useFetchGuild } from '../../utils/hooks/useFetchGuild2';
+import { useFetchGuild } from '../../utils/hooks/useFetchGuild';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
 
 /* eslint-disable-next-line */
 export interface DiscordProps {}
 
 export function Discord(props: DiscordProps) {
-  const {
-    guildConfig,
-    setGuildConfig,
-    parsedGuilds,
-    payments,
-    setPayments,
-    createPayment,
-    saveData,
-    loading,
-  } = useFetchGuild();
-
-  const onConfigIdChanged = async (serverId: string | number) => {
-    if (typeof serverId === 'number') return; //This will never happen however typescript requires i check
-    const fetchedPayments = await Labmaker.Discord.getPayments(serverId);
-    setPayments(fetchedPayments);
-    setGuildConfig({ ...guildConfig, paymentConfigId: serverId });
-  };
+  const { guildConfig, loading } = useFetchGuild();
+  const { createPayment, saveData, parsedGuilds } = useGuildLogic();
+  const navigate = useNavigate();
+  //Parsed Guilds are currently only fetched on GuildsMenu so if the user
+  //refreshes the page when inside the DiscordPage it will error unless we redirect
+  if (parsedGuilds.length === 0) {
+    navigate('/discord');
+    return <div></div>;
+  }
 
   return (
     <Page>
       <LoadingSpinner loading={loading} message={'Loading Discord Config'} />
-      {!loading && guildConfig && (
+      {!loading && guildConfig.id !== '-1' && (
         <Content>
           <ControlsContainer>
-            <UserControls
-              // onDelete={deleteNode}
-              // onRefresh={refreshItem}
-              onCreate={createPayment}
-              onSave={saveData}
-            />
+            <UserControls onCreate={createPayment} onSave={saveData} />
           </ControlsContainer>
 
           <ComboContainer>
-            <GeneralSettings
-              config={guildConfig}
-              setConfig={setGuildConfig}
-              parsedGuilds={parsedGuilds}
-              changeEvent={onConfigIdChanged}
-            />
-
-            <PaymentSettings
-              config={guildConfig}
-              guilds={parsedGuilds}
-              payments={payments}
-              setPayments={setPayments}
-              createPayment={createPayment}
-            />
+            <GeneralSettings />
+            <PaymentSettings />
           </ComboContainer>
         </Content>
       )}

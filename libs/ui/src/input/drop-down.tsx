@@ -28,9 +28,11 @@ export function DropDown({ items, onChange }: DropDownProps) {
 
   useEffect(() => {
     setInputValue(selected.label);
-  }, [selected.label]);
+  }, [selected]);
 
   useEffect(() => {
+    // console.log(items);
+    // if (!items) return setSelected({ value: 'loading', label: 'loading' });
     setSelected(items[0]);
   }, [items]);
 

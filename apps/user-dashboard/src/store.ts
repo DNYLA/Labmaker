@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { discordConfigSlice } from './utils/slices/configSlices';
+import { guildSlice } from './utils/slices/configSlices';
 import { userSlice } from './utils/slices/userSlice';
 
 export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
-    discordConfig: discordConfigSlice.reducer,
+    guild: guildSlice.reducer,
   },
 });
 

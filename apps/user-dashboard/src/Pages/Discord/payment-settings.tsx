@@ -2,31 +2,32 @@ import { GuildConfigDto, PaymentDto } from '@labmaker/wrapper';
 import styled from 'styled-components';
 import { SettingsContainer } from '../../assets/styles';
 import { PaymentBox } from './payment';
+import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
+import { useNavigate } from 'react-router-dom';
 
 /* eslint-disable-next-line */
 export interface PaymentSettingsProps {
-  payments: any;
-  guilds: any;
-  config: GuildConfigDto;
-  setPayments: any;
-  createPayment: any;
+  // payments: any;
+  // guilds: any;
+  // config: GuildConfigDto;
+  // setPayments: any;
+  // createPayment: any;
 }
 
-export function PaymentSettings({
-  payments,
-  guilds,
-  config,
-  setPayments,
-  createPayment,
-}: PaymentSettingsProps) {
+export function PaymentSettings(props: PaymentSettingsProps) {
+  const { guildConfig, payments, setPayments, createPayment } = useGuildLogic();
+  const navigate = useNavigate();
+
   const renderPayments = (payments: PaymentDto[]) => {
     let delKey = -2;
 
-    if (guilds.length === 0) {
+    if (!guildConfig) {
       return <div></div>;
     }
-
-    if (config.id === config.paymentConfigId) {
+    console.log(
+      `Guild Config: ${guildConfig.id} || PaymentID: ${guildConfig.paymentConfigId}`
+    );
+    if (guildConfig.id === guildConfig.paymentConfigId) {
       return payments.map((payment: PaymentDto, index) => {
         if (!payment.deletedPayment) {
           return (
@@ -44,15 +45,18 @@ export function PaymentSettings({
       });
     } else {
       return (
-        <p style={{ textAlign: 'center' }}>
-          Currently you have no payment options. You can add your first one with
-          the button below.
-        </p>
+        <CenterDiv>
+          <CustomButton
+            onClick={() => navigate(`/discord/${guildConfig.paymentConfigId}`)}
+          >
+            Go to Payments Config
+          </CustomButton>
+        </CenterDiv>
       );
     }
   };
 
-  if (guilds.length === 0) {
+  if (!guildConfig) {
     return <div></div>;
   } else {
     return (
@@ -60,10 +64,11 @@ export function PaymentSettings({
         <h1>Payment</h1>
 
         {renderPayments(payments)}
-
-        <CenterDiv>
-          <CustomButton onClick={createPayment}>Add</CustomButton>
-        </CenterDiv>
+        {guildConfig.id === guildConfig.paymentConfigId && (
+          <CenterDiv>
+            <CustomButton onClick={createPayment}>Add</CustomButton>
+          </CenterDiv>
+        )}
       </SettingsContainer>
     );
   }

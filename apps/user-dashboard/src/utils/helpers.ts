@@ -1,5 +1,5 @@
 import { Item } from '@labmaker/ui';
-import { Guild, RedditConfigDto } from '@labmaker/wrapper';
+import { Guild, PartialGuild, RedditConfigDto } from '@labmaker/wrapper';
 
 export const parseConfigs = (configs: RedditConfigDto[]) => {
   const parsedConfigs = new Array<Item>();
@@ -10,11 +10,14 @@ export const parseConfigs = (configs: RedditConfigDto[]) => {
   return parsedConfigs;
 };
 
-export const parseGuilds = (guilds: Guild[]) => {
+export const parseGuilds = (guilds: PartialGuild[]) => {
   const parsedGuild = new Array<Item>();
   guilds.forEach((guild) => {
     parsedGuild.push({ value: guild.id, label: guild.name });
   });
+
+  console.log('This is the parsedGuild');
+  console.log(parsedGuild);
 
   return parsedGuild;
 };

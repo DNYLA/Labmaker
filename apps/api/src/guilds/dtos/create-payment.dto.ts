@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+  IsBoolean,
   IsNumber,
   IsOptional,
   IsString,
@@ -26,12 +27,12 @@ export class UpdatePaymentDto extends CreatePaymentDto {
   id: number;
 
   @IsOptional()
-  @IsNumber()
-  newPayment?: boolean;
+  @IsBoolean()
+  newPayment: boolean;
 
   @IsOptional()
-  @IsNumber()
-  deletedPayment?: boolean;
+  @IsBoolean()
+  deletedPayment: boolean;
 }
 
 export class CreatePaymentDtoArray {

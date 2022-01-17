@@ -42,11 +42,13 @@ export class PaymentService {
   async updatPayments(
     updatedPayments: UpdatePaymentDtoArray
   ): Promise<Payment[] | undefined> {
+    console.log(updatedPayments);
     return await this.prismaService.$transaction(
       updatedPayments.payments.map((payment) => {
         if (payment.newPayment) {
+          const { name, value, type, serverId } = payment;
           return this.prismaService.payment.create({
-            data: payment,
+            data: { name, value, type, serverId },
           });
         } else if (payment.deletedPayment) {
           return this.prismaService.payment.delete({
