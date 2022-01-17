@@ -30,7 +30,11 @@ export function GeneralSettings(props: GeneralSettingsProps) {
       <StyledSpan>Payment Config</StyledSpan>
       {guildConfig.id !== '-1' && (
         <div>
-          <DropDown items={parsedGuilds} onChange={onConfigIdChanged} />
+          <DropDown
+            items={parsedGuilds}
+            onChange={onConfigIdChanged}
+            value={guildConfig.paymentConfigId}
+          />
 
           <InputBox
             message="Bot Image URL"

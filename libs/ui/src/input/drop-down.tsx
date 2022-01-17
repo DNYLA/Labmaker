@@ -16,10 +16,11 @@ export interface IOnDropDownChange {
 /* eslint-disable-next-line */
 export interface DropDownProps {
   items: Item[];
+  value: string | number;
   onChange: IOnDropDownChange;
 }
 
-export function DropDown({ items, onChange }: DropDownProps) {
+export function DropDown({ items, value, onChange }: DropDownProps) {
   const [isOpen, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [filteredItems, setFilteredItems] = useState(items);
@@ -33,8 +34,10 @@ export function DropDown({ items, onChange }: DropDownProps) {
   useEffect(() => {
     // console.log(items);
     // if (!items) return setSelected({ value: 'loading', label: 'loading' });
-    setSelected(items[0]);
-  }, [items]);
+    const startItem = items.find((item) => item.value === value);
+    if (!startItem) return setSelected(items[0]); //Throw Error Instead?
+    setSelected(startItem);
+  });
 
   const setItem = (id: number | string) => {
     console.log('Running');

@@ -28,7 +28,11 @@ export function Home() {
       {!loading && (
         <Content>
           <ControlsContainer>
-            <DropDown items={parsedConfigs} onChange={handleChange} />
+            <DropDown
+              items={parsedConfigs}
+              onChange={handleChange}
+              value={config.id}
+            />
             <UserControls
               onDelete={handleDelete}
               onRefresh={handleRefresh}

@@ -7,17 +7,22 @@ import {
   Page,
 } from '@labmaker/ui';
 import { useFetchLogs } from '../utils/hooks/useFetchLogs';
+import { useRedditLogic } from '../utils/hooks/useRedditLogic';
 
 export function Logs() {
   const { logs, loading, parsedConfigs, handleChange } = useFetchLogs();
-
+  const { config } = useRedditLogic();
   return (
     <Page>
       <LoadingSpinner loading={loading} message={'Loading Logs'} />
       {logs && (
         <Content>
           <ControlsContainer>
-            <DropDown items={parsedConfigs} onChange={handleChange} />
+            <DropDown
+              items={parsedConfigs}
+              onChange={handleChange}
+              value={config.id}
+            />
           </ControlsContainer>
           <SettingsContainer>
             <h1>Logs</h1>
