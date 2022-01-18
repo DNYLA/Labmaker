@@ -1,12 +1,14 @@
 {
   "version": 2,
   "projects": {
+    "admin-dashboard": "apps/admin-dashboard",
+    "admin-dashboard-e2e": "apps/admin-dashboard-e2e",
     "api": "apps/api",
     "discord-bot": "apps/discord-bot",
     "reddit-bot": "apps/reddit-bot",
+    "tutor-dashboard": "apps/tutor-dashboard",
+    "tutor-dashboard-e2e": "apps/tutor-dashboard-e2e",
     "ui": "libs/ui",
-    "admin-dashboard": "apps/admin-dashboard",
-    "admin-dashboard-e2e": "apps/admin-dashboard-e2e",
     "wrapper": "libs/wrapper"
   },
   "models": {

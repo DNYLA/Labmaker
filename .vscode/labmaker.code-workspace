@@ -9,6 +9,10 @@
       "path": "./../apps/admin-dashboard/src"
     },
     {
+      "name": "Tutor Dashboard",
+      "path": "./../apps/tutor-dashboard/src"
+    },
+    {
       "name": "Reddit Bot",
       "path": "./../apps/reddit-bot/src"
     },

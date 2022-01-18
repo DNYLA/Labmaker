@@ -1,0 +1,73 @@
+{
+  "root": "apps/tutor-dashboard",
+  "sourceRoot": "apps/tutor-dashboard/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/tutor-dashboard",
+        "index": "apps/tutor-dashboard/src/index.html",
+        "baseHref": "/",
+        "main": "apps/tutor-dashboard/src/main.tsx",
+        "polyfills": "apps/tutor-dashboard/src/polyfills.ts",
+        "tsConfig": "apps/tutor-dashboard/tsconfig.app.json",
+        "assets": [
+          "apps/tutor-dashboard/src/favicon.ico",
+          "apps/tutor-dashboard/src/assets"
+        ],
+        "styles": [],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/tutor-dashboard/src/environments/environment.ts",
+              "with": "apps/tutor-dashboard/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "tutor-dashboard:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "tutor-dashboard:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/tutor-dashboard/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/tutor-dashboard"],
+      "options": {
+        "jestConfig": "apps/tutor-dashboard/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
