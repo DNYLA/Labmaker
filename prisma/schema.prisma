@@ -10,6 +10,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  TUTOR
+  ADMIN
+  BOT
+}
+
 model User {
   id            String         @id
   username      String
@@ -18,6 +25,7 @@ model User {
   accessToken   String
   refreshToken  String
   tokenVersion  Int            @default(0)
+  role          Role?          @default(USER)
   nodes         RedditConfig[]
 }
 

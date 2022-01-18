@@ -1,5 +1,4 @@
-import { User } from '@prisma/client';
-import { TokenType } from '../utils/types';
+import { Role, User } from '@prisma/client';
 
 export type UserDetails = {
   id: string;
@@ -9,14 +8,14 @@ export type UserDetails = {
   accessToken: string;
   refreshToken: string;
   tokenVersion?: number;
-  type: TokenType;
+  type: Role;
 };
 
 export type UserPayload = {
   id: string;
   username: string;
   discriminator: string;
-  type: TokenType;
+  type: Role;
 };
 
 export type Done = (err: Error, user: User) => void;

@@ -10,9 +10,14 @@ import {
 import { Request, Response } from 'express';
 import { DiscordAuthGuard } from './guards/DiscordAuth.guard';
 import { AuthService } from './auth.service';
+import { Role } from '@prisma/client';
 
+type UserTokenType = {
+  token: string;
+  role: Role;
+};
 interface IUserAuthRequest extends Request {
-  user: string;
+  user: UserTokenType;
 }
 
 @Controller('auth')
@@ -28,14 +33,21 @@ export class AuthController {
   @Get('redirect')
   @UseGuards(DiscordAuthGuard)
   redirect(@Res() res: Response, @Req() req: IUserAuthRequest) {
-    console.log(req.user);
-    res.cookie('jid', req.user, {
+    console.log(
+      `User: ${req.user} || Token: ${req.user.token} || Role: ${req.user.role}`
+    );
+    res.cookie('jid', req.user.token, {
       sameSite: 'none',
       httpOnly: true,
       secure: true,
       path: '/auth/refresh_token',
     });
-    res.redirect(process.env.FRONT_END_URL);
+    console.log(process.env.ADMIN_DASH_URL);
+
+    //This means the Admin can never access the User Dashboard unless both dashboards are hosted on the same
+    //Ip with different subdomains/ports.
+    if (req.user.role !== Role.ADMIN) res.redirect(process.env.USER_DASH_URL);
+    else res.redirect(process.env.ADMIN_DASH_URL);
   }
 
   @Get('refresh_token')

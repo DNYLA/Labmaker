@@ -1,11 +1,4 @@
-import { RedditConfig, User as PrismaUser } from '@prisma/client';
-import internal = require('stream');
-
-export enum TokenType {
-  User,
-  Bot,
-  Admin,
-}
+import { Prisma, RedditConfig, User as PrismaUser } from '@prisma/client';
 
 //Discord Types
 export type PartialGuild = {
@@ -29,3 +22,9 @@ export type DiscordUser = {
 export type User = PrismaUser & {
   nodes?: RedditConfig[];
 };
+
+// const userWithNodes = Prisma.validator<Prisma.UserArgs>()({
+//   include: { nodes: true },
+// });
+
+// export type UserWithNodes = Prisma.UserGetPayload<typeof userWithNodes>;

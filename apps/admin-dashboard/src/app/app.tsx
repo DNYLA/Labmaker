@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { LoadingSpinner, Navbar } from '@labmaker/ui';
+import { LoadingSpinner, LoginPage, Navbar } from '@labmaker/ui';
 import { LabmakerSocket, InitSocket } from '../utils/APIHandler';
 import { Home } from '../Pages/Home';
 import { Logs } from '../Pages/Logs';
@@ -10,7 +10,6 @@ import { useFetchUser } from '../utils/hooks/useFetchUser';
 import { routes } from '../utils/routes';
 import { GuildsMenu } from '../Pages/Discord/guilds-menu';
 import { Discord } from '../Pages/Discord';
-import { LoginPage } from './login';
 
 const StyledApp = styled.div`
   /* background-color: ${(p) => p.theme.base.backCol};

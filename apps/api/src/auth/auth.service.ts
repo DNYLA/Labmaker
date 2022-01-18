@@ -1,10 +1,9 @@
 import { JwtService } from '@nestjs/jwt';
 import { UserPayload, UserDetails } from './userDetails.dto';
 import { Response, Request } from 'express';
-import { User } from '.prisma/client';
+import { Role, User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { TokenType } from '../utils/types';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +30,7 @@ export class AuthService {
   }
 
   async validateUser(details: UserDetails) {
-    const userData: User = {
+    const userData = {
       id: details.id,
       username: details.username,
       discriminator: details.discriminator,
@@ -42,14 +41,12 @@ export class AuthService {
     };
 
     const user = await this.prismaService.user.upsert({
-      where: {
-        id: details.id,
-      },
+      where: { id: userData.id },
       update: userData,
       create: userData,
     });
 
-    return this.createRefreshToken(user, TokenType.User);
+    return { token: this.createRefreshToken(user, user.role), role: user.role };
   }
 
   async createBotToken() {
@@ -94,7 +91,7 @@ export class AuthService {
       data: user,
     });
 
-    res.cookie('jid', this.createRefreshToken(updatedUser, TokenType.User), {
+    res.cookie('jid', this.createRefreshToken(updatedUser, user.role), {
       sameSite: 'none',
       httpOnly: true,
       secure: true,
@@ -103,11 +100,11 @@ export class AuthService {
 
     return res.send({
       ok: true,
-      accessToken: this.createAccessToken(updatedUser, TokenType.User),
+      accessToken: this.createAccessToken(updatedUser, user.role),
     });
   }
 
-  createRefreshToken(user: User, type: TokenType) {
+  createRefreshToken(user: User, type: Role) {
     return this.jwtService.sign(
       {
         id: user.id,
@@ -118,7 +115,7 @@ export class AuthService {
     );
   }
 
-  createAccessToken(user: User, type: TokenType) {
+  createAccessToken(user: User, type: Role) {
     const payload: UserPayload = {
       id: user.id,
       username: user.username,
@@ -136,7 +133,7 @@ export class AuthService {
     return this.jwtService.sign(
       {
         id: 'BOT',
-        type: TokenType.Bot,
+        type: Role.BOT,
       },
       { secret: process.env.JWT_SECRET, expiresIn: '1y' }
     );

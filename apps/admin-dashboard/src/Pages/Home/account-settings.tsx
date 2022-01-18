@@ -1,5 +1,4 @@
-import { InfoTitle, InputBox } from '@labmaker/ui';
-import { SettingsContainer } from '../../assets/styles';
+import { InfoTitle, InputBox, SettingsContainer } from '@labmaker/ui';
 import React from 'react';
 import { RedditConfig } from '../../utils/types';
 import { RedditConfigDto } from '@labmaker/wrapper';

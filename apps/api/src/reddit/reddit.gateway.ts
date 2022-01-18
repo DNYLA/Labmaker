@@ -11,10 +11,9 @@ import {} from '@nestjs/platform-socket.io';
 import { AuthService } from '../auth/auth.service';
 import { UseGuards } from '@nestjs/common';
 import { WSGuard } from '../auth/guards/WSAuth.guard';
-import { Log, RedditConfig } from '.prisma/client';
+import { Log, RedditConfig, Role } from '@prisma/client';
 import { Server, Socket } from 'socket.io';
 import { UserService } from '../user/user.service';
-import { TokenType } from '../utils/types';
 
 @WebSocketGateway({ namespace: 'reddit' })
 export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
@@ -32,7 +31,7 @@ export class RedditGateway implements OnGatewayInit, OnGatewayConnection {
     const result = await this.authService.verify(token);
     if (!result) {
       client.disconnect();
-    } else if (result.type === TokenType.Bot) {
+    } else if (result.type === Role.BOT) {
       client.join('bot');
     } else {
       // const user = await this.userService.getUserDetails(result.id);

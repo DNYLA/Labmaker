@@ -1,10 +1,10 @@
-import { SettingsContainer } from '../../assets/styles';
 import styled from 'styled-components';
 import {
   DropDown,
   InputBox,
   IOnDropDownChange,
   Item,
+  SettingsContainer,
   SwitchToggle,
 } from '@labmaker/ui';
 import { useDispatch } from 'react-redux';

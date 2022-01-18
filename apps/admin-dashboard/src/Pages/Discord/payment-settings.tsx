@@ -1,9 +1,9 @@
 import { GuildConfigDto, PaymentDto } from '@labmaker/wrapper';
 import styled from 'styled-components';
-import { SettingsContainer } from '../../assets/styles';
 import { PaymentBox } from './payment';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
 import { useNavigate } from 'react-router-dom';
+import { SettingsContainer } from '@labmaker/ui';
 
 /* eslint-disable-next-line */
 export interface PaymentSettingsProps {

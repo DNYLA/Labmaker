@@ -1,7 +1,7 @@
 import { InfoTitle } from './info-box';
 import styled from 'styled-components';
 
-export interface IOnChange {
+export interface IOnInputBoxChange {
   (event: React.ChangeEvent<HTMLInputElement>): void;
 }
 /* eslint-disable-next-line */
@@ -9,7 +9,8 @@ export interface InputBoxProps {
   value: string | string[];
   infoMessage?: string | React.ReactNode;
   message: string;
-  onChange: IOnChange;
+  onChange: IOnInputBoxChange;
+  disabled?: boolean;
 }
 
 export function InputBox({
@@ -17,12 +18,16 @@ export function InputBox({
   infoMessage,
   value,
   onChange,
+  disabled,
 }: InputBoxProps) {
   return (
     <StyledInputBox>
       <InfoTitle title={message} infoMessage={infoMessage} />
-
-      <StyledInput value={value} onChange={(e) => onChange(e)} />
+      <StyledInput
+        value={value}
+        onChange={(e) => onChange(e)}
+        disabled={disabled}
+      />
     </StyledInputBox>
   );
 }
@@ -48,5 +53,11 @@ const StyledInput = styled.input`
     opacity: 80%;
     outline: 0;
     transition: 340ms;
+  }
+
+  :disabled {
+    color: gray;
+    user-select: none;
+    pointer-events: none;
   }
 `;

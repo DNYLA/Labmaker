@@ -99,6 +99,13 @@ export type LogDto = {
   redditConfig?: RedditConfigDto[];
 };
 
+export enum UserRole {
+  USER,
+  TUTOR,
+  ADMIN,
+  BOT,
+}
+
 export type UserDto = {
   id: string;
   username: string;
@@ -106,6 +113,7 @@ export type UserDto = {
   avatar?: string;
   nodes: RedditConfigDto[];
   editableNodes: number[];
+  role: UserRole;
 };
 
 export type Guild = {

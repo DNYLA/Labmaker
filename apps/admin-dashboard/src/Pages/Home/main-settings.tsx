@@ -1,5 +1,10 @@
-import { InputBox, TagInputBox, SwitchToggle, InfoTitle } from '@labmaker/ui';
-import { SettingsContainer } from '../../assets/styles';
+import {
+  InputBox,
+  TagInputBox,
+  SwitchToggle,
+  InfoTitle,
+  SettingsContainer,
+} from '@labmaker/ui';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { RedditConfig } from '../../utils/types';

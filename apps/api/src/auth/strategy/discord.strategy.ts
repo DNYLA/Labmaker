@@ -2,8 +2,8 @@ import { Profile, Strategy } from 'passport-discord';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../auth.service';
-import { TokenType } from '../../utils/types';
 import { UserDetails } from '../../auth/userDetails.dto';
+import { Role } from '@prisma/client';
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {
@@ -17,7 +17,6 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
 
   async validate(accessToken: string, refreshToken: string, profile: Profile) {
     const { username, discriminator, id: discordId, avatar } = profile;
-    const userType = TokenType.User;
     const details: UserDetails = {
       id: discordId,
       username,
@@ -25,10 +24,9 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
       avatar,
       accessToken,
       refreshToken,
-      type: userType,
+      type: Role.USER,
     };
 
-    const jwtToken = await this.authService.validateUser(details);
-    return jwtToken;
+    return await this.authService.validateUser(details);
   }
 }

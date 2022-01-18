@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { TokenType } from '../../utils/types';
 import { UserDetails, UserPayload } from '../../auth/userDetails.dto';
 import { PrismaService } from '../../prisma/prisma.service';
+import { Role } from '@prisma/client';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly prismaService: PrismaService) {
@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: UserPayload) {
-    if (payload.type === TokenType.Bot) return payload; //Bots dont have accounts in DB
+    if (payload.type === Role.BOT) return payload; //Bots dont have accounts in DB
 
     const user = await this.prismaService.user.findUnique({
       where: { id: payload.id },
@@ -41,7 +41,7 @@ export class JwtBotStrategy extends PassportStrategy(Strategy, 'jwtbot') {
   }
 
   async validate(payload: UserDetails) {
-    if (payload.type !== TokenType.Bot)
+    if (payload.type !== Role.BOT)
       throw new UnauthorizedException(
         `You aren't authorized to access this data`
       );

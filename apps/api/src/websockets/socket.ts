@@ -9,8 +9,7 @@ import {} from '@nestjs/platform-socket.io';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user/user.service';
 import { Server, Socket } from 'socket.io';
-import { TokenType } from '../utils/types';
-import { Log, RedditConfig } from '@prisma/client';
+import { Log, RedditConfig, Role } from '@prisma/client';
 
 @WebSocketGateway({ cors: true })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
@@ -30,7 +29,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
     if (!result) {
       console.log('Disconnected');
       return client.disconnect();
-    } else if (result.type === TokenType.Bot) {
+    } else if (result.type === Role.BOT) {
       return client.join('bot');
     }
 
