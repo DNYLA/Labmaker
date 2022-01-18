@@ -63,7 +63,8 @@ export function PaymentSettings(props: PaymentSettingsProps) {
       <SettingsContainer>
         <h1>Payment</h1>
 
-        {renderPayments(payments)}
+        <PaymentsContainer>{renderPayments(payments)}</PaymentsContainer>
+
         {guildConfig.id === guildConfig.paymentConfigId && (
           <CenterDiv>
             <CustomButton onClick={createPayment}>Add</CustomButton>
@@ -81,6 +82,38 @@ const CenterDiv = styled.div`
 
   button {
     margin-right: 25px;
+  }
+`;
+
+const PaymentsContainer = styled.div`
+  max-height: 50vh;
+  overflow-y: auto;
+  padding-right: 20px;
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+    margin-left: 50px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 50px;
+    background: ${(p) => p.theme.input.backCol};
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: ${(p) => p.theme.input.activeCol};
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #eee;
+  }
+
+  @media (max-width: 800px) {
+    max-height: unset;
   }
 `;
 
