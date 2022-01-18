@@ -1,13 +1,13 @@
-import { DarkTheme, TestTheme } from './assets/Themes';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import './index.css';
+import './index.css'; //Move Into styled Components?
 import App from './app/app';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { setBaseURL } from '@labmaker/wrapper';
+import { DarkTheme } from '@labmaker/ui';
 
 const apiURL = process.env.NX_API_URL;
 if (!apiURL) throw Error('Invalid API URL');

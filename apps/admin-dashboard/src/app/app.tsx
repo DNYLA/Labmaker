@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui';
+import { LoadingSpinner, Navbar } from '@labmaker/ui';
 import { LabmakerSocket, InitSocket } from '../utils/APIHandler';
 import { Home } from '../Pages/Home';
 import { Logs } from '../Pages/Logs';
@@ -49,7 +49,7 @@ export function App() {
 
       {user && !error && (
         <>
-          <Nav
+          <Navbar
             title={'LABMAKER'}
             items={routes}
             avatarUrl={
