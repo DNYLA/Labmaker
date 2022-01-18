@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { LoadingSpinner, Navbar as Nav } from '@labmaker/ui';
 import { LabmakerSocket, InitSocket } from '../utils/APIHandler';
 import { Home } from '../Pages/Home';
@@ -10,7 +10,7 @@ import { useFetchUser } from '../utils/hooks/useFetchUser';
 import { routes } from '../utils/routes';
 import { GuildsMenu } from '../Pages/Discord/guilds-menu';
 import { Discord } from '../Pages/Discord';
-import { loginURL } from '@labmaker/wrapper';
+import { LoginPage } from './login';
 
 const StyledApp = styled.div`
   /* background-color: ${(p) => p.theme.base.backCol};
@@ -19,9 +19,9 @@ const StyledApp = styled.div`
 
 export function App() {
   const { user, error, loading } = useFetchUser();
-
   if (error) {
-    window.location.href = loginURL();
+    // window.location.href = loginURL();
+    // navigate('/login');
   }
 
   //Usually Spinner is included under StyledApp however dont want to show navigation until logged in.
@@ -34,20 +34,21 @@ export function App() {
 
   return (
     <StyledApp>
+      <ToastContainer
+        theme="dark"
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       {user && !error && (
         <>
-          <ToastContainer
-            theme="dark"
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
           <Nav
             title={'LABMAKER'}
             items={routes}
@@ -64,6 +65,11 @@ export function App() {
             <Route path="/logs" element={<Logs />} />
           </Routes>
         </>
+      )}
+      {error && (
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+        </Routes>
       )}
     </StyledApp>
   );

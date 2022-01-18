@@ -12,7 +12,7 @@ export const setBaseURL = (baseURL: string, accessToken?: string) => {
   if (accessToken) ACCESS_TOKEN = accessToken;
 };
 
-export const loginURL = () => `/auth/login`;
+export const loginURL = () => `${AXIOS.defaults.baseURL}/auth/login`;
 
 export const getUser = () => AXIOS.get<UserDto>(`/user/`);
 

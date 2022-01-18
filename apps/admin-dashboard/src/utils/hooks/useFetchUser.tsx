@@ -19,8 +19,9 @@ export function useFetchUser() {
     setLoading(true);
     setToken().then((token) => {
       if (!token) {
-        setError(true);
         setLoading(false);
+        setError(true);
+        console.log('no token');
         return;
       }
 
