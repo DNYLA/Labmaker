@@ -14,11 +14,15 @@ export class LogsService {
     private wsGateway: WebsocketGateway
   ) {}
 
-  async getLogs(nodeId: number): Promise<Log[]> {
+  async getLogs(nodeId: number, didPm: boolean): Promise<Log[]> {
+    let filter;
+    if (didPm) filter = { nodeId, pm: didPm };
+    else filter = { nodeId };
+
     const logs = await this.prismaService.log.findMany({
       take: 250,
       orderBy: { id: 'desc' },
-      where: { nodeId },
+      where: filter,
     });
 
     return logs;
@@ -39,7 +43,7 @@ export class LogsService {
   }
 
   async getSubmissionIds(nodeId: number): Promise<string[]> {
-    const logs = await this.getLogs(nodeId);
+    const logs = await this.getLogs(nodeId, false);
     const submissionIds = [];
 
     logs.forEach((log) => {
@@ -51,7 +55,7 @@ export class LogsService {
 
   async createLog(newLog: CreateLogDto): Promise<Log> {
     const log = await this.prismaService.log.create({ data: newLog });
-    this.wsGateway.notifyLog(log); //Dont Notify BOT since thats the application type we received the log from.
+    if (newLog.pm) this.wsGateway.notifyLog(log); //Dont Notify BOT since thats the application type we received the log from.
 
     return log;
   }

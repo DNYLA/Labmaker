@@ -64,7 +64,6 @@ export class Client {
       config.forbiddenWords.map((word, i) => {
         if (item.title.toLowerCase().includes(word.toLowerCase())) {
           valid = false;
-          console.log(`${i} : ${word}`);
         } else if (item.selftext.toLowerCase().includes(word.toLowerCase())) {
           valid = false;
         }
@@ -78,7 +77,9 @@ export class Client {
           const minuteDiff = msDifference / (1000 * 60);
           if (minuteDiff < 60) {
             //Dont RePM within 60Mins
-            console.log(`Dont RePM : ${item.id}`);
+            console.log(
+              `${item.author.name} : ${item.subreddit.name} : DontRePM() ${item.id}`
+            );
             valid = false;
           }
         }

@@ -15,7 +15,7 @@ export function useFetchLogs() {
 
   const fetchLogs = useCallback((id: number) => {
     setLoading(true);
-    getLogs(id)
+    getLogs(id, true)
       .then(({ data }) => {
         setLogs(data);
       })

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { Log } from '@prisma/client';
 import { CreateLogDto } from '../dtos/create-log.dto';
 import { LogsService } from '../services/logs.service';
@@ -12,8 +12,11 @@ export class LogsController {
   constructor(private readonly logService: LogsService) {}
 
   @Get('/:id')
-  getLog(@Param('id') nodeId: number): Promise<Log[]> {
-    return this.logService.getLogs(nodeId);
+  getLog(
+    @Param('id') nodeId: number,
+    @Query('pm') didPm: boolean
+  ): Promise<Log[]> {
+    return this.logService.getLogs(nodeId, didPm);
   }
 
   //Test & Finish Later
