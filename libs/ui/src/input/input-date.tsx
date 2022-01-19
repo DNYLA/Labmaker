@@ -1,29 +1,29 @@
 import styled from 'styled-components';
 import { InfoTitle } from './info-box';
 
-export interface IOnDateTimeChange {
+export interface IOnDateChange {
   (event: React.ChangeEvent<HTMLInputElement>): void;
 }
 
-export interface DateTimeProps {
+export interface DateProps {
   message?: string;
-  onChange: IOnDateTimeChange;
+  onChange: IOnDateChange;
 }
 
-export function DateTime({ message, onChange }: DateTimeProps) {
+export function InputDate({ message, onChange }: DateProps) {
   return (
-    <StyledDateTimeContainer>
+    <StyledDateContainer>
       {message ? <InfoTitle title={message} /> : null}
-      <StyledDateTime type="date" onChange={onChange} />
-    </StyledDateTimeContainer>
+      <StyledDate type="date" onChange={onChange} />
+    </StyledDateContainer>
   );
 }
 
-const StyledDateTimeContainer = styled.div`
+const StyledDateContainer = styled.div`
   width: 100%;
 `;
 
-const StyledDateTime = styled.input`
+const StyledDate = styled.input`
   padding: 0 10px;
   margin-top: 5px;
   width: 100%;

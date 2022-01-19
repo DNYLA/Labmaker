@@ -8,7 +8,7 @@ import {
   Page,
   SettingsContainer,
   TextArea,
-  DateTime,
+  InputDate,
 } from '@labmaker/ui';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -19,6 +19,7 @@ export interface IndexProps {}
 export function CreateTicket(props: IndexProps) {
   const [textAreaInput, setTextAreaInput] = useState('Enter Additional Info');
   const [rangeVal, setRangeVal] = useState(10);
+  const [dueDate, setDueDate] = useState(Date.now());
 
   const subjectItems: Item[] = [
     { value: 'maths', label: 'Maths' },
@@ -114,7 +115,10 @@ export function CreateTicket(props: IndexProps) {
             textLimit={300}
           />
 
-          <DateTime message="Due Date" onChange={(e) => console.log(e)} />
+          <InputDate
+            message="Due Date"
+            onChange={(e) => setDueDate(e.target.valueAsNumber)}
+          />
         </SettingsContainer>
       </Content>
     </Page>
