@@ -8,6 +8,7 @@ import {
   Page,
   SettingsContainer,
   TextArea,
+  DateTime,
 } from '@labmaker/ui';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -47,6 +48,7 @@ export function CreateTicket(props: IndexProps) {
       <Content>
         <SettingsContainer>
           <InfoTitle title={'Create Ticket Form'} header={true} center={true} />
+
           <DropDownContainer>
             <div>
               <StyledSpan>Type</StyledSpan>
@@ -56,6 +58,7 @@ export function CreateTicket(props: IndexProps) {
                 onChange={(e) => console.log(e)}
               />
             </div>
+
             <div>
               <StyledSpan>Subject</StyledSpan>
               <DropDown
@@ -64,6 +67,7 @@ export function CreateTicket(props: IndexProps) {
                 onChange={(e) => console.log(e)}
               />
             </div>
+
             <div>
               <StyledSpan>Education</StyledSpan>
               <DropDown
@@ -73,6 +77,7 @@ export function CreateTicket(props: IndexProps) {
               />
             </div>
           </DropDownContainer>
+
           <InputBox
             message="Username"
             value={'Lamer#001'}
@@ -88,6 +93,7 @@ export function CreateTicket(props: IndexProps) {
             value={''}
             onChange={(e) => console.log(e)}
           />
+
           <InputRange
             value={rangeVal}
             min={50}
@@ -100,17 +106,15 @@ export function CreateTicket(props: IndexProps) {
               'You and the tutor will still need to negotiate! If your budget is not within the range add your budget to the Additional Notes.'
             }
           />
+
           <TextArea
             message="Additional Notes"
             value={textAreaInput}
             onChange={(e) => setTextAreaInput(e.target.value)}
             textLimit={300}
           />
-          <InputBox
-            message="Date"
-            value={'Convert Into Date Time Picker'}
-            onChange={(e) => console.log(e)}
-          />
+
+          <DateTime message="Due Date" />
         </SettingsContainer>
       </Content>
     </Page>
