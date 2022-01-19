@@ -5,6 +5,7 @@ import {
   Post,
   Req,
   Res,
+  SetMetadata,
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
@@ -26,23 +27,28 @@ export class AuthController {
   private logger = new Logger(AuthController.name);
   @Get('login')
   @UseGuards(DiscordAuthGuard)
-  login() {
+  login(@Req() req: Request) {
+    console.log(req.header('Origin'));
+    console.log(req.header('Host'));
     this.logger.log('Attempting to Login User'); //EsLint requires functions to not be empty even though we dont need anything in here.
   }
 
   @Get('redirect')
   @UseGuards(DiscordAuthGuard)
   redirect(@Res() res: Response, @Req() req: IUserAuthRequest) {
-    console.log(
-      `User: ${req.user} || Token: ${req.user.token} || Role: ${req.user.role}`
-    );
+    // console.log(
+    //   `User: ${req.user} || Token: ${req.user.token} || Role: ${req.user.role}`
+    // );
+    console.log(req.headers);
+    console.log(req.header('Host'));
+
     res.cookie('jid', req.user.token, {
       sameSite: 'none',
       httpOnly: true,
       secure: true,
       path: '/auth/refresh_token',
     });
-    console.log(process.env.ADMIN_DASH_URL);
+    // console.log(process.env.ADMIN_DASH_URL);
 
     //This means the Admin can never access the User Dashboard unless both dashboards are hosted on the same
     //Ip with different subdomains/ports.

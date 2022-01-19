@@ -4,13 +4,22 @@ interface InfoTitleProps {
   title: string;
   infoMessage?: string | React.ReactNode;
   header?: boolean;
+  center?: boolean;
 }
 
-export function InfoTitle({ title, infoMessage, header }: InfoTitleProps) {
+export function InfoTitle({
+  title,
+  infoMessage,
+  header,
+  center,
+}: InfoTitleProps) {
+  const headerClass = header ? 'headerTitle' : '';
+  const centerClass = center ? 'centerTitle' : '';
+
   if (infoMessage) {
     return (
-      <StyledSpan>
-        <TitleStyle className={header ? 'headerTitle' : ''}>{title}</TitleStyle>
+      <StyledSpan className={centerClass}>
+        <TitleStyle className={headerClass}>{title}</TitleStyle>
         <InfoSpan>?</InfoSpan>
         <InfoBoxWrapper>
           <InfoBox>{infoMessage}</InfoBox>
@@ -19,7 +28,9 @@ export function InfoTitle({ title, infoMessage, header }: InfoTitleProps) {
     );
   } else {
     return (
-      <TitleStyle className={header ? 'headerTitle' : ''}>{title}</TitleStyle>
+      <StyledSpan className={`${headerClass} ${centerClass}`}>
+        {title}
+      </StyledSpan>
     );
   }
 }
@@ -31,13 +42,19 @@ const StyledSpan = styled.span`
   padding-right: 5px;
   margin-left: 2px;
   color: ${(p) => p.theme.input.text};
+
+  &.centerTitle {
+    justify-content: center;
+    align-items: center;
+  }
+
+  &.headerTitle {
+    font-size: 24px;
+  }
 `;
 
 const TitleStyle = styled.span`
   user-select: none;
-  &.headerTitle {
-    font-size: 24px;
-  }
 `;
 
 const InfoBox = styled.div`

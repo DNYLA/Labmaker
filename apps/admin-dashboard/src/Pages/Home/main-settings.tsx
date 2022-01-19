@@ -17,7 +17,6 @@ export interface MainSettingsProps {
 
 export function MainSettings({ config, setConfig }: MainSettingsProps) {
   const [isLogging, setIsLogging] = useState(true);
-
   return (
     <SettingsContainer>
       <InfoTitle title={'Main'} header={true} />

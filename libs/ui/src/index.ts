@@ -13,6 +13,7 @@ export * from './input/drop-down';
 export * from './input/utils/types';
 export * from './input/info-box';
 export * from './input/text-area';
+export * from './input/input-range';
 
 export * from './themes';
 export * from './login';

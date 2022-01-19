@@ -1,8 +1,7 @@
 import { InfoTitle } from './info-box';
 import styled from 'styled-components';
-import { useState } from 'react';
 
-export interface IOnDateTimeChange {
+export interface IOnInputRangeChange {
   (event: React.ChangeEvent<HTMLInputElement>): void;
 }
 /* eslint-disable-next-line */
@@ -10,7 +9,12 @@ export interface InputRangeProps {
   value: number;
   infoMessage?: string | React.ReactNode;
   message: string;
-  onChange: IOnDateTimeChange;
+  min: number;
+  max: number;
+  onChange: IOnInputRangeChange;
+  disabled?: boolean;
+  prefix?: string;
+  step: number;
 }
 
 export function InputRange({
@@ -18,16 +22,29 @@ export function InputRange({
   infoMessage,
   value,
   onChange,
+  disabled,
+  min,
+  max,
+  prefix,
+  step,
 }: InputRangeProps) {
   return (
     <>
       <InfoTitle title={message} infoMessage={infoMessage} />
       <StyledInputBox>
         <StyledInputRange
-          type="datetime-local"
+          type="range"
+          min={min}
+          max={max}
+          step={step}
           value={value}
           onChange={(e) => onChange(e)}
+          disabled={disabled}
         />
+        <h1>
+          {prefix}
+          {value}
+        </h1>
       </StyledInputBox>
     </>
   );

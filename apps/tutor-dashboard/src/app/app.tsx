@@ -43,10 +43,9 @@ export function App() {
             title={'LABMAKER'}
             items={routes}
             avatarUrl={
-              'https://i.imgur.com/yrZKnwI.png'
-              // user.avatar
-              //   ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`
-              //   : 'https://i.imgur.com/yrZKnwI.png'
+              user.avatar
+                ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`
+                : 'https://i.imgur.com/yrZKnwI.png'
             }
           />
           <Routes>

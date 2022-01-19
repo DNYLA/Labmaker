@@ -3,17 +3,21 @@ import {
   DropDown,
   InfoTitle,
   InputBox,
+  InputRange,
   Item,
   Page,
   SettingsContainer,
   TextArea,
 } from '@labmaker/ui';
+import { useState } from 'react';
 import styled from 'styled-components';
-
 /* eslint-disable-next-line */
 export interface IndexProps {}
 
 export function CreateTicket(props: IndexProps) {
+  const [textAreaInput, setTextAreaInput] = useState('Enter Additional Info');
+  const [rangeVal, setRangeVal] = useState(10);
+
   const subjectItems: Item[] = [
     { value: 'maths', label: 'Maths' },
     { value: 'compSci', label: 'Computer Science' },
@@ -41,7 +45,7 @@ export function CreateTicket(props: IndexProps) {
     <Page>
       <Content>
         <SettingsContainer>
-          <InfoTitle title={'Create Ticket Form'} header={true} />
+          <InfoTitle title={'Create Ticket Form'} header={true} center={true} />
           <DropDownContainer>
             <div>
               <StyledSpan>Type</StyledSpan>
@@ -83,11 +87,23 @@ export function CreateTicket(props: IndexProps) {
             value={''}
             onChange={(e) => console.log(e)}
           />
-
+          <InputRange
+            value={rangeVal}
+            min={30}
+            max={500}
+            step={10}
+            message={'Budget'}
+            prefix={'$'}
+            onChange={(e) => setRangeVal(Number(e.target.value))}
+            infoMessage={
+              'You and the tutor will still need to negotiate! If your budget is not within the range add your budget to the Additional Notes.'
+            }
+          />
           <TextArea
             message="Additional Notes"
-            value={''}
-            onChange={(e) => console.log(e)}
+            value={textAreaInput}
+            onChange={(e) => setTextAreaInput(e.target.value)}
+            textLimit={300}
           />
           <InputBox
             message="Date"
