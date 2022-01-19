@@ -20,6 +20,12 @@
       "problemMatcher": "$msCompile"
     },
     {
+      "label": "Serve Tutor Dashboard",
+      "type": "shell",
+      "command": "nx serve tutor-dashboard",
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "Open Prisma Studio",
       "type": "shell",
       "command": "prisma studio --schema=./../../prisma/schema.prisma",
