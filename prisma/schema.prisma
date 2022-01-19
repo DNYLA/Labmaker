@@ -27,8 +27,6 @@ model User {
   tokenVersion  Int            @default(0)
   role          Role?          @default(USER)
   nodes         RedditConfig[]
-  Ticket        Ticket[]       @relation("student")
-  TutorTickets  Ticket[]       @relation("tutor")
 
 }
 
@@ -109,8 +107,8 @@ model Ticket {
   transactions  Order[]
   creatorId     String
   tutorId       String?
-  student       User          @relation("student", fields: [creatorId], references: [id])
-  tutor         User?         @relation("tutor", fields: [tutorId], references: [id])
+  // student       User          @relation("student", fields: [creatorId], references: [id])
+  // tutor         User?         @relation("tutor", fields: [tutorId], references: [id])
 }
 
 model Log {
