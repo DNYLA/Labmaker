@@ -114,7 +114,7 @@ export function CreateTicket(props: IndexProps) {
             textLimit={300}
           />
 
-          <DateTime message="Due Date" />
+          <DateTime message="Due Date" onChange={(e) => console.log(e)} />
         </SettingsContainer>
       </Content>
     </Page>

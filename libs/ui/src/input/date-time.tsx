@@ -1,15 +1,20 @@
 import styled from 'styled-components';
 import { InfoTitle } from './info-box';
 
-export interface DateTimeProps {
-  message?: string;
+export interface IOnDateTimeChange {
+  (event: React.ChangeEvent<HTMLInputElement>): void;
 }
 
-export function DateTime({ message }: DateTimeProps) {
+export interface DateTimeProps {
+  message?: string;
+  onChange: IOnDateTimeChange;
+}
+
+export function DateTime({ message, onChange }: DateTimeProps) {
   return (
     <StyledDateTimeContainer>
       {message ? <InfoTitle title={message} /> : null}
-      <StyledDateTime type="date" />
+      <StyledDateTime type="date" onChange={onChange} />
     </StyledDateTimeContainer>
   );
 }
