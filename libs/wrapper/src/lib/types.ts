@@ -54,6 +54,17 @@ export type CreateOrderBreakdownAmountDto = {
   currencyCode: string;
 };
 
+export type CreateTicket = {
+  userId: string;
+  serverId: string;
+  type: string;
+  subject: string;
+  education: string;
+  budget: number;
+  additionalInfo: string;
+  date?: Date;
+};
+
 export type TicketDto = {
   id: number;
   ticketId: number;

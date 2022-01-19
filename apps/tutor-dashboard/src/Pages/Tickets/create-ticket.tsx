@@ -89,7 +89,7 @@ export function CreateTicket(props: IndexProps) {
           />
           <InputRange
             value={rangeVal}
-            min={30}
+            min={50}
             max={500}
             step={10}
             message={'Budget'}

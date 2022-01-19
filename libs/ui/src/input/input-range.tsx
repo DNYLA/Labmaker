@@ -41,10 +41,10 @@ export function InputRange({
           onChange={(e) => onChange(e)}
           disabled={disabled}
         />
-        <h1>
+        <h2>
           {prefix}
           {value}
-        </h1>
+        </h2>
       </StyledInputBox>
     </>
   );
@@ -88,11 +88,12 @@ const StyledInputRange = styled.input`
   display: block;
   appearance: none;
   /* max-width: 700px; */
+  /* width: 820px; */
   width: 100%;
   margin: 0;
   height: ${height};
   background: #202225;
-
+  border-radius: 15px;
   cursor: pointer;
 
   &:focus {
