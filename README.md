@@ -8,7 +8,7 @@ The ultimate way to engage and interact with your community on a range of platfo
   <p>Brings everything together and allows communication between each app.</p>
 - <a href="apps/admin-dashboard">**Admin Dashboard**</a>
   <p>Simplistic, yet powerful way of monitoring and controling the behaviour of all the apps.</p>
-- <a href="apps/tutor-dashboard">**User Dashboard (WIP)**</a>
+- <a href="apps/user-dashboard">**User Dashboard (WIP)**</a>
   <p>Allows members of your commmunity (Students & Tutors) to view, interact and create tasks.</p>
 - <a href="apps/discord-bot">**Discord Bot**</a>
   <p>Simplifies the process of talking to and helping out students.</p>
