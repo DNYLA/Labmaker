@@ -9,6 +9,7 @@ import {
   SettingsContainer,
   TextArea,
   InputDate,
+  InputTime,
 } from '@labmaker/ui';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -50,7 +51,7 @@ export function CreateTicket(props: IndexProps) {
         <SettingsContainer>
           <InfoTitle title={'Create Ticket Form'} header={true} center={true} />
 
-          <DropDownContainer>
+          <FormRow>
             <div>
               <StyledSpan>Type</StyledSpan>
               <DropDown
@@ -77,7 +78,7 @@ export function CreateTicket(props: IndexProps) {
                 onChange={(e) => console.log(e)}
               />
             </div>
-          </DropDownContainer>
+          </FormRow>
 
           <InputBox
             message="Username"
@@ -115,10 +116,14 @@ export function CreateTicket(props: IndexProps) {
             textLimit={300}
           />
 
-          <InputDate
-            message="Due Date"
-            onChange={(e) => setDueDate(e.target.valueAsNumber)}
-          />
+          <FormRow>
+            <InputDate
+              message="Due Date"
+              onChange={(e) => setDueDate(e.target.valueAsNumber)}
+            />
+
+            <InputTime message="Due Time" onChange={(e) => console.log(e)} />
+          </FormRow>
         </SettingsContainer>
       </Content>
     </Page>
@@ -134,13 +139,12 @@ const StyledSpan = styled.span`
   margin-bottom: 15px;
 `;
 
-const DropDownContainer = styled.div`
+const FormRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* div {
-    margin-right: 10px;
-  } */
-  /* justify-content: center; */
-  margin: 0px 50px 10px 50px;
+
+  & > *:not(:last-child) {
+    margin-right: 15px;
+  }
 `;
