@@ -61,7 +61,6 @@ export function InputTime({ message, onChange }: TimeProps) {
       time.setMinutes(Number(e));
     }
 
-    console.log('AM or PM:', amorpm);
     if (amorpm.toLowerCase() === 'pm') {
       time.setHours(time.getHours() + 12);
     }

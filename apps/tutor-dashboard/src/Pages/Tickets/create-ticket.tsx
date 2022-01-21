@@ -20,7 +20,7 @@ export interface IndexProps {}
 export function CreateTicket(props: IndexProps) {
   const [textAreaInput, setTextAreaInput] = useState('Enter Additional Info');
   const [rangeVal, setRangeVal] = useState(10);
-  const [dueDate, setDueDate] = useState(Date.now());
+  const [dueDate, setDueDate] = useState<Date>(new Date(0, 0, 0, 0, 0, 0));
 
   const subjectItems: Item[] = [
     { value: 'maths', label: 'Maths' },
@@ -119,12 +119,33 @@ export function CreateTicket(props: IndexProps) {
           <FormRow>
             <InputDate
               message="Due Date"
-              onChange={(e) => setDueDate(e.target.valueAsNumber)}
+              onChange={(e) => {
+                const d = e.target.valueAsDate;
+
+                if (d) {
+                  dueDate.setMonth(d.getMonth());
+                  dueDate.setDate(d.getDate());
+                  dueDate.setFullYear(d.getFullYear());
+                  setDueDate(dueDate);
+                }
+
+                console.log(dueDate);
+              }}
             />
 
             <InputTime
               message="Due Time"
-              onChange={(e) => console.log('InputTime:', e)}
+              onChange={(e) => {
+                const t = e.dateTime;
+
+                if (t) {
+                  dueDate.setHours(t.getHours());
+                  dueDate.setMinutes(t.getMinutes());
+                  setDueDate(dueDate);
+                }
+
+                console.log(dueDate);
+              }}
             />
           </FormRow>
         </SettingsContainer>
