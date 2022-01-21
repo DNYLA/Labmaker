@@ -18,16 +18,17 @@ enum Role {
 }
 
 model User {
-  id            String         @id
-  username      String
-  discriminator String
-  avatar        String?        @default("")
-  accessToken   String
-  refreshToken  String
-  tokenVersion  Int            @default(0)
-  role          Role?          @default(USER)
-  nodes         RedditConfig[]
-
+  id             String         @id
+  username       String
+  discriminator  String
+  avatar         String?        @default("")
+  accessToken    String
+  refreshToken   String
+  tokenVersion   Int            @default(0)
+  role           Role?          @default(USER)
+  nodes          RedditConfig[]
+  studentTickets Ticket[]       @relation("student")
+  tutorTickets   Ticket[]       @relation("tutor")
 }
 
 model RedditConfig {
@@ -62,7 +63,6 @@ model DiscordConfig {
   autoReact       Boolean  @default(false)
   // payment Payment[]
   paymentConfigId String
-  // tickets         Ticket[] @relation("student")
   // Ticket          Ticket[]
   Ticket          Ticket[]
 }
@@ -94,21 +94,19 @@ model Order {
 //Update Client side to not Post ticket until
 //It is Finished.
 model Ticket {
-  id            Int           @id @default(autoincrement())
-  serverId      String
-  channelId     String
-  type          String        @default("")
-  subject       String        @default("")
-  time          String        @default("")
-  level         String        @default("")
-  budget        String        @default("")
-  submitted     Boolean       @default(false)
-  discordConfig DiscordConfig @relation(fields: [serverId], references: [id])
-  transactions  Order[]
-  creatorId     String
-  tutorId       String?
-  // student       User          @relation("student", fields: [creatorId], references: [id])
-  // tutor         User?         @relation("tutor", fields: [tutorId], references: [id])
+  id             Int           @id @default(autoincrement())
+  serverId       String
+  type           String
+  subject        String
+  education      String
+  budget         Int
+  additionalInfo String        @default("")
+  discordConfig  DiscordConfig @relation(fields: [serverId], references: [id])
+  transactions   Order[]
+  creatorId      String
+  tutorId        String?
+  student        User          @relation("student", fields: [creatorId], references: [id])
+  tutor          User?         @relation("tutor", fields: [tutorId], references: [id])
 }
 
 model Log {

@@ -13,10 +13,9 @@ export class TicketService {
    * @param {number} ticketId - number - The ID of the ticket to get.
    * @returns The Ticket Object
    */
-  async getTicket(serverId: string, ticketId: number): Promise<Ticket> {
-    //Update Database to make ServerId + TicketID + Channel ID Unique Combination
+  async getTicket(serverId: string, id: number): Promise<Ticket> {
     return await this.prismaService.ticket.findFirst({
-      where: { serverId, ticketId },
+      where: { serverId, id },
     });
   }
 
@@ -26,6 +25,7 @@ export class TicketService {
    * @returns An array of tickets.
    */
   async getTickets(serverId: string): Promise<Ticket[]> {
+    //Convert to Query stuff
     return await this.prismaService.ticket.findMany({ where: { serverId } });
   }
 
@@ -43,10 +43,10 @@ export class TicketService {
    * @param {UpdateTicketDto} updateTicketDto - UpdateTicketDto
    * @returns The updated ticket.
    */
-  async updateConfig(updateTicketDto: UpdateTicketDto): Promise<Ticket> {
+  async updateConfig(ticket: UpdateTicketDto): Promise<Ticket> {
     return await this.prismaService.ticket.update({
-      where: { id: updateTicketDto.id },
-      data: updateTicketDto,
+      where: { id: ticket.id },
+      data: ticket,
     });
   }
 

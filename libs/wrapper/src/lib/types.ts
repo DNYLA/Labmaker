@@ -55,7 +55,7 @@ export type CreateOrderBreakdownAmountDto = {
 };
 
 export type CreateTicket = {
-  userId: string;
+  creatorId: string;
   serverId: string;
   type: string;
   subject: string;
@@ -63,6 +63,10 @@ export type CreateTicket = {
   budget: number;
   additionalInfo: string;
   date?: Date;
+};
+
+export type Ticket = CreateTicket & {
+  id: number;
 };
 
 export type TicketDto = {
@@ -126,6 +130,16 @@ export type UserDto = {
   editableNodes: number[];
   role: UserRole;
 };
+
+// export type TutorUser = {
+//   id: string;
+//   username: string;
+//   discriminator: string;
+//   avatar?: string;
+//   nodes: RedditConfigDto[];
+//   editableNodes: number[];
+//   role: UserRole;
+// };
 
 export type Guild = {
   id: string;

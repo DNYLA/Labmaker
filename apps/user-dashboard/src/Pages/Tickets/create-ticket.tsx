@@ -9,15 +9,18 @@ import {
   SettingsContainer,
   TextArea,
 } from '@labmaker/ui';
+import { CreateTicket } from '@labmaker/wrapper';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
 export interface IndexProps {}
 
-export function CreateTicket(props: IndexProps) {
+export function CreateTicketPage(props: IndexProps) {
   const [textAreaInput, setTextAreaInput] = useState('Enter Additional Info');
   const [rangeVal, setRangeVal] = useState(10);
+  const [ticket, setTicket] = useState<CreateTicket>();
 
   const subjectItems: Item[] = [
     { value: 'maths', label: 'Maths' },
@@ -41,6 +44,13 @@ export function CreateTicket(props: IndexProps) {
     { value: 'college', label: 'College' },
     { value: 'other', label: 'Other' },
   ];
+
+  const handleCreate = () => {
+    if (!ticket) toast.error('Fill out the Form!');
+    console.log('Creating Ticket');
+
+    toast.success('Created Ticket');
+  };
 
   return (
     <Page>
@@ -83,11 +93,6 @@ export function CreateTicket(props: IndexProps) {
             disabled={true}
           />
 
-          <InputBox
-            message="Budget ($)"
-            value={''}
-            onChange={(e) => console.log(e)}
-          />
           <InputRange
             value={rangeVal}
             min={50}
@@ -111,6 +116,9 @@ export function CreateTicket(props: IndexProps) {
             value={'Convert Into Date Time Picker'}
             onChange={(e) => console.log(e)}
           />
+          <CenterDiv>
+            <CustomButton onClick={handleCreate}>Create</CustomButton>
+          </CenterDiv>
         </SettingsContainer>
       </Content>
     </Page>
@@ -135,4 +143,38 @@ const DropDownContainer = styled.div`
   } */
   /* justify-content: center; */
   margin: 0px 50px 10px 50px;
+`;
+
+const CustomButton = styled.button`
+  width: 50%;
+  height: 28px;
+  border: none;
+  background-color: #313c4b;
+  border-radius: 5px;
+  justify-content: center;
+  color: white;
+  font-family: 'Roboto';
+  font-size: 18px;
+  outline: none;
+  transition: 0.5s;
+
+  :active {
+    border: none;
+  }
+
+  :hover {
+    background-color: #455366;
+    transition: 0.5s;
+    cursor: pointer;
+  }
+`;
+
+const CenterDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+
+  button {
+    margin-right: 25px;
+  }
 `;
