@@ -45,12 +45,12 @@ const StyledInput = styled.input`
   height: 30px;
   margin-top: 5px;
   background: ${(p) => p.theme.input.backCol};
-  border: 2px solid ${(p) => p.theme.input.borderCol};
+  border: 0;
   border-radius: 5px;
   transition: 340ms;
 
   :focus {
-    opacity: 80%;
+    background: ${(p) => p.theme.input.activeCol};
     outline: 0;
     transition: 340ms;
   }
