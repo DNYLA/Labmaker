@@ -21,18 +21,31 @@ function uses24Hour() {
 }
 
 export function InputTime({ message, onChange }: TimeProps) {
-  const hoursLn = uses24Hour() ? 24 : 12;
-  const hours: Item[] = Array.from({ length: hoursLn }, (e, i) => {
-    return { value: i, label: `${i}` };
-  });
+  const hours: Item[] = Array.from(
+    { length: uses24Hour() ? 24 : 12 },
+    (e, i) => {
+      return { value: i, label: `${i}` };
+    }
+  );
 
   const minutes: Item[] = Array.from({ length: 60 }, (e, i) => {
     return { value: i, label: `${i}` };
   });
 
+  const amorpm: Item[] = [
+    {
+      value: 'pm',
+      label: 'PM',
+    },
+    {
+      value: 'am',
+      label: 'AM',
+    },
+  ];
+
   return (
     <StyledTimeContainer>
-      {message ? <InfoTitle title={message} /> : null}
+      {message && <InfoTitle title={message} />}
 
       <StyledTimeWrapper>
         <DropDown
@@ -46,6 +59,14 @@ export function InputTime({ message, onChange }: TimeProps) {
           value={0}
           onChange={(e) => console.log(e)}
         ></DropDown>
+
+        {!uses24Hour() && (
+          <DropDown
+            items={amorpm}
+            value={'am'}
+            onChange={(e) => console.log(e)}
+          ></DropDown>
+        )}
       </StyledTimeWrapper>
     </StyledTimeContainer>
   );
