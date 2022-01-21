@@ -29,9 +29,14 @@ const StyledDate = styled.input`
   width: 100%;
   height: 30px;
   color: white;
-  background: ${(p) => p.theme.input.backCol};
+  background-color: ${(p) => p.theme.input.backCol};
   outline: 0;
   border: 0;
   border-radius: 5px;
   font-family: 'Roboto';
+  transition: background-color 250ms ease-in-out;
+
+  &:focus {
+    background-color: ${(p) => p.theme.input.activeCol};
+  }
 `;

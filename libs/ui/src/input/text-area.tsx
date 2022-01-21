@@ -77,7 +77,7 @@ const StyledTextarea = styled.textarea`
   background-color: ${(p) => p.theme.input.backCol};
   border: 0;
   border-radius: 5px;
-  transition: background-color 200ms ease-in-out;
+  transition: background-color 250ms ease-in-out;
   min-width: 90%;
 
   :focus {

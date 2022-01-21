@@ -47,12 +47,11 @@ const StyledInput = styled.input`
   background: ${(p) => p.theme.input.backCol};
   border: 0;
   border-radius: 5px;
-  transition: 340ms;
+  transition: 250ms;
 
   :focus {
     background: ${(p) => p.theme.input.activeCol};
     outline: 0;
-    transition: 340ms;
   }
 
   :disabled {
