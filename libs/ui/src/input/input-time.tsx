@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { InfoTitle, DropDown, Item } from './../';
 
 export interface IOnTimeChange {
-  (event: React.ChangeEvent<HTMLInputElement>): void;
+  // Also passing whole dateTime obj back incase it is needed
+  (event: { time: number; dateTime: Date }): void;
 }
 
 export interface TimeProps {
@@ -20,28 +22,58 @@ function uses24Hour() {
   );
 }
 
-export function InputTime({ message, onChange }: TimeProps) {
-  const hours: Item[] = Array.from(
+function getDropDownValues() {
+  const hourVals: Item[] = Array.from(
     { length: uses24Hour() ? 24 : 12 },
     (e, i) => {
       return { value: i, label: `${i}` };
     }
   );
 
-  const minutes: Item[] = Array.from({ length: 60 }, (e, i) => {
+  const minuteVals: Item[] = Array.from({ length: 60 }, (e, i) => {
     return { value: i, label: `${i}` };
   });
 
-  const amorpm: Item[] = [
-    {
-      value: 'pm',
-      label: 'PM',
-    },
+  const amorpmVals: Item[] = [
     {
       value: 'am',
       label: 'AM',
     },
+    {
+      value: 'pm',
+      label: 'PM',
+    },
   ];
+
+  return { hourVals, minuteVals, amorpmVals };
+}
+
+export function InputTime({ message, onChange }: TimeProps) {
+  const { hourVals, minuteVals, amorpmVals } = getDropDownValues();
+
+  const [time, setTime] = useState<Date>(new Date(0, 0, 0, 0, 0, 0));
+  let amorpm: 'am' | 'pm' = 'am';
+
+  const handleTimeUpdate = (type: 'hour' | 'minute' | 'amorpm', e: number) => {
+    if (type === 'hour') {
+      time.setHours(Number(e));
+    } else if (type === 'minute') {
+      time.setMinutes(Number(e));
+    }
+
+    console.log('AM or PM:', amorpm);
+    if (amorpm.toLowerCase() === 'pm') {
+      time.setHours(time.getHours() + 12);
+    }
+
+    // Only set hours back 12 if amorpm dropdown was changed to `am`.
+    // Avoids bug where time is set back 12 hours.
+    if (type === 'amorpm' && amorpm.toLowerCase() === 'am') {
+      time.setHours(time.getHours() - 12);
+    }
+
+    onChange({ time: time.getTime() / 1000, dateTime: time });
+  };
 
   return (
     <StyledTimeContainer>
@@ -49,22 +81,25 @@ export function InputTime({ message, onChange }: TimeProps) {
 
       <StyledTimeWrapper>
         <DropDown
-          items={hours}
-          value={0}
-          onChange={(e) => console.log(e)}
+          items={hourVals}
+          value={time.getHours()}
+          onChange={(e) => handleTimeUpdate('hour', Number(e))}
         ></DropDown>
 
         <DropDown
-          items={minutes}
-          value={0}
-          onChange={(e) => console.log(e)}
+          items={minuteVals}
+          value={time.getMinutes()}
+          onChange={(e) => handleTimeUpdate('minute', Number(e))}
         ></DropDown>
 
         {!uses24Hour() && (
           <DropDown
-            items={amorpm}
-            value={'am'}
-            onChange={(e) => console.log(e)}
+            items={amorpmVals}
+            value={amorpm}
+            onChange={(e) => {
+              amorpm = e as 'am' | 'pm';
+              handleTimeUpdate('amorpm', 0); // Just pass 0, wont be used
+            }}
           ></DropDown>
         )}
       </StyledTimeWrapper>

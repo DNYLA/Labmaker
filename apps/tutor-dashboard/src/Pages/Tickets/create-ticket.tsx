@@ -122,7 +122,10 @@ export function CreateTicket(props: IndexProps) {
               onChange={(e) => setDueDate(e.target.valueAsNumber)}
             />
 
-            <InputTime message="Due Time" onChange={(e) => console.log(e)} />
+            <InputTime
+              message="Due Time"
+              onChange={(e) => console.log('InputTime:', e)}
+            />
           </FormRow>
         </SettingsContainer>
       </Content>
