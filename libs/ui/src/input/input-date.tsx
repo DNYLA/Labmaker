@@ -39,4 +39,11 @@ const StyledDate = styled.input`
   &:focus {
     background-color: ${(p) => p.theme.input.activeCol};
   }
+
+  // Make chrome calendar picker icon white by inverting color.
+  // Using color doesn't work.. but this does for some reason.
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
 `;
