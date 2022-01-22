@@ -1,22 +1,31 @@
 import { Content, Page } from '@labmaker/ui';
+import { useFetchTickets } from '../../utils/hooks/useFetchTickets';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import TicketsList from './tickets-list';
 
 /* eslint-disable-next-line */
 export interface IndexProps {}
 
 export function Tickets(props: IndexProps) {
+  const { tickets, loading, error } = useFetchTickets();
+
   const navigate = useNavigate();
   const handleCreate = () => navigate('/create');
   return (
     <Page>
       <Section>
-        <h1>You Don't have Any Previous Tickets!</h1>
-        <p>
-          Dont worry, we've made the process super simple, just click below to
-          get started.
-        </p>
-        <Button onClick={handleCreate}>Create Ticket</Button>
+        {tickets && <TicketsList tickets={tickets} />}
+        {(!tickets || tickets?.length === 0 || error) && (
+          <>
+            <h1>You Don't have Any Previous Tickets!</h1>
+            <p>
+              Dont worry, we've made the process super simple, just click below
+              to get started.
+            </p>
+            <Button onClick={handleCreate}>Create Ticket</Button>
+          </>
+        )}
       </Section>
     </Page>
   );

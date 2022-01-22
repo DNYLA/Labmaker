@@ -94,19 +94,24 @@ model Order {
 //Update Client side to not Post ticket until
 //It is Finished.
 model Ticket {
-  id             Int           @id @default(autoincrement())
+  id             Int    @id @default(autoincrement())
   serverId       String
+  channelId String @default("xxx")
   type           String
   subject        String
   education      String
   budget         Int
-  additionalInfo String        @default("")
-  discordConfig  DiscordConfig @relation(fields: [serverId], references: [id])
-  transactions   Order[]
-  creatorId      String
-  tutorId        String?
-  student        User          @relation("student", fields: [creatorId], references: [id])
-  tutor          User?         @relation("tutor", fields: [tutorId], references: [id])
+  additionalInfo String @default("")
+  creatorId     String
+  tutorId       String?
+  due           DateTime
+  completed     Boolean       @default(false)
+  paid          Boolean       @default(false)
+  student       User          @relation("student", fields: [creatorId], references: [id])
+  tutor         User?         @relation("tutor", fields: [tutorId], references: [id])
+  discordConfig DiscordConfig @relation(fields: [serverId], references: [id])
+  transactions  Order[]
+
 }
 
 model Log {

@@ -17,7 +17,7 @@ Logger.log(`Running in ${process.env.ENVIRONMENT ?? 'Development'}`);
     RedditModule,
     AuthModule,
     UserModule,
-    PayModule,
+    // PayModule,
     PrismaModule,
     WebsocketModule,
     GuildsModule,

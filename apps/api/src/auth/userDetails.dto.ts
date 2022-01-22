@@ -8,7 +8,7 @@ export type UserDetails = {
   accessToken: string;
   refreshToken: string;
   tokenVersion?: number;
-  type: Role;
+  role: Role;
 };
 
 export type UserPayload = {

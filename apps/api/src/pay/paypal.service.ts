@@ -178,9 +178,9 @@ export class PayPalService {
 
   /**
    * Verify the webhook data, and if it's valid, then capture the funds.
-   * 
+   *
    * # **Step 4:** Create a webhook for the Payee.
-   * # 
+   * #
    * # **Note:** This is the webhook that will be used to notify the Payee that the funds have been
   captured.
    * @param {any} data - The data object that was sent by the webhook.

@@ -6,8 +6,12 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { Ticket } from '@prisma/client';
+import { JwtAuthGuard } from '../../auth/guards/Jwt.guard';
+import { UserDetails } from '../../auth/userDetails.dto';
+import { CurrentUser } from '../../utils/decorators';
 import { CreateTicketDto, UpdateTicketDto } from '../dtos/create-ticket.dto';
 import { TicketService } from '../services/ticket.service';
 
@@ -24,12 +28,20 @@ export class TicketController {
   }
 
   @Get('/:serverId')
-  getTickets(@Param('serverId') serverId: string): Promise<Ticket[]> {
-    return this.ticketService.getTickets(serverId);
+  @UseGuards(JwtAuthGuard)
+  getTickets(
+    @Param('serverId') serverId: string,
+    @CurrentUser() user: UserDetails
+  ): Promise<Ticket[]> {
+    return this.ticketService.getTickets(serverId, user);
   }
 
   @Post()
-  createTicket(@Body() body: CreateTicketDto): Promise<Ticket> {
+  @UseGuards(JwtAuthGuard)
+  createTicket(
+    @Body() body: CreateTicketDto,
+    @CurrentUser() user: UserDetails
+  ): Promise<Ticket> {
     return this.ticketService.createTicket(body);
   }
 

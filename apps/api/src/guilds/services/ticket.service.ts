@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTicketDto, UpdateTicketDto } from '../dtos/create-ticket.dto';
-import { Ticket } from '@prisma/client';
+import { Role, Ticket } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { UserDetails } from '../../auth/userDetails.dto';
 
 @Injectable()
 export class TicketService {
@@ -24,9 +25,22 @@ export class TicketService {
    * @param {string} serverId - The ID of the server to get tickets for.
    * @returns An array of tickets.
    */
-  async getTickets(serverId: string): Promise<Ticket[]> {
-    //Convert to Query stuff
-    return await this.prismaService.ticket.findMany({ where: { serverId } });
+  async getTickets(serverId: string, user: UserDetails): Promise<Ticket[]> {
+    let filter = {};
+
+    if (user.role === Role.USER) {
+      filter = { serverId, creatorId: user.id };
+    } else if (user.role === Role.TUTOR) {
+      filter = { serverId, tutorId: user.id };
+    } else {
+      filter = { serverId }; //Just return all for now
+    }
+
+    // console.log(user.ro);
+
+    return await this.prismaService.ticket.findMany({
+      where: filter,
+    });
   }
 
   /**
@@ -34,8 +48,9 @@ export class TicketService {
    * @param {CreateTicketDto} newTicketDto - CreateTicketDto
    * @returns The newly created ticket.
    */
-  async createTicket(newTicketDto: CreateTicketDto): Promise<Ticket> {
-    return await this.prismaService.ticket.create({ data: newTicketDto });
+  async createTicket(ticket: CreateTicketDto): Promise<Ticket> {
+    const due = new Date(ticket.due);
+    return await this.prismaService.ticket.create({ data: ticket });
   }
 
   /**

@@ -14,7 +14,6 @@ const StyledApp = styled.div`
 
 export function App() {
   const { user, loading, error } = useFetchUser();
-
   if (loading)
     return (
       <div>
@@ -37,6 +36,7 @@ export function App() {
         draggable
         pauseOnHover
       />
+
       {user && !error && (
         <>
           <Navbar

@@ -3,12 +3,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { getUser, setToken } from '../../utils/api';
 import { getUser, setToken, UserDto } from '@labmaker/wrapper';
+import { RootState } from '../../store';
+import { setUser } from '../slices/userSlice';
 
 export function useFetchUser() {
-  const [user, setUser] = useState<UserDto>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  // const user = useSelector((state: RootState) => state.user.value);
+  const user = useSelector((state: RootState) => state.user.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setLoading(true);
@@ -22,7 +24,7 @@ export function useFetchUser() {
 
       getUser()
         .then(({ data }) => {
-          setUser(data);
+          dispatch(setUser(data));
           // InitSocket(token);
         })
         .catch((err) => {
@@ -31,7 +33,7 @@ export function useFetchUser() {
         })
         .finally(() => setTimeout(() => setLoading(false), 1000));
     });
-  }, []);
+  }, [dispatch]);
 
   return { user, loading, error };
 }

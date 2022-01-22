@@ -1,4 +1,10 @@
-import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateTicketDto {
   @IsString()
@@ -20,10 +26,11 @@ export class CreateTicketDto {
   budget: number;
 
   @IsString()
+  @IsOptional()
   additionalInfo: string;
 
-  @IsDate()
-  date: Date;
+  @IsDateString({ message: 'Invalid Date' })
+  due: string;
 }
 
 export class UpdateTicketDto extends CreateTicketDto {

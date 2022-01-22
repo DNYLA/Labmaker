@@ -61,8 +61,8 @@ export type CreateTicket = {
   subject: string;
   education: string;
   budget: number;
-  additionalInfo: string;
-  date?: Date;
+  additionalInfo?: string;
+  due: string;
 };
 
 export type Ticket = CreateTicket & {
@@ -71,16 +71,17 @@ export type Ticket = CreateTicket & {
 
 export type TicketDto = {
   id: number;
-  ticketId: number;
   serverId: string;
-  channelId: string;
   type: string;
   subject: string;
-  time: string;
-  level: string;
-  budget: string;
-  submitted: boolean;
-  discordConfig?: GuildConfigDto;
+  education: string;
+  budget: number;
+  additionalInfo: string;
+  creatorId: string;
+  tutorId?: string;
+  due: Date;
+  completed: boolean;
+  paid: boolean;
 };
 
 export type RedditConfigDto = {
