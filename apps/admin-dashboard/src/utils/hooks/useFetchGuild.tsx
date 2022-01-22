@@ -24,9 +24,12 @@ export function useFetchGuild() {
 
   const guildConfig = useSelector((state: RootState) => state.guild.config);
   const payments = useSelector((state: RootState) => state.guild.payments);
+  const user = useSelector((state: RootState) => state.user.value);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (user.id === '-1') return;
     setLoading(true);
     if (!id) return;
 

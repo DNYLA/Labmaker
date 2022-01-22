@@ -28,10 +28,11 @@ export function Discord(props: DiscordProps) {
   const navigate = useNavigate();
   //Parsed Guilds are currently only fetched on GuildsMenu so if the user
   //refreshes the page when inside the DiscordPage it will error unless we redirect
-  if (parsedGuilds.length === 0) {
-    navigate('/discord');
-    return <div></div>;
-  }
+  useEffect(() => {
+    if (parsedGuilds.length === 0) {
+      navigate('/discord');
+    }
+  }, []);
 
   return (
     <Page>

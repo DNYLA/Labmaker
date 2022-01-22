@@ -1,16 +1,19 @@
 import { getGuilds, PartialGuild } from '@labmaker/wrapper';
 import { setParsedGuilds } from '../slices/configSlices';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { parseGuilds } from '../helpers';
+import { RootState } from '../../store';
 
 export function useFetchGuilds() {
   const [guilds, setGuilds] = useState<PartialGuild[]>();
   const [loading, setloading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.value);
 
   useEffect(() => {
+    if (user.id === '-1') return;
     setloading(true);
     getGuilds()
       .then(({ data }) => {
