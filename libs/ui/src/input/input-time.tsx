@@ -22,20 +22,29 @@ function uses24Hour() {
   );
 }
 
-function getDropDownValues() {
+export function InputTime({ message, onChange }: TimeProps) {
+  const [time, setTime] = useState<Date>(new Date(0, 0, 0, 0, 0, 0));
+  let amorpm: 'am' | 'pm' = 'am';
+
   // Add leading zero if number is smaller than or equal to 9
   const wlz = (n: number) => (n <= 9 ? `0${n}` : n);
 
-  const hourVals: Item[] = Array.from(
-    { length: uses24Hour() ? 24 : 12 },
-    (e, i) => {
-      return { value: i, label: `${wlz(i)}` };
-    }
-  );
-
-  const minuteVals: Item[] = Array.from({ length: 60 }, (e, i) => {
-    return { value: i, label: `${wlz(i)}` };
-  });
+  const timeVals: Item[] = [];
+  const timeValsN = uses24Hour() ? 24 : 12;
+  for (let i = 0; i < timeValsN; i++) {
+    timeVals.push(
+      ...[
+        {
+          value: `${wlz(i)}:00`,
+          label: `${wlz(i)}:00`,
+        },
+        {
+          value: `${wlz(i)}:30`,
+          label: `${wlz(i)}:30`,
+        },
+      ]
+    );
+  }
 
   const amorpmVals: Item[] = [
     {
@@ -48,31 +57,20 @@ function getDropDownValues() {
     },
   ];
 
-  return { hourVals, minuteVals, amorpmVals };
-}
+  const handleTimeUpdate = (t: string) => {
+    const hm = t.split(':');
 
-export function InputTime({ message, onChange }: TimeProps) {
-  const { hourVals, minuteVals, amorpmVals } = getDropDownValues();
+    time.setHours(amorpm === 'am' ? Number(hm[0]) : Number(hm[0]) + 12);
+    time.setMinutes(Number(hm[1]));
 
-  const [time, setTime] = useState<Date>(new Date(0, 0, 0, 0, 0, 0));
-  let amorpm: 'am' | 'pm' = 'am';
+    onChange({ time: time.getTime() / 1000, dateTime: time });
+  };
 
-  const handleTimeUpdate = (type: 'hour' | 'minute' | 'amorpm', e: number) => {
-    if (type === 'hour') {
-      time.setHours(Number(e));
-    } else if (type === 'minute') {
-      time.setMinutes(Number(e));
-    }
+  const handleAMPMSwitch = (newVal: 'am' | 'pm') => {
+    amorpm = newVal;
 
-    if (amorpm.toLowerCase() === 'pm') {
-      time.setHours(time.getHours() + 12);
-    }
-
-    // Only set hours back 12 if amorpm dropdown was changed to `am`.
-    // Avoids bug where time is set back 12 hours.
-    if (type === 'amorpm' && amorpm.toLowerCase() === 'am') {
-      time.setHours(time.getHours() - 12);
-    }
+    if (amorpm === 'pm') time.setHours(time.getHours() + 12);
+    else time.setHours(time.getHours() - 12);
 
     onChange({ time: time.getTime() / 1000, dateTime: time });
   };
@@ -83,15 +81,9 @@ export function InputTime({ message, onChange }: TimeProps) {
 
       <StyledTimeWrapper>
         <DropDown
-          items={hourVals}
+          items={timeVals}
           value={time.getHours()}
-          onChange={(e) => handleTimeUpdate('hour', Number(e))}
-        ></DropDown>
-
-        <DropDown
-          items={minuteVals}
-          value={time.getMinutes()}
-          onChange={(e) => handleTimeUpdate('minute', Number(e))}
+          onChange={(e) => handleTimeUpdate(String(e))}
         ></DropDown>
 
         {!uses24Hour() && (
@@ -99,8 +91,7 @@ export function InputTime({ message, onChange }: TimeProps) {
             items={amorpmVals}
             value={amorpm}
             onChange={(e) => {
-              amorpm = e as 'am' | 'pm';
-              handleTimeUpdate('amorpm', 0); // Just pass 0, wont be used
+              handleAMPMSwitch(e as 'am' | 'pm');
             }}
           ></DropDown>
         )}
