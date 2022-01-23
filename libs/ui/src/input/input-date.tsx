@@ -11,10 +11,15 @@ export interface DateProps {
 }
 
 export function InputDate({ message, onChange }: DateProps) {
+  const d = new Date(Date.now());
+  const minDate = d.toISOString().split('T')[0];
+  d.setFullYear(d.getFullYear() + 2);
+  const maxDate = d.toISOString().split('T')[0];
+
   return (
     <StyledDateContainer>
       {message ? <InfoTitle title={message} /> : null}
-      <StyledDate type="date" onChange={onChange} />
+      <StyledDate type="date" onChange={onChange} min={minDate} max={maxDate} />
     </StyledDateContainer>
   );
 }
