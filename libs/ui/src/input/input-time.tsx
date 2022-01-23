@@ -23,15 +23,18 @@ function uses24Hour() {
 }
 
 function getDropDownValues() {
+  // Add leading zero if number is smaller than or equal to 9
+  const wlz = (n: number) => (n <= 9 ? `0${n}` : n);
+
   const hourVals: Item[] = Array.from(
     { length: uses24Hour() ? 24 : 12 },
     (e, i) => {
-      return { value: i, label: `${i}` };
+      return { value: i, label: `${wlz(i)}` };
     }
   );
 
   const minuteVals: Item[] = Array.from({ length: 60 }, (e, i) => {
-    return { value: i, label: `${i}` };
+    return { value: i, label: `${wlz(i)}` };
   });
 
   const amorpmVals: Item[] = [
