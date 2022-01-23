@@ -151,14 +151,14 @@ const StyledInput = styled.input`
   font-family: 'Archivo Black';
   width: 100%;
   height: 30px;
-  background: #1a1a1d;
+  background-color: ${(p) => p.theme.input.backCol};
   border-radius: 5px;
-  border: 2px solid #141617;
+  border: 0;
   font-size: 16px;
   transition: opacity 340ms ease;
 
   :focus {
-    opacity: 80%;
+    background-color: ${(p) => p.theme.input.activeCol};
     outline: 0;
   }
 `;
@@ -166,27 +166,35 @@ const StyledInput = styled.input`
 const HiddenContainer = styled.div`
   z-index: 100;
   position: absolute;
-  width: 196px;
-  border: 2px solid transparent;
-  border-top: 0;
+  width: 100%;
+  max-height: 250px;
+  overflow-y: auto;
+  background-color: ${(p) => p.theme.input.backCol};
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+
+  // Don't know whats causing the children to go out of the containers borderRadius - quick fix
+  & > *:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
 `;
 
 const DropDownItem = styled.div`
   padding: 10px;
-  z-index: 10;
-  background-color: #1a1a1d;
   font-family: 'Roboto';
   font-size: 16px;
+  cursor: pointer;
 
   :hover {
-    cursor: pointer;
-    background-color: #141617;
+    font-weight: bold;
+    background-color: ${(p) => p.theme.input.activeCol};
   }
 `;
 
 const StyledDropDown = styled.div`
   position: relative;
-  width: 200px;
+  width: 100%;
   font-size: 18px;
   transition: all 200ms ease-in;
   user-select: none;

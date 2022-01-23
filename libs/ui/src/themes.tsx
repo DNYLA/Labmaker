@@ -1,5 +1,6 @@
 import 'styled-components';
 import { DefaultTheme } from 'styled-components';
+
 interface Navbar {
   base: string;
   item: string;
@@ -51,7 +52,7 @@ export const DarkTheme: DefaultTheme = {
     },
     backCol: '#141617',
     borderCol: '#141617',
-    activeCol: '#3B3B3B',
+    activeCol: '#161819',
     text: '#EEE',
     switchActive: '#ff9929',
   },
