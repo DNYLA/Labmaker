@@ -1,4 +1,4 @@
-import { Content, Page } from '@labmaker/ui';
+import { Content, LoadingSpinner, Page } from '@labmaker/ui';
 import { useFetchTickets } from '../../utils/hooks/useFetchTickets';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -14,9 +14,10 @@ export function Tickets(props: IndexProps) {
   const handleCreate = () => navigate('/create');
   return (
     <Page>
+      <LoadingSpinner loading={loading} message="Loading Tickets" />
       <Section>
-        {tickets && <TicketsList tickets={tickets} />}
-        {(!tickets || tickets?.length === 0 || error) && (
+        {!loading && tickets && <TicketsList tickets={tickets} />}
+        {((!loading && (!tickets || tickets?.length === 0)) || error) && (
           <>
             <h1>You Don't have Any Previous Tickets!</h1>
             <p>
