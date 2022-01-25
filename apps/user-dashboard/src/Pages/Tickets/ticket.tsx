@@ -1,6 +1,7 @@
 import {
   InputBox,
   InputDate,
+  InputTime,
   ModalPopup,
   SwitchToggle,
   TextArea,
@@ -82,11 +83,9 @@ export function TicketModal({ ticket }: TicketProps) {
       <InputBox message="Education" value={education} disabled={true} />
       <InputBox message="Budget" value={budget.toString()} disabled={true} />
       <InputBox message="Due" value={due.toString()} disabled={true} />
-      <InputDate
-        message="Due Date"
-        value={dueDateObj}
-        onChange={(e) => console.log(e)}
-      />
+      <InputDate message="Due Date" value={dueDateObj} />
+      {/* Doesnt Work Update to InputBox Or Fix (Input Box Probably Better) */}
+      <InputTime message="Due Time" value={dueDateObj} />
 
       <TextArea
         message="Additional Info"

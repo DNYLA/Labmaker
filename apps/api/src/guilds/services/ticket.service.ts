@@ -40,6 +40,7 @@ export class TicketService {
     // console.log(user.ro);
 
     const fetchedTickets = await this.prismaService.ticket.findMany({
+      orderBy: [{ id: 'desc' }],
       where: filter,
     });
 

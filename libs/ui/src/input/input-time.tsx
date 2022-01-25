@@ -4,12 +4,13 @@ import { InfoTitle, DropDown, Item } from './../';
 
 export interface IOnTimeChange {
   // Also passing whole dateTime obj back incase it is needed
-  (event: { time: number; dateTime: Date }): void;
+  (date: Date): void;
 }
 
 export interface TimeProps {
   message?: string;
-  onChange: IOnTimeChange;
+  onChange?: IOnTimeChange;
+  value: Date;
 }
 
 function uses24Hour() {
@@ -22,8 +23,7 @@ function uses24Hour() {
   );
 }
 
-export function InputTime({ message, onChange }: TimeProps) {
-  const [time, setTime] = useState<Date>(new Date(0, 0, 0, 0, 0, 0));
+export function InputTime({ message, value, onChange }: TimeProps) {
   let amorpm: 'am' | 'pm' = 'am';
 
   // Add leading zero if number is smaller than or equal to 9
@@ -58,21 +58,29 @@ export function InputTime({ message, onChange }: TimeProps) {
   ];
 
   const handleTimeUpdate = (t: string) => {
+    if (!onChange) return;
+
     const hm = t.split(':');
+    const curTime = value;
 
-    time.setHours(amorpm === 'am' ? Number(hm[0]) : Number(hm[0]) + 12);
-    time.setMinutes(Number(hm[1]));
+    curTime.setHours(amorpm === 'am' ? Number(hm[0]) : Number(hm[0]) + 12);
+    curTime.setMinutes(Number(hm[1]));
+    curTime.setSeconds(0);
+    curTime.setMilliseconds(0);
 
-    onChange({ time: time.getTime() / 1000, dateTime: time });
+    onChange(curTime);
   };
 
   const handleAMPMSwitch = (newVal: 'am' | 'pm') => {
+    if (!onChange) return;
     amorpm = newVal;
+    const curTime = value;
+    if (amorpm === 'pm') curTime.setHours(curTime.getHours() + 12);
+    else curTime.setHours(curTime.getHours() - 12);
+    curTime.setSeconds(0);
+    curTime.setMilliseconds(0);
 
-    if (amorpm === 'pm') time.setHours(time.getHours() + 12);
-    else time.setHours(time.getHours() - 12);
-
-    onChange({ time: time.getTime() / 1000, dateTime: time });
+    onChange(curTime);
   };
 
   return (
@@ -82,7 +90,7 @@ export function InputTime({ message, onChange }: TimeProps) {
       <StyledTimeWrapper>
         <DropDown
           items={timeVals}
-          value={time.getHours()}
+          value={value.getHours()}
           onChange={(e) => handleTimeUpdate(String(e))}
         ></DropDown>
 

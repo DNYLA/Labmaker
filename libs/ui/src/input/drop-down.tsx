@@ -38,7 +38,7 @@ export function DropDown({ items, value, onChange }: DropDownProps) {
     if (!startItem) return; //Throw Error Instead?
     setSelected(startItem);
     setInputValue(startItem.label);
-  }, [items]);
+  }, [items, value]);
 
   const setItem = (id: number | string) => {
     onChange(id);

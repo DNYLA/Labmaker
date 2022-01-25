@@ -180,17 +180,9 @@ export function CreateTicketPage(props: IndexProps) {
 
             <InputTime
               message="Due Time"
+              value={ticket.due}
               onChange={(e) => {
-                const t = e.dateTime;
-                const dueDate = ticket.due;
-
-                if (t) {
-                  dueDate.setHours(t.getHours());
-                  dueDate.setMinutes(t.getMinutes());
-                  setTicket({ ...ticket, due: dueDate });
-                }
-
-                console.log(dueDate);
+                setTicket({ ...ticket, due: e });
               }}
             />
           </FormRow>
