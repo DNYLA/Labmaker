@@ -9,7 +9,7 @@ export interface InputBoxProps {
   value: string | string[];
   infoMessage?: string | React.ReactNode;
   message: string;
-  onChange: IOnInputBoxChange;
+  onChange?: IOnInputBoxChange;
   disabled?: boolean;
 }
 
@@ -25,7 +25,9 @@ export function InputBox({
       <InfoTitle title={message} infoMessage={infoMessage} />
       <StyledInput
         value={value}
-        onChange={(e) => onChange(e)}
+        onChange={(e) => {
+          if (onChange) onChange(e);
+        }}
         disabled={disabled}
       />
     </StyledInputBox>

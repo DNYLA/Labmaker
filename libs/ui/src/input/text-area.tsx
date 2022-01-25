@@ -9,7 +9,7 @@ export interface TextAreaProps {
   value: string | string[];
   infoMessage?: string | React.ReactNode;
   message: string;
-  onChange: IOnTextAreaChange;
+  onChange?: IOnTextAreaChange;
   disabled?: boolean;
   textLimit?: number;
 }
@@ -22,12 +22,14 @@ export function TextArea({
   disabled,
   textLimit,
 }: TextAreaProps) {
-  let handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e);
+  let handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (onChange) onChange(e);
+  };
 
   if (textLimit) {
     handleChange = (e) => {
       if (e.target.value.length > textLimit) return;
-      onChange(e);
+      if (onChange) onChange(e);
     };
   }
 

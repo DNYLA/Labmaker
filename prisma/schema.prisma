@@ -111,7 +111,6 @@ model Ticket {
   tutor         User?         @relation("tutor", fields: [tutorId], references: [id])
   discordConfig DiscordConfig @relation(fields: [serverId], references: [id])
   transactions  Order[]
-
 }
 
 model Log {
