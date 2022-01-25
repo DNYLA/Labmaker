@@ -19,7 +19,7 @@ export function Tickets(props: IndexProps) {
         {!loading &&
         tickets &&
         (tickets.active.length > 0 || tickets.completed.length > 0) ? (
-          <TicketsList tickets={tickets} />
+          <TicketsList tickets={tickets} createEvent={handleCreate} />
         ) : (
           <>
             <h1>You Don't have Any Previous Tickets!</h1>

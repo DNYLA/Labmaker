@@ -29,7 +29,17 @@ function TicketContainer({ subject, type, budget, due }: TicketContainerProps) {
 
 export function TicketModal({ ticket }: TicketProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { id, subject, type, budget, due, education, additionalInfo } = ticket;
+  const {
+    id,
+    subject,
+    type,
+    budget,
+    due,
+    education,
+    paid,
+    completed,
+    additionalInfo,
+  } = ticket;
 
   const handleResign = () => {
     //Call API to Resign Tutor.
@@ -67,20 +77,20 @@ export function TicketModal({ ticket }: TicketProps) {
         disabled={true}
       />
       <SwitchToggle
-        toggled={true}
+        toggled={paid}
         onToggle={() => console.log('x')}
         message={'Paid'}
       />
       <SwitchToggle
-        toggled={false}
+        toggled={completed}
         onToggle={() => console.log('x')}
         message={'Completed'}
       />
       <ButtonContainer>
         {/* Can remove the close button if we can make the dialog box c lose when the user clicks outside */}
-        <MenuButton onClick={() => setIsOpen(false)}>Close</MenuButton>
-        <MenuButton onClick={handleResign}>Resign</MenuButton>
-        <MenuButton onClick={handleGoToChannel}>Channel</MenuButton>
+        <ModalButton onClick={() => setIsOpen(false)}>Close</ModalButton>
+        <ModalButton onClick={handleResign}>Resign</ModalButton>
+        <ModalButton onClick={handleGoToChannel}>Channel</ModalButton>
       </ButtonContainer>
     </ModalPopup>
   );
@@ -92,11 +102,12 @@ const TicketContainerStyle = styled.div`
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  margin-right: 10px;
   width: 250px;
   height: 100px;
   background-color: ${(p) => p.theme.input.backCol};
   padding: 10px;
+  flex-grow: 1;
+  margin: 10px;
 
   :hover {
     background-color: ${(p) => p.theme.input.activeCol};
@@ -109,7 +120,7 @@ const ButtonContainer = styled.div`
   justify-content: center;
 `;
 
-const MenuButton = styled.button`
+const ModalButton = styled.button`
   /* background-color: ${(p) => p.theme.navbar.item}; */
   background-color: #121212;
   color: ${(p) => p.theme.navbar.title};
