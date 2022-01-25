@@ -14,6 +14,8 @@ export * from './input/utils/types';
 export * from './input/info-box';
 export * from './input/text-area';
 export * from './input/input-range';
+export * from './input/input-date';
+export * from './input/input-time';
 
 export * from './themes';
 export * from './login';

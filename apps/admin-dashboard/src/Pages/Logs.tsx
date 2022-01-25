@@ -48,11 +48,13 @@ export function Logs() {
       {!loading && logs && (
         <Content>
           <ControlsContainer>
-            <DropDown
-              items={parsedConfigs}
-              onChange={handleMergeChange}
-              value={config.id}
-            />
+            <div className="dropDownContainer">
+              <DropDown
+                items={parsedConfigs}
+                onChange={handleMergeChange}
+                value={config.id}
+              />
+            </div>
           </ControlsContainer>
           <SettingsContainer>
             <h1>Logs</h1>
@@ -68,6 +70,10 @@ const ControlsContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   display: flex;
+
+  .dropDownContainer {
+    max-width: 200px;
+  }
 `;
 
 const SettingsContainer = styled.div`

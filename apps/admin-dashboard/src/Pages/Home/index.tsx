@@ -28,11 +28,14 @@ export function Home() {
       {!loading && (
         <Content>
           <ControlsContainer>
-            <DropDown
-              items={parsedConfigs}
-              onChange={handleChange}
-              value={config.id}
-            />
+            <div className="dropDownContainer">
+              <DropDown
+                items={parsedConfigs}
+                onChange={handleChange}
+                value={config.id}
+              />
+            </div>
+
             <UserControls
               onDelete={handleDelete}
               onRefresh={handleRefresh}
@@ -55,6 +58,10 @@ const ControlsContainer = styled.div`
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+
+  .dropDownContainer {
+    max-width: 200px;
+  }
 
   @media (max-width: 800px) {
     flex-flow: column;

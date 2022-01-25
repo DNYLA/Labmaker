@@ -1,6 +1,6 @@
 # Labmaker
 
-The ultimate way to engage and interact with your community on a range of platforms. Labmaker is used to help grow a community & interact with them. The Reddit Bot & Admin Dashboard are designed to ambiguous, however the Discord & Tutor Dashboard is designed to interact specifically with tutors and students. They can be edited to suite your own needs but require more time to change than the Admin Dashboard & Reddit Bot.
+The ultimate way to engage and interact with your community on a range of platforms. Labmaker is used to help grow a community & interact with them. The Reddit Bot & Admin Dashboard are designed to ambiguous, however the Discord & User Dashboard is designed to interact specifically with tutors and students. They can be edited to suite your own needs but require more time to change than the Admin Dashboard & Reddit Bot.
 
 ## Projects included in this monorepo
 
