@@ -1,6 +1,7 @@
 import { InputBox, ModalPopup, SwitchToggle, TextArea } from '@labmaker/ui';
 import { TicketDto } from '@labmaker/wrapper';
 import moment from 'moment';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 interface TicketContainerProps {
@@ -27,6 +28,7 @@ function TicketContainer({ subject, type, budget, due }: TicketContainerProps) {
 }
 
 export function TicketModal({ ticket }: TicketProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const { id, subject, type, budget, due, education, additionalInfo } = ticket;
 
   const handleResign = () => {
@@ -43,6 +45,8 @@ export function TicketModal({ ticket }: TicketProps) {
   return (
     <ModalPopup
       title={`Ticket ${id}`}
+      open={isOpen}
+      setOpen={setIsOpen}
       design={
         <TicketContainer
           subject={subject}
@@ -51,8 +55,6 @@ export function TicketModal({ ticket }: TicketProps) {
           due={due}
         />
       }
-      items={[]}
-      onChange={() => console.log('hi')}
     >
       <InputBox message="Type" value={type} disabled={true} />
       <InputBox message="Subject" value={subject} disabled={true} />
@@ -75,6 +77,8 @@ export function TicketModal({ ticket }: TicketProps) {
         message={'Completed'}
       />
       <ButtonContainer>
+        {/* Can remove the close button if we can make the dialog box c lose when the user clicks outside */}
+        <MenuButton onClick={() => setIsOpen(false)}>Close</MenuButton>
         <MenuButton onClick={handleResign}>Resign</MenuButton>
         <MenuButton onClick={handleGoToChannel}>Channel</MenuButton>
       </ButtonContainer>

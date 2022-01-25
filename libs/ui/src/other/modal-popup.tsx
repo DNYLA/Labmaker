@@ -3,37 +3,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-export interface IOnModalChange {
-  (updatedValues: string[]): void;
-}
 /* eslint-disable-next-line */
 export interface ModalPopupProps {
   title: string;
-  items: string[];
-  onChange: IOnModalChange;
   design: any;
   children: any;
+  open: any;
+  setOpen: any;
 }
 
 //Currently Broken Fix CSS
 export function ModalPopup({
   title,
-  onChange,
-  items,
   design,
   children,
+  open,
+  setOpen,
 }: ModalPopupProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <StyledTagInputBox>
-      <StyledSpan onClick={() => setIsOpen(true)}>{design}</StyledSpan>
-      {isOpen && (
+      <StyledSpan onClick={() => setOpen(true)}>{design}</StyledSpan>
+      {open && (
         <DialogContainer>
           <DialogBox>
             <TitleContainer>
               <h1>{title}</h1>
-              <span onClick={() => setIsOpen(false)}>X</span>
+              <span onClick={() => setOpen(false)}>X</span>
             </TitleContainer>
             <div className="childItems">{children}</div>
           </DialogBox>
