@@ -1,31 +1,3 @@
-export type GuildConfigDto = {
-  id: string;
-  name: string;
-  icon?: string;
-  prefix: string;
-  embedImageUrl: string;
-  autoSwitcher: boolean;
-  autoTicket: boolean;
-  autoReact: boolean;
-  paymentConfigId: string;
-  tickets?: TicketDto[];
-};
-
-export type GuildConfig = {
-  config: GuildConfigDto;
-  payments: PaymentDto[];
-};
-
-export type PaymentDto = {
-  id?: number;
-  name: string;
-  value: string;
-  type: string;
-  serverId: string;
-  newPayment?: boolean;
-  deletedPayment?: boolean;
-};
-
 export type CreateOrderDto = {
   /**
    * Channel ID to ticket relating to payment.
@@ -52,36 +24,6 @@ export type CreateOrderBreakdownDto = {
 export type CreateOrderBreakdownAmountDto = {
   value: string;
   currencyCode: string;
-};
-
-export type CreateTicket = {
-  creatorId: string;
-  serverId: string;
-  type: string;
-  subject: string;
-  education: string;
-  budget: number;
-  additionalInfo?: string;
-  due: string;
-};
-
-export type Ticket = CreateTicket & {
-  id: number;
-};
-
-export type TicketDto = {
-  id: number;
-  serverId: string;
-  type: string;
-  subject: string;
-  education: string;
-  budget: number;
-  additionalInfo: string;
-  creatorId: string;
-  tutorId?: string;
-  due: Date;
-  completed: boolean;
-  paid: boolean;
 };
 
 export type RedditConfigDto = {
@@ -166,11 +108,6 @@ export enum Events {
   Config = 'config',
   Delete = 'deleteConfig',
 }
-
-export type GuildConfigPayment = {
-  config: GuildConfigDto;
-  payments: PaymentDto[];
-};
 
 export type AuthResult = {
   accessToken: string;

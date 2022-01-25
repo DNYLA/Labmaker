@@ -1,33 +1,30 @@
-import {
-  CreateOrderDto,
-  GuildConfig,
-  GuildConfigDto,
-  PaymentDto,
-} from '../types';
+import { GuildConfig, GuildData, Payment } from '@labmaker/shared';
+import { CreateOrderDto } from '../types';
 import { AXIOS } from './Axios';
 
-export const getGuildConfigs = () => AXIOS.get<GuildConfigDto[]>(`/guilds/`);
+export const getGuildConfigs = () => AXIOS.get<GuildConfig[]>(`/guilds/`);
 
+//Merge with function below
 export const getGuildDetails = (id: string) =>
-  AXIOS.get<GuildConfig>(`/guilds/${id}?payments=true`);
+  AXIOS.get<GuildData>(`/guilds/${id}?payments=true`);
 
 export const getGuildConfig = (id: string) =>
-  AXIOS.get<GuildConfigDto>(`/guilds/${id}?payments=false`);
+  AXIOS.get<GuildConfig>(`/guilds/${id}?payments=false`);
 
 export const createGuildConfig = (id: string, name: string) =>
-  AXIOS.post<GuildConfigDto>(`/guilds/${id}/${name}`);
+  AXIOS.post<GuildConfig>(`/guilds/${id}/${name}`);
 
-export const updateGuildConfig = (config: GuildConfigDto) =>
-  AXIOS.put<GuildConfigDto>(`guilds`, config);
+export const updateGuildConfig = (config: GuildConfig) =>
+  AXIOS.put<GuildConfig>(`guilds`, config);
 
 //Payment Stuff Below
 export const getDiscordPayments = (id: string) =>
   AXIOS.get(`guilds/payments/${id}`);
 
-export const createDiscordPayments = (payments: PaymentDto[]) =>
+export const createDiscordPayments = (payments: Payment[]) =>
   AXIOS.post(`guilds/payments`, payments);
 
-export const updatePayments = (payments: PaymentDto[]) => {
+export const updatePayments = (payments: Payment[]) => {
   console.log(payments);
   return AXIOS.put(`guilds/payments`, { payments });
 };
