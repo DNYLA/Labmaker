@@ -18,8 +18,8 @@ import styled from 'styled-components';
 export interface IndexProps {}
 
 export function CreateTicket(props: IndexProps) {
-  const [textAreaInput, setTextAreaInput] = useState('Enter Additional Info');
-  const [rangeVal, setRangeVal] = useState(10);
+  const [additionalNotes, setAdditionalNotes] = useState('');
+  const [budget, setBudget] = useState(0);
   const [dueDate, setDueDate] = useState<Date>(new Date(0, 0, 0, 0, 0, 0));
 
   const subjectItems: Item[] = [
@@ -91,12 +91,14 @@ export function CreateTicket(props: IndexProps) {
           />
 
           <InputBox
-            message="Budget ($)"
-            value={''}
-            onChange={(e) => console.log(e)}
+            message="Budget"
+            prefix="$"
+            value={budget}
+            type="number"
+            onChange={(e) => setBudget(Number(e.target.value))}
           />
 
-          <InputRange
+          {/* <InputRange
             value={rangeVal}
             min={50}
             max={500}
@@ -107,12 +109,13 @@ export function CreateTicket(props: IndexProps) {
             infoMessage={
               'You and the tutor will still need to negotiate! If your budget is not within the range add your budget to the Additional Notes.'
             }
-          />
+          /> */}
 
           <TextArea
             message="Additional Notes"
-            value={textAreaInput}
-            onChange={(e) => setTextAreaInput(e.target.value)}
+            placeholder="Enter Additional Info"
+            value={additionalNotes}
+            onChange={(e) => setAdditionalNotes(e.target.value)}
             textLimit={300}
           />
 
