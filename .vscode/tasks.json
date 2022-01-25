@@ -20,9 +20,9 @@
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "Serve Tutor Dashboard",
+      "label": "Serve User Dashboard",
       "type": "shell",
-      "command": "nx serve tutor-dashboard",
+      "command": "nx serve user-dashboard",
       "problemMatcher": "$msCompile"
     },
     {

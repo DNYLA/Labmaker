@@ -1,6 +1,6 @@
 {
-  "root": "apps/tutor-dashboard",
-  "sourceRoot": "apps/tutor-dashboard/src",
+  "root": "apps/user-dashboard",
+  "sourceRoot": "apps/user-dashboard/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,15 +9,15 @@
       "defaultConfiguration": "production",
       "options": {
         "compiler": "babel",
-        "outputPath": "dist/apps/tutor-dashboard",
-        "index": "apps/tutor-dashboard/src/index.html",
+        "outputPath": "dist/apps/user-dashboard",
+        "index": "apps/user-dashboard/src/index.html",
         "baseHref": "/",
-        "main": "apps/tutor-dashboard/src/main.tsx",
-        "polyfills": "apps/tutor-dashboard/src/polyfills.ts",
-        "tsConfig": "apps/tutor-dashboard/tsconfig.app.json",
+        "main": "apps/user-dashboard/src/main.tsx",
+        "polyfills": "apps/user-dashboard/src/polyfills.ts",
+        "tsConfig": "apps/user-dashboard/tsconfig.app.json",
         "assets": [
-          "apps/tutor-dashboard/src/favicon.ico",
-          "apps/tutor-dashboard/src/assets"
+          "apps/user-dashboard/src/favicon.ico",
+          "apps/user-dashboard/src/assets"
         ],
         "styles": [],
         "scripts": [],
@@ -27,8 +27,8 @@
         "production": {
           "fileReplacements": [
             {
-              "replace": "apps/tutor-dashboard/src/environments/environment.ts",
-              "with": "apps/tutor-dashboard/src/environments/environment.prod.ts"
+              "replace": "apps/user-dashboard/src/environments/environment.ts",
+              "with": "apps/user-dashboard/src/environments/environment.prod.ts"
             }
           ],
           "optimization": true,
@@ -43,13 +43,13 @@
     "serve": {
       "executor": "@nrwl/web:dev-server",
       "options": {
-        "buildTarget": "tutor-dashboard:build",
+        "buildTarget": "user-dashboard:build",
         "hmr": true,
         "port": 4201
       },
       "configurations": {
         "production": {
-          "buildTarget": "tutor-dashboard:build:production",
+          "buildTarget": "user-dashboard:build:production",
           "hmr": false
         }
       }
@@ -58,14 +58,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/tutor-dashboard/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/user-dashboard/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/tutor-dashboard"],
+      "outputs": ["coverage/apps/user-dashboard"],
       "options": {
-        "jestConfig": "apps/tutor-dashboard/jest.config.js",
+        "jestConfig": "apps/user-dashboard/jest.config.js",
         "passWithNoTests": true
       }
     }
