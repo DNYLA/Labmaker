@@ -10,6 +10,7 @@ import { Ticket } from '@labmaker/shared';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { ConvertType, ConvertEdu, ConvertSbj } from '../../utils/helpers';
 
 interface TicketContainerProps {
   subject: string;
@@ -71,17 +72,27 @@ export function TicketModal({ ticket }: TicketProps) {
       setOpen={setIsOpen}
       design={
         <TicketContainer
-          subject={subject}
-          type={type}
+          subject={ConvertSbj(subject)}
+          type={ConvertType(type)}
           budget={budget}
           due={due}
         />
       }
     >
-      <InputBox message="Type" value={type} disabled={true} />
-      <InputBox message="Subject" value={subject} disabled={true} />
-      <InputBox message="Education" value={education} disabled={true} />
-      <InputBox message="Budget" value={budget.toString()} disabled={true} />
+      <InputBox message="Type" value={ConvertType(type)} disabled={true} />
+      <InputBox message="Subject" value={ConvertSbj(subject)} disabled={true} />
+      <InputBox
+        message="Education"
+        value={ConvertEdu(education)}
+        disabled={true}
+      />
+      <InputBox
+        message="Budget"
+        value={budget.toString()}
+        prefix={'$'}
+        type={'number'}
+        disabled={true}
+      />
       <InputBox message="Due" value={due.toString()} disabled={true} />
       <InputDate message="Due Date" value={dueDateObj} />
       {/* Doesnt Work Update to InputBox Or Fix (Input Box Probably Better) */}
@@ -152,3 +163,6 @@ const ModalButton = styled.button`
     color: ${(p) => p.theme.navbar.active};
   }
 `;
+function convertSubject(subject: string): string {
+  throw new Error('Function not implemented.');
+}
