@@ -1,5 +1,5 @@
 import { InputBox, ModalPopup, SwitchToggle, TextArea } from '@labmaker/ui';
-import { TicketDto } from '@labmaker/wrapper';
+import { Ticket } from '@labmaker/shared';
 import moment from 'moment';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -12,7 +12,7 @@ interface TicketContainerProps {
 }
 
 interface TicketProps {
-  ticket: TicketDto;
+  ticket: Ticket;
 }
 
 function TicketContainer({ subject, type, budget, due }: TicketContainerProps) {

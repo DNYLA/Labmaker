@@ -16,8 +16,11 @@ export function Tickets(props: IndexProps) {
     <Page>
       <LoadingSpinner loading={loading} message="Loading Tickets" />
       <Section>
-        {!loading && tickets && <TicketsList tickets={tickets} />}
-        {((!loading && (!tickets || tickets?.length === 0)) || error) && (
+        {!loading &&
+        tickets &&
+        (tickets.active.length > 0 || tickets.completed.length > 0) ? (
+          <TicketsList tickets={tickets} />
+        ) : (
           <>
             <h1>You Don't have Any Previous Tickets!</h1>
             <p>

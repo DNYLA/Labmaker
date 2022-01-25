@@ -3,6 +3,7 @@ import { CreateTicketDto, UpdateTicketDto } from '../dtos/create-ticket.dto';
 import { Role, Ticket } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserDetails } from '../../auth/userDetails.dto';
+import { Tickets } from '@labmaker/shared';
 
 @Injectable()
 export class TicketService {
@@ -25,7 +26,7 @@ export class TicketService {
    * @param {string} serverId - The ID of the server to get tickets for.
    * @returns An array of tickets.
    */
-  async getTickets(serverId: string, user: UserDetails): Promise<Ticket[]> {
+  async getTickets(serverId: string, user: UserDetails): Promise<Tickets> {
     let filter = {};
 
     if (user.role === Role.USER) {
@@ -38,9 +39,21 @@ export class TicketService {
 
     // console.log(user.ro);
 
-    return await this.prismaService.ticket.findMany({
+    const fetchedTickets = await this.prismaService.ticket.findMany({
       where: filter,
     });
+
+    const filteredTickets: Tickets = {
+      active: [],
+      completed: [],
+    };
+
+    fetchedTickets.forEach((ticket) => {
+      if (ticket.completed) filteredTickets.completed.push(ticket);
+      else filteredTickets.active.push(ticket);
+    });
+
+    return filteredTickets;
   }
 
   /**

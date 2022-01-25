@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@labmaker/shared": ["libs/shared/src/index.ts"],
       "@labmaker/ui": ["libs/ui/src/index.ts"],
       "@labmaker/wrapper": ["libs/wrapper/src/index.ts"]
     }

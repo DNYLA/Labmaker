@@ -9,7 +9,7 @@ import {
   SettingsContainer,
   TextArea,
 } from '@labmaker/ui';
-import { createTicket, CreateTicket } from '@labmaker/wrapper';
+import { createTicket } from '@labmaker/wrapper';
 import { RootState } from '../../store';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -18,6 +18,7 @@ import styled from 'styled-components';
 import { error } from 'console';
 import { typeItems, subjectItems, educationItems } from '../../utils/static';
 import { useNavigate } from 'react-router-dom';
+import { CreateTicket } from '@labmaker/shared';
 
 /* eslint-disable-next-line */
 export interface IndexProps {}
@@ -29,7 +30,7 @@ const defaultTicket: CreateTicket = {
   subject: 'maths',
   education: 'College',
   budget: 50,
-  due: new Date().toISOString(),
+  due: new Date(),
   additionalInfo: '',
 };
 
@@ -51,7 +52,7 @@ export function CreateTicketPage(props: IndexProps) {
       subject: subjectItems[0].value.toString(),
       education: educationItems[0].value.toString(),
       budget: 50,
-      due: new Date().toISOString(),
+      due: new Date(),
       additionalInfo: '',
     });
   }, [user.id]);
