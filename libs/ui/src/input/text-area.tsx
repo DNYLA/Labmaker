@@ -12,6 +12,7 @@ export interface TextAreaProps {
   onChange: IOnTextAreaChange;
   disabled?: boolean;
   textLimit?: number;
+  placeholder?: string;
 }
 
 export function TextArea({
@@ -21,6 +22,7 @@ export function TextArea({
   onChange,
   disabled,
   textLimit,
+  placeholder,
 }: TextAreaProps) {
   let handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e);
 
@@ -40,10 +42,12 @@ export function TextArea({
             {value.length} / {textLimit}
           </span>
         )}
+
         <StyledTextarea
           value={value}
           onChange={handleChange}
           disabled={disabled}
+          placeholder={placeholder}
         />
       </TextareaContainer>
     </StyledTextArea>
