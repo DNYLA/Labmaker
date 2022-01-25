@@ -27,7 +27,6 @@ model User {
   tokenVersion  Int            @default(0)
   role          Role?          @default(USER)
   nodes         RedditConfig[]
-
 }
 
 model RedditConfig {
@@ -95,6 +94,7 @@ model Order {
 //It is Finished.
 model Ticket {
   id            Int           @id @default(autoincrement())
+  ticketId      Int //Ticket ID is the ID of the Channel Name not database ID
   serverId      String
   channelId     String
   type          String        @default("")
@@ -105,8 +105,8 @@ model Ticket {
   submitted     Boolean       @default(false)
   discordConfig DiscordConfig @relation(fields: [serverId], references: [id])
   transactions  Order[]
-  creatorId     String
-  tutorId       String?
+  // creatorId     String
+  // tutorId       String?
   // student       User          @relation("student", fields: [creatorId], references: [id])
   // tutor         User?         @relation("tutor", fields: [tutorId], references: [id])
 }
