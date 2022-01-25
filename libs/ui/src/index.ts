@@ -17,3 +17,5 @@ export * from './input/input-range';
 
 export * from './themes';
 export * from './login';
+
+export * from './other/modal-popup';
