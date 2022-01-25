@@ -1,5 +1,6 @@
 import { InputBox, ModalPopup, SwitchToggle, TextArea } from '@labmaker/ui';
 import { TicketDto } from '@labmaker/wrapper';
+import { TicketModal } from './ticket';
 import moment from 'moment';
 import React from 'react';
 import styled from 'styled-components';
@@ -8,73 +9,11 @@ interface TicketsListProps {
   tickets: TicketDto[];
 }
 
-interface TicketProps {
-  subject: string;
-  type: string;
-  budget: number;
-  due: Date;
-}
-
-export function Ticket({ subject, type, budget, due }: TicketProps) {
-  return (
-    <TicketStyle>
-      <h4>
-        {subject} - {type}
-      </h4>
-      <h4>${budget}</h4>
-      <h4>{moment(due, 'YYYYMMDD').toNow(true)}</h4>
-    </TicketStyle>
-  );
-}
-
 export default function TicketsList({ tickets }: TicketsListProps) {
   return (
     <StyledTickets>
-      {tickets.map((t) => {
-        return (
-          <ModalPopup
-            title={`Ticket ${t.id}`}
-            design={
-              <Ticket
-                subject={t.subject}
-                type={t.type}
-                budget={t.budget}
-                due={t.due}
-              />
-            }
-            items={[]}
-            onChange={() => console.log('hi')}
-          >
-            <InputBox message="Type" value={t.type} disabled={true} />
-            <InputBox message="Subject" value={t.subject} disabled={true} />
-            <InputBox message="Education" value={t.education} disabled={true} />
-            <InputBox
-              message="Budget"
-              value={t.budget.toString()}
-              disabled={true}
-            />
-            <InputBox message="Due" value={t.due.toString()} disabled={true} />
-            <TextArea
-              message="Additional Info"
-              value={t.additionalInfo}
-              disabled={true}
-            />
-            <SwitchToggle
-              toggled={true}
-              onToggle={() => console.log('x')}
-              message={'Paid'}
-            />
-            <SwitchToggle
-              toggled={false}
-              onToggle={() => console.log('x')}
-              message={'Completed'}
-            />
-            <ButtonContainer>
-              <MenuButton>Resign</MenuButton>
-              <MenuButton>Channel</MenuButton>
-            </ButtonContainer>
-          </ModalPopup>
-        );
+      {tickets.map((ticket) => {
+        return <TicketModal ticket={ticket} />;
       })}
     </StyledTickets>
   );
