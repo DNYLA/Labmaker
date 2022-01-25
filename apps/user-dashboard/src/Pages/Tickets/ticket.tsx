@@ -1,7 +1,13 @@
-import { InputBox, ModalPopup, SwitchToggle, TextArea } from '@labmaker/ui';
+import {
+  InputBox,
+  InputDate,
+  ModalPopup,
+  SwitchToggle,
+  TextArea,
+} from '@labmaker/ui';
 import { Ticket } from '@labmaker/shared';
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 interface TicketContainerProps {
@@ -40,6 +46,11 @@ export function TicketModal({ ticket }: TicketProps) {
     completed,
     additionalInfo,
   } = ticket;
+  const [dueDateObj, setDueDate] = useState(due);
+
+  useEffect(() => {
+    setDueDate(new Date(due));
+  }, [due]);
 
   const handleResign = () => {
     //Call API to Resign Tutor.
@@ -71,6 +82,12 @@ export function TicketModal({ ticket }: TicketProps) {
       <InputBox message="Education" value={education} disabled={true} />
       <InputBox message="Budget" value={budget.toString()} disabled={true} />
       <InputBox message="Due" value={due.toString()} disabled={true} />
+      <InputDate
+        message="Due Date"
+        value={dueDateObj}
+        onChange={(e) => console.log(e)}
+      />
+
       <TextArea
         message="Additional Info"
         value={additionalInfo}

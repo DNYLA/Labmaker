@@ -1,25 +1,54 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { InfoTitle } from './info-box';
 
 export interface IOnDateChange {
-  (event: React.ChangeEvent<HTMLInputElement>): void;
+  (date: Date): void;
 }
 
 export interface DateProps {
   message?: string;
-  onChange: IOnDateChange;
+  onChange?: IOnDateChange;
+  value: Date;
 }
 
-export function InputDate({ message, onChange }: DateProps) {
+export function InputDate({ message, onChange, value }: DateProps) {
   const d = new Date(Date.now());
   const minDate = d.toISOString().split('T')[0];
   d.setFullYear(d.getFullYear() + 2);
   const maxDate = d.toISOString().split('T')[0];
+  const wlz = (n: number) => (n <= 9 ? `0${n}` : n);
+
+  const convertToDate = (d: Date) => {
+    const yyyy = wlz(d.getFullYear());
+    const mm = wlz(d.getMonth() + 1);
+    const dd = wlz(d.getDate());
+
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const onDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const d = e.target.valueAsDate;
+    const dueDate = value;
+
+    if (d) {
+      dueDate.setMonth(d.getMonth());
+      dueDate.setDate(d.getDate());
+      dueDate.setFullYear(d.getFullYear());
+      if (onChange) onChange(dueDate);
+    }
+  };
 
   return (
     <StyledDateContainer>
       {message ? <InfoTitle title={message} /> : null}
-      <StyledDate type="date" onChange={onChange} min={minDate} max={maxDate} />
+      <StyledDate
+        type="date"
+        onChange={onDateChange}
+        min={minDate}
+        max={maxDate}
+        value={convertToDate(value)}
+      />
     </StyledDateContainer>
   );
 }
