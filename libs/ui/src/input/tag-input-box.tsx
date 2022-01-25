@@ -168,11 +168,11 @@ const InputTag = styled.div`
     height: 30px;
     background: ${(p) => p.theme.input.backCol};
     border-radius: 5px;
-    border: 2px solid ${(p) => p.theme.input.borderCol};
+    border: 0;
     transition: 340ms;
 
     :focus {
-      opacity: 80%;
+      background: ${(p) => p.theme.input.activeCol};
       outline: 0;
       transition: 340ms;
     }

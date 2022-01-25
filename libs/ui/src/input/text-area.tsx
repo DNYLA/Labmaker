@@ -12,6 +12,7 @@ export interface TextAreaProps {
   onChange: IOnTextAreaChange;
   disabled?: boolean;
   textLimit?: number;
+  placeholder?: string;
 }
 
 export function TextArea({
@@ -21,6 +22,7 @@ export function TextArea({
   onChange,
   disabled,
   textLimit,
+  placeholder,
 }: TextAreaProps) {
   let handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e);
 
@@ -40,10 +42,12 @@ export function TextArea({
             {value.length} / {textLimit}
           </span>
         )}
+
         <StyledTextarea
           value={value}
           onChange={handleChange}
           disabled={disabled}
+          placeholder={placeholder}
         />
       </TextareaContainer>
     </StyledTextArea>
@@ -74,14 +78,14 @@ const StyledTextarea = styled.textarea`
   width: 100%;
   height: 100px;
   margin-top: 5px;
-  background: ${(p) => p.theme.input.backCol};
-  border: 2px solid ${(p) => p.theme.input.borderCol};
+  background-color: ${(p) => p.theme.input.backCol};
+  border: 0;
   border-radius: 5px;
-  transition: 340ms;
-
+  transition: background-color 250ms ease-in-out;
   min-width: 90%;
+
   :focus {
-    opacity: 80%;
+    background-color: ${(p) => p.theme.input.activeCol};
     outline: 0;
   }
 
@@ -90,6 +94,4 @@ const StyledTextarea = styled.textarea`
     user-select: none;
     pointer-events: none;
   }
-
-  transition: 150ms;
 `;
