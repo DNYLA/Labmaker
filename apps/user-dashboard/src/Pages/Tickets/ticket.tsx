@@ -30,8 +30,8 @@ interface TicketContainerProps {
 interface TicketModalProps {
   ticket: Ticket;
   student: boolean;
-  refresh: any;
-  setRefresh: any;
+  refresh: boolean;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function TicketContainer({

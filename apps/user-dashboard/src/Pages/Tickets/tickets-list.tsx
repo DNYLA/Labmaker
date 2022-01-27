@@ -9,8 +9,8 @@ interface TicketsListProps {
   tickets: Tickets;
   createEvent: () => void; //Prop Drill create event because its pointless re-writing it inside here
   findEvent: () => void;
-  refresh: any;
-  setRefresh: any;
+  refresh: boolean;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function TicketsList({

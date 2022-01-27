@@ -21,8 +21,8 @@ import { updateTicket } from '@labmaker/wrapper';
 
 interface PartialTicketProps {
   ticket: PartialTicket;
-  setRefresh: any;
-  refresh: any;
+  refresh: boolean;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function PartialTicketModal({
