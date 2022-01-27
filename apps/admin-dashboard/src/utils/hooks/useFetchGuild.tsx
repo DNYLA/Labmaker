@@ -1,11 +1,5 @@
 import { Item } from '@labmaker/ui';
-import {
-  getGuildDetails,
-  GuildConfig,
-  GuildConfigDto,
-  PaymentDto,
-  updatePayments,
-} from '@labmaker/wrapper';
+import { getGuildDetails, updatePayments } from '@labmaker/wrapper';
 import React, { useEffect, useState } from 'react';
 import { RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';

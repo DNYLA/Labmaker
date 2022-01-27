@@ -8,9 +8,8 @@ export const defaultUser: UserDto = {
   username: 'Username',
   discriminator: '4444',
   avatar: 'http://google.com',
-  nodes: [],
-  editableNodes: [],
   role: UserRole.USER,
+  verifiedSubjects: [],
 };
 
 export const userSlice = createSlice({

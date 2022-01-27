@@ -1,19 +1,31 @@
 import {
+  AdminUser,
   Guild,
-  GuildConfigDto,
   LogDto,
   RedditConfigDto,
+  UserDto,
+  UserRole,
 } from '@labmaker/wrapper';
-import { RedditConfig, Payment, User } from './types';
+import { GuildConfig } from '@labmaker/shared';
+import { RedditConfig, Payment } from './types';
 
-export const defaultUser: User = {
+export const defaultUser: UserDto = {
+  id: '-1',
+  username: 'Username',
+  discriminator: '4444',
+  avatar: 'http://google.com',
+  role: UserRole.USER,
+  verifiedSubjects: [],
+};
+
+export const defaultAdminUser: AdminUser = {
   id: '-1',
   username: 'Username',
   discriminator: '4444',
   avatar: 'http://google.com',
   nodes: [],
   editableNodes: [],
-  loading: true,
+  role: UserRole.USER,
 };
 
 export const loadingLogs: LogDto = {
@@ -54,7 +66,7 @@ export const loadingRedditConfig: RedditConfig = {
   loading: true,
 };
 
-export const loadingDiscordConfig: GuildConfigDto = {
+export const loadingDiscordConfig: GuildConfig = {
   id: '-1',
   name: 'Loading Server',
   paymentConfigId: '0',

@@ -1,7 +1,7 @@
 //Update Actual API with this if the tests work
 
 import axios, { AxiosRequestConfig } from 'axios';
-import { AuthResult, UserDto } from '../types';
+import { AdminUser, AuthResult, UserDto } from '../types';
 
 const CONFIG: AxiosRequestConfig = { withCredentials: true };
 export const AXIOS = axios.create(CONFIG); //Axios Uses .defaults.baseURL to set/call the API this way we can change the API URL outside the library.
@@ -15,6 +15,8 @@ export const setBaseURL = (baseURL: string, accessToken?: string) => {
 export const loginURL = () => `${AXIOS.defaults.baseURL}/auth/login`;
 
 export const getUser = () => AXIOS.get<UserDto>(`/user/`);
+
+export const getAdminUser = () => AXIOS.get<AdminUser>('/user/admin');
 
 const refreshToken = () => {
   const instance = axios.create(CONFIG); //Dont want to use Interceptors when refreshing token

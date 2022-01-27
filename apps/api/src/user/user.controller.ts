@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/guards/Jwt.guard';
 import { UserDetails } from '../auth/userDetails.dto';
 import { CurrentUser } from '../utils/decorators';
-import { UserDto } from './dto/User.dto';
+import { AdminUser, UserDto } from './dto/User.dto';
 // import { Request } from 'express';
 
 @Controller('user')
@@ -14,5 +14,11 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   getUser(@CurrentUser() user: UserDetails): Promise<UserDto> {
     return this.userService.getUser(user);
+  }
+
+  @Get('/admin')
+  @UseGuards(JwtAuthGuard)
+  getAdminUser(@CurrentUser() user: UserDetails): Promise<AdminUser> {
+    return this.userService.getAdminUser(user);
   }
 }

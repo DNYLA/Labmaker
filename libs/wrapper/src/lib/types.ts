@@ -1,3 +1,4 @@
+//Move All of the types over to Shared/Types
 export type CreateOrderDto = {
   /**
    * Channel ID to ticket relating to payment.
@@ -66,6 +67,15 @@ export enum UserRole {
 }
 
 export type UserDto = {
+  id: string;
+  username: string;
+  discriminator: string;
+  avatar?: string;
+  role: UserRole;
+  verifiedSubjects: string[];
+};
+
+export type AdminUser = {
   id: string;
   username: string;
   discriminator: string;

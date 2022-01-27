@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserDto } from '@labmaker/wrapper';
-import { defaultUser } from '../../utils/LoadingTypes';
+import { AdminUser } from '@labmaker/wrapper';
+import { defaultAdminUser } from '../../utils/LoadingTypes';
 import { RedditConfig } from '../../utils/types';
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
-    value: defaultUser,
+    value: defaultAdminUser,
   },
   reducers: {
-    setUser: (state, action: PayloadAction<UserDto>) => {
+    setUser: (state, action: PayloadAction<AdminUser>) => {
       state.value = action.payload;
     },
     addNode: (state, action: PayloadAction<RedditConfig[]>) => {
