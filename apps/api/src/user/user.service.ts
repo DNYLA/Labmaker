@@ -17,9 +17,9 @@ export class UserService {
   /**
    * Get the user from the database, and fetch the extra nodes from the database.
    */
-  async getUser(userDetails: UserDetails): Promise<UserDto> {
+  async getUser(id: string): Promise<UserDto> {
     const user = await this.prismaService.user.findUnique({
-      where: { id: userDetails.id },
+      where: { id },
     });
 
     //Add Redis caching to add delays between refetching user. E.G cache when last fetched
@@ -48,9 +48,9 @@ export class UserService {
     });
   }
 
-  async getAdminUser(userDetails: UserDetails): Promise<AdminUser> {
+  async getAdminUser(id: string): Promise<AdminUser> {
     const user = await this.prismaService.user.findUnique({
-      where: { id: userDetails.id },
+      where: { id },
       include: { nodes: true },
     });
 

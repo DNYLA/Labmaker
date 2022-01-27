@@ -1,6 +1,6 @@
 import { RedditConfig } from '.prisma/client';
 import {
-  BadRequestException,
+  ForbiddenException,
   Injectable,
   Logger,
   NotFoundException,
@@ -11,16 +11,21 @@ import {
   CreateConfigDto,
   UpdateConfigDto,
 } from '../dtos/create-redditconfig.dto';
+import { UserDetails } from '../../auth/userDetails.dto';
+import { UserService } from '../../user/user.service';
+import { UserRole } from '@labmaker/wrapper';
 
 @Injectable()
 export class ConfigService {
   constructor(
     private prismaService: PrismaService,
+    private userService: UserService,
     private wsGateway: WebsocketGateway
   ) {}
   private readonly logger = new Logger(ConfigService.name);
 
-  async getConfig(id: number): Promise<RedditConfig> {
+  async getConfig(id: number, userDetails: UserDetails): Promise<RedditConfig> {
+    await this.validNode(userDetails, id);
     return await this.prismaService.redditConfig.findUnique({ where: { id } });
   }
 
@@ -33,7 +38,12 @@ export class ConfigService {
    * @param {CreateConfigDto} newConfig - CreateConfigDto: The data to create the config with.
    * @returns A new config object.
    */
-  async createConfig(newConfig: CreateConfigDto): Promise<RedditConfig> {
+  async createConfig(
+    newConfig: CreateConfigDto,
+    user: UserDetails
+  ): Promise<RedditConfig> {
+    if (user.id !== UserRole.ADMIN) throw new ForbiddenException();
+
     const config = await this.prismaService.redditConfig.create({
       data: newConfig,
     });
@@ -47,18 +57,25 @@ export class ConfigService {
    * @param {UpdateConfigDto} ucd - UpdateConfigDto
    * @returns The updated config.
    */
-  async updateConfig(ucd: UpdateConfigDto): Promise<RedditConfig | undefined> {
-    const editors = ucd.nodeEditors.filter((userId) => userId !== ucd.userId);
-    ucd.nodeEditors = [...new Set(editors)]; //Dont store Duplicates
+  async updateConfig(
+    config: UpdateConfigDto,
+    user: UserDetails
+  ): Promise<RedditConfig | undefined> {
+    await this.validNode(user, config.id);
 
-    const config = await this.prismaService.redditConfig.update({
-      where: { id: ucd.id },
-      data: ucd,
+    const editors = config.nodeEditors.filter(
+      (userId) => userId !== config.userId
+    );
+    config.nodeEditors = [...new Set(editors)]; //Dont store Duplicates
+
+    const updatedConfig = await this.prismaService.redditConfig.update({
+      where: { id: config.id },
+      data: config,
     });
-    if (!config) throw new NotFoundException('Unable to locate config');
+    if (!updatedConfig) throw new NotFoundException('Unable to locate config');
 
-    this.wsGateway.notifyConfig(config);
-    return config;
+    this.wsGateway.notifyConfig(updatedConfig);
+    return updatedConfig;
   }
 
   /**
@@ -66,11 +83,22 @@ export class ConfigService {
    * @param {number} id - number - The id of the config to delete.
    * @returns The deleted config.
    */
-  async deleteConfig(id: number): Promise<RedditConfig> {
+  async deleteConfig(id: number, user: UserDetails): Promise<RedditConfig> {
+    await this.validNode(user, id);
+
     const config = await this.prismaService.redditConfig.delete({
       where: { id },
     });
     this.wsGateway.deleteConfig(id.toString());
     return config;
+  }
+
+  private async validNode(user: UserDetails, nodeId: number) {
+    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT)
+      throw new ForbiddenException();
+
+    const fetchedUser = await this.userService.getAdminUser(user.id);
+    const node = fetchedUser.nodes.filter((n) => n.id === nodeId);
+    if (!node) throw new ForbiddenException();
   }
 }

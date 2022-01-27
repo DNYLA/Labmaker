@@ -9,6 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { RedditConfig } from '@prisma/client';
+import { UserDetails } from '../../auth/userDetails.dto';
+import { CurrentUser } from '../../utils/decorators';
 import { JwtAuthGuard, JwtBotAuthGuard } from '../../auth/guards/Jwt.guard';
 import {
   CreateConfigDto,
@@ -22,8 +24,11 @@ export class ConfigController {
 
   @Get('/:id')
   @UseGuards(JwtAuthGuard)
-  getConfig(@Param('id') id: number): Promise<RedditConfig> {
-    return this.configService.getConfig(id);
+  getConfig(
+    @Param('id') id: number,
+    @CurrentUser() user: UserDetails
+  ): Promise<RedditConfig> {
+    return this.configService.getConfig(id, user);
   }
 
   @Get('')
@@ -34,18 +39,24 @@ export class ConfigController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  createConfig(@Body() body: CreateConfigDto): Promise<RedditConfig> {
-    return this.configService.createConfig(body);
+  createConfig(
+    @Body() body: CreateConfigDto,
+    @CurrentUser() user: UserDetails
+  ): Promise<RedditConfig> {
+    return this.configService.createConfig(body, user);
   }
 
   @Put()
-  updateConfig(@Body() body: UpdateConfigDto) {
-    return this.configService.updateConfig(body);
+  updateConfig(
+    @Body() body: UpdateConfigDto,
+    @CurrentUser() user: UserDetails
+  ) {
+    return this.configService.updateConfig(body, user);
   }
 
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
-  deleteConfig(@Param('id') id: number) {
-    return this.configService.deleteConfig(id);
+  deleteConfig(@Param('id') id: number, @CurrentUser() user: UserDetails) {
+    return this.configService.deleteConfig(id, user);
   }
 }

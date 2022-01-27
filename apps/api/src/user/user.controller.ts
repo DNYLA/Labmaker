@@ -13,12 +13,12 @@ export class UserController {
   @Get('')
   @UseGuards(JwtAuthGuard)
   getUser(@CurrentUser() user: UserDetails): Promise<UserDto> {
-    return this.userService.getUser(user);
+    return this.userService.getUser(user.id);
   }
 
   @Get('/admin')
   @UseGuards(JwtAuthGuard)
   getAdminUser(@CurrentUser() user: UserDetails): Promise<AdminUser> {
-    return this.userService.getAdminUser(user);
+    return this.userService.getAdminUser(user.id);
   }
 }
