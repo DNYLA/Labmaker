@@ -1,3 +1,4 @@
+import { PartialTicket, TicketAction, Tickets } from '@labmaker/shared';
 import {
   Body,
   Controller,
@@ -6,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { Ticket } from '@prisma/client';
@@ -19,21 +21,31 @@ import { TicketService } from '../services/ticket.service';
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 
-  @Get('/:serverId/:ticketId')
-  getTicket(
+  // @Get('/:serverId/:ticketId')
+  // getTicket(
+  //   @Param('serverId') serverId: string,
+  //   @Param('ticketId') ticketId: number
+  // ): Promise<Ticket> | undefined {
+  //   return this.ticketService.getTicket(serverId, ticketId);
+  // }
+
+  @Get('/:serverId/:userId')
+  @UseGuards(JwtAuthGuard)
+  getTickets(
     @Param('serverId') serverId: string,
-    @Param('ticketId') ticketId: number
-  ): Promise<Ticket> | undefined {
-    return this.ticketService.getTicket(serverId, ticketId);
+    @Param('userId') userId: string,
+    @CurrentUser() user: UserDetails
+  ): Promise<Tickets> {
+    return this.ticketService.getTickets(serverId, userId, user);
   }
 
   @Get('/:serverId')
   @UseGuards(JwtAuthGuard)
-  getTickets(
+  getServerTickets(
     @Param('serverId') serverId: string,
     @CurrentUser() user: UserDetails
-  ): Promise<Ticket[]> {
-    return this.ticketService.getTickets(serverId, user);
+  ): Promise<PartialTicket[]> {
+    return this.ticketService.getServerTickets(serverId, user);
   }
 
   @Post()
@@ -42,12 +54,27 @@ export class TicketController {
     @Body() body: CreateTicketDto,
     @CurrentUser() user: UserDetails
   ): Promise<Ticket> {
-    return this.ticketService.createTicket(body);
+    return this.ticketService.createTicket(body, user);
   }
 
-  @Put()
-  updateTicket(@Body() body: UpdateTicketDto): Promise<Ticket> {
-    return this.ticketService.updateConfig(body);
+  @Put('/:serverId/:ticketId/accept')
+  handleTicket(
+    @Param('serverId') serverId: string,
+    @Param('ticketId') ticketId: number,
+    @Query('action') action: TicketAction,
+    @CurrentUser() user: UserDetails
+  ): Promise<Ticket> {
+    return this.ticketService.handleTicket(serverId, ticketId, action, user);
+  }
+
+  @Put('/:serverId/:ticketId/resign')
+  resignTutor(
+    @Param('serverId') serverId: string,
+    @Param('ticketId') ticketId: number,
+    @Query('action') action: TicketAction,
+    @CurrentUser() user: UserDetails
+  ): Promise<Ticket> {
+    return this.ticketService.handleTicket(serverId, ticketId, action, user);
   }
 
   @Delete('/:id')

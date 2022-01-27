@@ -1,10 +1,5 @@
-import {
-  IsDate,
-  IsDateString,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { Education, Subjects, TicketType } from '@prisma/client';
+import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateTicketDto {
   @IsString()
@@ -13,14 +8,15 @@ export class CreateTicketDto {
   @IsString()
   serverId: string;
 
+  //Add Validation to the Below
   @IsString()
-  type: string;
+  type: TicketType;
 
   @IsString()
-  subject: string;
+  subject: Subjects;
 
   @IsString()
-  education: string;
+  education: Education;
 
   @IsNumber()
   budget: number;

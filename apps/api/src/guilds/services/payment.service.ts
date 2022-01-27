@@ -1,10 +1,4 @@
-import {
-  HttpCode,
-  HttpStatus,
-  Injectable,
-  Logger,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpCode, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
   CreatePaymentDtoArray,
   UpdatePaymentDtoArray,

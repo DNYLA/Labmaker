@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,25 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
-  TUTOR
-  ADMIN
-  BOT
-}
-
 model User {
-  id             String         @id
-  username       String
-  discriminator  String
-  avatar         String?        @default("")
-  accessToken    String
-  refreshToken   String
-  tokenVersion   Int            @default(0)
-  role           Role?          @default(USER)
-  nodes          RedditConfig[]
-  studentTickets Ticket[]       @relation("student")
-  tutorTickets   Ticket[]       @relation("tutor")
+  id               String         @id
+  username         String
+  discriminator    String
+  avatar           String?        @default("")
+  accessToken      String
+  refreshToken     String
+  tokenVersion     Int            @default(0)
+  role             Role?          @default(USER)
+  verifiedSubjects Subjects[]
+  nodes            RedditConfig[]
+  studentTickets   Ticket[]       @relation("student")
+  tutorTickets     Ticket[]       @relation("tutor")
 }
 
 model RedditConfig {
@@ -50,8 +41,6 @@ model RedditConfig {
   logs           Log[]
 }
 
-//Commented Out Relations as Payment Configs can be used across Multiple
-//Discord Configs
 model DiscordConfig {
   id              String   @id
   name            String?
@@ -61,9 +50,7 @@ model DiscordConfig {
   autoSwicher     Boolean  @default(false)
   autoTicket      Boolean  @default(false)
   autoReact       Boolean  @default(false)
-  // payment Payment[]
   paymentConfigId String
-  // Ticket          Ticket[]
   Ticket          Ticket[]
 }
 
@@ -71,46 +58,37 @@ model Payment {
   id       Int    @id @default(autoincrement())
   name     String
   value    String
-  type     String // Type 'Unlisted' will exclude it from being displayed. Used for paypal option.
-  // discordConfig DiscordConfig @relation(fields: [serverId], references: [id])
+  type     String
   serverId String
-}
-
-enum OrderStatus {
-  // INITIALIZED // Order has been created in table to link tutor to it
-  CREATED // Actual invoice has been created (ie paypal order created)
-  PAID // Invoice has been paid
 }
 
 model Order {
   id            Int         @id @default(autoincrement())
+  transactionId String      @unique
+  ticketId      Int?
   status        OrderStatus
   tutorId       String
-  transactionId String      @unique
   ticket        Ticket?     @relation(fields: [ticketId], references: [id])
-  ticketId      Int? // Ticket id NOT `ticketid` in ticket
 }
 
-//Update Client side to not Post ticket until
-//It is Finished.
 model Ticket {
-  id             Int    @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   serverId       String
-  channelId String @default("xxx")
-  type           String
-  subject        String
-  education      String
+  additionalInfo String        @default("")
+  creatorId      String
+  tutorId        String?
   budget         Int
-  additionalInfo String @default("")
-  creatorId     String
-  tutorId       String?
-  due           DateTime
-  completed     Boolean       @default(false)
-  paid          Boolean       @default(false)
-  student       User          @relation("student", fields: [creatorId], references: [id])
-  tutor         User?         @relation("tutor", fields: [tutorId], references: [id])
-  discordConfig DiscordConfig @relation(fields: [serverId], references: [id])
-  transactions  Order[]
+  due            DateTime
+  completed      Boolean       @default(false)
+  paid           Boolean       @default(false)
+  channelId      String        @default("xxx")
+  type           TicketType
+  subject        Subjects
+  education      Education
+  student        User          @relation("student", fields: [creatorId], references: [id])
+  discordConfig  DiscordConfig @relation(fields: [serverId], references: [id])
+  tutor          User?         @relation("tutor", fields: [tutorId], references: [id])
+  transactions   Order[]
 }
 
 model Log {
@@ -123,4 +101,43 @@ model Log {
   pm           Boolean
   createdAt    DateTime     @default(now())
   redditConfig RedditConfig @relation(fields: [nodeId], references: [id])
+}
+
+enum Role {
+  USER
+  TUTOR
+  ADMIN
+  BOT
+}
+
+//Using Strings until Prisma Allow Enums to easily map to another value
+//Alternativley we could create our own methods for this but it seems extrememly
+//Tedious and annoying to 
+enum Subjects {
+  Maths @map("maths")
+  CompSci @map("compSci")
+  English @map("english")
+  Chem @map("chem")
+  Physics @map("physics")
+  Bio @map("bio")
+  Other @map("other")
+}
+
+enum TicketType {
+  Homework @map("hw")
+  Exam @map("exam")
+  Assignment @map("assignment")
+  Other @map("other")
+  @@map("Type")
+}
+
+enum Education {
+  University @map("uni")
+  College @map("college")
+  Other @map("other")
+}
+
+enum OrderStatus {
+  CREATED
+  PAID
 }

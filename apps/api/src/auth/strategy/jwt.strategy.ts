@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { UserDetails, UserPayload } from '../../auth/userDetails.dto';
@@ -22,9 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
 
     if (!user)
-      throw new UnauthorizedException(
-        `You aren't authorized to access this data`
-      );
+      throw new ForbiddenException(`You don't permission to access this data`);
 
     return user;
   }
@@ -41,10 +39,8 @@ export class JwtBotStrategy extends PassportStrategy(Strategy, 'jwtbot') {
   }
 
   async validate(payload: UserDetails) {
-    if (payload.type !== Role.BOT)
-      throw new UnauthorizedException(
-        `You aren't authorized to access this data`
-      );
+    if (payload.role !== Role.BOT)
+      throw new ForbiddenException(`You don't permission to access this data`);
 
     return payload;
   }

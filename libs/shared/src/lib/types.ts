@@ -35,6 +35,17 @@ export type Ticket = CreateTicket & {
   paid: boolean;
 };
 
+export type PartialTicket = {
+  id: number;
+  serverId: string;
+  type: string;
+  subject: string;
+  education: string;
+  budget: number;
+  additionalInfo: string;
+  due: Date;
+};
+
 export type CreateTicket = {
   creatorId: string;
   serverId: string;
@@ -52,3 +63,31 @@ export type Tickets = {
 };
 //#endregion
 //#endregion
+
+export enum TicketAction {
+  Accept,
+  Resign,
+}
+
+export enum Subjects {
+  Maths = 'maths',
+  CompSci = 'compSci',
+  English = 'english',
+  Chem = 'chem',
+  Physics = 'physics',
+  Bio = 'bio',
+  Other = 'other',
+}
+
+export enum Type {
+  Homework = 'hw',
+  Exam = 'exam',
+  Assignment = 'assignment',
+  Other = 'other',
+}
+
+export enum Education {
+  University = 'uni',
+  College = 'college',
+  Other = 'other',
+}
