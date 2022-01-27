@@ -61,7 +61,7 @@ export class Client {
     );
 
     await Promise.all(
-      config.forbiddenWords.map((word, i) => {
+      config.forbiddenWords.map((word) => {
         if (item.title.toLowerCase().includes(word.toLowerCase())) {
           valid = false;
         } else if (item.selftext.toLowerCase().includes(word.toLowerCase())) {
