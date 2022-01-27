@@ -25,7 +25,7 @@ export class ConfigService {
   private readonly logger = new Logger(ConfigService.name);
 
   async getConfig(id: number, userDetails: UserDetails): Promise<RedditConfig> {
-    await this.validNode(userDetails, id);
+    await this.userService.validNode(userDetails, id);
     return await this.prismaService.redditConfig.findUnique({ where: { id } });
   }
 
@@ -61,7 +61,7 @@ export class ConfigService {
     config: UpdateConfigDto,
     user: UserDetails
   ): Promise<RedditConfig | undefined> {
-    await this.validNode(user, config.id);
+    await this.userService.validNode(user, config.id);
 
     const editors = config.nodeEditors.filter(
       (userId) => userId !== config.userId
@@ -84,21 +84,12 @@ export class ConfigService {
    * @returns The deleted config.
    */
   async deleteConfig(id: number, user: UserDetails): Promise<RedditConfig> {
-    await this.validNode(user, id);
+    await this.userService.validNode(user, id);
 
     const config = await this.prismaService.redditConfig.delete({
       where: { id },
     });
     this.wsGateway.deleteConfig(id.toString());
     return config;
-  }
-
-  private async validNode(user: UserDetails, nodeId: number) {
-    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT)
-      throw new ForbiddenException();
-
-    const fetchedUser = await this.userService.getAdminUser(user.id);
-    const node = fetchedUser.nodes.filter((n) => n.id === nodeId);
-    if (!node) throw new ForbiddenException();
   }
 }

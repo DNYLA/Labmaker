@@ -1,10 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { UserDetails } from '../auth/userDetails.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto, AdminUser } from './dto/User.dto';
 import { User } from '../utils/types';
 import { DiscordHttpService } from '../discord/services/discord-http.service';
 import { RedditConfig } from '@prisma/client';
+import { UserRole } from '@labmaker/wrapper';
 
 @Injectable()
 export class UserService {
@@ -101,6 +102,15 @@ export class UserService {
     user.nodes = await this.fetchExtraNodes(user.id, user.nodes);
 
     return user;
+  }
+
+  async validNode(user: UserDetails, nodeId: number) {
+    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT)
+      throw new ForbiddenException();
+
+    const fetchedUser = await this.getAdminUser(user.id);
+    const node = fetchedUser.nodes.filter((n) => n.id === nodeId);
+    if (!node) throw new ForbiddenException();
   }
 
   // createUser(details: UserDetails) {
