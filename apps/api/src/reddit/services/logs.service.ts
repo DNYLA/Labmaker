@@ -6,15 +6,24 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { WebSocketServer } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { WebsocketGateway } from '../../websockets/socket';
+import { UserDetails } from '../../auth/userDetails.dto';
+import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class LogsService {
   constructor(
     private prismaService: PrismaService,
+    private userService: UserService,
     private wsGateway: WebsocketGateway
   ) {}
 
-  async getLogs(nodeId: number, didPm: boolean): Promise<Log[]> {
+  async getLogs(
+    nodeId: number,
+    didPm: boolean,
+    user: UserDetails
+  ): Promise<Log[]> {
+    this.userService.validNode(user, nodeId);
+
     let filter;
     if (didPm) filter = { nodeId, pm: didPm };
     else filter = { nodeId };
@@ -28,7 +37,13 @@ export class LogsService {
     return logs;
   }
 
-  async queryGetLogs(nodeId: number, query: LogQueryParms): Promise<Log[]> {
+  async queryGetLogs(
+    nodeId: number,
+    query: LogQueryParms,
+    user: UserDetails
+  ): Promise<Log[]> {
+    this.userService.validNode(user, nodeId);
+
     const filter = { nodeId, pm: false };
 
     if (query.pmOnly) {
@@ -42,10 +57,20 @@ export class LogsService {
     });
   }
 
-  async getSubmissionIds(nodeId: number): Promise<string[]> {
-    const logs = await this.getLogs(nodeId, false);
-    const submissionIds = [];
+  async getSubmissionIds(nodeId: number, user: UserDetails): Promise<string[]> {
+    this.userService.validNode(user, nodeId);
 
+    const logs = await this.prismaService.log.findMany({
+      take: 250,
+      orderBy: { id: 'desc' },
+      where: { nodeId },
+      select: { subId: true },
+    });
+
+    //Change Reddit-Bot into allowing this type
+    // return logs;
+
+    const submissionIds = [];
     logs.forEach((log) => {
       submissionIds.push(log.subId);
     });
