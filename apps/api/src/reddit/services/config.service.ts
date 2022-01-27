@@ -42,7 +42,7 @@ export class ConfigService {
     newConfig: CreateConfigDto,
     user: UserDetails
   ): Promise<RedditConfig> {
-    if (user.id !== UserRole.ADMIN) throw new ForbiddenException();
+    if (user.role !== UserRole.ADMIN) throw new ForbiddenException();
 
     const config = await this.prismaService.redditConfig.create({
       data: newConfig,

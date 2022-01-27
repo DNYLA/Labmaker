@@ -47,6 +47,7 @@ export class ConfigController {
   }
 
   @Put()
+  @UseGuards(JwtAuthGuard)
   updateConfig(
     @Body() body: UpdateConfigDto,
     @CurrentUser() user: UserDetails
