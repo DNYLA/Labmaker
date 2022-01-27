@@ -7,7 +7,7 @@ export default class Clear extends Command {
     super('created', 'Admin', ['']);
   }
 
-  async run(client: DiscordClient, message: Message, args: string[]) {
+  async run(client: DiscordClient, message: Message) {
     const date2 = message.channel.createdAt;
     message.channel.send(date2.toDateString());
   }

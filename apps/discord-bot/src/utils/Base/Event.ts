@@ -7,5 +7,5 @@ export default abstract class Event {
     return this.name;
   }
 
-  abstract run(client: DiscordClient, ...args: any): Promise<void>;
+  abstract run(client: DiscordClient, ...args: string[]): Promise<void>;
 }

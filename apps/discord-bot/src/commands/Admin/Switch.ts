@@ -1,5 +1,4 @@
 import { Message, Permissions } from 'discord.js';
-import { GuildConfigDto } from '@labmaker/wrapper';
 import Command from '../../utils/Base/Command';
 import DiscordClient from '../../utils/client';
 
@@ -8,12 +7,7 @@ export default class Payment extends Command {
     super('switch', 'Admin', ['s']);
   }
 
-  async run(
-    client: DiscordClient,
-    message: Message,
-    args: string[],
-    guildConfig: GuildConfigDto
-  ) {
+  async run(client: DiscordClient, message: Message) {
     if (!message.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
       return message.channel.send('Invalid Permission to use command');
     }

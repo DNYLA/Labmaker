@@ -8,7 +8,7 @@ export default class Prefix extends Command {
     super('stop', 'Ticket', ['']);
   }
 
-  async run(client: DiscordClient, message: Message, args: string[]) {
+  async run(client: DiscordClient, message: Message) {
     if (message.channel.type == 'DM') return;
 
     const ticketIdMsg = message.channel.name

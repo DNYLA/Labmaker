@@ -10,7 +10,7 @@ export default class Prefix extends Command {
     super('ticket', 'Ticket', ['']);
   }
 
-  async run(client: DiscordClient, message: Message, args: string[]) {
+  async run(client: DiscordClient, message: Message) {
     const channel = message.channel as TextChannel;
     const ticketId = getTicketNo(channel);
     const guildId = channel.guild.id;
