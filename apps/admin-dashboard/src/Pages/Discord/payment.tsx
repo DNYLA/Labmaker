@@ -6,7 +6,7 @@ import styled from 'styled-components';
 export interface PaymentProps {
   payment: Payment;
   payments: Payment[];
-  setPayment: any;
+  setPayment: React.Dispatch<React.SetStateAction<Payment[]>>;
 }
 
 enum InputType {
@@ -16,7 +16,10 @@ enum InputType {
 }
 
 export function PaymentBox({ payment, payments, setPayment }: PaymentProps) {
-  const updatePayments = (e: any, inputType: InputType) => {
+  const updatePayments = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    inputType: InputType
+  ) => {
     const details = {
       name: payment.name,
       value: payment.value,
@@ -70,19 +73,19 @@ export function PaymentBox({ payment, payments, setPayment }: PaymentProps) {
       <InputBox
         message="Name"
         value={payment.name}
-        onChange={(e: any) => updatePayments(e, InputType.Name)}
+        onChange={(e) => updatePayments(e, InputType.Name)}
       />
 
       <InputBox
         message="Value"
         value={payment.value}
-        onChange={(e: any) => updatePayments(e, InputType.Value)}
+        onChange={(e) => updatePayments(e, InputType.Value)}
       />
 
       <InputBox
         message="Type"
         value={payment.type}
-        onChange={(e: any) => updatePayments(e, InputType.Type)}
+        onChange={(e) => updatePayments(e, InputType.Type)}
       />
 
       <button onClick={deletePayment}>X</button>

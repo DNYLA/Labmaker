@@ -17,7 +17,7 @@ export function Logs() {
   const { loading, config, handleChange } = useRedditLogic();
 
   useEffect(() => {
-    LabmakerSocket?.on('newLog', (data: any) => {
+    LabmakerSocket?.on('newLog', (data: string) => {
       const newLog: LogDto = JSON.parse(data);
       console.log(config.id);
       if (newLog.nodeId !== config.id) return;

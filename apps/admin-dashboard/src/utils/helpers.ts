@@ -1,5 +1,5 @@
 import { Item } from '@labmaker/ui';
-import { Guild, PartialGuild, RedditConfigDto } from '@labmaker/wrapper';
+import { PartialGuild, RedditConfigDto } from '@labmaker/wrapper';
 
 export const parseConfigs = (configs: RedditConfigDto[]) => {
   const parsedConfigs = new Array<Item>();

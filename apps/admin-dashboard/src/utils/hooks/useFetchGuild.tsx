@@ -38,7 +38,7 @@ export function useFetchGuild() {
         setError(err);
       })
       .finally(() => setLoading(false));
-  }, [id, dispatch]);
+  }, [id, dispatch, navigate, user.id]);
 
   return {
     guildConfig,

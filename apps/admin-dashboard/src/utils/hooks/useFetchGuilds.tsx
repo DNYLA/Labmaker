@@ -25,7 +25,7 @@ export function useFetchGuilds() {
         setError(err);
       })
       .finally(() => setloading(false));
-  }, [dispatch]);
+  }, [dispatch, user.id]);
 
   return { guilds, loading, error };
 }

@@ -26,7 +26,7 @@ export function Discord(props: DiscordProps) {
     if (parsedGuilds.length === 0) {
       navigate('/discord');
     }
-  }, []);
+  }, [navigate, parsedGuilds.length]);
 
   return (
     <Page>
