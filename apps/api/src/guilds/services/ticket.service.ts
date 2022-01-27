@@ -22,9 +22,9 @@ export class TicketService {
    * @param {number} ticketId - number - The ID of the ticket to get.
    * @returns The Ticket Object
    */
-  async getTicket(serverId: string, id: number): Promise<Ticket> {
-    return await this.prismaService.ticket.findFirst({
-      where: { serverId, id },
+  async getTicket(id: number): Promise<Ticket> {
+    return await this.prismaService.ticket.findUnique({
+      where: { id },
     });
   }
 
@@ -71,29 +71,20 @@ export class TicketService {
   ): Promise<PartialTicket[]> {
     if (user.role === Role.USER) throw new ForbiddenException();
 
-    const fetchedTickets = await this.prismaService.ticket.findMany({
+    return await this.prismaService.ticket.findMany({
       orderBy: [{ id: 'desc' }],
       where: { serverId, completed: false, deleted: false, tutor: null },
+      select: {
+        id: true,
+        serverId: true,
+        type: true,
+        subject: true,
+        education: true,
+        budget: true,
+        additionalInfo: true,
+        due: true,
+      },
     });
-
-    const tickets: PartialTicket[] = [];
-
-    //Filter Information as we dont want to send back the Users Information such as
-    //there DiscordID;
-    fetchedTickets.forEach((ticket) => {
-      tickets.push({
-        id: ticket.id,
-        serverId: ticket.serverId,
-        type: ticket.type,
-        subject: ticket.subject,
-        education: ticket.education,
-        budget: ticket.budget,
-        additionalInfo: ticket.additionalInfo,
-        due: ticket.due,
-      });
-    });
-
-    return tickets;
   }
 
   async createTicket(
