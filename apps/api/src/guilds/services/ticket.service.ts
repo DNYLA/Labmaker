@@ -16,17 +16,17 @@ import { UserRole } from '@labmaker/wrapper';
 export class TicketService {
   constructor(private prismaService: PrismaService) {}
 
-  /**
-   * `getTicket` returns a ticket object from the database.
-   * @param {string} serverId - string - The server ID of the server the ticket is in.
-   * @param {number} ticketId - number - The ID of the ticket to get.
-   * @returns The Ticket Object
-   */
-  async getTicket(id: number): Promise<Ticket> {
-    return await this.prismaService.ticket.findUnique({
-      where: { id },
-    });
-  }
+  // /**
+  //  * `getTicket` returns a ticket object from the database.
+  //  * @param {string} serverId - string - The server ID of the server the ticket is in.
+  //  * @param {number} ticketId - number - The ID of the ticket to get.
+  //  * @returns The Ticket Object
+  //  */
+  // async getTicket(id: number): Promise<Ticket> {
+  //   return await this.prismaService.ticket.findUnique({
+  //     where: { id },
+  //   });
+  // }
 
   /**
    * `getTickets` returns all the tickets for a given server.
@@ -103,7 +103,8 @@ export class TicketService {
     action: TicketAction,
     user: UserDetails
   ) {
-    if (user.role === Role.USER) throw new ForbiddenException();
+    if (user.role === Role.USER && action !== TicketAction.Complete)
+      throw new ForbiddenException();
 
     const ticket = await this.prismaService.ticket.findUnique({
       where: { id: ticketId },
@@ -156,8 +157,10 @@ export class TicketService {
       //Allows Admins to delete
       throw new ForbiddenException();
     if (ticket.serverId !== serverId) throw new ForbiddenException();
-    if (ticket.deleted) return; //Already Deleted
+    if (ticket.deleted) return ticket; //Already Deleted
 
+    //Dont want to actually delete the ticket as admins may want to view
+    //data from all tickets a student has created.
     return await this.prismaService.ticket.update({
       where: { id: ticket.id },
       data: { deleted: true },
