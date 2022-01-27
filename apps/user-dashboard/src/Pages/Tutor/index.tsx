@@ -19,6 +19,7 @@ export function Tutor(props: TutorProps) {
             {tickets.map((ticket) => {
               return (
                 <PartialTicketModal
+                  key={ticket.id}
                   ticket={ticket}
                   refresh={refresh}
                   setRefresh={setRefresh}

@@ -7,7 +7,6 @@ export const defaultUser: UserDto = {
   id: '-1',
   username: 'Username',
   discriminator: '4444',
-  avatar: 'http://google.com',
   role: UserRole.USER,
   verifiedSubjects: [],
 };

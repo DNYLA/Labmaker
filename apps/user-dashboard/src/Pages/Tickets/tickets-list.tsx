@@ -21,7 +21,6 @@ export default function TicketsList({
   setRefresh,
 }: TicketsListProps) {
   const user = useSelector((state: RootState) => state.user.value);
-  console.log(user.role);
   return (
     <StyledTickets>
       <CreateButton
@@ -37,6 +36,7 @@ export default function TicketsList({
             {tickets.active.map((ticket) => {
               return (
                 <TicketModal
+                  key={ticket.id}
                   ticket={ticket}
                   student={user.role === UserRole.USER ? true : false}
                   refresh={refresh}
@@ -56,6 +56,7 @@ export default function TicketsList({
             {tickets.completed.map((ticket) => {
               return (
                 <TicketModal
+                  key={ticket.id}
                   ticket={ticket}
                   student={user.role === UserRole.USER ? true : false}
                   refresh={refresh}
