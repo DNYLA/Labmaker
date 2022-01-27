@@ -111,21 +111,18 @@ enum Role {
   BOT
 }
 
-//Using Strings until Prisma Allow Enums to easily map to another value
-//Alternativley we could create our own methods for this but it seems extrememly
-//Tedious and annoying to
 enum Subjects {
-  Maths    @map("maths")
-  CompSci  @map("compSci")
-  English  @map("english")
-  Chem     @map("chem")
-  Physics  @map("physics")
-  Bio      @map("bio")
-  Other    @map("other")
+  Maths      @map("maths")
+  CompSci    @map("compSci")
+  English    @map("english")
+  Chemistry  @map("chemistry")
+  Physics    @map("physics")
+  Bio        @map("bio")
+  Other      @map("other")
 }
 
 enum TicketType {
-  Homework    @map("hw")
+  Homework    @map("homework")
   Exam        @map("exam")
   Assignment  @map("assignment")
   Other       @map("other")
@@ -134,7 +131,7 @@ enum TicketType {
 }
 
 enum Education {
-  University  @map("uni")
+  University  @map("university")
   College     @map("college")
   Other       @map("other")
 }

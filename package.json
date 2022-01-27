@@ -10,7 +10,7 @@
   },
   "private": true,
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed/seed.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",

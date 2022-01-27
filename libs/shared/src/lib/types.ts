@@ -67,6 +67,7 @@ export type Tickets = {
 export enum TicketAction {
   Accept = 'accept',
   Resign = 'resign',
+  Complete = 'completed',
 }
 
 export enum Subjects {
