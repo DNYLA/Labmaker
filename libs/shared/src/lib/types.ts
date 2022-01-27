@@ -65,8 +65,8 @@ export type Tickets = {
 //#endregion
 
 export enum TicketAction {
-  Accept,
-  Resign,
+  Accept = 'accept',
+  Resign = 'resign',
 }
 
 export enum Subjects {

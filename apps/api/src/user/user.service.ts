@@ -41,6 +41,7 @@ export class UserService {
       discriminator: updatedUser.discriminator,
       avatar: updatedUser.avatar,
       nodes: userNodes,
+      role: user.role,
     };
   }
 

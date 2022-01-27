@@ -1,27 +1,48 @@
 import { TicketModal } from './ticket';
 import styled from 'styled-components';
 import { Tickets } from '@labmaker/shared';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { UserRole } from '@labmaker/wrapper';
 
 interface TicketsListProps {
   tickets: Tickets;
   createEvent: () => void; //Prop Drill create event because its pointless re-writing it inside here
+  findEvent: () => void;
+  refresh: any;
+  setRefresh: any;
 }
 
 export default function TicketsList({
   tickets,
   createEvent,
+  findEvent,
+  refresh,
+  setRefresh,
 }: TicketsListProps) {
+  const user = useSelector((state: RootState) => state.user.value);
+  console.log(user.role);
   return (
     <StyledTickets>
-      <CreateButton onClick={createEvent}>Create Ticket</CreateButton>
+      <CreateButton
+        onClick={user.role === UserRole.USER ? createEvent : findEvent}
+      >
+        {user.role === UserRole.USER ? 'Create Ticket' : 'Find Work'}
+      </CreateButton>
       {/* Center This */}
       {tickets.active.length > 0 && (
         <>
           <h1>Active: </h1>
           <TicketContainer>
             {tickets.active.map((ticket) => {
-              return <TicketModal ticket={ticket} />;
+              return (
+                <TicketModal
+                  ticket={ticket}
+                  student={user.role === UserRole.USER ? true : false}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                />
+              );
             })}
           </TicketContainer>
         </>
@@ -33,7 +54,14 @@ export default function TicketsList({
           <h1>Completed: </h1>
           <TicketContainer>
             {tickets.completed.map((ticket) => {
-              return <TicketModal ticket={ticket} />;
+              return (
+                <TicketModal
+                  ticket={ticket}
+                  student={user.role === UserRole.USER ? true : false}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                />
+              );
             })}
           </TicketContainer>
         </>

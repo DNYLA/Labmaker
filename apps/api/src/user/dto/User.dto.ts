@@ -1,19 +1,11 @@
-import { RedditConfig } from '.prisma/client';
+import { RedditConfig, Role } from '.prisma/client';
 import { IsString } from 'class-validator';
 
-export class UserDto {
-  @IsString()
+export type UserDto = {
   id: string;
-
-  @IsString()
   username: string;
-
-  @IsString()
   discriminator: string;
-
-  @IsString()
-  avatar: string | null;
-
-  @IsString({ each: true })
+  avatar?: string;
   nodes: RedditConfig[];
-}
+  role: Role;
+};

@@ -82,6 +82,7 @@ model Ticket {
   completed      Boolean       @default(false)
   paid           Boolean       @default(false)
   channelId      String        @default("xxx")
+  deleted        Boolean       @default(false)
   type           TicketType
   subject        Subjects
   education      Education
@@ -112,29 +113,30 @@ enum Role {
 
 //Using Strings until Prisma Allow Enums to easily map to another value
 //Alternativley we could create our own methods for this but it seems extrememly
-//Tedious and annoying to 
+//Tedious and annoying to
 enum Subjects {
-  Maths @map("maths")
-  CompSci @map("compSci")
-  English @map("english")
-  Chem @map("chem")
-  Physics @map("physics")
-  Bio @map("bio")
-  Other @map("other")
+  Maths    @map("maths")
+  CompSci  @map("compSci")
+  English  @map("english")
+  Chem     @map("chem")
+  Physics  @map("physics")
+  Bio      @map("bio")
+  Other    @map("other")
 }
 
 enum TicketType {
-  Homework @map("hw")
-  Exam @map("exam")
-  Assignment @map("assignment")
-  Other @map("other")
+  Homework    @map("hw")
+  Exam        @map("exam")
+  Assignment  @map("assignment")
+  Other       @map("other")
+
   @@map("Type")
 }
 
 enum Education {
-  University @map("uni")
-  College @map("college")
-  Other @map("other")
+  University  @map("uni")
+  College     @map("college")
+  Other       @map("other")
 }
 
 enum OrderStatus {

@@ -8,7 +8,7 @@ export class CreateTicketDto {
   @IsString()
   serverId: string;
 
-  //Add Validation to the Below
+  //Add Validation to the Enums Below
   @IsString()
   type: TicketType;
 

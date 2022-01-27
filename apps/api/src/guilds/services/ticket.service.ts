@@ -1,6 +1,7 @@
 import {
   ConflictException,
   ForbiddenException,
+  GoneException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -37,20 +38,19 @@ export class TicketService {
     userId: string,
     user: UserDetails
   ): Promise<Tickets> {
-    console.log('test');
     if (userId !== user.id) throw new ForbiddenException();
 
     let filter = {};
 
     if (user.role === Role.USER) {
-      filter = { serverId, creatorId: user.id };
+      filter = { creatorId: user.id };
     } else {
-      filter = { serverId, tutorId: user.id };
+      filter = { tutorId: user.id };
     }
 
     const fetchedTickets = await this.prismaService.ticket.findMany({
       orderBy: [{ id: 'desc' }],
-      where: filter,
+      where: { ...filter, deleted: false, serverId },
     });
 
     const filteredTickets: Tickets = {
@@ -62,7 +62,6 @@ export class TicketService {
       if (ticket.completed) filteredTickets.completed.push(ticket);
       else filteredTickets.active.push(ticket);
     });
-    console.log(filteredTickets);
     return filteredTickets;
   }
 
@@ -74,7 +73,7 @@ export class TicketService {
 
     const fetchedTickets = await this.prismaService.ticket.findMany({
       orderBy: [{ id: 'desc' }],
-      where: { serverId, completed: false, tutor: null },
+      where: { serverId, completed: false, deleted: false, tutor: null },
     });
 
     const tickets: PartialTicket[] = [];
@@ -118,11 +117,14 @@ export class TicketService {
     const ticket = await this.prismaService.ticket.findUnique({
       where: { id: ticketId },
     });
+
     if (!ticket) throw new NotFoundException();
     if (ticket.serverId !== serverId) throw new ForbiddenException();
+    if (ticket.deleted) throw new GoneException();
 
     switch (action) {
       case TicketAction.Accept:
+        console.log('Handling Ticket');
         return this.acceptTutor(ticket, user);
       case TicketAction.Resign:
         return this.resignTutor(ticket, user);
@@ -153,7 +155,21 @@ export class TicketService {
     });
   }
 
-  async deleteTicket(id: number) {
-    return await this.prismaService.ticket.delete({ where: { id } });
+  async deleteTicket(serverId: string, ticketId: number, user: UserDetails) {
+    const ticket = await this.prismaService.ticket.findUnique({
+      where: { id: ticketId },
+    });
+
+    if (!ticket) throw new NotFoundException();
+    if (ticket.creatorId !== user.id && user.role !== Role.ADMIN)
+      //Allows Admins to delete
+      throw new ForbiddenException();
+    if (ticket.serverId !== serverId) throw new ForbiddenException();
+    if (ticket.deleted) return; //Already Deleted
+
+    return await this.prismaService.ticket.update({
+      where: { id: ticket.id },
+      data: { deleted: true },
+    });
   }
 }

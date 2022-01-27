@@ -1,13 +1,13 @@
 // import { getUser, setToken } from '../api';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTickets } from '@labmaker/wrapper';
+import { getActiveTickets, getTickets } from '@labmaker/wrapper';
 import { RootState } from '../../store';
-import { Tickets } from '@labmaker/shared';
+import { PartialTicket, Tickets } from '@labmaker/shared';
 
-//Fetches Users Tickets
-export function useFetchTickets() {
-  const [tickets, setTickets] = useState<Tickets>();
+//Fetches Active Server Tickets
+export function useFetchActiveTickets() {
+  const [tickets, setTickets] = useState<PartialTicket[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -19,12 +19,12 @@ export function useFetchTickets() {
     if (!id) throw Error('Unable to find Discord ID');
 
     setLoading(true);
-    getTickets(id, user.id)
+    getActiveTickets(id)
       .then(({ data }) => {
         setTickets(data);
       })
       .catch((err) => setError(err))
-      .finally(() => setTimeout(() => setLoading(false), 1000));
+      .finally(() => setTimeout(() => setLoading(false), 500));
   }, [user, refresh]);
 
   return { tickets, loading, setRefresh, refresh, error };

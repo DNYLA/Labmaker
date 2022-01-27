@@ -3,15 +3,20 @@ import { useFetchTickets } from '../../utils/hooks/useFetchTickets';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import TicketsList from './tickets-list';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { UserRole } from '@labmaker/wrapper';
 
 /* eslint-disable-next-line */
 export interface IndexProps {}
 
 export function Tickets(props: IndexProps) {
-  const { tickets, loading, error } = useFetchTickets();
+  const { tickets, loading, setRefresh, refresh, error } = useFetchTickets();
+  const user = useSelector((state: RootState) => state.user.value);
 
   const navigate = useNavigate();
   const handleCreate = () => navigate('/create');
+  const handleFind = () => navigate('/tutor');
   return (
     <Page>
       <LoadingSpinner loading={loading} message="Loading Tickets" />
@@ -19,7 +24,13 @@ export function Tickets(props: IndexProps) {
         {!loading &&
         tickets &&
         (tickets.active.length > 0 || tickets.completed.length > 0) ? (
-          <TicketsList tickets={tickets} createEvent={handleCreate} />
+          <TicketsList
+            tickets={tickets}
+            createEvent={handleCreate}
+            findEvent={handleFind}
+            refresh={refresh}
+            setRefresh={setRefresh}
+          />
         ) : (
           <>
             <h1>You Don't have Any Previous Tickets!</h1>
@@ -27,7 +38,11 @@ export function Tickets(props: IndexProps) {
               Dont worry, we've made the process super simple, just click below
               to get started.
             </p>
-            <Button onClick={handleCreate}>Create Ticket</Button>
+            <Button
+              onClick={user.role === UserRole.USER ? handleCreate : handleFind}
+            >
+              {user.role === UserRole.USER ? 'Create Ticket' : 'Find Work'}
+            </Button>
           </>
         )}
       </Section>

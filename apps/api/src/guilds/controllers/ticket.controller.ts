@@ -57,7 +57,8 @@ export class TicketController {
     return this.ticketService.createTicket(body, user);
   }
 
-  @Put('/:serverId/:ticketId/accept')
+  @UseGuards(JwtAuthGuard)
+  @Put('/:serverId/:ticketId')
   handleTicket(
     @Param('serverId') serverId: string,
     @Param('ticketId') ticketId: number,
@@ -67,18 +68,13 @@ export class TicketController {
     return this.ticketService.handleTicket(serverId, ticketId, action, user);
   }
 
-  @Put('/:serverId/:ticketId/resign')
-  resignTutor(
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:serverId/:ticketId')
+  deleteTicket(
     @Param('serverId') serverId: string,
     @Param('ticketId') ticketId: number,
-    @Query('action') action: TicketAction,
     @CurrentUser() user: UserDetails
-  ): Promise<Ticket> {
-    return this.ticketService.handleTicket(serverId, ticketId, action, user);
-  }
-
-  @Delete('/:id')
-  deleteTicket(@Param('id') id: number) {
-    return this.ticketService.deleteTicket(id);
+  ) {
+    return this.ticketService.deleteTicket(serverId, ticketId, user);
   }
 }

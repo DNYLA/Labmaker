@@ -24,6 +24,7 @@ export function useFetchUser() {
 
       getUser()
         .then(({ data }) => {
+          console.log(data);
           dispatch(setUser(data));
           // InitSocket(token);
         })

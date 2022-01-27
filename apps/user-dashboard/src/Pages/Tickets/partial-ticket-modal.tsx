@@ -6,7 +6,7 @@ import {
   SwitchToggle,
   TextArea,
 } from '@labmaker/ui';
-import { Ticket, TicketAction } from '@labmaker/shared';
+import { PartialTicket, Ticket, TicketAction } from '@labmaker/shared';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -16,92 +16,42 @@ import {
   ConvertSbj,
   getServerId,
 } from '../../utils/helpers';
-import { deleteTicket, updateTicket } from '@labmaker/wrapper';
-import { useNavigate } from 'react-router-dom';
-import { useNavigationType } from 'react-router';
+import { TicketContainer } from './ticket';
+import { updateTicket } from '@labmaker/wrapper';
 
-interface TicketContainerProps {
-  subject: string;
-  type: string;
-  budget: number;
-  due: Date;
-}
-
-interface TicketModalProps {
-  ticket: Ticket;
-  student: boolean;
-  refresh: any;
+interface PartialTicketProps {
+  ticket: PartialTicket;
   setRefresh: any;
+  refresh: any;
 }
 
-export function TicketContainer({
-  subject,
-  type,
-  budget,
-  due,
-}: TicketContainerProps) {
-  return (
-    <TicketContainerStyle>
-      <h4>
-        {subject} - {type}
-      </h4>
-      <h4>${budget}</h4>
-      <h4>{moment(due, 'YYYYMMDD').toNow(true)}</h4>
-    </TicketContainerStyle>
-  );
-}
-
-export function TicketModal({
+export function PartialTicketModal({
   ticket,
-  student,
-  refresh,
   setRefresh,
-}: TicketModalProps) {
+  refresh,
+}: PartialTicketProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const {
-    id,
-    subject,
-    type,
-    budget,
-    due,
-    education,
-    paid,
-    completed,
-    additionalInfo,
-  } = ticket;
+  const { id, subject, type, budget, due, education, additionalInfo } = ticket;
   const [dueDateObj, setDueDate] = useState(due);
+
   useEffect(() => {
     setDueDate(new Date(due));
   }, [due]);
 
-  const handleResign = async () => {
+  const handleAccept = async () => {
     //Force Reload data from API || Locally Delete Ticket
     try {
       const id = getServerId();
-      await updateTicket(id, ticket.id, TicketAction.Resign);
+      await updateTicket(id, ticket.id, TicketAction.Accept);
       setIsOpen(false);
       setRefresh(!refresh);
     } catch (err) {
       console.log(err);
-      //Show Notification "An Error Occured Whilst trying to resign! Contact an Admin if the problem persists"
-    }
-  };
+      //Show Notification
+      //If Error = Jobs Accepted
+      //Else "Unable to Accept Job"
 
-  const handleGoToChannel = () => {
-    //Redirect User to Discord Channel in New Tab
-    console.log('Redirecting to Discord Channel in New Tab');
-  };
-
-  const handleDelete = async () => {
-    try {
-      console.log('Deleting');
-      const id = getServerId();
-      await deleteTicket(id, ticket.id);
-      setIsOpen(false);
-      setRefresh(!refresh);
-    } catch (err) {
-      console.log(err);
-      //Show Notification "Unable to delete ticket if this persists contact an adminisrator"
+      //Or Justr show Unable to accept job for both errors
     }
   };
 
@@ -143,23 +93,10 @@ export function TicketModal({
         value={additionalInfo}
         disabled={true}
       />
-      <SwitchToggle
-        toggled={paid}
-        onToggle={() => console.log('x')}
-        message={'Paid'}
-      />
-      <SwitchToggle
-        toggled={completed}
-        onToggle={() => console.log('x')}
-        message={'Completed'}
-      />
       <ButtonContainer>
         {/* Can remove the close button if we can make the dialog box c lose when the user clicks outside */}
         <ModalButton onClick={() => setIsOpen(false)}>Close</ModalButton>
-        <ModalButton onClick={student ? handleDelete : handleResign}>
-          {student ? 'Delete' : 'Resign'}
-        </ModalButton>
-        <ModalButton onClick={handleGoToChannel}>Channel</ModalButton>
+        <ModalButton onClick={handleAccept}>Accept</ModalButton>
       </ButtonContainer>
     </ModalPopup>
   );

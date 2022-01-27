@@ -57,11 +57,12 @@ export type LogDto = {
   redditConfig?: RedditConfigDto[];
 };
 
+//Prisma Enums Map System doesnt work for String Values
 export enum UserRole {
-  USER,
-  TUTOR,
-  ADMIN,
-  BOT,
+  USER = 'USER',
+  TUTOR = 'TUTOR',
+  ADMIN = 'ADMIN',
+  BOT = 'BOT',
 }
 
 export type UserDto = {
