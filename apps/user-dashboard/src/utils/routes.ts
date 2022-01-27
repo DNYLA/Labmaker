@@ -1,8 +1,8 @@
 export const tutorRoutes = [
   {
-    name: 'Tickets',
+    name: 'tickets',
     to: '/',
   },
   { name: 'tutor' },
 ];
-export const studentRoutes = [{ name: 'Home', to: '/' }, { name: 'create' }];
+export const studentRoutes = [{ name: 'home', to: '/' }, { name: 'create' }];
