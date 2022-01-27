@@ -1,16 +1,8 @@
-import {
-  GuildConfigDto,
-  LogDto,
-  PaymentDto,
-  RedditConfigDto,
-} from '@labmaker/wrapper';
+import { LogDto, RedditConfigDto } from '@labmaker/wrapper';
 
 export type RedditConfig = RedditConfigDto & {
-  loading?: boolean;
   newNode?: boolean;
 };
-
-export type Payment = PaymentDto & { loading?: boolean };
 
 export type User = UserDto & { loading?: boolean };
 

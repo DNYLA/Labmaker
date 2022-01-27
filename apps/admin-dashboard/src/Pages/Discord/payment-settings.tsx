@@ -1,9 +1,9 @@
-import { GuildConfigDto, PaymentDto } from '@labmaker/wrapper';
 import styled from 'styled-components';
 import { PaymentBox } from './payment';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
 import { useNavigate } from 'react-router-dom';
 import { SettingsContainer } from '@labmaker/ui';
+import { Payment } from '@labmaker/shared';
 
 /* eslint-disable-next-line */
 export interface PaymentSettingsProps {
@@ -18,7 +18,7 @@ export function PaymentSettings(props: PaymentSettingsProps) {
   const { guildConfig, payments, setPayments, createPayment } = useGuildLogic();
   const navigate = useNavigate();
 
-  const renderPayments = (payments: PaymentDto[]) => {
+  const renderPayments = (payments: Payment[]) => {
     let delKey = -2;
 
     if (!guildConfig) {
@@ -28,7 +28,7 @@ export function PaymentSettings(props: PaymentSettingsProps) {
       `Guild Config: ${guildConfig.id} || PaymentID: ${guildConfig.paymentConfigId}`
     );
     if (guildConfig.id === guildConfig.paymentConfigId) {
-      return payments.map((payment: PaymentDto, index) => {
+      return payments.map((payment: Payment, index) => {
         if (!payment.deletedPayment) {
           return (
             <PaymentBox

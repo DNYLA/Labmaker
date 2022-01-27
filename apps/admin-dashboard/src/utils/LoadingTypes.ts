@@ -6,8 +6,8 @@ import {
   UserDto,
   UserRole,
 } from '@labmaker/wrapper';
-import { GuildConfig } from '@labmaker/shared';
-import { RedditConfig, Payment } from './types';
+import { GuildConfig, Payment } from '@labmaker/shared';
+import { RedditConfig } from './types';
 
 export const defaultUser: UserDto = {
   id: '-1',
@@ -45,7 +45,6 @@ export const loadingPayment: Payment = {
   name: 'Loading Payments...',
   value: 'Loading...',
   type: 'Loading...',
-  loading: true,
 };
 
 export const loadingRedditConfig: RedditConfig = {
@@ -63,7 +62,6 @@ export const loadingRedditConfig: RedditConfig = {
   forbiddenWords: ['ForbiddenWord1', 'Forbidden String 1'],
   blockedUsers: ['Blocked_User1', 'Blocked_User2'],
   nodeEditors: [],
-  loading: true,
 };
 
 export const loadingDiscordConfig: GuildConfig = {

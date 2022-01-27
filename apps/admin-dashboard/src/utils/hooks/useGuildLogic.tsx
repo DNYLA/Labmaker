@@ -13,18 +13,12 @@ import { findItem, parseConfigs } from '../helpers';
 import { Item } from '@labmaker/ui';
 import { toast } from 'react-toastify';
 import { addNode, deleteNode, setNode } from '../slices/userSlice';
-import {
-  getGuildConfig,
-  GuildConfig,
-  GuildConfigDto,
-  PaymentDto,
-  updateGuildConfig,
-  updatePayments,
-} from '@labmaker/wrapper';
+import { updateGuildConfig, updatePayments } from '@labmaker/wrapper';
 import {
   setConfig as setConfigState,
   setPayments as setPaymentsState,
 } from '../slices/configSlices';
+import { GuildConfig, Payment } from '@labmaker/shared';
 
 export function useGuildLogic() {
   const dispatch = useDispatch();
@@ -48,7 +42,7 @@ export function useGuildLogic() {
   const createPayment = () => {
     if (!guildConfig) return;
 
-    const newPayment: PaymentDto = {
+    const newPayment: Payment = {
       id: Math.random(), //This gets overridden on Server-Side (Create new DTOS for items yet to be created)
       name: 'Payment Name',
       value: 'Payment Value',
@@ -66,11 +60,9 @@ export function useGuildLogic() {
     setConfig({ ...guildConfig, paymentConfigId: serverId });
   };
 
-  const setPayments = (payments: PaymentDto[]) =>
+  const setPayments = (payments: Payment[]) =>
     dispatch(setPaymentsState(payments));
-
-  const setConfig = (config: GuildConfigDto) =>
-    dispatch(setConfigState(config));
+  const setConfig = (config: GuildConfig) => dispatch(setConfigState(config));
 
   return {
     guildConfig,

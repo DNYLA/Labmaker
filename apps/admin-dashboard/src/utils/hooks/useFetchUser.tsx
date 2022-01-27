@@ -6,7 +6,7 @@ import { RootState } from '../../store';
 import { setUser } from '../slices/userSlice';
 import { InitSocket } from '../APIHandler';
 // import { getUser, setToken } from '../../utils/api';
-import { getUser, setToken } from '@labmaker/wrapper';
+import { getAdminUser, getUser, setToken } from '@labmaker/wrapper';
 
 export function useFetchUser() {
   // const [user, setUser] = useState<User>();
@@ -25,7 +25,7 @@ export function useFetchUser() {
         return;
       }
 
-      getUser()
+      getAdminUser()
         .then(({ data }) => {
           dispatch(setUser(data));
           InitSocket(token);

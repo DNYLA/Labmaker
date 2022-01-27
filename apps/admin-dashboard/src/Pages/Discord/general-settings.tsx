@@ -9,7 +9,6 @@ import {
 } from '@labmaker/ui';
 import { useDispatch } from 'react-redux';
 import ReactDropdown from 'react-dropdown';
-import { GuildConfig, GuildConfigDto } from '@labmaker/wrapper';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
 
 /* eslint-disable-next-line */
