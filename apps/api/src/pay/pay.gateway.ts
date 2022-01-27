@@ -1,32 +1,28 @@
-import { UseGuards } from '@nestjs/common';
 import {
-  ConnectedSocket,
   OnGatewayConnection,
   OnGatewayInit,
-  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { AuthService } from '../auth/auth.service';
-import { WSGuard } from '../auth/guards/WSAuth.guard';
 import PayGatewayMessage from './dtos/PayGatewayMessage.dto';
 
 @WebSocketGateway({ namespace: 'payments' })
 export class PayGateway implements OnGatewayInit, OnGatewayConnection {
   constructor(private authService: AuthService) {}
+  afterInit() {
+    console.log('connected');
+  }
 
   @WebSocketServer() server: Server;
 
-  async handleConnection(client: any, ...args: any[]) {
+  async handleConnection(client: Socket, ...args: string[]) {
+    console.log(args);
     const token = client.handshake.headers.authorization.split(' ')[1];
     const result = await this.authService.verify(token);
     console.log(token);
     !result && client.disconnect();
-  }
-
-  afterInit(server: any) {
-    console.log('Connected');
   }
 
   public notifyAll(msg: PayGatewayMessage) {

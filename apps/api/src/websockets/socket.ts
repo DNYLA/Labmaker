@@ -21,6 +21,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
   @WebSocketServer() ws: Server;
 
   async handleConnection(client: Socket, ...args: string[]) {
+    console.log(args);
     console.log('Client Connected to WebSocket');
     const token = client.handshake.headers.authorization.split(' ')[1];
     const result = await this.authService.verify(token);

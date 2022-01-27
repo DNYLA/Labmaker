@@ -1,5 +1,4 @@
 import { RedditConfig, Role } from '.prisma/client';
-import { IsString } from 'class-validator';
 
 export type UserDto = {
   id: string;

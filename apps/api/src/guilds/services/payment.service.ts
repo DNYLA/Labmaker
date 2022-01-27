@@ -1,11 +1,10 @@
-import { HttpCode, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
   CreatePaymentDtoArray,
   UpdatePaymentDtoArray,
 } from '../dtos/create-payment.dto';
 import { Payment } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { STATUS_CODES } from 'http';
 
 @Injectable()
 export class PaymentService {
@@ -57,7 +56,7 @@ export class PaymentService {
     );
   }
 
-  async deletePayments(deleteIds: number[]): Promise<any> {
+  async deletePayments(deleteIds: number[]): Promise<HttpStatus> {
     await this.prismaService.$transaction(
       deleteIds.map((id) => {
         return this.prismaService.payment.delete({

@@ -14,7 +14,7 @@ import { Ticket } from '@prisma/client';
 import { JwtAuthGuard } from '../../auth/guards/Jwt.guard';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { CurrentUser } from '../../utils/decorators';
-import { CreateTicketDto, UpdateTicketDto } from '../dtos/create-ticket.dto';
+import { CreateTicketDto } from '../dtos/create-ticket.dto';
 import { TicketService } from '../services/ticket.service';
 
 @Controller('guilds/tickets')

@@ -5,12 +5,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateTicketDto, UpdateTicketDto } from '../dtos/create-ticket.dto';
+import { CreateTicketDto } from '../dtos/create-ticket.dto';
 import { Role, Ticket } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { PartialTicket, TicketAction, Tickets } from '@labmaker/shared';
-import { UserRole } from '@labmaker/wrapper';
 
 @Injectable()
 export class TicketService {

@@ -3,8 +3,6 @@ import { CreateLogDto } from '../dtos/create-log.dto';
 import { LogQueryParms } from '../controllers/logs.controller';
 import { Log } from '.prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { WebSocketServer } from '@nestjs/websockets';
-import { Server } from 'socket.io';
 import { WebsocketGateway } from '../../websockets/socket';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { UserService } from '../../user/user.service';

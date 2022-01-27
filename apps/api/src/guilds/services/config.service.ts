@@ -1,9 +1,15 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateConfigDto } from '../dtos/create-guildconfig.dto';
 import { DiscordConfig, Payment } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { PaymentService } from './payment.service';
+import { UserRole } from '@labmaker/wrapper';
 
 export interface LocalData {
   config: DiscordConfig;
@@ -30,6 +36,8 @@ export class ConfigService {
     user: UserDetails
   ): Promise<DiscordConfig | LocalData> {
     //Add Authorization to see if user has access to this data. ( This can be done via fetching mutual guilds )
+    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT)
+      throw new ForbiddenException();
     const config = await this.prismaService.discordConfig.findUnique({
       where: { id },
     });

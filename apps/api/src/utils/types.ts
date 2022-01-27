@@ -1,4 +1,4 @@
-import { Prisma, RedditConfig, User as PrismaUser } from '@prisma/client';
+import { RedditConfig, User as PrismaUser } from '@prisma/client';
 
 //Discord Types
 export type PartialGuild = {
