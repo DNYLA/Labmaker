@@ -94,10 +94,13 @@ export function TicketModal({
   const handleGoToChannel = () => {
     //Redirect User to Discord Channel in New Tab
     console.log('Redirecting to Discord Channel in New Tab');
-    if (!ticket.channelId)
+    if (!ticket.tutorId) toast.info('Wait until a tutor Accepts your job');
+    else if (!ticket.channelId)
       toast.info("Woah Slow down, channel hasn't been created yet.");
-    const id = getServerId();
-    window.open(`https://discord.com/channels/${id}/${ticket.channelId}`);
+    else {
+      const id = getServerId();
+      window.open(`https://discord.com/channels/${id}/${ticket.channelId}`);
+    }
   };
 
   const handleDelete = async () => {
@@ -107,7 +110,9 @@ export function TicketModal({
       await deleteTicket(id, ticket.id);
       setIsOpen(false);
       setRefresh(!refresh);
+      toast.success(`Deleted Ticket ${ticket.id}`);
     } catch (err) {
+      toast.error(`Unable to delete Ticket ${ticket.id}`);
       console.log(err);
       //Show Notification "Unable to delete ticket if this persists contact an adminisrator"
     }

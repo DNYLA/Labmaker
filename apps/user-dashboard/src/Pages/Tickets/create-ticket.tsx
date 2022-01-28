@@ -61,10 +61,10 @@ export function CreateTicketPage(props: IndexProps) {
     if (!ticket) return console.log('Not Filled Out');
     try {
       console.log(ticket);
+      await createTicket(ticket);
       toast.success(
         'Successfully Created Ticket!. You will be notified whenever a tutor accepts the job.'
       );
-      await createTicket(ticket);
       navigate('/');
     } catch (err) {
       toast.error(
