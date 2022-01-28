@@ -24,7 +24,7 @@ export class APISocket {
       console.log('Socket Disconnected'); // false
     });
 
-    this.socket.on('error', (data) => {
+    this.socket.on('error', () => {
       console.log('Error Occured');
     });
 
