@@ -1,5 +1,5 @@
 import { InfoTitle } from './info-box';
-import styled, { css } from 'styled-components';
+import styled, { css, StyledProps } from 'styled-components';
 
 /* eslint-disable-next-line */
 export interface SwitchProps {

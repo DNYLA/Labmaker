@@ -71,7 +71,7 @@ const trackHeight = '16px';
 
 // colours
 
-const makeLongShadow = (color: any, size: any) => {
+const makeLongShadow = (color: string, size: string) => {
   let i = 18;
   let shadow = `${i}px 0 0 ${size} ${color}`;
 

@@ -1,6 +1,6 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 export interface IOnTagChange {
@@ -17,17 +17,16 @@ export interface TagInputBoxProps {
 export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleKeyDown = (event: any) => {
-    console.log(typeof event);
-    const value = event.target.value;
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
 
-    if (event.key === 'Enter' && value) {
+    if (e.key === 'Enter' && value) {
       if (items.find((tag) => tag.toLowerCase() === value.toLowerCase()))
         return;
 
       onChange([...items, value]);
-      event.target.value = '';
-    } else if (event.key === 'Backspace' && !value) {
+      e.currentTarget.value = '';
+    } else if (e.key === 'Backspace' && !value) {
       removeTag(items.length - 1);
     }
   };

@@ -1,15 +1,15 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
 export interface ModalPopupProps {
   title: string;
   design: any;
-  children: any;
-  open: any;
-  setOpen: any;
+  children: ReactNode;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 //Currently Broken Fix CSS
