@@ -10,6 +10,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { PaymentService } from './payment.service';
 import { UserRole } from '@labmaker/wrapper';
+import { WebsocketGateway } from '../../websockets/socket';
 
 export interface LocalData {
   config: DiscordConfig;
@@ -20,7 +21,8 @@ export interface LocalData {
 export class ConfigService {
   constructor(
     private prismaService: PrismaService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private wsGateway: WebsocketGateway
   ) {}
   private readonly logger = new Logger(ConfigService.name);
 
@@ -35,7 +37,6 @@ export class ConfigService {
     payments: boolean,
     user: UserDetails
   ): Promise<DiscordConfig | LocalData> {
-    console.log('reuqested');
     //Add Authorization to see if user has access to this data. ( This can be done via fetching mutual guilds )
     if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT)
       throw new ForbiddenException();
@@ -65,10 +66,15 @@ export class ConfigService {
     });
   }
 
-  async updateConfig(updateConfigDto: CreateConfigDto): Promise<DiscordConfig> {
-    return await this.prismaService.discordConfig.update({
+  async updateConfig(
+    updateConfigDto: CreateConfigDto,
+    user: UserDetails
+  ): Promise<DiscordConfig> {
+    const c = await this.prismaService.discordConfig.update({
       where: { id: updateConfigDto.id },
       data: updateConfigDto,
     });
+    if (user.role !== UserRole.BOT) this.wsGateway.notifyGuildConfig(c);
+    return c;
   }
 }

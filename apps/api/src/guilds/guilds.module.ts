@@ -6,9 +6,10 @@ import { TicketService } from './services/ticket.service';
 import { PaymentController } from '../guilds/controllers/payment.controller';
 import { PaymentService } from './services/payment.service';
 import { DiscordModule } from '../discord/discord.module';
+import { WebsocketModule } from '../websockets/websocket.module';
 
 @Module({
-  imports: [DiscordModule],
+  imports: [DiscordModule, WebsocketModule],
   controllers: [ConfigController, TicketController, PaymentController],
   providers: [ConfigService, TicketService, PaymentService],
   exports: [PaymentService],

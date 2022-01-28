@@ -11,7 +11,7 @@ const intents = new Intents(32767);
 const client = new DiscordClient({ intents });
 
 (async () => {
-  listen(process.env.API_TOKEN);
+  listen(process.env.API_TOKEN, client);
   setBaseURL(process.env.API_URL, process.env.API_TOKEN);
   await registerCommands(client);
   await registerEvents(client);

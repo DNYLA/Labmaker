@@ -21,10 +21,11 @@ export default class Prefix extends Command {
     const prefix = args[0];
 
     try {
-      await updateGuildConfig({
+      const { data: c } = await updateGuildConfig({
         ...guildConfig,
         prefix,
       });
+      client.setConfig(c);
       message.channel.send(`Updated Prefix to ${prefix}`);
     } catch (err) {
       message.channel.send(

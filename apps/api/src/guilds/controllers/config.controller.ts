@@ -19,8 +19,6 @@ import { ConfigService, LocalData } from '../services/config.service';
 export class ConfigController {
   constructor(private readonly configService: ConfigService) {}
 
-  private context = 'DiscordConfigController';
-
   // @UseGuards(AuthGuard('jwt'))
   @UseGuards(JwtAuthGuard)
   @Get('/:id/')
@@ -47,7 +45,11 @@ export class ConfigController {
   }
 
   @Put()
-  updateConfig(@Body() body: CreateConfigDto) {
-    return this.configService.updateConfig(body);
+  @UseGuards(JwtAuthGuard)
+  updateConfig(
+    @Body() body: CreateConfigDto,
+    @CurrentUser() user: UserDetails
+  ) {
+    return this.configService.updateConfig(body, user);
   }
 }

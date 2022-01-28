@@ -29,7 +29,7 @@ export default class MessageEvent extends Event {
     }
 
     if (!config) return; //After Two Tries move on.
-
+    console.log('here');
     if (message.content.startsWith(config.prefix)) {
       // If message is only <Prefix>
       if (message.content === config.prefix) return;

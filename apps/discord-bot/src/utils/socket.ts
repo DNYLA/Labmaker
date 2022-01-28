@@ -1,6 +1,8 @@
+import { GuildConfig } from '@labmaker/shared';
+import DiscordClient from './client';
 import { io } from 'socket.io-client';
 
-export const listen = (accessToken: string) => {
+export const listen = (accessToken: string, client: DiscordClient) => {
   const socket = io(process.env.API_URL, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
@@ -32,7 +34,13 @@ export const listen = (accessToken: string) => {
   });
   //#endregion
 
-  socket.on('guildConfig', (config: string) => {
-    console.log('New Config', config);
+  socket.on('guildConfig', (configJson: string) => {
+    console.log('New Config');
+    try {
+      const config: GuildConfig = JSON.parse(configJson);
+      client.setConfig(config);
+    } catch (err) {
+      console.log(err);
+    }
   });
 };

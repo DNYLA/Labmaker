@@ -32,6 +32,17 @@ export function GeneralSettings(props: GeneralSettingsProps) {
           />
 
           <InputBox
+            message="Prefix"
+            value={guildConfig.prefix}
+            onChange={(e) => {
+              setConfig({
+                ...guildConfig,
+                prefix: e.target.value,
+              });
+            }}
+          />
+
+          <InputBox
             message="Bot Image URL"
             value={guildConfig.embedImageUrl}
             onChange={(e) => {
