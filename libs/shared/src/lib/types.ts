@@ -92,3 +92,9 @@ export enum Education {
   College = 'college',
   Other = 'other',
 }
+
+export enum PaymentAction {
+  Create,
+  Update,
+  Delete,
+}

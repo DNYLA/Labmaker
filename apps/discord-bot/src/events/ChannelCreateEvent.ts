@@ -15,6 +15,6 @@ export default class MessageEvent extends Event {
       return;
     }
 
-    console.log('New Channel');
+    return;
   }
 }
