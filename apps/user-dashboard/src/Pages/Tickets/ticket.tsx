@@ -19,6 +19,7 @@ import {
 import { deleteTicket, updateTicket } from '@labmaker/wrapper';
 import { useNavigate } from 'react-router-dom';
 import { useNavigationType } from 'react-router';
+import { toast } from 'react-toastify';
 
 interface TicketContainerProps {
   subject: string;
@@ -81,15 +82,22 @@ export function TicketModal({
       await updateTicket(id, ticket.id, TicketAction.Resign);
       setIsOpen(false);
       setRefresh(!refresh);
+      toast.success('Sucessfully resigned from Job');
     } catch (err) {
       console.log(err);
-      //Show Notification "An Error Occured Whilst trying to resign! Contact an Admin if the problem persists"
+      toast.success(
+        'An Error Occured Whilst trying to resign! Contact an Admin if the problem persists'
+      );
     }
   };
 
   const handleGoToChannel = () => {
     //Redirect User to Discord Channel in New Tab
     console.log('Redirecting to Discord Channel in New Tab');
+    if (!ticket.channelId)
+      toast.info("Woah Slow down, channel hasn't been created yet.");
+    const id = getServerId();
+    window.open(`https://discord.com/channels/${id}/${ticket.channelId}`);
   };
 
   const handleDelete = async () => {

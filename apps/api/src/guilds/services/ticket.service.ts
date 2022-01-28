@@ -126,7 +126,6 @@ export class TicketService {
 
     switch (action) {
       case TicketAction.Accept:
-        console.log('Handling Ticket');
         return this.acceptTutor(ticket, user);
       case TicketAction.Resign:
         return this.resignTutor(ticket, user);

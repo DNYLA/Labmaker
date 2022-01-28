@@ -18,6 +18,7 @@ import {
 } from '../../utils/helpers';
 import { TicketContainer } from './ticket';
 import { updateTicket } from '@labmaker/wrapper';
+import { toast } from 'react-toastify';
 
 interface PartialTicketProps {
   ticket: PartialTicket;
@@ -45,13 +46,17 @@ export function PartialTicketModal({
       await updateTicket(id, ticket.id, TicketAction.Accept);
       setIsOpen(false);
       setRefresh(!refresh);
-    } catch (err) {
-      console.log(err);
-      //Show Notification
-      //If Error = Jobs Accepted
-      //Else "Unable to Accept Job"
-
-      //Or Justr show Unable to accept job for both errors
+      toast.success(
+        'Succesfully Accepted Job!. Check The Discord Server to talk with the student.'
+      );
+    } catch (err: any) {
+      let message = 'Unable to Accept Job';
+      if (err.response.status === 409) {
+        message = 'Job Already Accepted By Another User';
+      }
+      toast.error(message);
+      setIsOpen(false);
+      setRefresh(!refresh);
     }
   };
 
