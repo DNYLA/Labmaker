@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from 'react-router-dom';
 import { LoadingSpinner, LoginPage, Navbar } from '@labmaker/ui';
 import { tutorRoutes, studentRoutes } from '../utils/routes';
