@@ -158,7 +158,7 @@ export class TicketService {
       data: { tutorId: null },
     });
 
-    this.wsGateway.notifyTicket(uTicket, TicketNotif.Resigned);
+    this.wsGateway.notifyTicket(ticket, TicketNotif.Resigned); //Send old Ticket with tutorId
     return uTicket;
   }
 

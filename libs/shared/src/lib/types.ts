@@ -33,28 +33,30 @@ export type Ticket = CreateTicket & {
   tutorId: string;
   completed: boolean;
   paid: boolean;
+  channelId: string;
+  deleted: boolean;
 };
 
 export type PartialTicket = {
   id: number;
   serverId: string;
+  additionalInfo: string;
   type: string;
   subject: string;
   education: string;
   budget: number;
-  additionalInfo: string;
   due: Date;
 };
 
 export type CreateTicket = {
-  creatorId: string;
   serverId: string;
+  additionalInfo: string;
+  creatorId: string;
+  budget: number;
+  due: Date;
   type: string;
   subject: string;
   education: string;
-  budget: number;
-  additionalInfo: string;
-  due: Date;
 };
 
 export type Tickets = {
@@ -109,4 +111,9 @@ export enum TicketNotif {
 export type TicketInfo = {
   ticket: Ticket;
   type: TicketNotif;
+};
+
+export type TicketChannelInfo = {
+  id: number;
+  channelId: string;
 };

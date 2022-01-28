@@ -1,25 +1,31 @@
 import { Ticket } from '@labmaker/shared';
-import { Client, Message, MessageEmbed } from 'discord.js';
+import { Client, GuildMember, Message, MessageEmbed } from 'discord.js';
 
 export default class Logs {
   static async GenerateEmbed(
-    ticketDetails: Ticket,
-    message: Message
+    ticket: Ticket,
+    student: GuildMember,
+    url: string
   ): Promise<MessageEmbed> | null {
-    const displayName = `${message.member.user.username}#${message.member.user.discriminator} - Ticket ${ticketDetails.id}`;
-    const avUrl = `${message.member.user.displayAvatarURL({
+    const displayName = `${student.user.username}#${student.user.discriminator} - Ticket ${ticket.id}`;
+    const budgetText = `$${ticket.budget}`;
+    const avUrl = `${student.user.displayAvatarURL({
       dynamic: true,
     })}`;
     return new MessageEmbed()
       .setColor('#10F9AB')
-      .setTitle(ticketDetails.type)
-      .setAuthor({ name: displayName, iconURL: avUrl, url: message.url })
+      .setTitle(ticket.type)
+      .setAuthor({ name: displayName, iconURL: avUrl, url })
       .addFields(
-        { name: 'Subject', value: ticketDetails.subject, inline: false },
-        { name: 'Education', value: ticketDetails.education, inline: true },
-        { name: 'Budget', value: String(ticketDetails.budget), inline: true }
+        { name: 'Subject', value: ticket.subject, inline: true },
+        { name: 'Education', value: ticket.education, inline: true },
+        {
+          name: 'Budget',
+          value: budgetText,
+          inline: false,
+        }
       )
-      .setFooter({ text: 'Submitted' })
+      .setFooter({ text: 'Accepted' })
       .setThumbnail(`https://i.imgur.com/E7PB9cr.gif`)
       .setTimestamp();
   }

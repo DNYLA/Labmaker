@@ -3,6 +3,8 @@ import {
   WebSocketServer,
   OnGatewayInit,
   OnGatewayConnection,
+  SubscribeMessage,
+  MessageBody,
 } from '@nestjs/websockets';
 
 import {} from '@nestjs/platform-socket.io';
@@ -10,13 +12,17 @@ import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user/user.service';
 import { Server, Socket } from 'socket.io';
 import { DiscordConfig, Log, RedditConfig, Role, Ticket } from '@prisma/client';
-import { TicketInfo, TicketNotif } from '@labmaker/shared';
+import { TicketChannelInfo, TicketInfo, TicketNotif } from '@labmaker/shared';
+import { UseGuards } from '@nestjs/common';
+import { WSGuard } from '../auth/guards/WSAuth.guard';
+import { PrismaService } from '../prisma/prisma.service';
 
 @WebSocketGateway({ cors: true })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
   constructor(
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private prismaService: PrismaService
   ) {}
 
   @WebSocketServer() ws: Server;
@@ -87,12 +93,19 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
     this.ws.to(log.nodeId.toString()).emit('newLog', JSON.stringify(log));
   }
 
-  // @UseGuards(WSGuard)
-  // @SubscribeMessage('message')
-  // handleConfig(
-  //   // @ConnectedSocket() client: Socket,
-  //   @MessageBody() message: string
-  // ): void {
-  //   this.server.emit('message', message);
-  // }
+  @UseGuards(WSGuard)
+  @SubscribeMessage('ticketChannelId')
+  async handleConfig(
+    // @ConnectedSocket() client: Socket,
+    @MessageBody() ticket: TicketChannelInfo
+  ) {
+    // console.log(tJson);
+    // this.server.emit('message', message);
+    // const ticket: TicketChannelInfo = JSON.parse(tJson);
+    console.log(ticket);
+    await this.prismaService.ticket.update({
+      where: { id: ticket.id },
+      data: { channelId: ticket.channelId },
+    });
+  }
 }
