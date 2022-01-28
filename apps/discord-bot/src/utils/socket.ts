@@ -121,7 +121,7 @@ const handleAccepted = async (
 
 const handleResign = async (client: DiscordClient, ticket: Ticket) => {
   const { channel, student } = await hideChannel(client, ticket);
-  if (!channel) return;
+  if (!channel || !channel.isText()) return;
   await channel.send(
     '<@&918311173093457941> Tutor Handling case resigned. Student Already Notified, close Ticket Once Verified.'
   );
@@ -137,7 +137,7 @@ const handleResign = async (client: DiscordClient, ticket: Ticket) => {
 
 const handleDelete = async (client: DiscordClient, ticket: Ticket) => {
   const { channel, tutor } = await hideChannel(client, ticket);
-  if (!channel) return;
+  if (!channel || !channel.isText()) return;
   await channel.send(
     '<@&918311173093457941> Student deleted Ticket. Tutor has been Notified, close Ticket Once Verified.'
   );
