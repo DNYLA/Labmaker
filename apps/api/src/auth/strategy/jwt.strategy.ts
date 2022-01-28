@@ -15,7 +15,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: UserPayload) {
-    if (payload.type === Role.BOT) return payload; //Bots dont have accounts in DB
+    if (payload.type === Role.BOT)
+      return { id: payload.id, role: payload.type }; //Bots dont have accounts in DB
 
     const user = await this.prismaService.user.findUnique({
       where: { id: payload.id },

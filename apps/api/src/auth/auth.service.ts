@@ -132,7 +132,7 @@ export class AuthService {
   private createBotAccessToken() {
     return this.jwtService.sign(
       {
-        id: 'BOT',
+        id: '0',
         type: Role.BOT,
       },
       { secret: process.env.JWT_SECRET, expiresIn: '1y' }

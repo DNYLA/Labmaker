@@ -35,9 +35,11 @@ export class ConfigService {
     payments: boolean,
     user: UserDetails
   ): Promise<DiscordConfig | LocalData> {
+    console.log('reuqested');
     //Add Authorization to see if user has access to this data. ( This can be done via fetching mutual guilds )
     if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT)
       throw new ForbiddenException();
+
     const config = await this.prismaService.discordConfig.findUnique({
       where: { id },
     });
