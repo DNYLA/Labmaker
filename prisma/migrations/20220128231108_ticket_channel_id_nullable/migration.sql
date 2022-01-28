@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Ticket" ALTER COLUMN "channelId" DROP NOT NULL,
+ALTER COLUMN "channelId" DROP DEFAULT;

@@ -81,7 +81,7 @@ model Ticket {
   due            DateTime
   completed      Boolean       @default(false)
   paid           Boolean       @default(false)
-  channelId      String        @default("xxx")
+  channelId      String?
   deleted        Boolean       @default(false)
   type           TicketType
   subject        Subjects
