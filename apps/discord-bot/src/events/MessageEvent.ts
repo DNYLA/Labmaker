@@ -11,53 +11,37 @@ export default class MessageEvent extends Event {
 
   async run(client: DiscordClient, message: Message) {
     if (message.author.bot) return;
-
-    if (message.channel.id == '863424666052198410' && !message.author.bot) {
-      message
-        .reply('This is a log channel please use the main channel')
-        .then((msg) => {
-          setTimeout(() => {
-            message.delete();
-            msg.delete();
-          }, 5000);
-        });
-      return;
-    }
-
     const guildId = message.guild.id;
 
-    let { data: guildConfig } = await getGuildConfig(guildId);
+    let config = client.getConfig(guildId);
 
-    if (!guildConfig) {
-      guildConfig = (await createGuildConfig(guildId, message.guild.name)).data;
-    }
+    if (!config) {
+      try {
+        config = (await getGuildConfig(guildId)).data;
 
-    if (!guildConfig) {
-      return; //After Two Tries move on.
-    }
+        if (!config)
+          config = (await createGuildConfig(guildId, message.guild.name)).data;
 
-    // Move Try catch inside ticket command?
-    try {
-      client.commands.get('ticket').run(client, message, [], guildConfig);
-    } catch {
-      console.log('Unable To Execute Ticket Command'); //Not all Messages are tickets so pointless sending a message to the channel
-    }
-
-    if (message.content.startsWith(guildConfig.prefix)) {
-      // If message is only <Prefix>
-      if (message.content === guildConfig.prefix) {
-        return;
+        client.setConfig(config);
+      } catch (err) {
+        message.channel.send('Unable to fetch Guild Config');
       }
+    }
 
+    if (!config) return; //After Two Tries move on.
+
+    if (message.content.startsWith(config.prefix)) {
+      // If message is only <Prefix>
+      if (message.content === config.prefix) return;
       const { commandName, args } = getArgsFromMsg(
         message.content,
-        guildConfig.prefix.length
+        config.prefix.length
       );
       const command = client.commands.get(commandName.toLowerCase());
 
       if (command) {
         try {
-          command.run(client, message, args, guildConfig);
+          command.run(client, message, args, config);
         } catch (err) {
           message.channel.send(
             'There was an error when attempting to execute this command'

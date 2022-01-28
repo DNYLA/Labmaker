@@ -1,27 +1,25 @@
+import { Ticket } from '@labmaker/shared';
 import { Client, Message, MessageEmbed } from 'discord.js';
-import { TicketDto } from '@labmaker/wrapper';
 
 export default class Logs {
   static async GenerateEmbed(
-    ticketDetails: TicketDto,
+    ticketDetails: Ticket,
     message: Message
   ): Promise<MessageEmbed> | null {
+    const displayName = `${message.member.user.username}#${message.member.user.discriminator} - Ticket ${ticketDetails.id}`;
+    const avUrl = `${message.member.user.displayAvatarURL({
+      dynamic: true,
+    })}`;
     return new MessageEmbed()
       .setColor('#10F9AB')
       .setTitle(ticketDetails.type)
-      .setAuthor(
-        `${message.member.user.username}#${message.member.user.discriminator} - Ticket ${ticketDetails.ticketId}`,
-        `${message.member.user.displayAvatarURL({
-          dynamic: true,
-        })}`,
-        message.url
-      )
+      .setAuthor({ name: displayName, iconURL: avUrl, url: message.url })
       .addFields(
-        { name: 'Time', value: ticketDetails.time, inline: false },
-        { name: 'Level', value: ticketDetails.level, inline: true },
-        { name: 'Budget', value: ticketDetails.budget, inline: true }
+        { name: 'Subject', value: ticketDetails.subject, inline: false },
+        { name: 'Education', value: ticketDetails.education, inline: true },
+        { name: 'Budget', value: String(ticketDetails.budget), inline: true }
       )
-      .setFooter('Submitted')
+      .setFooter({ text: 'Submitted' })
       .setThumbnail(`https://i.imgur.com/E7PB9cr.gif`)
       .setTimestamp();
   }

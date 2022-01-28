@@ -1,4 +1,5 @@
-import { getDiscordPayments, GuildConfigDto } from '@labmaker/wrapper';
+import { GuildConfig } from '@labmaker/shared';
+import { getDiscordPayments } from '@labmaker/wrapper';
 import { Message, Permissions } from 'discord.js';
 import Command from '../../utils/Base/Command';
 import DiscordClient from '../../utils/client';
@@ -13,7 +14,7 @@ export default class PayPal extends Command {
     client: DiscordClient,
     message: Message,
     args: string[],
-    guildConfig: GuildConfigDto
+    guildConfig: GuildConfig
   ) {
     // Only tutors/admins can call this command
     if (

@@ -14,11 +14,7 @@ export default class InviteCreatedEvent extends Event {
     const guild = await client.guilds.fetch(invite.guild.id);
     const member = await guild.members.fetch(invite.inviter.id);
 
-    if (
-      member.roles.cache.find((r) => r.name === 'Tutor') ||
-      member.roles.cache.find((r) => r.name === 'Trial Tutor') ||
-      member.permissions.has('ADMINISTRATOR')
-    ) {
+    if (member.permissions.has('ADMINISTRATOR')) {
       console.log('Invite Created by Admin/Helper');
       return;
     }

@@ -8,10 +8,8 @@ export default class Clear extends Command {
   }
 
   async run(client: DiscordClient, message: Message, args: string[]) {
-    if (!message.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
+    if (!message.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR))
       return message.channel.send('Invalid Permission to use command');
-    }
-
     if (!args[0]) return message.reply('Please Specify A Number');
 
     const amount = parseInt(args[0]);
@@ -20,8 +18,8 @@ export default class Clear extends Command {
     if (amount > 100 || amount < 1)
       return message.reply('Number Must Be between 1-100');
 
-    if (message.channel.type == 'GUILD_TEXT') {
+    if (message.channel.type == 'GUILD_TEXT')
       message.channel.bulkDelete(amount);
-    }
+    else message.reply('Unable to delete in this channel');
   }
 }

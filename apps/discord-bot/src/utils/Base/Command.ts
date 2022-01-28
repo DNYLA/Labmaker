@@ -1,5 +1,5 @@
+import { GuildConfig } from '@labmaker/shared';
 import { Message } from 'discord.js';
-import { GuildConfigDto } from '@labmaker/wrapper';
 import DiscordClient from '../client';
 
 export default abstract class Command {
@@ -22,7 +22,7 @@ export default abstract class Command {
   abstract run(
     client: DiscordClient,
     message: Message,
-    args: string[] | null,
-    guildConfig: GuildConfigDto | null
+    args: Array<string> | null,
+    guildConfig: GuildConfig | null
   ): Promise<Message> | Promise<void>;
 }

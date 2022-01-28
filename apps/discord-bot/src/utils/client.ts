@@ -1,19 +1,17 @@
+import { GuildConfig, GuildData, Payment } from '@labmaker/shared';
 import { Client, ClientOptions, Collection } from 'discord.js';
-import { GuildConfigDto, PaymentDto } from '@labmaker/wrapper';
 import Command from './Base/Command';
 import Event from './Base/Event';
 
 export type PaymentsType = {
   serverId: string;
-  payments: PaymentDto[];
+  payments: GuildConfig[];
 };
 
 export default class DiscordClient extends Client {
   private _commands = new Collection<string, Command>();
   private _events = new Collection<string, Event>();
-
-  private _payments = new Array<PaymentsType>();
-  private _configs = new Array<GuildConfigDto>();
+  private _guilds = new Array<GuildData>();
   private _prefix = '?';
 
   constructor(options?: ClientOptions) {
@@ -36,34 +34,42 @@ export default class DiscordClient extends Client {
     this.prefix = prefix;
   }
 
-  getPayments(id: string): PaymentsType {
-    // console.log(this._payments);
-    // console.log(id);
-    return this._payments.find((payment) => payment.serverId === id);
+  getPayments(id: string): Payment[] {
+    const g = this.getGuild(id);
+    if (!g) return null;
+    return g.payments;
   }
 
-  setPayments(payment: PaymentsType) {
-    if (this._payments.length == 0) {
-      //console.log('IS EMPTY');
-      return this._payments.push(payment);
-    }
-
-    const index = this._payments.findIndex(
-      (p) => p.serverId === payment.serverId
-    );
-
-    if (index > -1) this._payments[index] = payment;
-    else this._payments.push(payment);
+  setPayments(payment: Payment[]) {
+    if (payment.length === 0) return;
+    const i = this.getGuildIndex(payment[0].serverId);
+    if (i > -1) this._guilds[i].payments = payment;
+    // else callFetchConfig;
   }
 
-  getConfig(id: string): GuildConfigDto {
-    return this._configs.find((config) => config.id === id);
+  getConfig(id: string): GuildConfig {
+    const g = this.getGuild(id);
+    if (!g) return null;
+    return g.config;
   }
 
-  setConfig(config: GuildConfigDto) {
-    const index = this._configs.findIndex((c) => c.id === config.id);
+  setConfig(config: GuildConfig) {
+    const i = this.getGuildIndex(config.id);
+    if (i > -1) this._guilds[i].config = config;
+    else this._guilds.push({ config, payments: [] });
+  }
 
-    if (index > -1) this._configs[index] = config;
-    else this._configs[index] = config;
+  getGuild(id: string): GuildData {
+    return this._guilds.find((g) => g.config.id === id);
+  }
+
+  setGuild(guild: GuildData) {
+    const i = this.getGuildIndex(guild.config.id);
+    if (i > -1) this._guilds[i] = guild;
+    else this._guilds.push(guild);
+  }
+
+  private getGuildIndex(id: string): number {
+    return this._guilds.findIndex((g) => g.config.id === id);
   }
 }

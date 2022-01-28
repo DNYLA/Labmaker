@@ -1,4 +1,3 @@
-import { createTicket } from '@labmaker/wrapper';
 import { DMChannel, NewsChannel, TextChannel } from 'discord.js';
 import Event from '../utils/Base/Event';
 import DiscordClient from '../utils/client';
@@ -16,31 +15,6 @@ export default class MessageEvent extends Event {
       return;
     }
 
-    const guildId = channel.guild.id;
-    const channelId = channel.id;
-
-    const x = channel.guild.me.joinedTimestamp / 1000;
-    if (x >= x + 10) return; // if the bot just joined the server the channelcreate event will get activated after 10 sec
-    if (
-      channel.parent === null ||
-      channel.parent.name.toLowerCase() != 'open orders'
-    )
-      return;
-
-    const ticketIdMsg = channel.name.toLowerCase().replace('ticket-', '');
-    if (isNaN(Number(ticketIdMsg))) return;
-    const ticketId = Number(ticketIdMsg);
-
-    setTimeout(async () => {
-      channel.send(
-        `Welcome! I'm going to need some more information before I can find you a suitable tutor. (Enter !stop at Anytime to cancel).`
-      );
-
-      createTicket(guildId, ticketId, channelId)
-        .then(() =>
-          channel.send(`**Is this an exam, assignment or homework sheet?**`)
-        )
-        .catch((err) => console.log(err));
-    }, 1500);
+    console.log('New Channel');
   }
 }
