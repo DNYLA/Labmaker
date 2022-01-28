@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -36,7 +37,7 @@ export class PaymentController {
   }
 
   @Delete('')
-  deletePayments(@Body() body: number[]): Promise<void> {
+  deletePayments(@Body() body: number[]): Promise<HttpStatus> {
     return this.paymentService.deletePayments(body);
   }
 }

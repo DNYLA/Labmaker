@@ -1,11 +1,10 @@
 import { Item } from '@labmaker/ui';
-import { getGuildDetails, updatePayments } from '@labmaker/wrapper';
-import React, { useEffect, useState } from 'react';
+import { getGuildDetails } from '@labmaker/wrapper';
+import { useEffect, useState } from 'react';
 import { RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { loadingDiscordConfig } from '../LoadingTypes';
-import { setGuild, setPayments } from '../slices/configSlices';
+import { setGuild } from '../slices/configSlices';
 import { toast } from 'react-toastify';
 
 export function useFetchGuild() {

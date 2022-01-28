@@ -6,7 +6,7 @@ import styled from 'styled-components';
 export interface PaymentProps {
   payment: Payment;
   payments: Payment[];
-  setPayment: React.Dispatch<React.SetStateAction<Payment[]>>;
+  setPayment: (payments: Payment[]) => void;
 }
 
 enum InputType {
