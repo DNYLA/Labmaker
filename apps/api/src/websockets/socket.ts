@@ -9,7 +9,8 @@ import {} from '@nestjs/platform-socket.io';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user/user.service';
 import { Server, Socket } from 'socket.io';
-import { DiscordConfig, Log, RedditConfig, Role } from '@prisma/client';
+import { DiscordConfig, Log, RedditConfig, Role, Ticket } from '@prisma/client';
+import { TicketInfo, TicketNotif } from '@labmaker/shared';
 
 @WebSocketGateway({ cors: true })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
@@ -70,7 +71,12 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
   }
 
   notifyGuildConfig(config: DiscordConfig) {
-    this.ws.sockets.to('bot').emit('guildConfig', JSON.stringify(config));
+    this.ws.to('bot').emit('guildConfig', JSON.stringify(config));
+  }
+
+  notifyTicket(ticket: Ticket, type: TicketNotif) {
+    const info: TicketInfo = { ticket, type };
+    this.ws.to('bot').emit('ticket', JSON.stringify(info));
   }
 
   deleteConfig(id: string) {

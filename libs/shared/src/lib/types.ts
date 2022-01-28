@@ -98,3 +98,15 @@ export enum PaymentAction {
   Update,
   Delete,
 }
+
+export enum TicketNotif {
+  Created,
+  Accepted,
+  Resigned,
+  Deleted,
+}
+
+export type TicketInfo = {
+  ticket: Ticket;
+  type: TicketNotif;
+};

@@ -32,7 +32,7 @@ const catToCreate: CategoryCreate[] = [
   { name: 'Help', channels: ['TOS', 'Help', 'Apply'] },
   {
     name: 'General',
-    channels: ['Announcements', 'Invites', 'Vouches'],
+    channels: ['Announcements', 'Tutor Notifications', 'Invites', 'Vouches'],
   },
   { name: 'Chat', channels: ['Student Chat'] },
   {
@@ -50,7 +50,7 @@ export default class Setup extends Command {
     if (message.guild.ownerId !== message.author.id)
       return message.channel.send('Invalid Permission to use command');
 
-    return message.channel.send('Setup Command Disabled');
+    // return message.channel.send('Setup Command Disabled');
 
     const guild = message.guild;
     //Delete All Channels

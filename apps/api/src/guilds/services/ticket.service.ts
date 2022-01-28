@@ -9,11 +9,20 @@ import { CreateTicketDto } from '../dtos/create-ticket.dto';
 import { Role, Ticket } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserDetails } from '../../auth/userDetails.dto';
-import { PartialTicket, TicketAction, Tickets } from '@labmaker/shared';
+import {
+  PartialTicket,
+  TicketAction,
+  TicketNotif,
+  Tickets,
+} from '@labmaker/shared';
+import { WebsocketGateway } from '../../websockets/socket';
 
 @Injectable()
 export class TicketService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private wsGateway: WebsocketGateway
+  ) {}
 
   // /**
   //  * `getTicket` returns a ticket object from the database.
@@ -92,7 +101,9 @@ export class TicketService {
   ): Promise<Ticket> {
     // const due = new Date(ticket.due);
     if (user.role === Role.TUTOR) throw new ForbiddenException();
-    return await this.prismaService.ticket.create({ data: ticket });
+    const sTicket = await this.prismaService.ticket.create({ data: ticket });
+    this.wsGateway.notifyTicket(sTicket, TicketNotif.Created);
+    return sTicket;
   }
 
   //Common Auth Checks in here
@@ -128,10 +139,12 @@ export class TicketService {
   ): Promise<Ticket> {
     if (ticket.tutorId) throw new ConflictException('Job Already Accepted');
 
-    return await this.prismaService.ticket.update({
+    const uTicket = await this.prismaService.ticket.update({
       where: { id: ticket.id },
       data: { tutorId: user.id },
     });
+    this.wsGateway.notifyTicket(uTicket, TicketNotif.Accepted);
+    return uTicket;
   }
 
   private async resignTutor(
@@ -140,10 +153,13 @@ export class TicketService {
   ): Promise<Ticket> {
     if (ticket.tutorId !== user.id) throw new ForbiddenException();
 
-    return await this.prismaService.ticket.update({
+    const uTicket = await this.prismaService.ticket.update({
       where: { id: ticket.id },
       data: { tutorId: null },
     });
+
+    this.wsGateway.notifyTicket(uTicket, TicketNotif.Resigned);
+    return uTicket;
   }
 
   async deleteTicket(serverId: string, ticketId: number, user: UserDetails) {
@@ -160,9 +176,11 @@ export class TicketService {
 
     //Dont want to actually delete the ticket as admins may want to view
     //data from all tickets a student has created.
-    return await this.prismaService.ticket.update({
+    const uTicket = await this.prismaService.ticket.update({
       where: { id: ticket.id },
       data: { deleted: true },
     });
+    this.wsGateway.notifyTicket(uTicket, TicketNotif.Deleted);
+    return uTicket;
   }
 }
