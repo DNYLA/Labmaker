@@ -4,6 +4,7 @@ import { Tickets } from '@labmaker/shared';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { UserRole } from '@labmaker/wrapper';
+import { Button } from '@labmaker/ui';
 
 interface TicketsListProps {
   tickets: Tickets;
@@ -23,11 +24,10 @@ export default function TicketsList({
   const user = useSelector((state: RootState) => state.user.value);
   return (
     <StyledTickets>
-      <CreateButton
-        onClick={user.role === UserRole.USER ? createEvent : findEvent}
-      >
+      <Button onClick={user.role === UserRole.USER ? createEvent : findEvent}>
         {user.role === UserRole.USER ? 'Create Ticket' : 'Find Work'}
-      </CreateButton>
+      </Button>
+
       {/* Center This */}
       {tickets.active.length > 0 && (
         <>
@@ -87,21 +87,4 @@ const TicketContainer = styled.div`
   max-height: 1000px;
   margin: 15px 0px;
   /* overflow: scroll; */
-`;
-
-const CreateButton = styled.button`
-  cursor: pointer;
-  display: flex;
-  float: right;
-  background-color: ${(p) => p.theme.input.backCol};
-  color: #fff;
-  font-size: 20px;
-  font-family: 'Archivo Black', 'Roboto', sans-serif;
-  width: fit-content;
-  padding: 0px 15px;
-  border: none;
-  border-radius: 4px;
-  :hover {
-    background-color: #1a1a1a;
-  }
 `;

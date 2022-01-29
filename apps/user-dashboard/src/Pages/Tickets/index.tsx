@@ -1,4 +1,4 @@
-import { Content, LoadingSpinner, Page } from '@labmaker/ui';
+import { Button, Content, LoadingSpinner, Page } from '@labmaker/ui';
 import { useFetchTickets } from '../../utils/hooks/useFetchTickets';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -20,6 +20,7 @@ export function Tickets(props: IndexProps) {
   return (
     <Page>
       <LoadingSpinner loading={loading} message="Loading Tickets" />
+
       <Section>
         {!loading &&
         tickets &&
@@ -56,20 +57,4 @@ const Section = styled(Content)`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const Button = styled.button`
-  cursor: pointer;
-  margin-top: 10px;
-  background-color: ${(p) => p.theme.input.backCol};
-  color: #fff;
-  font-size: 20px;
-  font-family: 'Archivo Black', 'Roboto', sans-serif;
-  width: fit-content;
-  padding: 0px 15px;
-  border: none;
-  border-radius: 4px;
-  :hover {
-    background-color: #1a1a1a;
-  }
 `;

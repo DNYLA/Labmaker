@@ -1,4 +1,5 @@
 import {
+  Button,
   Content,
   DropDown,
   InfoTitle,
@@ -193,7 +194,7 @@ export function CreateTicketPage(props: IndexProps) {
             />
           </FormRow>
           <CenterDiv>
-            <CustomButton onClick={handleCreate}>Create</CustomButton>
+            <Button onClick={handleCreate}>Create</Button>
           </CenterDiv>
         </SettingsContainer>
       </Content>
@@ -217,30 +218,6 @@ const FormRow = styled.div`
 
   & > *:not(:last-child) {
     margin-right: 15px;
-  }
-`;
-
-const CustomButton = styled.button`
-  width: 50%;
-  height: 28px;
-  border: none;
-  background-color: #313c4b;
-  border-radius: 5px;
-  justify-content: center;
-  color: white;
-  font-family: 'Roboto';
-  font-size: 18px;
-  outline: none;
-  transition: 0.5s;
-
-  :active {
-    border: none;
-  }
-
-  :hover {
-    background-color: #455366;
-    transition: 0.5s;
-    cursor: pointer;
   }
 `;
 

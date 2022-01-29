@@ -5,6 +5,7 @@ export * from './header/selector';
 export * from './header/log-table';
 export * from './header/navbar';
 
+export * from './input/button';
 export * from './input/user-controls';
 export * from './input/tag-input-box';
 export * from './input/input-box';
