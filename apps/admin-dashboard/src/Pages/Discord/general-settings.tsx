@@ -65,7 +65,7 @@ export function GeneralSettings(props: GeneralSettingsProps) {
           />
 
           <SwitchToggle
-            message="Auto Create Ticket"
+            message="Enable Tickets"
             toggled={guildConfig.autoTicket}
             onToggle={() => {
               setConfig({

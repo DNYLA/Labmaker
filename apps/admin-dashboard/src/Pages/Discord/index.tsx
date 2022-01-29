@@ -12,6 +12,8 @@ import { PaymentSettings } from './payment-settings';
 import { useFetchGuild } from '../../utils/hooks/useFetchGuild';
 import { useNavigate } from 'react-router-dom';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
+import { TicketSettings } from './ticket-settings';
+import { TicketMessage } from './ticket-message-settings';
 
 /* eslint-disable-next-line */
 export interface DiscordProps {}
@@ -40,6 +42,10 @@ export function Discord(props: DiscordProps) {
           <ComboContainer>
             <GeneralSettings />
             <PaymentSettings />
+          </ComboContainer>
+          <ComboContainer>
+            <TicketSettings />
+            <TicketMessage />
           </ComboContainer>
         </Content>
       )}
