@@ -1,8 +1,8 @@
 //#region Guild
 export type GuildData = {
   config: GuildConfig;
-  channels: PartialGuildChannel[];
-  roles: PartialRole[];
+  channels?: PartialGuildChannel[];
+  roles?: PartialRole[];
   payments: Payment[];
 };
 
@@ -114,10 +114,10 @@ export enum PaymentAction {
 }
 
 export enum TicketNotif {
-  Created,
-  Accepted,
-  Resigned,
-  Deleted,
+  Created = 'created',
+  Accepted = 'accepted',
+  Resigned = 'resigned',
+  Deleted = 'deleted',
 }
 
 export type TicketInfo = {

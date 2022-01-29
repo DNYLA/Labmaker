@@ -102,7 +102,7 @@ export function TicketMessage(props: TicketMessageProps) {
           <InputBox
             message="Delete/Resign Message"
             infoMessage={createInfoMessage(
-              '/(admin_role} /(student_or_tutor)/ has /(action)/. /(opposite_of_student_or_tutor)/ has been Notified, close Ticket once verified.',
+              '/(admin_role)/ /(student_or_tutor)/ has /(action)/. /(opposite_of_student_or_tutor)/ has been Notified, close Ticket once verified.',
               InfoType.Deleted
             )}
             value={config.deleteMessage ? config.deleteMessage : ''}

@@ -1,3 +1,4 @@
+import { GuildConfig, Ticket, TicketNotif } from '@labmaker/shared';
 import {
   GuildMember,
   Interaction,
@@ -135,4 +136,59 @@ export function showConfirmation(
     content: confirmationMsg,
     components: [new MessageActionRow().addComponents([YES, NO])],
   });
+}
+
+export function parseTicketMessage(
+  toParse: string,
+  config: GuildConfig,
+  ticket: Ticket,
+  action?: TicketNotif
+): string {
+  const parseKeys = [
+    'tutor',
+    'student',
+    'subject',
+    'type',
+    'education',
+    'budget',
+    'action',
+    'id',
+    'tutor_role',
+    'admin_role',
+    'sender',
+    'recipient',
+  ];
+  let parsed = toParse;
+  let sender = '';
+  let recipient = '';
+  if (action === TicketNotif.Resigned) {
+    sender = `<@${ticket.tutorId}>`;
+    recipient = `<@${ticket.creatorId}>`;
+  } else if (action === TicketNotif.Deleted) {
+    sender = `<@${ticket.creatorId}>`;
+    recipient = `<@${ticket.tutorId}>`;
+  }
+
+  parseKeys.forEach((key) => {
+    let replaceVal = ticket[key];
+    if (key === 'student') {
+      replaceVal = `<@${ticket.creatorId}>`;
+    } else if (key === 'tutor') {
+      replaceVal = `<@${ticket.tutorId}>`;
+    } else if (key === 'tutor_role') {
+      replaceVal = `<@&${config.tutorRole}>`;
+    } else if (key === 'admin_role') {
+      replaceVal = `<@&${config.staffRole}>`;
+    } else if (key === 'action') {
+      replaceVal = action;
+    } else if (key === 'sender') {
+      replaceVal = sender;
+    } else if (key === 'recipient') {
+      replaceVal = recipient;
+    }
+
+    parsed = parsed.replace(`{${key}}`, replaceVal);
+  });
+
+  return parsed;
 }

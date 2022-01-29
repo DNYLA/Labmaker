@@ -33,6 +33,7 @@ export function useFetchGuild() {
     getGuildData(id)
       .then(({ data }) => {
         dispatch(setGuild(data));
+        if (!data.roles || !data.channels) return;
         setRoles(parseRoles(data.roles));
         setTextChannels(parseChannels(data.channels, ChannelType.GUILD_TEXT));
         setCategories(parseChannels(data.channels, ChannelType.GUILD_CATEGORY));
