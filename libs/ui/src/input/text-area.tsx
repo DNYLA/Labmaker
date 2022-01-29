@@ -36,43 +36,46 @@ export function TextArea({
   }
 
   return (
-    <StyledTextArea>
+    <StyledTextAreaContainer>
       <InfoTitle title={message} infoMessage={infoMessage} />
-      <TextareaContainer>
+
+      <TextAreaWrapper>
         {textLimit && (
-          <span>
+          <StyledTextAreaLimit>
             {value.length} / {textLimit}
-          </span>
+          </StyledTextAreaLimit>
         )}
 
-        <StyledTextarea
+        <StyledTextArea
           value={value}
           onChange={handleChange}
           disabled={disabled}
           placeholder={placeholder}
         />
-      </TextareaContainer>
-    </StyledTextArea>
+      </TextAreaWrapper>
+    </StyledTextAreaContainer>
   );
 }
 
-const StyledTextArea = styled.div`
+const StyledTextAreaContainer = styled.div`
   user-select: none;
 `;
 
-const TextareaContainer = styled.div`
+const TextAreaWrapper = styled.div`
   display: flex;
-  /* position: relative; */
-  span {
-    position: absolute;
-    font-size: 10px;
-    width: 100px;
-    left: 90%;
-    top: 50%;
-  }
+  position: relative;
 `;
 
-const StyledTextarea = styled.textarea`
+const StyledTextAreaLimit = styled.span`
+  pointer-events: none;
+  position: absolute;
+  bottom: 5px;
+  right: 8px;
+  font-size: 10px;
+  text-shadow: 1px 1px 0px #000;
+`;
+
+const StyledTextArea = styled.textarea`
   display: flex;
   padding: 5px 10px;
   color: white;
@@ -85,6 +88,8 @@ const StyledTextarea = styled.textarea`
   border-radius: 5px;
   transition: background-color 250ms ease-in-out;
   min-width: 90%;
+  min-height: 80px;
+  resize: vertical; // Only allow vertical resize
 
   :focus {
     background-color: ${(p) => p.theme.input.activeCol};
