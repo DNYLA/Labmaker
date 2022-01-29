@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
+import { InfoTitle } from '..';
 
 export interface Item {
   value: number | string;
@@ -18,9 +19,17 @@ export interface DropDownProps {
   items: Item[];
   value: string | number;
   onChange: IOnDropDownChange;
+  message?: string;
+  infoMessage?: string | React.ReactNode;
 }
 
-export function DropDown({ items, value, onChange }: DropDownProps) {
+export function DropDown({
+  items,
+  value,
+  onChange,
+  message,
+  infoMessage,
+}: DropDownProps) {
   const [isOpen, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [filteredItems, setFilteredItems] = useState(items);
@@ -107,6 +116,12 @@ export function DropDown({ items, value, onChange }: DropDownProps) {
       onBlur={handleClose}
       className={isOpen ? 'open' : ''}
     >
+      {message && (
+        <InfoTitleWrapper>
+          <InfoTitle title={message} infoMessage={infoMessage} />
+        </InfoTitleWrapper>
+      )}
+
       <SelectedItem>
         <StyledInput
           value={inputValue}
@@ -143,6 +158,10 @@ export function DropDown({ items, value, onChange }: DropDownProps) {
     </StyledDropDown>
   );
 }
+
+const InfoTitleWrapper = styled.div`
+  margin-bottom: 5px;
+`;
 
 const StyledInput = styled.input`
   padding-left: 10px;
@@ -195,7 +214,6 @@ const DropDownItem = styled.div`
 const StyledDropDown = styled.div`
   position: relative;
   width: 100%;
-  font-size: 18px;
   transition: all 200ms ease-in;
   user-select: none;
 

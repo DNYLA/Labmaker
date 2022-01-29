@@ -31,7 +31,9 @@ export function InputBox({
       <StyledInputWrapper>
         <StyledInput
           value={value}
-          onChange={(e) => { if (onChange) onChange(e)}}
+          onChange={(e) => {
+            if (onChange) onChange(e);
+          }}
           disabled={disabled}
           type={type}
           className={prefix ? 'has-prefix' : ''}

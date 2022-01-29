@@ -108,41 +108,37 @@ export function CreateTicketPage(props: IndexProps) {
           <InfoTitle title={'Create Ticket Form'} header={true} center={true} />
 
           <FormRow>
-            <div>
-              <StyledSpan>Type</StyledSpan>
+            <FormRowGroup>
               <DropDown
+                message="Type"
                 items={typeItems}
                 value={ticket.type}
                 onChange={handleChangeType}
               />
-            </div>
+            </FormRowGroup>
 
-            <div>
-              <StyledSpan>Subject</StyledSpan>
+            <FormRowGroup>
               <DropDown
+                message="Subject"
                 items={subjectItems}
                 value={ticket.subject}
                 onChange={handleChangeSubject}
               />
-            </div>
+            </FormRowGroup>
 
-            <div>
-              <StyledSpan>Education</StyledSpan>
+            <FormRowGroup>
               <DropDown
+                message="Education"
                 items={educationItems}
                 value={ticket.education}
                 onChange={handleChangeEducation}
               />
-            </div>
+            </FormRowGroup>
           </FormRow>
 
           <InputBox
             message="Username"
             value={`${user.username}#${user.discriminator}`}
-            onChange={(e) => console.log(e.target.value)}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            //   setConfig({ ...config, clientId: e.target.value })
-            // }
             disabled={true}
           />
 
@@ -153,19 +149,6 @@ export function CreateTicketPage(props: IndexProps) {
             type="number"
             onChange={(e) => handleTicketInput(Number(e.target.value))}
           />
-
-          {/* <InputRange
-            value={rangeVal}
-            min={50}
-            max={500}
-            step={10}
-            message={'Budget'}
-            prefix={'$'}
-            onChange={(e) => setRangeVal(Number(e.target.value))}
-            infoMessage={
-              'You and the tutor will still need to negotiate! If your budget is not within the range add your budget to the Additional Notes.'
-            }
-          /> */}
 
           <TextArea
             message="Additional Notes"
@@ -202,22 +185,28 @@ export function CreateTicketPage(props: IndexProps) {
   );
 }
 
-const StyledSpan = styled.span`
-  padding-right: 5px;
-  margin-left: 2px;
-  margin-bottom: 5px;
-  user-select: none;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+const FormRowGroup = styled.div`
+  width: 100%;
 `;
 
 const FormRow = styled.div`
   display: flex;
+  flex-flow: column;
   align-items: center;
-  justify-content: space-between;
+  flex-grow: 1;
 
   & > *:not(:last-child) {
-    margin-right: 15px;
+    margin-bottom: 15px;
+  }
+
+  @media (min-width: 750px) {
+    flex-flow: row;
+    justify-content: space-between;
+
+    & > *:not(:last-child) {
+      margin-right: 15px;
+      margin-bottom: 0;
+    }
   }
 `;
 
