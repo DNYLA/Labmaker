@@ -16,7 +16,7 @@ export interface IOnDropDownChange {
 /* eslint-disable-next-line */
 export interface DropDownProps {
   items: Item[];
-  value: string | number;
+  value?: string | number;
   onChange: IOnDropDownChange;
 }
 
@@ -35,7 +35,7 @@ export function DropDown({ items, value, onChange }: DropDownProps) {
     // console.log(items);
     // if (!items) return setSelected({ value: 'loading', label: 'loading' });
     const startItem = items.find((item) => item.value === value);
-    if (!startItem) return; //Throw Error Instead?
+    if (!startItem) return setInputValue('Select...');
     setSelected(startItem);
     setInputValue(startItem.label);
   }, [items, value]);
