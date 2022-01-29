@@ -42,16 +42,26 @@ model RedditConfig {
 }
 
 model DiscordConfig {
-  id              String   @id
-  name            String?
-  icon            String?
-  prefix          String   @default("?")
-  embedImageUrl   String   @default("https://i.imgur.com/rDzblHE.gif")
-  autoSwicher     Boolean  @default(false)
-  autoTicket      Boolean  @default(false)
-  autoReact       Boolean  @default(false)
-  paymentConfigId String
-  Ticket          Ticket[]
+  id                  String   @id
+  name                String?
+  icon                String?
+  prefix              String   @default("?")
+  embedImageUrl       String   @default("https://i.imgur.com/rDzblHE.gif")
+  autoSwicher         Boolean  @default(false)
+  autoTicket          Boolean  @default(false)
+  autoReact           Boolean  @default(false)
+  paymentConfigId     String
+  ordersCategory      String?
+  notificationChannel String?
+  tutorRole           String?
+  staffRole           String?
+  channelName         String   @default("Ticket-/id/")
+  newMessage          String?
+  acceptedMessage     String?
+  deleteMessage       String?
+  hideChannel         Boolean  @default(true)
+  notifyUser          Boolean  @default(true)
+  Ticket              Ticket[]
 }
 
 model Payment {

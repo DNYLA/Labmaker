@@ -1,6 +1,8 @@
 //#region Guild
 export type GuildData = {
   config: GuildConfig;
+  channels: PartialGuildChannel[];
+  roles: PartialRole[];
   payments: Payment[];
 };
 
@@ -10,10 +12,20 @@ export type GuildConfig = {
   icon?: string;
   prefix: string;
   embedImageUrl: string;
-  autoSwitcher: boolean;
+  autoSwitcher?: boolean;
   autoTicket: boolean;
   autoReact: boolean;
   paymentConfigId: string;
+  ordersCategory?: string;
+  notificationChannel?: string;
+  tutorRole?: string;
+  staffRole?: string;
+  channelName: string;
+  newMessage?: string;
+  acceptedMessage?: string;
+  deleteMessage?: string;
+  hideChannel: boolean;
+  notifyUser: boolean;
   tickets?: Ticket[];
 };
 
@@ -117,3 +129,39 @@ export type TicketChannelInfo = {
   id: number;
   channelId: string;
 };
+
+//Discord Types
+export type PartialGuild = {
+  id: string;
+  name: string;
+  icon: string;
+  owner: boolean;
+  permissions: string;
+  features: string[];
+};
+
+export type PartialRole = {
+  id: string;
+  name: string;
+  color: number;
+};
+
+export type PartialGuildChannel = {
+  id: string;
+  name: string;
+  type: ChannelType;
+};
+
+export enum ChannelType {
+  GUILD_TEXT = 0,
+  DM = 1,
+  GUILD_VOICE = 2,
+  GROUP_DM = 3,
+  GUILD_CATEGORY = 4,
+  GUILD_NEWS = 5,
+  GUILD_STORE = 6,
+  GUILD_NEWS_THREAD = 7,
+  GUILD_PUBLIC_THREAD = 8,
+  GUILD_PRIVATE_THREAD = 9,
+  GUILD_STAGE_VOICE = 10,
+}

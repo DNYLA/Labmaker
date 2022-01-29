@@ -6,6 +6,8 @@ import { loadingDiscordConfig } from '../LoadingTypes';
 const initialStateValue: GuildData & { parsedGuilds: Item[] } = {
   config: loadingDiscordConfig,
   payments: [],
+  channels: [],
+  roles: [],
   parsedGuilds: [],
 };
 

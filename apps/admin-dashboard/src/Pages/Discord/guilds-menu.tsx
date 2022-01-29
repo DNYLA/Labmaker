@@ -2,8 +2,8 @@ import { useFetchGuilds } from '../../utils/hooks/useFetchGuilds';
 import React from 'react';
 import styled from 'styled-components';
 import { Content, LoadingSpinner, Page } from '@labmaker/ui';
-import { PartialGuild } from '@labmaker/wrapper';
 import { useNavigate } from 'react-router-dom';
+import { PartialGuild } from '@labmaker/shared';
 
 export function GuildsMenu() {
   const { guilds, loading, error } = useFetchGuilds();

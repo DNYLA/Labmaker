@@ -35,7 +35,6 @@ export class PaymentService {
   async updatPayments(
     updatedPayments: UpdatePaymentDtoArray
   ): Promise<Payment[] | undefined> {
-    console.log(updatedPayments);
     return await this.prismaService.$transaction(
       updatedPayments.payments.map((payment) => {
         if (payment.newPayment) {

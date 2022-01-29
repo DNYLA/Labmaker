@@ -4,8 +4,9 @@ import {
   LoadingSpinner,
   Page,
   Content,
+  Item,
 } from '@labmaker/ui';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GeneralSettings } from './general-settings';
 import { PaymentSettings } from './payment-settings';
@@ -19,8 +20,10 @@ import { TicketMessage } from './ticket-message-settings';
 export interface DiscordProps {}
 
 export function Discord(props: DiscordProps) {
-  const { guildConfig, loading } = useFetchGuild();
+  const { guildConfig, categories, textChannels, roles, loading } =
+    useFetchGuild();
   const { createPayment, saveData, parsedGuilds } = useGuildLogic();
+
   const navigate = useNavigate();
   //Parsed Guilds are currently only fetched on GuildsMenu so if the user
   //refreshes the page when inside the DiscordPage it will error unless we redirect
@@ -44,7 +47,11 @@ export function Discord(props: DiscordProps) {
             <PaymentSettings />
           </ComboContainer>
           <ComboContainer>
-            <TicketSettings />
+            <TicketSettings
+              categories={categories}
+              textChannels={textChannels}
+              parsedRoles={roles}
+            />
             <TicketMessage />
           </ComboContainer>
         </Content>

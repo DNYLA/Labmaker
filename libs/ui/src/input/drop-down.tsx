@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
+import { StringifyOptions } from 'querystring';
+import { InfoTitle } from './info-box';
 
 export interface Item {
   value: number | string;
@@ -15,21 +17,28 @@ export interface IOnDropDownChange {
 
 /* eslint-disable-next-line */
 export interface DropDownProps {
+  title?: string;
+  infoMessage?: string | React.ReactNode;
   items: Item[];
   value?: string | number;
   onChange: IOnDropDownChange;
 }
 
-export function DropDown({ items, value, onChange }: DropDownProps) {
+export function DropDown({
+  title,
+  infoMessage,
+  items,
+  value,
+  onChange,
+}: DropDownProps) {
   const [isOpen, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [filteredItems, setFilteredItems] = useState(items);
-  const [selected, setSelected] = useState<Item>(items[0]);
+  const [selected, setSelected] = useState<Item>({
+    value: 0,
+    label: 'Select...',
+  });
   const inputRef = React.createRef<HTMLInputElement>();
-
-  useEffect(() => {
-    setInputValue(selected.label);
-  }, [selected]);
 
   useEffect(() => {
     // console.log(items);
@@ -42,7 +51,6 @@ export function DropDown({ items, value, onChange }: DropDownProps) {
 
   const setItem = (id: number | string) => {
     onChange(id);
-    console.log('Running');
     const newItem = items.find((item) => item.value === id);
     if (!newItem) return;
     inputRef.current?.blur();
@@ -57,7 +65,6 @@ export function DropDown({ items, value, onChange }: DropDownProps) {
       (item) => item.label.toLowerCase() === inputVal
     );
     if (alreadyInside && selected.value === alreadyInside.value) {
-      console.log('Already inside');
       setFilteredItems(items);
       setInputValue(inputVal);
       return;
@@ -100,47 +107,50 @@ export function DropDown({ items, value, onChange }: DropDownProps) {
   };
 
   return (
-    <StyledDropDown
-      tabIndex={0}
-      // onMouseDown={handleCloseClick} //Bug Where Clicking an item closes menu
-      onFocus={handleInputClick}
-      onBlur={handleClose}
-      className={isOpen ? 'open' : ''}
-    >
-      <SelectedItem>
-        <StyledInput
-          value={inputValue}
-          ref={inputRef}
-          onChange={(e) => onKeyInput(e.target.value.toLowerCase())}
-        />
+    <>
+      {title && <InfoTitle title={title} infoMessage={infoMessage} />}
+      <StyledDropDown
+        tabIndex={0}
+        // onMouseDown={handleCloseClick} //Bug Where Clicking an item closes menu
+        onFocus={handleInputClick}
+        onBlur={handleClose}
+        className={isOpen ? 'open' : ''}
+      >
+        <SelectedItem>
+          <StyledInput
+            value={inputValue}
+            ref={inputRef}
+            onChange={(e) => onKeyInput(e.target.value.toLowerCase())}
+          />
 
-        <FontAwesomeIcon
-          pull={'right'}
-          icon={isOpen ? faCaretUp : faCaretDown}
-          size="1x"
-          color="#FFF"
-          onClick={updateOpen}
-        />
-      </SelectedItem>
+          <FontAwesomeIcon
+            pull={'right'}
+            icon={isOpen ? faCaretUp : faCaretDown}
+            size="1x"
+            color="#FFF"
+            onClick={updateOpen}
+          />
+        </SelectedItem>
 
-      {isOpen && (
-        <HiddenContainer>
-          {filteredItems.map((item) => {
-            if (item.value !== selected.value)
-              return (
-                <DropDownItem
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => setItem(item.value)}
-                  key={item.value}
-                >
-                  {item.label}
-                </DropDownItem>
-              );
-            return <div key={item.value}></div>;
-          })}
-        </HiddenContainer>
-      )}
-    </StyledDropDown>
+        {isOpen && (
+          <HiddenContainer>
+            {filteredItems.map((item) => {
+              if (item.value !== selected.value)
+                return (
+                  <DropDownItem
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => setItem(item.value)}
+                    key={item.value}
+                  >
+                    {item.label}
+                  </DropDownItem>
+                );
+              return <div key={item.value}></div>;
+            })}
+          </HiddenContainer>
+        )}
+      </StyledDropDown>
+    </>
   );
 }
 

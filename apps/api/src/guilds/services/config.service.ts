@@ -4,24 +4,22 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateConfigDto } from '../dtos/create-guildconfig.dto';
-import { DiscordConfig, Payment } from '@prisma/client';
+import { DiscordConfig } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { PaymentService } from './payment.service';
 import { UserRole } from '@labmaker/wrapper';
 import { WebsocketGateway } from '../../websockets/socket';
-
-export interface LocalData {
-  config: DiscordConfig;
-  payments: Payment[];
-}
+import { UpdateConfigDto } from '../dtos/create-guildconfig.dto';
+import { GuildData, PartialGuildChannel, PartialRole } from '@labmaker/shared';
+import { DiscordHttpService } from '../../discord/services/discord-http.service';
 
 @Injectable()
 export class ConfigService {
   constructor(
     private prismaService: PrismaService,
     private paymentService: PaymentService,
+    private discordHttpService: DiscordHttpService,
     private wsGateway: WebsocketGateway
   ) {}
   private readonly logger = new Logger(ConfigService.name);
@@ -35,8 +33,9 @@ export class ConfigService {
   async getConfig(
     id: string,
     payments: boolean,
+    guildInfo: boolean,
     user: UserDetails
-  ): Promise<DiscordConfig | LocalData> {
+  ): Promise<DiscordConfig | GuildData> {
     //Add Authorization to see if user has access to this data. ( This can be done via fetching mutual guilds )
     if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT)
       throw new ForbiddenException();
@@ -48,10 +47,20 @@ export class ConfigService {
     // if (!config) return this.createConfigFromId(id);
     if (!config) throw new NotFoundException('Unable to find config');
     if (!payments) return config;
+    let channels: PartialGuildChannel[] = [];
+    let roles: PartialRole[] = [];
 
+    if (guildInfo) {
+      channels = (await this.discordHttpService.fetchGuildChannels(config.id))
+        .data;
+      roles = (await this.discordHttpService.fetchGuildRoles(config.id)).data;
+      channels;
+    }
     const fetchedPayments = await this.paymentService.getPayments(id);
     return {
       config,
+      channels,
+      roles,
       payments: fetchedPayments,
     };
   }
@@ -67,12 +76,12 @@ export class ConfigService {
   }
 
   async updateConfig(
-    updateConfigDto: CreateConfigDto,
+    config: UpdateConfigDto,
     user: UserDetails
   ): Promise<DiscordConfig> {
     const c = await this.prismaService.discordConfig.update({
-      where: { id: updateConfigDto.id },
-      data: updateConfigDto,
+      where: { id: config.id },
+      data: config,
     });
     if (user.role !== UserRole.BOT) this.wsGateway.notifyGuildConfig(c);
     return c;

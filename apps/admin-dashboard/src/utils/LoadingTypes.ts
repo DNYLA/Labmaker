@@ -73,6 +73,9 @@ export const loadingDiscordConfig: GuildConfig = {
   autoSwitcher: false,
   autoReact: false,
   autoTicket: false,
+  channelName: 'Ticket-id',
+  hideChannel: false,
+  notifyUser: false,
 };
 
 export const loadingServer: Guild = {

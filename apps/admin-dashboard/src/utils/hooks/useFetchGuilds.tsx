@@ -1,9 +1,11 @@
-import { getGuilds, PartialGuild } from '@labmaker/wrapper';
+import { getGuilds } from '@labmaker/wrapper';
 import { setParsedGuilds } from '../slices/configSlices';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { parseGuilds } from '../helpers';
 import { RootState } from '../../store';
+import { PartialGuild } from '@labmaker/shared';
+import { Item } from '@labmaker/ui';
 
 export function useFetchGuilds() {
   const [guilds, setGuilds] = useState<PartialGuild[]>();

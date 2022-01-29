@@ -9,16 +9,14 @@ import { GuildConfig, Payment } from '@labmaker/shared';
 
 export function useGuildLogic() {
   const dispatch = useDispatch();
-  const guildConfig = useSelector((state: RootState) => state.guild.config);
-  const payments = useSelector((state: RootState) => state.guild.payments); //Only Used for Saving
-  const parsedGuilds = useSelector(
-    (state: RootState) => state.guild.parsedGuilds
-  ); //Only Used for Saving
+  const { config, payments, channels, roles, parsedGuilds } = useSelector(
+    (state: RootState) => state.guild
+  );
 
   const saveData = async () => {
-    if (!guildConfig) return;
+    if (!config) return;
     try {
-      updateGuildConfig(guildConfig);
+      updateGuildConfig(config);
       if (payments.length === 0) return;
       await updatePayments(payments);
     } catch (err) {
@@ -27,14 +25,14 @@ export function useGuildLogic() {
   };
 
   const createPayment = () => {
-    if (!guildConfig) return;
+    if (!config) return;
 
     const newPayment: Payment = {
       id: Math.random(), //This gets overridden on Server-Side (Create new DTOS for items yet to be created)
       name: 'Payment Name',
       value: 'Payment Value',
       type: 'FIAT',
-      serverId: guildConfig.id,
+      serverId: config.id,
       newPayment: true,
     };
     const _payments = [...payments];
@@ -44,7 +42,7 @@ export function useGuildLogic() {
 
   const onConfigIdChanged = async (serverId: string | number) => {
     if (typeof serverId === 'number') return; //This will never happen however typescript requires i check
-    setConfig({ ...guildConfig, paymentConfigId: serverId });
+    setConfig({ ...config, paymentConfigId: serverId });
   };
 
   const setPayments = (payments: Payment[]) =>
@@ -52,7 +50,7 @@ export function useGuildLogic() {
   const setConfig = (config: GuildConfig) => dispatch(setConfigState(config));
 
   return {
-    guildConfig,
+    config,
     payments,
     parsedGuilds,
     onConfigIdChanged,

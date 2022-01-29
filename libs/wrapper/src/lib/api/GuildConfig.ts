@@ -5,8 +5,8 @@ import { AXIOS } from './Axios';
 export const getGuildConfigs = () => AXIOS.get<GuildConfig[]>(`/guilds/`);
 
 //Merge with function below
-export const getGuildDetails = (id: string) =>
-  AXIOS.get<GuildData>(`/guilds/${id}?payments=true`);
+export const getGuildData = (id: string) =>
+  AXIOS.get<GuildData>(`/guilds/${id}?payments=true&guildInfo=true`);
 
 export const getGuildConfig = (id: string) =>
   AXIOS.get<GuildConfig>(`/guilds/${id}?payments=false`);

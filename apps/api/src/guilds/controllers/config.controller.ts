@@ -8,12 +8,13 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { CreateConfigDto } from '../dtos/create-guildconfig.dto';
+import { UpdateConfigDto } from '../dtos/create-guildconfig.dto';
 import { DiscordConfig } from '@prisma/client';
 import { JwtAuthGuard, JwtBotAuthGuard } from '../../auth/guards/Jwt.guard';
 import { CurrentUser } from '../../utils/decorators';
 import { UserDetails } from '../../auth/userDetails.dto';
-import { ConfigService, LocalData } from '../services/config.service';
+import { ConfigService } from '../services/config.service';
+import { GuildData } from '@labmaker/shared';
 
 @Controller('guilds')
 export class ConfigController {
@@ -25,9 +26,10 @@ export class ConfigController {
   getConfig(
     @Param('id') id: string,
     @Query('payments') payments: boolean,
+    @Query('guildInfo') guildInfo: boolean,
     @CurrentUser() user: UserDetails
-  ): Promise<DiscordConfig | LocalData> {
-    return this.configService.getConfig(id, payments, user);
+  ): Promise<DiscordConfig | GuildData> {
+    return this.configService.getConfig(id, payments, guildInfo, user);
   }
 
   @Get()
@@ -47,7 +49,7 @@ export class ConfigController {
   @Put()
   @UseGuards(JwtAuthGuard)
   updateConfig(
-    @Body() body: CreateConfigDto,
+    @Body() body: UpdateConfigDto,
     @CurrentUser() user: UserDetails
   ) {
     return this.configService.updateConfig(body, user);

@@ -1,76 +1,112 @@
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   DropDown,
   InputBox,
+  Item,
   SettingsContainer,
   SwitchToggle,
 } from '@labmaker/ui';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
+import {
+  ChannelType,
+  PartialGuildChannel,
+  PartialRole,
+} from '@labmaker/shared';
+import { getChannels, getRoles } from '@labmaker/wrapper';
+import { parseChannels, parseRoles } from '../../utils/helpers';
 
 /* eslint-disable-next-line */
 export interface TicketSettingsProps {
-  // config: GuildConfigDto;
-  // setConfig: React.Dispatch<React.SetStateAction<GuildConfigDto>>;
-  // parsedGuilds: Item[];
-  // changeEvent: IOnDropDownChange;
+  categories: Item[];
+  textChannels: Item[];
+  parsedRoles: Item[];
 }
 
-export function TicketSettings(props: TicketSettingsProps) {
-  const { guildConfig, parsedGuilds, onConfigIdChanged, setConfig } =
-    useGuildLogic();
+export function TicketSettings({
+  categories,
+  textChannels,
+  parsedRoles,
+}: TicketSettingsProps) {
+  const { config, setConfig } = useGuildLogic();
+
   return (
     <SettingsContainer id="GeneralSettings">
       <h1>Ticket</h1>
 
-      {guildConfig.id !== '-1' && (
+      {config.id !== '-1' && (
         <div>
-          <InputBox
-            message="Orders Category"
-            value={'Open Orders'}
-            // onChange={(e) => {
-            //   setConfig({
-            //     ...guildConfig,
-            //     prefix: e.target.value,
-            //   });
-            // }}
+          <DropDown
+            title="Orders Category"
+            items={categories}
+            onChange={(e) => {
+              setConfig({
+                ...config,
+                ordersCategory: String(e),
+              });
+            }}
+            value={config.ordersCategory}
+          />
+          <DropDown
+            title="Notification Channel"
+            items={textChannels}
+            onChange={(e) => {
+              setConfig({
+                ...config,
+                notificationChannel: String(e),
+              });
+            }}
+            value={config.notificationChannel}
+          />
+          <DropDown
+            title="Staff Role"
+            items={parsedRoles}
+            onChange={(e) => {
+              setConfig({
+                ...config,
+                staffRole: String(e),
+              });
+            }}
+            value={config.staffRole}
+          />
+          <DropDown
+            title="Tutor Role"
+            items={parsedRoles}
+            onChange={(e) => {
+              setConfig({
+                ...config,
+                tutorRole: String(e),
+              });
+            }}
+            value={config.tutorRole}
           />
           <InputBox
             message="Ticket Channel Name"
-            value={'Ticket-{id}'}
-            // onChange={(e) => {
-            //   setConfig({
-            //     ...guildConfig,
-            //     prefix: e.target.value,
-            //   });
-            // }}
-          />
-          <InputBox
-            message="Notification Channel"
-            value={'Tutor Notifications'}
-            // onChange={(e) => {
-            //   setConfig({
-            //     ...guildConfig,
-            //     prefix: e.target.value,
-            //   });
-            // }}
+            value={config.channelName}
+            onChange={(e) => {
+              setConfig({
+                ...config,
+                channelName: e.target.value,
+              });
+            }}
           />
           <SwitchToggle
             message="Hide Channel on Delete"
-            toggled={guildConfig.autoSwitcher}
+            toggled={config.hideChannel}
             onToggle={() => {
               setConfig({
-                ...guildConfig,
-                autoSwitcher: !guildConfig.autoSwitcher,
+                ...config,
+                autoSwitcher: !config.autoSwitcher,
               });
             }}
           />
           <SwitchToggle
             message="Notify on Delete"
-            toggled={guildConfig.autoSwitcher}
+            toggled={config.notifyUser}
             onToggle={() => {
               setConfig({
-                ...guildConfig,
-                autoSwitcher: !guildConfig.autoSwitcher,
+                ...config,
+                autoSwitcher: !config.autoSwitcher,
               });
             }}
           />
