@@ -20,10 +20,14 @@ export function InfoTitle({
     return (
       <StyledSpan className={centerClass}>
         <TitleStyle className={headerClass}>{title}</TitleStyle>
-        <InfoSpan>?</InfoSpan>
-        <InfoBoxWrapper>
-          <InfoBox>{infoMessage}</InfoBox>
-        </InfoBoxWrapper>
+
+        <InfoWrapper>
+          <InfoSpan>?</InfoSpan>
+
+          <InfoBoxWrapper>
+            <InfoBox>{infoMessage}</InfoBox>
+          </InfoBoxWrapper>
+        </InfoWrapper>
       </StyledSpan>
     );
   } else {
@@ -57,9 +61,14 @@ const TitleStyle = styled.span`
   user-select: none;
 `;
 
+const InfoWrapper = styled.div`
+  position: relative;
+`;
+
 const InfoBox = styled.div`
-  width: 350px;
+  width: 100%;
   min-height: 50px;
+  padding: 15px;
   background-color: ${(p) => p.theme.input.backCol};
   border-radius: 5px;
   box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.2);
@@ -67,11 +76,11 @@ const InfoBox = styled.div`
 `;
 
 const InfoBoxWrapper = styled.div`
-  display: flex;
-  align-items: center;
   position: absolute;
+  min-width: 200px;
+  max-width: 350px;
+  top: 0;
   padding-top: 25px;
-  margin-left: 35px;
   z-index: 1;
   visibility: hidden;
   opacity: 0;
@@ -86,7 +95,6 @@ const InfoBoxWrapper = styled.div`
 const InfoSpan = styled.span`
   display: inline-block;
   margin-left: 8px;
-  /* padding: 2px; */
   text-align: center;
   width: 20px;
   height: 20px;
