@@ -96,7 +96,7 @@ export function TicketSettings({
             onToggle={() => {
               setConfig({
                 ...config,
-                autoSwitcher: !config.autoSwitcher,
+                hideChannel: !config.hideChannel,
               });
             }}
           />
@@ -106,7 +106,7 @@ export function TicketSettings({
             onToggle={() => {
               setConfig({
                 ...config,
-                autoSwitcher: !config.autoSwitcher,
+                notifyUser: !config.notifyUser,
               });
             }}
           />
