@@ -16,7 +16,7 @@ export const loginURL = () => `${AXIOS.defaults.baseURL}/auth/login`;
 
 export const getUser = () => AXIOS.get<UserDto>(`/user/`);
 
-export const getAdminUser = () => AXIOS.get<AdminUser>('/user/admin');
+export const getAdminUser = () => AXIOS.get<AdminUser>('/user?admin=true');
 
 const refreshToken = () => {
   const instance = axios.create(CONFIG); //Dont want to use Interceptors when refreshing token

@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/guards/Jwt.guard';
 import { UserDetails } from '../auth/userDetails.dto';
@@ -12,8 +12,15 @@ export class UserController {
 
   @Get('')
   @UseGuards(JwtAuthGuard)
-  getUser(@CurrentUser() user: UserDetails): Promise<UserDto> {
-    return this.userService.getUser(user.id);
+  getUser(
+    @Query() admin: boolean,
+    @CurrentUser() user: UserDetails
+  ): Promise<UserDto | AdminUser> {
+    if (!admin) {
+      return this.userService.getUser(user.id);
+    }
+
+    return this.userService.getAdminUser(user.id);
   }
 
   @Get('/admin')
