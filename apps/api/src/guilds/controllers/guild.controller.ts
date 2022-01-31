@@ -14,13 +14,13 @@ import { ApplicationResult, DiscordConfig } from '@prisma/client';
 import { JwtAuthGuard, JwtBotAuthGuard } from '../../auth/guards/Jwt.guard';
 import { CurrentUser } from '../../utils/decorators';
 import { UserDetails } from '../../auth/userDetails.dto';
-import { ConfigService } from '../services/guild.service';
+import { GuildService } from '../services/guild.service';
 import { GuildData } from '@labmaker/shared';
 import { CreateApplicationDTO } from '../dtos/apply-tutor.dto';
 
 @Controller('guilds')
 export class GuildController {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly configService: GuildService) {}
 
   // @UseGuards(AuthGuard('jwt'))
   @UseGuards(JwtAuthGuard)
