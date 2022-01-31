@@ -108,6 +108,8 @@ export class UserService {
     if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT)
       throw new ForbiddenException();
 
+    if (user.role === UserRole.BOT) return; //We Trust Anything from a JWT bot Token as they are allowed acess to any data.
+
     const fetchedUser = await this.getAdminUser(user.id);
     const node = fetchedUser.nodes.filter((n) => n.id === nodeId);
     if (!node) throw new ForbiddenException();

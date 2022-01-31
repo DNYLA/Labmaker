@@ -39,10 +39,22 @@ export class JwtBotStrategy extends PassportStrategy(Strategy, 'jwtbot') {
     });
   }
 
-  async validate(payload: UserDetails) {
-    if (payload.role !== Role.BOT)
+  async validate(payload: UserPayload) {
+    //Example Bot Payload
+    //{ id: '0', type: 'BOT', iat: 1643374465, exp: 1674932065 }
+
+    if (payload.type !== Role.BOT)
       throw new ForbiddenException(`You don't permission to access this data`);
 
-    return payload;
+    //In the Future Bots will have their own ID, Username etc.
+    //For now we send back id + role
+    return {
+      id: payload.id,
+      // username: 'Labmaker-Bot',
+      // discriminator: '#0000',
+      // accessToken: '0',
+      // refreshToken: '0',
+      role: payload.type,
+    };
   }
 }
