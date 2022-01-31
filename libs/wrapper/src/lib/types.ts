@@ -72,7 +72,7 @@ export type UserDto = {
   discriminator: string;
   avatar?: string;
   role: UserRole;
-  verifiedSubjects: string[];
+  subjects: string[];
 };
 
 export type AdminUser = {

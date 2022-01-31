@@ -15,7 +15,7 @@ export const defaultUser: UserDto = {
   discriminator: '4444',
   avatar: 'http://google.com',
   role: UserRole.USER,
-  verifiedSubjects: [],
+  subjects: [],
 };
 
 export const defaultAdminUser: AdminUser = {

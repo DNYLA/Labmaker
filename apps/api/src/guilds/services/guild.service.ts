@@ -1,10 +1,11 @@
 import {
   ForbiddenException,
+  HttpStatus,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { DiscordConfig } from '@prisma/client';
+import { ApplicationResult, DiscordConfig, Role } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { PaymentService } from './payment.service';
@@ -13,16 +14,17 @@ import { WebsocketGateway } from '../../websockets/socket';
 import { UpdateConfigDto } from '../dtos/create-guildconfig.dto';
 import { GuildData, PartialGuildChannel, PartialRole } from '@labmaker/shared';
 import { DiscordHttpService } from '../../discord/services/discord-http.service';
+import { CreateApplicationDTO } from '../dtos/apply-tutor.dto';
 
 @Injectable()
-export class ConfigService {
+export class GuildService {
   constructor(
     private prismaService: PrismaService,
     private paymentService: PaymentService,
     private discordHttpService: DiscordHttpService,
     private wsGateway: WebsocketGateway
   ) {}
-  private readonly logger = new Logger(ConfigService.name);
+  private readonly logger = new Logger(GuildService.name);
 
   /**
    * Gets Guild Config
@@ -85,5 +87,44 @@ export class ConfigService {
     });
     if (user.role !== UserRole.BOT) this.wsGateway.notifyGuildConfig(c);
     return c;
+  }
+
+  async applyTutor(
+    serverId: string,
+    application: CreateApplicationDTO,
+    user: UserDetails
+  ) {
+    if (user.role !== UserRole.USER) throw new ForbiddenException();
+
+    await this.prismaService.applications.create({
+      data: {
+        ...application,
+        serverId,
+        createdAt: new Date(),
+      },
+    });
+
+    return HttpStatus.OK;
+  }
+
+  async updateApplication(
+    id: number,
+    action: ApplicationResult,
+    user: UserDetails
+  ) {
+    if (user.role !== UserRole.ADMIN) throw new ForbiddenException();
+
+    const applic = await this.prismaService.applications.findUnique({
+      where: { id },
+    });
+    if (!applic) throw new NotFoundException();
+
+    //Add Log Notifying that user attempted to access this
+    if (applic.reviewedAt) throw new ForbiddenException();
+
+    await this.prismaService.applications.update({
+      where: { id },
+      data: { result: action, reviewedAt: new Date() },
+    });
   }
 }

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigController } from '../guilds/controllers/config.controller';
-import { ConfigService } from '../guilds/services/config.service';
+import { GuildController } from './controllers/guild.controller';
+import { GuildService } from './services/guild.service';
 import { TicketController } from './controllers/ticket.controller';
 import { TicketService } from './services/ticket.service';
 import { PaymentController } from '../guilds/controllers/payment.controller';
@@ -10,8 +10,8 @@ import { WebsocketModule } from '../websockets/websocket.module';
 
 @Module({
   imports: [DiscordModule, WebsocketModule],
-  controllers: [ConfigController, TicketController, PaymentController],
-  providers: [ConfigService, TicketService, PaymentService],
+  controllers: [GuildController, TicketController, PaymentController],
+  providers: [GuildService, TicketService, PaymentService],
   exports: [PaymentService],
 })
 export class GuildsModule {}

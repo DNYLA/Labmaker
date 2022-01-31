@@ -5,4 +5,8 @@ export const tutorRoutes = [
   },
   { name: 'tutor' },
 ];
-export const studentRoutes = [{ name: 'home', to: '/' }, { name: 'create' }];
+export const studentRoutes = [
+  { name: 'home', to: '/' },
+  { name: 'create' },
+  { name: 'apply' },
+];

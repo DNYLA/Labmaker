@@ -9,6 +9,7 @@ import { Tutor } from '../Pages/Tutor';
 import { useFetchUser } from '../utils/hooks/useFetchUser';
 import { CreateTicketPage } from '../Pages/Tickets/create-ticket';
 import { UserRole } from '@labmaker/wrapper';
+import { ApplyTutorPage } from '../Pages/Tutor/apply';
 
 const StyledApp = styled.div`
   // Your style here
@@ -53,7 +54,10 @@ export function App() {
             <Route path="/" element={<Tickets />} />
             <Route path="/tutor" element={<Tutor />} />
             {user.role !== UserRole.TUTOR && (
-              <Route path="/create" element={<CreateTicketPage />} />
+              <>
+                <Route path="/create" element={<CreateTicketPage />} />
+                <Route path="/apply" element={<ApplyTutorPage />} />
+              </>
             )}
           </Routes>
         </>

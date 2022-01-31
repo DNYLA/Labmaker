@@ -44,7 +44,7 @@ export class UserService {
         discriminator: true,
         avatar: true,
         role: true,
-        verifiedSubjects: true,
+        subjects: true,
       },
     });
   }
