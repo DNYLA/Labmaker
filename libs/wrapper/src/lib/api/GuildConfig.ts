@@ -1,4 +1,9 @@
-import { GuildConfig, GuildData, Payment } from '@labmaker/shared';
+import {
+  CreateApplication,
+  GuildConfig,
+  GuildData,
+  Payment,
+} from '@labmaker/shared';
 import { CreateOrderDto } from '../types';
 import { AXIOS } from './Axios';
 
@@ -12,7 +17,7 @@ export const getGuildConfig = (id: string) =>
   AXIOS.get<GuildConfig>(`/guilds/${id}?payments=false`);
 
 export const createGuildConfig = (id: string, name: string) =>
-  AXIOS.post<GuildConfig>(`/guilds/${id}/${name}`);
+  AXIOS.post<GuildConfig>(`/guilds/${id}?name=${name}`);
 
 export const updateGuildConfig = (config: GuildConfig) =>
   AXIOS.put<GuildConfig>(`guilds`, config);
@@ -39,3 +44,14 @@ export const createPaypalOrder = (
   AXIOS.get<CreateOrderDto>(
     `pay/create_order/${tutorId}/${channelId}/${price}`
   );
+
+export const getCanApply = (serverId: string) =>
+  AXIOS.get<boolean>(`guilds/${serverId}/apply`);
+
+export const createApplication = (
+  serverId: string,
+  application: CreateApplication
+) => AXIOS.post(`guilds/${serverId}/apply`, application);
+
+export const reviewApplication = (id: number, action: string) =>
+  AXIOS.put(`guilds/${id}?action=${action}`);

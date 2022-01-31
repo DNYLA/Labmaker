@@ -4,7 +4,7 @@ export const subjectItems: Item[] = [
   { value: 'maths', label: 'Maths' },
   { value: 'compSci', label: 'Computer Science' },
   { value: 'english', label: 'English' },
-  { value: 'chemistry', label: 'Chemistry' },
+  { value: 'chem', label: 'Chemistry' },
   { value: 'physics', label: 'Physics' },
   { value: 'bio', label: 'Biology' },
   { value: 'other', label: 'Other' },

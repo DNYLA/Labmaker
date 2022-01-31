@@ -71,6 +71,13 @@ export type CreateTicket = {
   education: string;
 };
 
+export type CreateApplication = {
+  applicationMessage: string;
+  vouchesLink: string;
+  redditUsername?: string;
+  subjects: Subjects[];
+};
+
 export type Tickets = {
   active: Ticket[];
   completed: Ticket[];

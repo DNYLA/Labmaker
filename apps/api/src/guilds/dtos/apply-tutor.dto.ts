@@ -1,5 +1,5 @@
 import { Subjects } from '@prisma/client';
-import { IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class CreateApplicationDTO {
   @IsString()
@@ -12,6 +12,8 @@ export class CreateApplicationDTO {
   @IsString()
   redditUsername: string;
 
-  @IsString()
+  // @IsEnum(Subjects, { each: true }) //Cant Verify this becasue of how
+  //Prisma works with Enums currently
+  //Need to find a Work Around
   subjects: Subjects[];
 }

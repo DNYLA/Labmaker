@@ -40,11 +40,12 @@ export class GuildController {
     return this.guildService.getConfigs();
   }
 
-  @Post('/:id/:name')
+  @Post('/:id')
   createConfig(
     @Param('id') id: string,
-    @Param('name') name: string
+    @Query('name') name: string
   ): Promise<DiscordConfig> {
+    if (!name) throw new BadRequestException();
     return this.guildService.createConfig(id, name);
   }
 
@@ -57,20 +58,51 @@ export class GuildController {
     return this.guildService.updateConfig(body, user);
   }
 
+  //Cant Merge into one Since Creating Requires Body
+  //Also One is a Get the Other is A Put (Forgot that when i made the endpoint)
+  //   @UseGuards(JwtAuthGuard)
+  //   @Get('/:id/apply') //For Students Applying ID = ServerID for Admins ID = ApplicationID
+  //   applyTutor(
+  //     @Param('id') id: string,
+  //     @Query('action') action: ApplicationResult,
+  //     @Body() body: CreateApplicationDTO,
+  //     @CurrentUser() user: UserDetails
+  //   ) {
+  //     if (!action) return this.guildService.applyTutor(id, body, user);
+  //     try {
+  //       if (isNaN(Number(id))) throw new BadRequestException();
+  //       return this.guildService.updateApplication(Number(id), action, user);
+  //     } catch {
+  //       throw new BadRequestException();
+  //     }
+  //   }
+  // }
+
   @UseGuards(JwtAuthGuard)
-  @Get('/:id/apply') //For Students Applying ID = ServerID for Admins ID = ApplicationID
+  @Get('/:id/apply')
+  canApplyTutor(@CurrentUser() user: UserDetails) {
+    console.log('Here');
+    return this.guildService.canApply(user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/:id/apply') //For Students Applying ID = ServerID for Admins ID = ApplicationID
   applyTutor(
     @Param('id') id: string,
-    @Query('action') action: ApplicationResult,
     @Body() body: CreateApplicationDTO,
     @CurrentUser() user: UserDetails
   ) {
-    if (!action) return this.guildService.applyTutor(id, body, user);
-    try {
-      if (isNaN(Number(id))) throw new BadRequestException();
-      return this.guildService.updateApplication(Number(id), action, user);
-    } catch {
-      throw new BadRequestException();
-    }
+    console.log('im here?');
+    return this.guildService.applyTutor(id, body, user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('/:id/review') //For Students Applying ID = ServerID for Admins ID = ApplicationID
+  reviewApplication(
+    @Param('id') id: number,
+    @Query('action') action: ApplicationResult,
+    @CurrentUser() user: UserDetails
+  ) {
+    return this.guildService.updateApplication(id, action, user);
   }
 }

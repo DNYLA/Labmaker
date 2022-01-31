@@ -6,7 +6,7 @@ export interface IOnInputBoxChange {
 }
 /* eslint-disable-next-line */
 export interface InputBoxProps {
-  value: string | string[] | number;
+  value?: string | string[] | number;
   infoMessage?: string | React.ReactNode;
   message: string;
   onChange?: IOnInputBoxChange;
@@ -31,7 +31,9 @@ export function InputBox({
       <StyledInputWrapper>
         <StyledInput
           value={value}
-          onChange={(e) => { if (onChange) onChange(e)}}
+          onChange={(e) => {
+            if (onChange) onChange(e);
+          }}
           disabled={disabled}
           type={type}
           className={prefix ? 'has-prefix' : ''}

@@ -7,121 +7,120 @@ import {
   InputRange,
   InputTime,
   Item,
+  MultiSelect,
   Page,
   SettingsContainer,
   TextArea,
 } from '@labmaker/ui';
-import { createTicket } from '@labmaker/wrapper';
+import {
+  createApplication,
+  createTicket,
+  getCanApply,
+} from '@labmaker/wrapper';
 import { RootState } from '../../store';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { error } from 'console';
 import { typeItems, subjectItems, educationItems } from '../../utils/static';
 import { useNavigate } from 'react-router-dom';
-import { CreateTicket } from '@labmaker/shared';
+import { CreateApplication, Subjects } from '@labmaker/shared';
+import { getEnumKeyByEnumValue, getServerId } from '../../utils/helpers';
 
 /* eslint-disable-next-line */
 export interface ApplyTutor {}
 
-const defaultTicket: CreateTicket = {
-  creatorId: '-1',
-  serverId: '0',
-  type: 'hwk',
-  subject: 'maths',
-  education: 'College',
-  budget: 50,
-  due: new Date(),
-  additionalInfo: '',
+const defaultApplication: CreateApplication = {
+  applicationMessage: '',
+  vouchesLink: '',
+  subjects: [],
 };
 
 export function ApplyTutorPage(props: ApplyTutor) {
-  const [ticket, setTicket] = useState<CreateTicket>(defaultTicket);
+  const [application, setApplication] =
+    useState<CreateApplication>(defaultApplication);
+  const [canApply, setCanApply] = useState(true);
   const user = useSelector((state: RootState) => state.user.value);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const serverId = process.env.NX_SERVER_ID;
-    if (!serverId) throw EvalError('Unable to locate Server ID');
+    const id = getServerId();
+    getCanApply(id)
+      .then(({ data }) => setCanApply(data))
+      .catch((err) => {
+        setCanApply(false);
+        toast.error(
+          'Unable to Load Data. If this continues contact an administrator!'
+        );
+        console.log(err);
+      });
+  }, []);
 
-    setTicket({
-      creatorId: user.id,
-      serverId: serverId,
-      type: typeItems[0].value.toString(),
-      subject: subjectItems[0].value.toString(),
-      education: educationItems[0].value.toString(),
-      budget: 50,
-      due: new Date(),
-      additionalInfo: '',
-    });
-  }, [user.id]);
-
-  const handleCreate = async () => {
-    if (!ticket) return console.log('Not Filled Out');
+  const handleApply = async () => {
     try {
-      console.log(ticket);
-      await createTicket(ticket);
+      const id = getServerId();
+      await createApplication(id, application);
       toast.success(
-        'Successfully Created Ticket!. You will be notified whenever a tutor accepts the job.'
+        `Successfully Created Application!. You will be notified once it's been reviewd.`
       );
       navigate('/');
     } catch (err) {
+      //Check if Form is filled and Present Seperate Error
       toast.error(
-        'Unable to create the  Ticket. If this continues please contact an Administrator'
+        'Unable to create the Application. If this continues please contact an Administrator'
       );
       console.log(err);
     }
   };
 
-  const handleChangeType = (value: number | string) => {
-    if (typeof value === 'number') return;
-    if (!ticket) return;
+  const onMultiSelectChange = (item: string | number) => {
+    if (typeof item === 'number') return;
 
-    setTicket({ ...ticket, type: value });
-  };
+    const enumKey = getEnumKeyByEnumValue(Subjects, item);
 
-  const handleChangeSubject = (value: number | string) => {
-    if (typeof value === 'number') return;
-    if (!ticket) return;
+    if (!enumKey) return;
+    const enumVal = Subjects[enumKey];
 
-    setTicket({ ...ticket, subject: value });
-  };
+    const curSubjects = [...application.subjects];
+    const index = curSubjects.findIndex((sbj) => sbj === enumVal);
+    if (index === -1) curSubjects.push(enumVal);
+    else curSubjects.splice(index, 1);
 
-  const handleChangeEducation = (value: number | string) => {
-    if (typeof value === 'number') return;
-    if (!ticket) return;
-
-    setTicket({ ...ticket, education: value });
-  };
-
-  const handleTicketInput = (value: number) => {
-    if (!ticket) return;
-    setTicket({ ...ticket, budget: value });
+    console.log(curSubjects);
+    setApplication({ ...application, subjects: curSubjects });
   };
 
   return (
     <Page>
       <Content>
-        <SettingsContainer>
-          <InfoTitle title={'Create Ticket Form'} header={true} center={true} />
-
-          <FormRow>
+        {!canApply && (
+          <Section>
+            <h1>You are Unable to Apply!</h1>
+            <p>
+              You either have an application in progress or have already applied
+              in the past 7 days.
+            </p>
+            <p>
+              If its been over 48 hours since you applied contact an
+              Administrator for an update.
+            </p>
+          </Section>
+        )}
+        {canApply && (
+          <SettingsContainer>
+            <InfoTitle
+              title={'Create Ticket Form'}
+              header={true}
+              center={true}
+            />
+            {/* <FormRow>
             <div>
               <StyledSpan>Type</StyledSpan>
               <DropDown
                 items={typeItems}
                 value={ticket.type}
                 onChange={handleChangeType}
-              />
-            </div>
-
-            <div>
-              <StyledSpan>Subject</StyledSpan>
-              <DropDown
-                items={subjectItems}
-                value={ticket.subject}
-                onChange={handleChangeSubject}
               />
             </div>
 
@@ -133,69 +132,61 @@ export function ApplyTutorPage(props: ApplyTutor) {
                 onChange={handleChangeEducation}
               />
             </div>
-          </FormRow>
-
-          <InputBox
-            message="Username"
-            value={`${user.username}#${user.discriminator}`}
-            onChange={(e) => console.log(e.target.value)}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            //   setConfig({ ...config, clientId: e.target.value })
-            // }
-            disabled={true}
-          />
-
-          <InputBox
-            message="Budget"
-            prefix="$"
-            value={ticket.budget}
-            type="number"
-            onChange={(e) => handleTicketInput(Number(e.target.value))}
-          />
-
-          {/* <InputRange
-            value={rangeVal}
-            min={50}
-            max={500}
-            step={10}
-            message={'Budget'}
-            prefix={'$'}
-            onChange={(e) => setRangeVal(Number(e.target.value))}
-            infoMessage={
-              'You and the tutor will still need to negotiate! If your budget is not within the range add your budget to the Additional Notes.'
-            }
-          /> */}
-
-          <TextArea
-            message="Additional Notes"
-            placeholder="Enter Additional Info"
-            value={ticket.additionalInfo}
-            onChange={(e) => {
-              if (!ticket) return;
-              setTicket({ ...ticket, additionalInfo: e.target.value });
-            }}
-            textLimit={300}
-          />
-
-          <FormRow>
-            <InputDate
-              message="Due Date"
-              value={ticket.due}
-              onChange={(e) => setTicket({ ...ticket, due: e })}
+          </FormRow> */}
+            <InputBox
+              message="Username"
+              value={`${user.username}#${user.discriminator}`}
+              onChange={(e) => console.log(e.target.value)}
+              // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              //   setConfig({ ...config, clientId: e.target.value })
+              // }
+              disabled={true}
             />
-
-            <InputTime
-              message="Due Time"
-              value={ticket.due}
+            <TextArea
+              message="Experience"
+              placeholder="Enter Your Experience"
+              value={application.applicationMessage}
               onChange={(e) => {
-                setTicket({ ...ticket, due: e });
+                setApplication({
+                  ...application,
+                  applicationMessage: e.target.value,
+                });
               }}
+              textLimit={300}
             />
-          </FormRow>
-          <CenterDiv>
-            <CustomButton onClick={handleCreate}>Create</CustomButton>
-          </CenterDiv>
-        </SettingsContainer>
+            <InputBox
+              message="Vouches Evidence"
+              infoMessage="Reddit Thread/Post or Discord Server you are apart of. We do not accept image vouches."
+              value={application.vouchesLink}
+              onChange={(e) =>
+                setApplication({ ...application, vouchesLink: e.target.value })
+              }
+            />
+            <InputBox
+              message="Reddit Username"
+              infoMessage="This is optional but may help boost your chances of getting accepted if you are active on reddit."
+              value={application.redditUsername}
+              onChange={(e) =>
+                setApplication({
+                  ...application,
+                  redditUsername: e.target.value,
+                })
+              }
+            />
+            <div>
+              <MultiSelect
+                title="Subject"
+                infoMessage="If Other is selected specify inside Experience"
+                items={subjectItems}
+                selected={application.subjects}
+                onChange={onMultiSelectChange} // onChange={handleChangeSubject}
+              />
+            </div>
+            <CenterDiv>
+              <CustomButton onClick={handleApply}>Apply</CustomButton>
+            </CenterDiv>
+          </SettingsContainer>
+        )}
       </Content>
     </Page>
   );
@@ -218,6 +209,14 @@ const FormRow = styled.div`
   & > *:not(:last-child) {
     margin-right: 15px;
   }
+`;
+
+const Section = styled(Content)`
+  /* width: 200vh; */
+  height: 65vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CustomButton = styled.button`

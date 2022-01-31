@@ -89,12 +89,32 @@ export class GuildService {
     return c;
   }
 
+  async canApply(user: UserDetails) {
+    if (user.role !== UserRole.USER) throw new ForbiddenException();
+    const date = new Date();
+    date.setDate(date.getDate() - 7);
+
+    const applications = await this.prismaService.applications.findMany({
+      where: {
+        userId: user.id,
+        OR: [{ createdAt: { gte: date } }, { reviewedAt: null }],
+      },
+    });
+
+    console.log(applications);
+
+    if (applications.length > 0) return false;
+    return true;
+  }
+
   async applyTutor(
     serverId: string,
     application: CreateApplicationDTO,
     user: UserDetails
   ) {
-    if (user.role !== UserRole.USER) throw new ForbiddenException();
+    //Some people may manually make requests to EndPoint so we re-check if they can apply
+    //On API aswell
+    if (!this.canApply(user)) throw new ForbiddenException();
 
     await this.prismaService.applications.create({
       data: {
