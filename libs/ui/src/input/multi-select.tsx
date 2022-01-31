@@ -55,6 +55,14 @@ export function MultiSelect({
     console.log(selecItems);
     setSelectedItems(selecItems);
     setFilteredItems(filteredItems);
+
+    let inputStr = 'Select...';
+    selecItems.forEach((item, i) => {
+      if (i === 0) inputStr = `${item.label}`;
+      else inputStr = `${inputStr}, ${item.label}`;
+    });
+
+    setInputValue(inputStr);
   }, [selected, items]);
 
   const setItem = (id: string | number) => {
