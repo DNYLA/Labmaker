@@ -114,7 +114,9 @@ export class GuildService {
   ) {
     //Some people may manually make requests to EndPoint so we re-check if they can apply
     //On API aswell
-    if (!this.canApply(user)) throw new ForbiddenException();
+    const canApply = await this.canApply(user);
+    console.log(canApply);
+    if (!canApply) throw new ForbiddenException();
 
     await this.prismaService.applications.create({
       data: {

@@ -95,7 +95,7 @@ export enum Subjects {
   Maths = 'maths',
   CompSci = 'compSci',
   English = 'english',
-  Chem = 'chem',
+  Chem = 'chemistry',
   Physics = 'physics',
   Bio = 'bio',
   Other = 'other',

@@ -15,6 +15,19 @@ export class PrismaService extends PrismaClient {
           params.args.data.education
         );
       }
+
+      if (params.model === 'Applications' && params.action === 'create') {
+        const subjects = params.args.data.subjects;
+        // console.log(subjects);
+        console.log(params.args.data);
+        for (let i = 0; i < subjects.length; i++) {
+          const subject = subjects[i];
+          subjects[i] = this.capitalize(subject);
+        }
+
+        params.args.data.subjects = subjects;
+      }
+
       const result = await next(params);
 
       return result;

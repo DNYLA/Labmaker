@@ -1,5 +1,11 @@
 import { Subjects } from '@prisma/client';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsEnum,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class CreateApplicationDTO {
   @IsString()
@@ -15,5 +21,6 @@ export class CreateApplicationDTO {
   // @IsEnum(Subjects, { each: true }) //Cant Verify this becasue of how
   //Prisma works with Enums currently
   //Need to find a Work Around
+  @ArrayNotEmpty()
   subjects: Subjects[];
 }
