@@ -114,6 +114,31 @@ model Log {
   redditConfig RedditConfig @relation(fields: [nodeId], references: [id])
 }
 
+//Complete Later
+// model UserLogs {
+//   id Int @id @default(autoincrement())
+//   fromUserId String
+//   toUserId String? 
+//   action UserLogType
+//   //Add Relations
+// }
+
+// model Notifications {
+//   id Int @id @default(autoincrement())
+//   fromUserId String
+//   toUserIds String[] //If type === Created We Could batch it out to all users with subject Role?
+//   message String
+//   viewed Boolean
+//   hidden Boolean
+// }
+
+// enum UserLogType {
+//   CREATED
+//   ACCEPTED
+//   RESIGNED
+//   DELETED
+// }
+
 enum Role {
   USER
   TUTOR
