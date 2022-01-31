@@ -81,7 +81,6 @@ export class GuildController {
   @UseGuards(JwtAuthGuard)
   @Get('/:id/apply')
   canApplyTutor(@CurrentUser() user: UserDetails) {
-    console.log('Here');
     return this.guildService.canApply(user);
   }
 
@@ -92,7 +91,6 @@ export class GuildController {
     @Body() body: CreateApplicationDTO,
     @CurrentUser() user: UserDetails
   ) {
-    console.log('im here?');
     return this.guildService.applyTutor(id, body, user);
   }
 
