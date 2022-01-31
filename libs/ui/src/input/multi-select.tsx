@@ -56,13 +56,7 @@ export function MultiSelect({
     setSelectedItems(selecItems);
     setFilteredItems(filteredItems);
 
-    let inputStr = 'Select...';
-    selecItems.forEach((item, i) => {
-      if (i === 0) inputStr = `${item.label}`;
-      else inputStr = `${inputStr}, ${item.label}`;
-    });
-
-    setInputValue(inputStr);
+    setInputValue(generateInputValue(selecItems));
   }, [selected, items]);
 
   const setItem = (id: string | number) => {
@@ -70,25 +64,35 @@ export function MultiSelect({
     const newItem = items.find((item) => item.value === id);
     if (!newItem) return;
     inputRef.current?.blur();
-    // setSelected(newItem);
-    // setInputValue(newItem.label);
     setOpen(false);
   };
 
+  const generateInputValue = (items: Item[]) => {
+    let inputStr = 'Select...';
+    items.forEach((item, i) => {
+      if (i === 0) inputStr = `${item.label}`;
+      else inputStr = `${inputStr}, ${item.label}`;
+    });
+
+    return inputStr;
+  };
+  //Filtered Items + Selected Items need to both be filtered Here
+  //Right now it shows duplicate values not a big issue but needs to be fixed before
+  //Merge to Master
   const onKeyInput = (inputVal: string) => {
     setOpen(true);
     const alreadyInside = items.find(
       (item) => item.label.toLowerCase() === inputVal
     );
-    // if (alreadyInside && selected.value === alreadyInside.value) {
-    //   setFilteredItems(items);
-    //   setInputValue(inputVal);
-    //   return;
-    // }
+    if (alreadyInside) {
+      setFilteredItems(items);
+      setInputValue(inputVal);
+      return;
+    }
     const fItems = items.filter((item) =>
       item.label.toLowerCase().includes(inputVal)
     );
-    // setFilteredItems(fItems);
+    setFilteredItems(fItems);
     setInputValue(inputVal);
   };
 
@@ -118,7 +122,7 @@ export function MultiSelect({
   // };
 
   const handleClose = () => {
-    // setInputValue(selected.label);
+    setInputValue(generateInputValue(selectedItems));
     setOpen(false);
   };
 
