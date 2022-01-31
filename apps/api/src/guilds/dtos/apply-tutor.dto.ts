@@ -1,13 +1,7 @@
 import { Subjects } from '@prisma/client';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateApplicationDTO {
-  @IsNumber()
-  id: number;
-
-  @IsString()
-  userId: string;
-
   @IsString()
   applicationMessage: string;
 

@@ -100,6 +100,7 @@ export class GuildService {
       data: {
         ...application,
         serverId,
+        userId: user.id,
         createdAt: new Date(),
       },
     });
