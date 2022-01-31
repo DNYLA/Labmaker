@@ -81,7 +81,13 @@ export class TicketService {
 
     return await this.prismaService.ticket.findMany({
       orderBy: [{ id: 'desc' }],
-      where: { serverId, completed: false, deleted: false, tutor: null },
+      where: {
+        serverId,
+        completed: false,
+        deleted: false,
+        tutor: null,
+        due: { gte: new Date() }, //Dont want posts that are already "Due" (Create Cron Job Which automatically Completes them? or do this manually via Admin Dashboard)
+      },
       select: {
         id: true,
         serverId: true,
