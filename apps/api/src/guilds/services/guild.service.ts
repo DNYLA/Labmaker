@@ -101,8 +101,6 @@ export class GuildService {
       },
     });
 
-    console.log(applications);
-
     if (applications.length > 0) return false;
     return true;
   }
@@ -115,7 +113,6 @@ export class GuildService {
     //Some people may manually make requests to EndPoint so we re-check if they can apply
     //On API aswell
     const canApply = await this.canApply(user);
-    console.log(canApply);
     if (!canApply) throw new ForbiddenException();
 
     await this.prismaService.applications.create({
