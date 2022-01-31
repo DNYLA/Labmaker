@@ -20,7 +20,7 @@ import { CreateApplicationDTO } from '../dtos/apply-tutor.dto';
 
 @Controller('guilds')
 export class GuildController {
-  constructor(private readonly configService: GuildService) {}
+  constructor(private readonly guildService: GuildService) {}
 
   // @UseGuards(AuthGuard('jwt'))
   @UseGuards(JwtAuthGuard)
@@ -31,13 +31,13 @@ export class GuildController {
     @Query('guildInfo') guildInfo: boolean,
     @CurrentUser() user: UserDetails
   ): Promise<DiscordConfig | GuildData> {
-    return this.configService.getConfig(id, payments, guildInfo, user);
+    return this.guildService.getConfig(id, payments, guildInfo, user);
   }
 
   @Get()
   @UseGuards(JwtBotAuthGuard)
   async getConfigs() {
-    return this.configService.getConfigs();
+    return this.guildService.getConfigs();
   }
 
   @Post('/:id/:name')
@@ -45,7 +45,7 @@ export class GuildController {
     @Param('id') id: string,
     @Param('name') name: string
   ): Promise<DiscordConfig> {
-    return this.configService.createConfig(id, name);
+    return this.guildService.createConfig(id, name);
   }
 
   @Put()
@@ -54,7 +54,7 @@ export class GuildController {
     @Body() body: UpdateConfigDto,
     @CurrentUser() user: UserDetails
   ) {
-    return this.configService.updateConfig(body, user);
+    return this.guildService.updateConfig(body, user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -65,10 +65,10 @@ export class GuildController {
     @Body() body: CreateApplicationDTO,
     @CurrentUser() user: UserDetails
   ) {
-    if (!action) return this.configService.applyTutor(id, body, user);
+    if (!action) return this.guildService.applyTutor(id, body, user);
     try {
       if (isNaN(Number(id))) throw new BadRequestException();
-      return this.configService.updateApplication(Number(id), action, user);
+      return this.guildService.updateApplication(Number(id), action, user);
     } catch {
       throw new BadRequestException();
     }
