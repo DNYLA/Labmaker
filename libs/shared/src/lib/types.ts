@@ -78,6 +78,17 @@ export type CreateApplication = {
   subjects: Subjects[];
 };
 
+export type TutorApplication = {
+  id: number;
+  userId: string;
+  serverId: string;
+  applicationMessage: string;
+  createdAt: Date;
+  vouchesLink: string;
+  redditUsername?: string;
+  subjects: Subjects[];
+};
+
 export type Tickets = {
   active: Ticket[];
   completed: Ticket[];

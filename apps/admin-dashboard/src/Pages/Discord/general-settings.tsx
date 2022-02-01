@@ -6,6 +6,7 @@ import {
   SwitchToggle,
 } from '@labmaker/ui';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
+import { useNavigate } from 'react-router-dom';
 
 /* eslint-disable-next-line */
 export interface GeneralSettingsProps {
@@ -18,6 +19,13 @@ export interface GeneralSettingsProps {
 export function GeneralSettings(props: GeneralSettingsProps) {
   const { config, parsedGuilds, onConfigIdChanged, setConfig } =
     useGuildLogic();
+
+  const navigate = useNavigate();
+
+  const handleTutorApps = () => {
+    navigate('applications');
+  };
+
   return (
     <SettingsContainer id="GeneralSettings">
       <h1>General</h1>
@@ -63,7 +71,7 @@ export function GeneralSettings(props: GeneralSettingsProps) {
               });
             }}
           /> */}
-
+          <span onClick={handleTutorApps}>View Tutor Applications</span>
           <SwitchToggle
             message="Enable Tickets"
             toggled={config.autoTicket}

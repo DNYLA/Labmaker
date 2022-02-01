@@ -107,7 +107,10 @@ export class TicketService {
   ): Promise<Ticket> {
     // const due = new Date(ticket.due);
     if (user.role === Role.TUTOR) throw new ForbiddenException();
-    const sTicket = await this.prismaService.ticket.create({ data: ticket });
+    const sTicket = await this.prismaService.ticket.create({
+      data: { ...ticket, creatorId: user.id },
+    });
+
     this.wsGateway.notifyTicket(sTicket, TicketNotif.Created);
     return sTicket;
   }

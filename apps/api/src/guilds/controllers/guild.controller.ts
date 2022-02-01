@@ -95,6 +95,12 @@ export class GuildController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/:id/applications')
+  getApplications(@Param('id') id: string, @CurrentUser() user: UserDetails) {
+    return this.guildService.getApplications(id, user);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Put('/:id/review') //For Students Applying ID = ServerID for Admins ID = ApplicationID
   reviewApplication(
     @Param('id') id: number,

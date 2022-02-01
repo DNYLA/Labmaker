@@ -5,7 +5,12 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { ApplicationResult, DiscordConfig, Role } from '@prisma/client';
+import {
+  ApplicationResult,
+  Applications,
+  DiscordConfig,
+  Role,
+} from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { PaymentService } from './payment.service';
@@ -114,7 +119,6 @@ export class GuildService {
     //On API aswell
     const canApply = await this.canApply(user);
     if (!canApply) throw new ForbiddenException();
-
     await this.prismaService.applications.create({
       data: {
         ...application,
@@ -125,6 +129,14 @@ export class GuildService {
     });
 
     return HttpStatus.OK;
+  }
+
+  async getApplications(serverId: string, user: UserDetails) {
+    if (user.role !== UserRole.ADMIN) return;
+
+    return await this.prismaService.applications.findMany({
+      where: { serverId, reviewedAt: null },
+    });
   }
 
   async updateApplication(
