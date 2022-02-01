@@ -110,7 +110,7 @@ export function CreateTicketPage(props: IndexProps) {
           <FormRow>
             <FormRowGroup>
               <DropDown
-                message="Type"
+                title="Type"
                 items={typeItems}
                 value={ticket.type}
                 onChange={handleChangeType}
@@ -119,7 +119,7 @@ export function CreateTicketPage(props: IndexProps) {
 
             <FormRowGroup>
               <DropDown
-                message="Subject"
+                title="Subject"
                 items={subjectItems}
                 value={ticket.subject}
                 onChange={handleChangeSubject}
@@ -128,7 +128,7 @@ export function CreateTicketPage(props: IndexProps) {
 
             <FormRowGroup>
               <DropDown
-                message="Education"
+                title="Education"
                 items={educationItems}
                 value={ticket.education}
                 onChange={handleChangeEducation}
