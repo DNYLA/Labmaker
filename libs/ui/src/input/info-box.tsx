@@ -53,7 +53,8 @@ const StyledSpan = styled.span`
   }
 
   &.headerTitle {
-    font-size: 24px;
+    font-size: 28px;
+    margin-bottom: 30px;
   }
 `;
 

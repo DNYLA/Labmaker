@@ -1,4 +1,5 @@
 import {
+  Button,
   InputBox,
   InputDate,
   InputTime,
@@ -100,8 +101,8 @@ export function PartialTicketModal({
       />
       <ButtonContainer>
         {/* Can remove the close button if we can make the dialog box c lose when the user clicks outside */}
-        <ModalButton onClick={() => setIsOpen(false)}>Close</ModalButton>
-        <ModalButton onClick={handleAccept}>Accept</ModalButton>
+        <Button onClick={() => setIsOpen(false)}>Close</Button>
+        <Button onClick={handleAccept}>Accept</Button>
       </ButtonContainer>
     </ModalPopup>
   );
@@ -131,22 +132,23 @@ const ButtonContainer = styled.div`
   justify-content: center;
 `;
 
-const ModalButton = styled.button`
-  /* background-color: ${(p) => p.theme.navbar.item}; */
-  background-color: #121212;
-  color: ${(p) => p.theme.navbar.title};
-  font-size: 19px;
-  margin-right: 20px;
-  width: 100px;
-  height: 50px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+// const ModalButton = styled.button`
+//   /* background-color: ${(p) => p.theme.navbar.item}; */
+//   background-color: #121212;
+//   color: ${(p) => p.theme.navbar.title};
+//   font-size: 19px;
+//   margin-right: 20px;
+//   width: 100px;
+//   height: 50px;
+//   border: none;
+//   border-radius: 5px;
+//   cursor: pointer;
 
-  :hover {
-    color: ${(p) => p.theme.navbar.active};
-  }
-`;
+//   :hover {
+//     color: ${(p) => p.theme.navbar.active};
+//   }
+// `;
+
 function convertSubject(subject: string): string {
   throw new Error('Function not implemented.');
 }

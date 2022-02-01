@@ -214,8 +214,4 @@ const CenterDiv = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 10px;
-
-  button {
-    margin-right: 25px;
-  }
 `;
