@@ -6,37 +6,45 @@ import {
   SwitchToggle,
 } from '@labmaker/ui';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
+import { useNavigate } from 'react-router-dom';
 
 /* eslint-disable-next-line */
 export interface GeneralSettingsProps {
-  // config: GuildConfigDto;
-  // setConfig: React.Dispatch<React.SetStateAction<GuildConfigDto>>;
+  // config: configDto;
+  // setConfig: React.Dispatch<React.SetStateAction<configDto>>;
   // parsedGuilds: Item[];
   // changeEvent: IOnDropDownChange;
 }
 
 export function GeneralSettings(props: GeneralSettingsProps) {
-  const { guildConfig, parsedGuilds, onConfigIdChanged, setConfig } =
+  const { config, parsedGuilds, onConfigIdChanged, setConfig } =
     useGuildLogic();
+
+  const navigate = useNavigate();
+
+  const handleTutorApps = () => {
+    navigate('applications');
+  };
+
   return (
     <SettingsContainer id="GeneralSettings">
       <h1>General</h1>
 
       <StyledSpan>Payment Config</StyledSpan>
-      {guildConfig.id !== '-1' && (
+      {config.id !== '-1' && (
         <div>
           <DropDown
             items={parsedGuilds}
             onChange={onConfigIdChanged}
-            value={guildConfig.paymentConfigId}
+            value={config.paymentConfigId}
           />
 
           <InputBox
             message="Prefix"
-            value={guildConfig.prefix}
+            value={config.prefix}
             onChange={(e) => {
               setConfig({
-                ...guildConfig,
+                ...config,
                 prefix: e.target.value,
               });
             }}
@@ -44,44 +52,44 @@ export function GeneralSettings(props: GeneralSettingsProps) {
 
           <InputBox
             message="Bot Image URL"
-            value={guildConfig.embedImageUrl}
+            value={config.embedImageUrl}
             onChange={(e) => {
               setConfig({
-                ...guildConfig,
+                ...config,
                 embedImageUrl: e.target.value,
               });
             }}
           />
-
+          {/* 
           <SwitchToggle
             message="Advanced User Switcher"
-            toggled={guildConfig.autoSwitcher}
+            toggled={config.autoSwitcher}
             onToggle={() => {
               setConfig({
-                ...guildConfig,
-                autoSwitcher: !guildConfig.autoSwitcher,
+                ...config,
+                autoSwitcher: !config.autoSwitcher,
               });
             }}
-          />
-
+          /> */}
+          <span onClick={handleTutorApps}>View Tutor Applications</span>
           <SwitchToggle
-            message="Auto Create Ticket"
-            toggled={guildConfig.autoTicket}
+            message="Enable Tickets"
+            toggled={config.autoTicket}
             onToggle={() => {
               setConfig({
-                ...guildConfig,
-                autoTicket: !guildConfig.autoTicket,
+                ...config,
+                autoTicket: !config.autoTicket,
               });
             }}
           />
 
           <SwitchToggle
             message="Auto Reacter"
-            toggled={guildConfig.autoReact}
+            toggled={config.autoReact}
             onToggle={() => {
               setConfig({
-                ...guildConfig,
-                autoReact: !guildConfig.autoReact,
+                ...config,
+                autoReact: !config.autoReact,
               });
             }}
           />

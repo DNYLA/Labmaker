@@ -1,3 +1,4 @@
+import { Subjects } from '@labmaker/shared';
 import { educationItems, subjectItems, typeItems } from './static';
 
 export const ConvertType = (value: string) => {
@@ -23,3 +24,11 @@ export const getServerId = () => {
   if (!id) throw Error('Unable to find Discord ID');
   return id;
 };
+
+export function getEnumKeyByEnumValue<T extends { [index: string]: string }>(
+  myEnum: T,
+  enumValue: string
+): keyof T | null {
+  const keys = Object.keys(myEnum).filter((x) => myEnum[x] === enumValue);
+  return keys.length > 0 ? keys[0] : null;
+}

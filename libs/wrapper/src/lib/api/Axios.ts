@@ -16,7 +16,7 @@ export const loginURL = () => `${AXIOS.defaults.baseURL}/auth/login`;
 
 export const getUser = () => AXIOS.get<UserDto>(`/user/`);
 
-export const getAdminUser = () => AXIOS.get<AdminUser>('/user/admin');
+export const getAdminUser = () => AXIOS.get<AdminUser>('/user?admin=true');
 
 const refreshToken = () => {
   const instance = axios.create(CONFIG); //Dont want to use Interceptors when refreshing token
@@ -57,22 +57,17 @@ AXIOS.interceptors.response.use(
 
     if (err.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      refreshToken()
-        .then(({ data }) => {
-          if (!data.ok) {
-            //Redirect to Login URL
-            console.log('Authentication Failed');
-          }
-
-          axios.defaults.headers.common['Authorization'] =
-            'Bearer ' + data.accessToken;
-        })
-        .catch((err) => {
-          console.log('An Error Occured whilst trying to authenticate');
-          console.log(err);
-        });
-
-      return axios(originalRequest);
+      try {
+        await setToken();
+        originalRequest.headers['Authorization'] = 'Bearer ' + ACCESS_TOKEN;
+        return axios(originalRequest);
+      } catch (err) {
+        //Force Refresh?? || Clear Cookies/Force Re-Login
+        console.log('Failed to Authenticate');
+        console.log(err);
+      }
+    } else {
+      //New Token After refreshing Invalid -> Force Refresh || Clear Cookies/Force Re-Login
     }
 
     return Promise.reject(err);

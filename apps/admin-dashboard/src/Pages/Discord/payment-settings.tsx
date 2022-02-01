@@ -9,25 +9,25 @@ import { Payment } from '@labmaker/shared';
 export interface PaymentSettingsProps {
   // payments: any;
   // guilds: any;
-  // config: GuildConfigDto;
+  // config: configDto;
   // setPayments: any;
   // createPayment: any;
 }
 
 export function PaymentSettings(props: PaymentSettingsProps) {
-  const { guildConfig, payments, setPayments, createPayment } = useGuildLogic();
+  const { config, payments, setPayments, createPayment } = useGuildLogic();
   const navigate = useNavigate();
 
   const renderPayments = (payments: Payment[]) => {
     let delKey = -2;
 
-    if (!guildConfig) {
+    if (!config) {
       return <div></div>;
     }
     console.log(
-      `Guild Config: ${guildConfig.id} || PaymentID: ${guildConfig.paymentConfigId}`
+      `Guild Config: ${config.id} || PaymentID: ${config.paymentConfigId}`
     );
-    if (guildConfig.id === guildConfig.paymentConfigId) {
+    if (config.id === config.paymentConfigId) {
       return payments.map((payment: Payment, index) => {
         if (!payment.deletedPayment) {
           return (
@@ -47,7 +47,7 @@ export function PaymentSettings(props: PaymentSettingsProps) {
       return (
         <CenterDiv>
           <CustomButton
-            onClick={() => navigate(`/discord/${guildConfig.paymentConfigId}`)}
+            onClick={() => navigate(`/discord/${config.paymentConfigId}`)}
           >
             Go to Payments Config
           </CustomButton>
@@ -56,7 +56,7 @@ export function PaymentSettings(props: PaymentSettingsProps) {
     }
   };
 
-  if (!guildConfig) {
+  if (!config) {
     return <div></div>;
   } else {
     return (
@@ -65,7 +65,7 @@ export function PaymentSettings(props: PaymentSettingsProps) {
 
         <PaymentsContainer>{renderPayments(payments)}</PaymentsContainer>
 
-        {guildConfig.id === guildConfig.paymentConfigId && (
+        {config.id === config.paymentConfigId && (
           <CenterDiv>
             <CustomButton onClick={createPayment}>Add</CustomButton>
           </CenterDiv>

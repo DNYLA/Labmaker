@@ -29,10 +29,16 @@ export class APISocket {
     });
 
     this.socket.on('exception', (ex) => {
+      // console.log(ex.code);
       switch (ex.code) {
         case 401: {
           console.log('Invalid API token provided. Disconnecting Client.');
           this.socket.disconnect();
+          break;
+        }
+        case 403: {
+          console.log('Forbidden Access');
+          break;
         }
       }
     });

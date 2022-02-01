@@ -15,7 +15,7 @@ export const defaultUser: UserDto = {
   discriminator: '4444',
   avatar: 'http://google.com',
   role: UserRole.USER,
-  verifiedSubjects: [],
+  subjects: [],
 };
 
 export const defaultAdminUser: AdminUser = {
@@ -73,6 +73,9 @@ export const loadingDiscordConfig: GuildConfig = {
   autoSwitcher: false,
   autoReact: false,
   autoTicket: false,
+  channelName: 'Ticket-id',
+  hideChannel: false,
+  notifyUser: false,
 };
 
 export const loadingServer: Guild = {

@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DISCORD_API_URL } from '../../utils/constants';
 import axios, { AxiosResponse } from 'axios';
-import { DiscordUser, PartialGuild } from '../../utils/types';
+import { DiscordUser } from '../../utils/types';
+import {
+  PartialGuild,
+  PartialGuildChannel,
+  PartialRole,
+} from '@labmaker/shared';
 
 @Injectable()
 export class DiscordHttpService {
@@ -45,7 +50,26 @@ an array of guilds that the user is a member of.
     });
   }
 
-  // fetchGuildChannels(): Promise<AxiosResponse<GuildChannel[]>> {}
+  fetchGuildChannels(
+    id: string
+  ): Promise<AxiosResponse<PartialGuildChannel[]>> {
+    return axios.get<PartialGuildChannel[]>(
+      `${DISCORD_API_URL}/guilds/${id}/channels`,
+      {
+        headers: {
+          Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+        },
+      }
+    );
+  }
+
+  fetchGuildRoles(id: string): Promise<AxiosResponse<PartialRole[]>> {
+    return axios.get<PartialRole[]>(`${DISCORD_API_URL}/guilds/${id}/roles`, {
+      headers: {
+        Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+      },
+    });
+  }
   // fetchGuildBan(): Promise<AxiosResponse<GuildChannel[]>> {}
   // deleteGuildBan(): Promise<AxiosResponse<GuildChannel[]>> {}
 }

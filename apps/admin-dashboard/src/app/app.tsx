@@ -10,6 +10,7 @@ import { useFetchUser } from '../utils/hooks/useFetchUser';
 import { routes } from '../utils/routes';
 import { GuildsMenu } from '../Pages/Discord/guilds-menu';
 import { Discord } from '../Pages/Discord';
+import { TutorApplications } from '../Pages/Discord/tutor-applications';
 
 const StyledApp = styled.div`
   /* background-color: ${(p) => p.theme.base.backCol};
@@ -61,6 +62,10 @@ export function App() {
             <Route path="/" element={<Home />} />
             <Route path="/discord" element={<GuildsMenu />} />
             <Route path="/discord/:id" element={<Discord />} />
+            <Route
+              path="/discord/:id/applications"
+              element={<TutorApplications />}
+            />
             <Route path="/logs" element={<Logs />} />
           </Routes>
         </>

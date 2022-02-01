@@ -1,12 +1,8 @@
 import { GuildConfig, GuildData, Payment } from '@labmaker/shared';
+import { createGuildConfig, getGuildConfig } from '@labmaker/wrapper';
 import { Client, ClientOptions, Collection } from 'discord.js';
 import Command from './Base/Command';
 import Event from './Base/Event';
-
-export type PaymentsType = {
-  serverId: string;
-  payments: GuildConfig[];
-};
 
 export default class DiscordClient extends Client {
   private _commands = new Collection<string, Command>();
@@ -47,9 +43,19 @@ export default class DiscordClient extends Client {
     // else callFetchConfig;
   }
 
-  getConfig(id: string): GuildConfig {
+  async getConfig(id: string): Promise<GuildConfig> {
     const g = this.getGuild(id);
-    if (!g) return null;
+    if (!g) {
+      try {
+        const config = (await getGuildConfig(id)).data;
+
+        if (!config) return null;
+        this.setConfig(config);
+        return config;
+      } catch (err) {
+        console.log(err);
+      }
+    }
     return g.config;
   }
 

@@ -13,14 +13,16 @@ type LocalLog = {
 };
 export class Client {
   constructor(private client: Snoowrap, public config: RedditConfigDto) {}
-  private streams: SubmissionStream[] = [];
+  private streams: SubmissionStream[] = []; //Active Subreddit Streams
+  //Merge LocalLogs + Submission Ids Into One
   private localLogs: LocalLog[] = [];
   private submissionIds = [];
+  //Counters for Logging.
   private counter = 0;
   private postCounter = 0;
 
+  //Remove all stream.on for each stream
   public resetListener() {
-    //Remove all stream.on for each stream
     for (const s in this.streams) {
       const stream = this.streams[s];
       stream.removeAllListeners();
@@ -30,6 +32,7 @@ export class Client {
   }
 
   private async handleSubmission(item: Snoowrap.Submission) {
+    //Init Variables
     const date = new Date(item.created * 1000);
     const dateNow = new Date();
     const msBetween = dateNow.getTime() - date.getTime();
@@ -40,26 +43,30 @@ export class Client {
     let valid = true;
     config.delay = 30;
 
+    //Dont PM if Submission was created over 24 hours ago
+    //Can Move this to Dashboard and use the value from that?
     if (hourDiff > 24) {
       return;
     }
 
+    //Check if we have already looked through the submission & return if true
     const validId = this.submissionIds.find((subId) => subId === item.id);
     console.log(this.counter, ':', display_name);
+    if (validId) return;
 
-    if (!validId) {
-      this.submissionIds.push(item.id);
-      this.counter++;
-    } else {
-      return;
-    }
+    //Update Local Variables
+    this.submissionIds.push(item.id);
+    this.counter++;
 
+    //Check if Submission Author is blocked in the config
     await Promise.all(
       config.blockedUsers.map((u) => {
         if (u.toLowerCase() === name.toLowerCase()) valid = false;
       })
     );
 
+    //Check if the post & title includes any forbidden words
+    //Map is Async? so we Await it
     await Promise.all(
       config.forbiddenWords.map((word) => {
         if (item.title.toLowerCase().includes(word.toLowerCase())) {
@@ -70,6 +77,12 @@ export class Client {
       })
     );
 
+    //Check if we have already PM'd this user before
+    //A Better way to do this would be by pushing the username & date into a Set (Unique Array) and then looping through that unique array
+    //This change would only increase performance by a small margin however.
+    //A Better Alternative could be to set a CronJob that runs every x minutes/hours
+    //which checks through each log and deletes any that are over an hour long (This way when we loop through the LocalLogs array we only get back)
+    // People we PMDM within an hour.
     if (valid) {
       this.localLogs.forEach((log) => {
         if (log.username === name) {
@@ -86,8 +99,9 @@ export class Client {
       });
     }
 
+    //Removes first 150 Logs if local logs > 300 as they should be useless
     if (this.localLogs.length > 300) {
-      this.localLogs.splice(0, 150); //Removes first 150 Logs as they should be useless
+      this.localLogs.splice(0, 150);
     }
 
     this.localLogs.push({ username: name, createdAt: new Date() });
@@ -105,7 +119,9 @@ export class Client {
 
     try {
       if (valid) {
+        //Dont want to PM when Debugging (Could check if we are in .env.development <- that would be better)
         if (!process.env.API_DEBUG) {
+          //This can Cause an Error Sometimes -> User Blocked, User Doesnt Exist, Etc.
           await this.client.composeMessage({
             to: item.author,
             subject: config.title,
@@ -130,7 +146,7 @@ export class Client {
         subId: item.id,
         pm: didPm,
       };
-
+      //Error Will get Caught Below
       createLog(log);
     } catch (err) {
       console.error(`Error Occured ${err.message}`);
@@ -151,11 +167,15 @@ export class Client {
       console.log('Unable to fetch SubmissionIDs');
     }
 
+    //Fetch Logs from API on start instead of just Submission Ids?
     // const fetchedLogs = await Labmaker.Log.getLogs(this.config.id);
     // this.localLogs.push(fetchedLogs);
+
+    //Just a precaution the client shouldnt have any listeners when calling CreateEvent
     this.resetListener();
     const delay = CalculateMinimumDelay(this.config.subreddits.length, 5) * 3; //Minimum Delay is too little to poll anyways
 
+    //Create Event Streams
     this.config.subreddits.forEach((subreddit, index) => {
       this.streams.push(
         new SubmissionStream(this.client, {

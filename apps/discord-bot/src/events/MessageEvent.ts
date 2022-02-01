@@ -13,23 +13,18 @@ export default class MessageEvent extends Event {
     if (message.author.bot) return;
     const guildId = message.guild.id;
 
-    let config = client.getConfig(guildId);
+    let config = await client.getConfig(guildId);
 
     if (!config) {
       try {
-        config = (await getGuildConfig(guildId)).data;
-
-        if (!config)
-          config = (await createGuildConfig(guildId, message.guild.name)).data;
-
-        client.setConfig(config);
+        config = (await createGuildConfig(guildId, message.guild.name)).data;
       } catch (err) {
         message.channel.send('Unable to fetch Guild Config');
       }
     }
 
-    if (!config) return; //After Two Tries move on.
-    console.log('here');
+    if (!config) return; //Unable to Create Config
+
     if (message.content.startsWith(config.prefix)) {
       // If message is only <Prefix>
       if (message.content === config.prefix) return;

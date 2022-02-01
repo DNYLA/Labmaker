@@ -6,7 +6,7 @@ export type UserDto = {
   discriminator: string;
   avatar?: string;
   role: Role;
-  verifiedSubjects: string[];
+  subjects: string[];
 
   //Currently Not Fetched but this might just be an easier way of displaying user
   //Tickets means less fetching?

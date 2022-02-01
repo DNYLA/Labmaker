@@ -81,7 +81,13 @@ export class TicketService {
 
     return await this.prismaService.ticket.findMany({
       orderBy: [{ id: 'desc' }],
-      where: { serverId, completed: false, deleted: false, tutor: null },
+      where: {
+        serverId,
+        completed: false,
+        deleted: false,
+        tutor: null,
+        due: { gte: new Date() }, //Dont want posts that are already "Due" (Create Cron Job Which automatically Completes them? or do this manually via Admin Dashboard)
+      },
       select: {
         id: true,
         serverId: true,
@@ -101,7 +107,10 @@ export class TicketService {
   ): Promise<Ticket> {
     // const due = new Date(ticket.due);
     if (user.role === Role.TUTOR) throw new ForbiddenException();
-    const sTicket = await this.prismaService.ticket.create({ data: ticket });
+    const sTicket = await this.prismaService.ticket.create({
+      data: { ...ticket, creatorId: user.id },
+    });
+
     this.wsGateway.notifyTicket(sTicket, TicketNotif.Created);
     return sTicket;
   }

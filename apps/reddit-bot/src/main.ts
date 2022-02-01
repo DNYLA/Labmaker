@@ -10,6 +10,8 @@ import {
 } from '@labmaker/wrapper';
 dotenv.config();
 
+//I Think Configs is Pointless? Although i may have added it as createClients waits 10 seconds to initialize and sometimes
+//Configs can get updated within that time before the client has been created. <- Fix this by replacing it with DeletedIds? which is temporary?
 let configs: RedditConfigDto[] = [];
 setBaseURL(process.env.API_URL, process.env.API_TOKEN);
 const sHandler = new APISocket(`${process.env.API_URL}`);
@@ -17,6 +19,7 @@ const sHandler = new APISocket(`${process.env.API_URL}`);
 let clients: Client[] = [];
 
 function socketCallback() {
+  //Update Callbacks to TypeCast Data <- This needs to be done on the API
   sHandler.socket.on(Events.Config, (data) => {
     initClient(JSON.parse(data));
   });
@@ -74,11 +77,10 @@ function initClient(config: RedditConfigDto) {
         console.log('Error Occured');
       }
     })
-    .catch(() => console.log('Client Credentials Invalid'));
+    .catch(() =>
+      console.log(`${config.username} Invalid Credentials Provided`)
+    );
 }
-
-sHandler.listen(process.env.API_TOKEN);
-socketCallback();
 
 async function createClients() {
   try {
@@ -110,4 +112,10 @@ async function createClients() {
   }
 }
 
-createClients();
+//Main Function
+(() => {
+  console.log('Starting Reddit Bot. Fetching Configs');
+  sHandler.listen(process.env.API_TOKEN);
+  socketCallback();
+  createClients();
+})();

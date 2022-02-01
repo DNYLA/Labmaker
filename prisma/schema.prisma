@@ -8,18 +8,18 @@ datasource db {
 }
 
 model User {
-  id               String         @id
-  username         String
-  discriminator    String
-  avatar           String?        @default("")
-  accessToken      String
-  refreshToken     String
-  tokenVersion     Int            @default(0)
-  role             Role?          @default(USER)
-  verifiedSubjects Subjects[]
-  nodes            RedditConfig[]
-  studentTickets   Ticket[]       @relation("student")
-  tutorTickets     Ticket[]       @relation("tutor")
+  id             String         @id
+  username       String
+  discriminator  String
+  avatar         String?        @default("")
+  accessToken    String
+  refreshToken   String
+  tokenVersion   Int            @default(0)
+  role           Role?          @default(USER)
+  subjects       Subjects[]
+  nodes          RedditConfig[]
+  studentTickets Ticket[]       @relation("student")
+  tutorTickets   Ticket[]       @relation("tutor")
 }
 
 model RedditConfig {
@@ -42,16 +42,27 @@ model RedditConfig {
 }
 
 model DiscordConfig {
-  id              String   @id
-  name            String?
-  icon            String?
-  prefix          String   @default("?")
-  embedImageUrl   String   @default("https://i.imgur.com/rDzblHE.gif")
-  autoSwicher     Boolean  @default(false)
-  autoTicket      Boolean  @default(false)
-  autoReact       Boolean  @default(false)
-  paymentConfigId String
-  Ticket          Ticket[]
+  id                  String         @id
+  name                String?
+  icon                String?
+  prefix              String         @default("?")
+  embedImageUrl       String         @default("https://i.imgur.com/rDzblHE.gif")
+  autoSwicher         Boolean        @default(false)
+  autoTicket          Boolean        @default(false)
+  autoReact           Boolean        @default(false)
+  paymentConfigId     String
+  ordersCategory      String?
+  notificationChannel String?
+  tutorRole           String?
+  staffRole           String?
+  channelName         String         @default("Ticket-/id/")
+  newMessage          String?
+  acceptedMessage     String?
+  deleteMessage       String?
+  hideChannel         Boolean        @default(true)
+  notifyUser          Boolean        @default(true)
+  Ticket              Ticket[]
+  Applications        Applications[]
 }
 
 model Payment {
@@ -92,6 +103,26 @@ model Ticket {
   transactions   Order[]
 }
 
+model Applications {
+  id                 Int               @id @default(autoincrement())
+  userId             String
+  serverId           String
+  applicationMessage String
+  vouchesLink        String
+  redditUsername     String?
+  subjects           Subjects[]
+  createdAt          DateTime
+  reviewedAt         DateTime?
+  result             ApplicationResult?
+  discordConfig      DiscordConfig     @relation(fields: [serverId], references: [id])
+}
+
+enum ApplicationResult {
+  ACCEPTED
+  REJECTED
+  HOLD //Probably wont get used but ill include it incase we have a use for it in the future
+}
+
 model Log {
   id           Int          @id @default(autoincrement())
   nodeId       Int
@@ -103,6 +134,31 @@ model Log {
   createdAt    DateTime     @default(now())
   redditConfig RedditConfig @relation(fields: [nodeId], references: [id])
 }
+
+// Complete Later
+// model UserLogs {
+//   id         Int         @id @default(autoincrement())
+//   fromUserId String
+//   toUserId   String?
+//   action     UserLogType
+//   //Add Relations
+// }
+
+// model Notifications {
+//   id         Int      @id @default(autoincrement())
+//   fromUserId String
+//   toUserIds  String[] //If type === Created We Could batch it out to all users with subject Role?
+//   message    String
+//   viewed     Boolean
+//   hidden     Boolean
+// }
+
+// enum UserLogType {
+//   CREATED
+//   ACCEPTED
+//   RESIGNED
+//   DELETED
+// }
 
 enum Role {
   USER

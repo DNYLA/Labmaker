@@ -1,5 +1,11 @@
+import {
+  ChannelType,
+  PartialGuild,
+  PartialGuildChannel,
+  PartialRole,
+} from '@labmaker/shared';
 import { Item } from '@labmaker/ui';
-import { PartialGuild, RedditConfigDto } from '@labmaker/wrapper';
+import { RedditConfigDto } from '@labmaker/wrapper';
 
 export const parseConfigs = (configs: RedditConfigDto[]) => {
   const parsedConfigs = new Array<Item>();
@@ -20,6 +26,27 @@ export const parseGuilds = (guilds: PartialGuild[]) => {
   console.log(parsedGuild);
 
   return parsedGuild;
+};
+
+export const parseRoles = (roles: PartialRole[]) => {
+  const parsedRoles = new Array<Item>();
+  roles.forEach((role) => {
+    parsedRoles.push({ value: role.id, label: role.name });
+  });
+
+  return parsedRoles;
+};
+
+export const parseChannels = (
+  channels: PartialGuildChannel[],
+  type: ChannelType
+) => {
+  const parsedRoles = new Array<Item>();
+  channels.forEach((c) => {
+    if (c.type === type) parsedRoles.push({ value: c.id, label: c.name });
+  });
+
+  return parsedRoles;
 };
 
 export const findItem = (

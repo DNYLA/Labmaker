@@ -1,70 +1,90 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCaretDown,
+  faCaretUp,
+  faCheckCircle,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { StringifyOptions } from 'querystring';
 import { InfoTitle } from './info-box';
+import { Item } from './drop-down';
 
-export interface Item {
-  value: number | string;
-  label: string;
-}
-
-export interface IOnDropDownChange {
-  (id: number | string): void;
+export interface IOnMultiSelectChange {
+  (item: string | number): void;
 }
 
 /* eslint-disable-next-line */
-export interface DropDownProps {
+export interface MultiSelectProps {
   title?: string;
   infoMessage?: string | React.ReactNode;
   items: Item[];
-  value?: string | number;
-  onChange: IOnDropDownChange;
+  selected: string[];
+  onChange: IOnMultiSelectChange;
 }
 
-export function DropDown({
+export function MultiSelect({
   title,
   infoMessage,
   items,
-  value,
+  selected,
   onChange,
-}: DropDownProps) {
+}: MultiSelectProps) {
   const [isOpen, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [filteredItems, setFilteredItems] = useState(items);
-  const [selected, setSelected] = useState<Item>({
-    value: 0,
-    label: 'Select...',
-  });
+  const [selectedItems, setSelectedItems] = useState<Item[]>([]);
+  // const [selected, setSelected] = useState<Item>({
+  //   value: 0,
+  //   label: 'Select...',
+  // });
   const inputRef = React.createRef<HTMLInputElement>();
 
   useEffect(() => {
-    // console.log(items);
-    // if (!items) return setSelected({ value: 'loading', label: 'loading' });
-    const startItem = items.find((item) => item.value === value);
-    if (!startItem) return setInputValue('Select...');
-    setSelected(startItem);
-    setInputValue(startItem.label);
-  }, [items, value]);
+    const selecItems = new Array<Item>();
+    for (let i = 0; i < selected.length; i++) {
+      const item = selected[i];
+      const foundItem = items.find((itm) => itm.value === item);
 
-  const setItem = (id: number | string) => {
+      if (foundItem) selecItems.push(foundItem);
+    }
+    const filteredItems = items.filter((item) => !selecItems.includes(item));
+    console.log(filteredItems);
+    console.log(selecItems);
+    setSelectedItems(selecItems);
+    setFilteredItems(filteredItems);
+
+    setInputValue(generateInputValue(selecItems));
+  }, [selected, items]);
+
+  const setItem = (id: string | number) => {
     onChange(id);
     const newItem = items.find((item) => item.value === id);
     if (!newItem) return;
     inputRef.current?.blur();
-    setSelected(newItem);
-    // setInputValue(newItem.label);
     setOpen(false);
   };
 
+  const generateInputValue = (items: Item[]) => {
+    let inputStr = 'Select...';
+    items.forEach((item, i) => {
+      if (i === 0) inputStr = `${item.label}`;
+      else inputStr = `${inputStr}, ${item.label}`;
+    });
+
+    return inputStr;
+  };
+  //Filtered Items + Selected Items need to both be filtered Here
+  //Right now it shows duplicate values not a big issue but needs to be fixed before
+  //Merge to Master
   const onKeyInput = (inputVal: string) => {
     setOpen(true);
     const alreadyInside = items.find(
       (item) => item.label.toLowerCase() === inputVal
     );
-    if (alreadyInside && selected.value === alreadyInside.value) {
+    if (alreadyInside) {
       setFilteredItems(items);
       setInputValue(inputVal);
       return;
@@ -77,16 +97,16 @@ export function DropDown({
   };
 
   const updateOpen = () => {
-    setFilteredItems(items);
-    if (isOpen && selected.label !== inputValue) {
-      setInputValue(selected.label);
-    }
+    // setFilteredItems(items);
+    // if (isOpen && selected.label !== inputValue) {
+    //   setInputValue(selected.label);
+    // }
     setOpen(!isOpen);
   };
 
   const handleInputClick = () => {
     setInputValue('');
-    setFilteredItems(items);
+    // setFilteredItems(items);
     setOpen(true);
   };
 
@@ -102,15 +122,14 @@ export function DropDown({
   // };
 
   const handleClose = () => {
-    setInputValue(selected.label);
+    setInputValue(generateInputValue(selectedItems));
     setOpen(false);
   };
 
   return (
-    <div>
+    <>
       {title && <InfoTitle title={title} infoMessage={infoMessage} />}
-
-      <StyledDropDown
+      <StyledMultiSelect
         tabIndex={0}
         // onMouseDown={handleCloseClick} //Bug Where Clicking an item closes menu
         onFocus={handleInputClick}
@@ -135,29 +154,36 @@ export function DropDown({
 
         {isOpen && (
           <HiddenContainer>
+            {selectedItems.map((item) => {
+              return (
+                <DropDownItem
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => setItem(item.value)}
+                  key={item.value}
+                >
+                  {item.label}
+                  <FontAwesomeIcon className="checkMark" icon={faCheckCircle} />
+                </DropDownItem>
+              );
+            })}
             {filteredItems.map((item) => {
-              if (item.value !== selected.value)
-                return (
-                  <DropDownItem
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => setItem(item.value)}
-                    key={item.value}
-                  >
-                    {item.label}
-                  </DropDownItem>
-                );
-              return <div key={item.value}></div>;
+              // if (item.value !== selected.value)
+              return (
+                <DropDownItem
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => setItem(item.value)}
+                  key={item.value}
+                >
+                  {item.label}
+                </DropDownItem>
+              );
             })}
           </HiddenContainer>
         )}
-      </StyledDropDown>
-    </div>
+      </StyledMultiSelect>
+    </>
   );
 }
-
-const InfoTitleWrapper = styled.div`
-  margin-bottom: 5px;
-`;
 
 const StyledInput = styled.input`
   padding-left: 10px;
@@ -205,11 +231,16 @@ const DropDownItem = styled.div`
     font-weight: bold;
     background-color: ${(p) => p.theme.input.activeCol};
   }
+
+  .checkMark {
+    float: right;
+  }
 `;
 
-const StyledDropDown = styled.div`
+const StyledMultiSelect = styled.div`
   position: relative;
   width: 100%;
+  font-size: 18px;
   transition: all 200ms ease-in;
   user-select: none;
 

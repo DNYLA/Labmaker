@@ -11,7 +11,9 @@ export class CreateConfigDto {
   @IsOptional()
   @IsString()
   icon: string;
+}
 
+export class UpdateConfigDto extends CreateConfigDto {
   @IsOptional()
   @IsString()
   prefix: string;
@@ -19,10 +21,6 @@ export class CreateConfigDto {
   @IsOptional()
   @IsString()
   embedImageUrl: string;
-
-  @IsOptional()
-  @IsString()
-  paymentConfigId: string;
 
   @IsOptional()
   @IsBoolean()
@@ -35,4 +33,44 @@ export class CreateConfigDto {
   @IsOptional()
   @IsBoolean()
   autoReact: boolean;
+
+  @IsString()
+  paymentConfigId: string;
+
+  @IsOptional()
+  @IsString()
+  ordersCategory: string;
+
+  @IsOptional()
+  @IsString()
+  notificationChannel: string;
+
+  @IsOptional()
+  @IsString()
+  tutorRole: string;
+
+  @IsOptional()
+  @IsString()
+  staffRole: string;
+
+  @IsString()
+  channelName: string;
+
+  @IsOptional()
+  @IsString()
+  newMessage: string;
+
+  @IsOptional()
+  @IsString()
+  acceptedMessage: string;
+
+  @IsOptional()
+  @IsString()
+  deleteMessage: string;
+
+  @IsBoolean()
+  hideChannel: boolean;
+
+  @IsBoolean()
+  notifyUser: boolean;
 }

@@ -3,9 +3,6 @@ import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateTicketDto {
   @IsString()
-  creatorId: string;
-
-  @IsString()
   serverId: string;
 
   //Add Validation to the Enums Below
@@ -32,4 +29,7 @@ export class CreateTicketDto {
 export class UpdateTicketDto extends CreateTicketDto {
   @IsNumber()
   id: number;
+
+  @IsString()
+  creatorId: string;
 }

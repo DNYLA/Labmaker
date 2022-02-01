@@ -55,9 +55,7 @@ export class LogsService {
     });
   }
 
-  async getSubmissionIds(nodeId: number, user: UserDetails): Promise<string[]> {
-    this.userService.validNode(user, nodeId);
-
+  async getSubmissionIds(nodeId: number): Promise<string[]> {
     const logs = await this.prismaService.log.findMany({
       take: 250,
       orderBy: { id: 'desc' },

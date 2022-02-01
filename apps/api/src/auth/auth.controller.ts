@@ -19,8 +19,6 @@ export class AuthController {
   @Get('login')
   @UseGuards(DiscordAuthGuard)
   login(@Req() req: Request) {
-    console.log(req.header('Origin'));
-    console.log(req.header('Host'));
     this.logger.log('Attempting to Login User'); //EsLint requires functions to not be empty even though we dont need anything in here.
   }
 
@@ -30,8 +28,6 @@ export class AuthController {
     // console.log(
     //   `User: ${req.user} || Token: ${req.user.token} || Role: ${req.user.role}`
     // );
-    console.log(req.headers);
-    console.log(req.header('Host'));
 
     res.cookie('jid', req.user.token, {
       sameSite: 'none',

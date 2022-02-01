@@ -8,7 +8,7 @@ export const defaultUser: UserDto = {
   username: 'Username',
   discriminator: '4444',
   role: UserRole.USER,
-  verifiedSubjects: [],
+  subjects: [],
 };
 
 export const userSlice = createSlice({

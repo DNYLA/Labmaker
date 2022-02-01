@@ -72,7 +72,7 @@ export type UserDto = {
   discriminator: string;
   avatar?: string;
   role: UserRole;
-  verifiedSubjects: string[];
+  subjects: string[];
 };
 
 export type AdminUser = {
@@ -123,23 +123,4 @@ export enum Events {
 export type AuthResult = {
   accessToken: string;
   ok: boolean;
-};
-
-//Discord Types
-export type PartialGuild = {
-  id: string;
-  name: string;
-  icon: string;
-  owner: boolean;
-  permissions: string;
-  features: string[];
-};
-
-export type DiscordUser = {
-  id: string;
-  username: string;
-  avatar?: string;
-  discriminator: string;
-  mfa_enabled: boolean;
-  premium_type: number;
 };

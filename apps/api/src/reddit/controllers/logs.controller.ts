@@ -45,13 +45,11 @@ export class LogsController {
   //   return this.logService.queryGetLogs(nodeId, q);
   // }
 
-  @UseGuards(JwtAuthGuard)
+  //Make this Depracted
+  @UseGuards(JwtBotAuthGuard)
   @Get('submissions/:id')
-  getSubmissions(
-    @Param('id') nodeId: number,
-    @CurrentUser() user: UserDetails
-  ): Promise<string[]> {
-    return this.logService.getSubmissionIds(nodeId, user);
+  getSubmissions(@Param('id') nodeId: number): Promise<string[]> {
+    return this.logService.getSubmissionIds(nodeId);
   }
 
   @UseGuards(JwtBotAuthGuard)

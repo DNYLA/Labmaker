@@ -1,3 +1,4 @@
+import { PartialGuildChannel, PartialRole } from '@labmaker/shared';
 import { Injectable } from '@nestjs/common';
 import { UserDetails } from '../../auth/userDetails.dto';
 import { DiscordHttpService } from './discord-http.service';
@@ -12,6 +13,14 @@ export class DiscordService {
 
   getUserGuilds(accessToken: string) {
     return this.discordHttpService.fetchUserGuilds(accessToken);
+  }
+
+  async fetchGuildChannels(guildId: string): Promise<PartialGuildChannel[]> {
+    return (await this.discordHttpService.fetchGuildChannels(guildId)).data;
+  }
+
+  async fetchGuildRoles(guildId: string): Promise<PartialRole[]> {
+    return (await this.discordHttpService.fetchGuildRoles(guildId)).data;
   }
 
   async fetchGuilds(user: UserDetails) /*: Promise<Guild[]> */ {

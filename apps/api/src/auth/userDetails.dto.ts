@@ -4,7 +4,7 @@ export type UserDetails = {
   id: string;
   username: string;
   discriminator: string;
-  avatar: string;
+  avatar?: string;
   accessToken: string;
   refreshToken: string;
   tokenVersion?: number;
