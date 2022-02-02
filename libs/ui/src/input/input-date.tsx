@@ -42,6 +42,7 @@ export function InputDate({ message, onChange, value }: DateProps) {
   return (
     <StyledDateContainer>
       {message ? <InfoTitle title={message} /> : null}
+
       <StyledDate
         type="date"
         onChange={onDateChange}

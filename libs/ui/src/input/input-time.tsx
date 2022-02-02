@@ -90,7 +90,7 @@ export function InputTime({ message, value, onChange }: TimeProps) {
       <StyledTimeWrapper>
         <DropDown
           items={timeVals}
-          value={value.getHours()}
+          value={`${wlz(value.getHours())}:${wlz(value.getMinutes())}`}
           onChange={(e) => handleTimeUpdate(String(e))}
         ></DropDown>
 
