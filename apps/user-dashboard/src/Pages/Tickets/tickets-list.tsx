@@ -22,11 +22,15 @@ export default function TicketsList({
   setRefresh,
 }: TicketsListProps) {
   const user = useSelector((state: RootState) => state.user.value);
+  const ticketLength = () => tickets.active.length + tickets.completed.length;
+
   return (
     <StyledTickets>
-      <Button onClick={user.role === UserRole.USER ? createEvent : findEvent}>
-        {user.role === UserRole.USER ? 'Create Ticket' : 'Find Work'}
-      </Button>
+      {ticketLength() === 0 && (
+        <Button onClick={user.role === UserRole.USER ? createEvent : findEvent}>
+          {user.role === UserRole.USER ? 'Create Ticket' : 'Find Work'}
+        </Button>
+      )}
 
       {/* Center This */}
       {tickets.active.length > 0 && (

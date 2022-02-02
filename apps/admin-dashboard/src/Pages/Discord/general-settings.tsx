@@ -71,7 +71,9 @@ export function GeneralSettings(props: GeneralSettingsProps) {
               });
             }}
           /> */}
-          <span onClick={handleTutorApps}>View Tutor Applications</span>
+          <StyledLink onClick={handleTutorApps}>
+            View Tutor Applications
+          </StyledLink>
           <SwitchToggle
             message="Enable Tickets"
             toggled={config.autoTicket}
@@ -103,4 +105,13 @@ const StyledSpan = styled.span`
   padding-right: 5px;
   margin-left: 2px;
   margin-bottom: 5px;
+`;
+
+const StyledLink = styled.span`
+  cursor: pointer;
+  color: ${(p) => p.theme.navbar.item};
+
+  :hover {
+    color: ${(p) => p.theme.input.switchActive};
+  }
 `;
