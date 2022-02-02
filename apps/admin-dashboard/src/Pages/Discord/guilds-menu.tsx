@@ -1,7 +1,6 @@
 import { useFetchGuilds } from '../../utils/hooks/useFetchGuilds';
-import React from 'react';
 import styled from 'styled-components';
-import { Content, LoadingSpinner, Page } from '@labmaker/ui';
+import { LoadingSpinner, Page } from '@labmaker/ui';
 import { useNavigate } from 'react-router-dom';
 import { PartialGuild } from '@labmaker/shared';
 
@@ -22,6 +21,7 @@ export function GuildsMenu() {
   return (
     <Page>
       <LoadingSpinner loading={loading} message="Loading Guilds" />
+
       {guilds &&
         !error &&
         guilds?.map((guild) => (
@@ -31,13 +31,14 @@ export function GuildsMenu() {
               alt="Guild Icon"
             />
             <span>{guild.name}</span>
-            <Menubutton>Edit</Menubutton>
+            {/* <Menubutton>Edit</Menubutton> */}
           </GuildSelector>
         ))}
+
       <GuildSelector onClick={handleAddClick}>
         <img src={`https://i.imgur.com/t5JIZ1M.png`} alt="Guild Icon" />
         <span>Add Guild</span>
-        <Menubutton>Add</Menubutton>
+        {/* <Menubutton>Add</Menubutton> */}
       </GuildSelector>
     </Page>
   );
@@ -46,50 +47,47 @@ export function GuildsMenu() {
 const GuildSelector = styled.div`
   display: flex;
   cursor: pointer;
-  justify-content: space-between;
-  /* width: 700px; //950 */
-  /* height: 105px; // 150 */
-  width: 40%;
-  height: 100%;
-  background-color: ${(p) => p.theme.navbar.base};
-  border: 2px solid ${(p) => p.theme.input.borderCol};
+  width: 100%;
+  max-width: 650px;
+  background-color: ${(p) => p.theme.input.activeCol};
+  border: 2px solid transparent;
+  border-radius: 20px;
   margin: 10px 0px;
-  padding: 5px 0px 5px 10px;
+  padding: 12px;
   align-items: center;
+  transition: border-radius 150ms ease-in-out;
 
   img {
     user-select: none;
     border-radius: 50%;
+    width: 80px;
+    margin-right: 25px;
     transition: border-radius 150ms ease-in-out;
-    width: 90px;
   }
+
   span {
     font-size: 25px;
   }
-  :hover {
+
+  &:hover {
+    border: 2px solid ${(p) => p.theme.navbar.active};
+    border-radius: 28px;
+
     img {
       border-radius: 30%;
     }
-    button {
-      color: ${(p) => p.theme.navbar.active};
-    }
-    /* span {
-      color: ${(p) => p.theme.navbar.title};
-    } */
-    /* background-color: ${(p) => p.theme.input.activeCol}; */
-    border: 2px solid ${(p) => p.theme.navbar.active};
   }
 `;
 
-const Menubutton = styled.button`
-  /* background-color: ${(p) => p.theme.navbar.item}; */
-  background-color: #121212;
-  color: ${(p) => p.theme.navbar.title};
-  font-size: 19px;
-  margin-right: 20px;
-  width: 100px;
-  height: 50px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-`;
+// const Menubutton = styled.button`
+//   /* background-color: ${(p) => p.theme.navbar.item}; */
+//   background-color: #121212;
+//   color: ${(p) => p.theme.navbar.title};
+//   font-size: 19px;
+//   margin-right: 20px;
+//   width: 100px;
+//   height: 50px;
+//   border: none;
+//   border-radius: 5px;
+//   cursor: pointer;
+// `;
