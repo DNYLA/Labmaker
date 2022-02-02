@@ -64,12 +64,12 @@ export function CreateTicketPage(props: IndexProps) {
       console.log(ticket);
       await createTicket(ticket);
       toast.success(
-        'Successfully Created Ticket!. You will be notified whenever a tutor accepts the job.'
+        'Successfully created your ticket! You will be notified when a tutor accepts your ticket.'
       );
       navigate('/');
     } catch (err) {
       toast.error(
-        'Unable to create the  Ticket. If this continues please contact an Administrator'
+        'Unable to create ticket. If this continues please contact an Administrator.'
       );
       console.log(err);
     }
@@ -176,6 +176,7 @@ export function CreateTicketPage(props: IndexProps) {
               }}
             />
           </FormRow>
+
           <CenterDiv>
             <Button onClick={handleCreate}>Create</Button>
           </CenterDiv>
