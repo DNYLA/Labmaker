@@ -17,6 +17,7 @@ const StyledApp = styled.div`
 
 export function App() {
   const { user, loading, error } = useFetchUser();
+
   if (loading)
     return (
       <div>
@@ -62,9 +63,11 @@ export function App() {
           </Routes>
         </>
       )}
+
       {error && (
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          {/* If not logged in, all routes will shown login page */}
+          <Route path="*" element={<LoginPage />} />
         </Routes>
       )}
     </StyledApp>

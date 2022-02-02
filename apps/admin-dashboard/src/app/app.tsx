@@ -72,7 +72,8 @@ export function App() {
       )}
       {error && (
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          {/* If not logged in, all routes will shown login page */}
+          <Route path="*" element={<LoginPage />} />
         </Routes>
       )}
     </StyledApp>

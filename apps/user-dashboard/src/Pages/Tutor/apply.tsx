@@ -45,6 +45,10 @@ export function ApplyTutorPage(props: ApplyTutor) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // If user not logged in, don't bother checking if they can apply.
+    // The login element will be shown.
+    if (user.id === '-1') return;
+
     const id = getServerId();
     getCanApply(id)
       .then(({ data }) => setCanApply(data))
