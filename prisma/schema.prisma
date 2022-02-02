@@ -20,6 +20,7 @@ model User {
   nodes          RedditConfig[]
   studentTickets Ticket[]       @relation("student")
   tutorTickets   Ticket[]       @relation("tutor")
+  applications Applications[]
 }
 
 model RedditConfig {
@@ -115,6 +116,7 @@ model Applications {
   reviewedAt         DateTime?
   result             ApplicationResult?
   discordConfig      DiscordConfig     @relation(fields: [serverId], references: [id])
+  user          User         @relation(fields: [userId], references: [id])
 }
 
 enum ApplicationResult {
