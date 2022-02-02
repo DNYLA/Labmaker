@@ -107,51 +107,53 @@ export function DropDown({
   };
 
   return (
-    <div>
-      {title && <InfoTitle title={title} infoMessage={infoMessage} />}
+    <StyledDropDown
+      tabIndex={0}
+      // onMouseDown={handleCloseClick} //Bug Where Clicking an item closes menu
+      onFocus={handleInputClick}
+      onBlur={handleClose}
+      className={isOpen ? 'open' : ''}
+    >
+      {title && (
+        <InfoTitleWrapper>
+          <InfoTitle title={title} infoMessage={infoMessage} />
+        </InfoTitleWrapper>
+      )}
 
-      <StyledDropDown
-        tabIndex={0}
-        // onMouseDown={handleCloseClick} //Bug Where Clicking an item closes menu
-        onFocus={handleInputClick}
-        onBlur={handleClose}
-        className={isOpen ? 'open' : ''}
-      >
-        <SelectedItem>
-          <StyledInput
-            value={inputValue}
-            ref={inputRef}
-            onChange={(e) => onKeyInput(e.target.value.toLowerCase())}
-          />
+      <SelectedItem>
+        <StyledInput
+          value={inputValue}
+          ref={inputRef}
+          onChange={(e) => onKeyInput(e.target.value.toLowerCase())}
+        />
 
-          <FontAwesomeIcon
-            pull={'right'}
-            icon={isOpen ? faCaretUp : faCaretDown}
-            size="1x"
-            color="#FFF"
-            onClick={updateOpen}
-          />
-        </SelectedItem>
+        <FontAwesomeIcon
+          pull={'right'}
+          icon={isOpen ? faCaretUp : faCaretDown}
+          size="1x"
+          color="#FFF"
+          onClick={updateOpen}
+        />
+      </SelectedItem>
 
-        {isOpen && (
-          <HiddenContainer>
-            {filteredItems.map((item) => {
-              if (item.value !== selected.value)
-                return (
-                  <DropDownItem
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => setItem(item.value)}
-                    key={item.value}
-                  >
-                    {item.label}
-                  </DropDownItem>
-                );
-              return <div key={item.value}></div>;
-            })}
-          </HiddenContainer>
-        )}
-      </StyledDropDown>
-    </div>
+      {isOpen && (
+        <HiddenContainer>
+          {filteredItems.map((item) => {
+            if (item.value !== selected.value)
+              return (
+                <DropDownItem
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => setItem(item.value)}
+                  key={item.value}
+                >
+                  {item.label}
+                </DropDownItem>
+              );
+            return <div key={item.value}></div>;
+          })}
+        </HiddenContainer>
+      )}
+    </StyledDropDown>
   );
 }
 

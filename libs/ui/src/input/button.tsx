@@ -11,7 +11,6 @@ export function Button({ children, onClick }: ButtonProps) {
 
 const StyledButton = styled.button`
   cursor: pointer;
-  margin-top: 10px;
   background-color: ${(p) => p.theme.input.backCol};
   color: #fff;
   font-size: 20px;
@@ -24,5 +23,14 @@ const StyledButton = styled.button`
 
   &:hover {
     background-color: #1a1a1a;
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+
+  & > *:not(:last-child) {
+    margin-right: 10px;
   }
 `;

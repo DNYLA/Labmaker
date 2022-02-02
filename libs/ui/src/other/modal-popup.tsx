@@ -30,6 +30,7 @@ export function ModalPopup({
               <h1>{title}</h1>
               <span onClick={() => setOpen(false)}>X</span>
             </TitleContainer>
+
             <div className="childItems">{children}</div>
           </DialogBox>
         </DialogContainer>
@@ -61,8 +62,8 @@ const TitleContainer = styled.span`
   }
 
   span {
-    left: 95%;
-    top: 3%;
+    right: 30px;
+    top: 30px;
     position: absolute;
   }
 
@@ -73,35 +74,34 @@ const TitleContainer = styled.span`
 `;
 
 const DialogContainer = styled.div`
-  margin: 0;
-  padding: 0;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: black;
-  background: rgba(0, 0, 0, 0.5);
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  transform: 0;
   top: 0;
   left: 0;
-  bottom: 0;
-  right: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
 `;
 
 const DialogBox = styled.div`
   position: fixed;
-  width: 30%;
-  min-height: 30%;
+  width: 450px;
+  max-height: 90%;
+  overflow-y: auto;
   background-color: #202225;
   z-index: 1001;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
-  padding-bottom: 30px;
+  padding: 15px;
+  border-radius: 15px;
 
   .childItems {
     margin: 10px;
+
+    & > *:not(:last-child) {
+      margin-bottom: 15px;
+    }
   }
 `;
