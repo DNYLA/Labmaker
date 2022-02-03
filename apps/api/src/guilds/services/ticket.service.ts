@@ -4,6 +4,7 @@ import {
   GoneException,
   Injectable,
   NotFoundException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { CreateTicketDto } from '../dtos/create-ticket.dto';
 import { Role, Ticket } from '@prisma/client';
@@ -106,6 +107,14 @@ export class TicketService {
     user: UserDetails
   ): Promise<Ticket> {
     // const due = new Date(ticket.due);
+    //Update Fetch GuildConfig to Use Service
+    const config = await this.prismaService.discordConfig.findUnique({
+      where: { id: ticket.serverId },
+    });
+
+    if (!config || !config.ticketSystem)
+      throw new ServiceUnavailableException();
+
     if (user.role === Role.TUTOR) throw new ForbiddenException();
     const sTicket = await this.prismaService.ticket.create({
       data: { ...ticket, creatorId: user.id },

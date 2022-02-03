@@ -76,6 +76,7 @@ export const loadingDiscordConfig: GuildConfig = {
   channelName: 'Ticket-id',
   hideChannel: false,
   notifyUser: false,
+  ticketSystem: false,
 };
 
 export const loadingServer: Guild = {

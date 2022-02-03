@@ -26,6 +26,7 @@ export type GuildConfig = {
   deleteMessage?: string;
   hideChannel: boolean;
   notifyUser: boolean;
+  ticketSystem: boolean;
   tickets?: Ticket[];
 };
 

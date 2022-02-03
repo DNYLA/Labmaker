@@ -29,8 +29,7 @@ const LinkSpan = styled.span`
 `;
 
 export function TicketMessage(props: TicketMessageProps) {
-  const { config, parsedGuilds, onConfigIdChanged, setConfig } =
-    useGuildLogic();
+  const { config, setConfig } = useGuildLogic();
 
   const createInfoMessage = (example: string, type: InfoType) => {
     const handleClick = () => {

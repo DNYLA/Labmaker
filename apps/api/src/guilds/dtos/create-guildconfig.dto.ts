@@ -41,6 +41,9 @@ export class UpdateConfigDto extends CreateConfigDto {
   @IsString()
   ordersCategory: string;
 
+  @IsBoolean()
+  ticketSystem: boolean;
+
   @IsOptional()
   @IsString()
   notificationChannel: string;

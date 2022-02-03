@@ -46,14 +46,18 @@ export function Discord(props: DiscordProps) {
             <GeneralSettings />
             <PaymentSettings />
           </ComboContainer>
-          <ComboContainer>
-            <TicketSettings
-              categories={categories}
-              textChannels={textChannels}
-              parsedRoles={roles}
-            />
-            <TicketMessage />
-          </ComboContainer>
+
+          {/* Add Styling for Transition */}
+          {guildConfig.ticketSystem && (
+            <ComboContainer>
+              <TicketSettings
+                categories={categories}
+                textChannels={textChannels}
+                parsedRoles={roles}
+              />
+              <TicketMessage />
+            </ComboContainer>
+          )}
         </Content>
       )}
     </Page>

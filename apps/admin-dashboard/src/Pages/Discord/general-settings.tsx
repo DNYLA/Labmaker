@@ -76,11 +76,11 @@ export function GeneralSettings(props: GeneralSettingsProps) {
           </StyledLink>
           <SwitchToggle
             message="Enable Tickets"
-            toggled={config.autoTicket}
+            toggled={config.ticketSystem}
             onToggle={() => {
               setConfig({
                 ...config,
-                autoTicket: !config.autoTicket,
+                ticketSystem: !config.ticketSystem,
               });
             }}
           />

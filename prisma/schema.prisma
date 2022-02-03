@@ -20,7 +20,7 @@ model User {
   nodes          RedditConfig[]
   studentTickets Ticket[]       @relation("student")
   tutorTickets   Ticket[]       @relation("tutor")
-  applications Applications[]
+  applications   Applications[]
 }
 
 model RedditConfig {
@@ -62,6 +62,7 @@ model DiscordConfig {
   deleteMessage       String?
   hideChannel         Boolean        @default(true)
   notifyUser          Boolean        @default(true)
+  ticketSystem        Boolean        @default(false)
   Ticket              Ticket[]
   Applications        Applications[]
 }
@@ -105,7 +106,7 @@ model Ticket {
 }
 
 model Applications {
-  id                 Int               @id @default(autoincrement())
+  id                 Int                @id @default(autoincrement())
   userId             String
   serverId           String
   applicationMessage String
@@ -115,8 +116,8 @@ model Applications {
   createdAt          DateTime
   reviewedAt         DateTime?
   result             ApplicationResult?
-  discordConfig      DiscordConfig     @relation(fields: [serverId], references: [id])
-  user          User         @relation(fields: [userId], references: [id])
+  discordConfig      DiscordConfig      @relation(fields: [serverId], references: [id])
+  user               User               @relation(fields: [userId], references: [id])
 }
 
 enum ApplicationResult {
