@@ -112,8 +112,6 @@ const InfoSpan = styled.span`
   }
 
   &.headerTitle {
-    /* font-size: 20px; */
-    width: 35px;
-    height: 35px;
+    font-size: 13px;
   }
 `;

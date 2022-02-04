@@ -55,7 +55,7 @@ model DiscordConfig {
   notificationChannel String?
   tutorRole           String?
   staffRole           String?
-  channelName         String         @default("Ticket-/id/")
+  channelName         String         @default("Ticket-{id}")
   newMessage          String?
   acceptedMessage     String?
   deleteMessage       String?

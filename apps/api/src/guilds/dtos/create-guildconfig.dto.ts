@@ -22,18 +22,6 @@ export class UpdateConfigDto extends CreateConfigDto {
   @IsString()
   embedImageUrl: string;
 
-  @IsOptional()
-  @IsBoolean()
-  autoSwitcher: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  autoTicket: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  autoReact: boolean;
-
   @IsString()
   paymentConfigId: string;
 
