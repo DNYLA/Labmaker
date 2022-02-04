@@ -15,14 +15,13 @@ export function InfoTitle({
 }: InfoTitleProps) {
   const headerClass = header ? 'headerTitle' : '';
   const centerClass = center ? 'centerTitle' : '';
-
   if (infoMessage) {
     return (
       <StyledSpan className={centerClass}>
         <TitleStyle className={headerClass}>{title}</TitleStyle>
 
         <InfoWrapper>
-          <InfoSpan>?</InfoSpan>
+          <InfoSpan className={headerClass}>?</InfoSpan>
 
           <InfoBoxWrapper>
             <InfoBox>{infoMessage}</InfoBox>
@@ -47,13 +46,13 @@ const StyledSpan = styled.span`
   margin-left: 2px;
   color: ${(p) => p.theme.input.text};
 
-  &.centerTitle {
+  .centerTitle {
     justify-content: center;
     align-items: center;
   }
 
-  &.headerTitle {
-    font-size: 28px;
+  .headerTitle {
+    font-size: 25px;
     margin-bottom: 30px;
   }
 `;
@@ -104,6 +103,10 @@ const InfoSpan = styled.span`
   border-radius: 50%;
   background-color: black;
   cursor: help;
+  .headerTitle {
+    font-size: 20px;
+    width: 30px;
+  }
 
   &:hover {
     & + ${InfoBoxWrapper} {

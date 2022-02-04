@@ -65,7 +65,7 @@ export function TicketMessage(props: TicketMessageProps) {
     <SettingsContainer id="GeneralSettings">
       <InfoTitle
         title={'Notification Messages'}
-        infoMessage={'You can use /()/  to decouple values from the ticket.'}
+        infoMessage="You can use {}  to decouple values from the ticket."
         header={true}
       />
       {config.id !== '-1' && (
@@ -73,7 +73,7 @@ export function TicketMessage(props: TicketMessageProps) {
           <InputBox
             message="New Ticket Message"
             infoMessage={createInfoMessage(
-              'Listing Created /(subject)/ /(type)/ paying $/(budget)/ /(tutor_role)/.',
+              'Listing Created {subject} {type} paying ${budget} {tutor_role}.',
               InfoType.New
             )}
             value={config.newMessage ? config.newMessage : ''}
@@ -87,7 +87,7 @@ export function TicketMessage(props: TicketMessageProps) {
           <InputBox
             message="Ticket Accepted Message"
             infoMessage={createInfoMessage(
-              'Welcome /(student)/ Your Tutor is /(tutor)/ discuss your /(type)/ here.',
+              'Welcome {student} Your Tutor is {tutor} discuss your {type} here.',
               InfoType.Accepted
             )}
             value={config.acceptedMessage ? config.acceptedMessage : ''}
@@ -101,7 +101,7 @@ export function TicketMessage(props: TicketMessageProps) {
           <InputBox
             message="Delete/Resign Message"
             infoMessage={createInfoMessage(
-              '/(admin_role)/ /(student_or_tutor)/ has /(action)/. /(opposite_of_student_or_tutor)/ has been Notified, close Ticket once verified.',
+              '{admin_role} {sender} has {action} the ticket. {recipient} has been Notified, close Ticket once verified.',
               InfoType.Deleted
             )}
             value={config.deleteMessage ? config.deleteMessage : ''}
