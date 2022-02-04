@@ -103,15 +103,17 @@ const InfoSpan = styled.span`
   border-radius: 50%;
   background-color: black;
   cursor: help;
-  .headerTitle {
-    font-size: 20px;
-    width: 30px;
-  }
 
   &:hover {
     & + ${InfoBoxWrapper} {
       visibility: visible;
       opacity: 1;
     }
+  }
+
+  &.headerTitle {
+    /* font-size: 20px; */
+    width: 35px;
+    height: 35px;
   }
 `;

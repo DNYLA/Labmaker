@@ -12,9 +12,6 @@ export type GuildConfig = {
   icon?: string;
   prefix: string;
   embedImageUrl: string;
-  autoSwitcher?: boolean;
-  autoTicket: boolean;
-  autoReact: boolean;
   paymentConfigId: string;
   ordersCategory?: string;
   notificationChannel?: string;

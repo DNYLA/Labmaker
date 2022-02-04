@@ -49,10 +49,8 @@ model DiscordConfig {
   icon                String?
   prefix              String         @default("?")
   embedImageUrl       String         @default("https://i.imgur.com/rDzblHE.gif")
-  autoSwicher         Boolean        @default(false)
-  autoTicket          Boolean        @default(false)
-  autoReact           Boolean        @default(false)
   paymentConfigId     String
+  ticketSystem        Boolean        @default(false)
   ordersCategory      String?
   notificationChannel String?
   tutorRole           String?
@@ -63,7 +61,6 @@ model DiscordConfig {
   deleteMessage       String?
   hideChannel         Boolean        @default(true)
   notifyUser          Boolean        @default(true)
-  ticketSystem        Boolean        @default(false)
   Ticket              Ticket[]
   Applications        Applications[]
 }

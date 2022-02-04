@@ -84,17 +84,6 @@ export function GeneralSettings(props: GeneralSettingsProps) {
               });
             }}
           />
-
-          <SwitchToggle
-            message="Auto Reacter"
-            toggled={config.autoReact}
-            onToggle={() => {
-              setConfig({
-                ...config,
-                autoReact: !config.autoReact,
-              });
-            }}
-          />
         </div>
       )}
     </SettingsContainer>
