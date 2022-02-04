@@ -109,4 +109,10 @@ export class GuildController {
   ) {
     return this.guildService.updateApplication(id, action, user);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('tickets/:id/enabled') //For Students Applying ID = ServerID for Admins ID = ApplicationID
+  ticketsEnabled(@Param('id') id: string) {
+    return this.guildService.ticketsEnabled(id);
+  }
 }

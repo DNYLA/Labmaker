@@ -8,11 +8,12 @@ import {
   InputRange,
   InputTime,
   Item,
+  LoadingSpinner,
   Page,
   SettingsContainer,
   TextArea,
 } from '@labmaker/ui';
-import { createTicket } from '@labmaker/wrapper';
+import { createTicket, fetchTicketStatus } from '@labmaker/wrapper';
 import { RootState } from '../../store';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -39,23 +40,35 @@ const defaultTicket: CreateTicket = {
 
 export function CreateTicketPage(props: IndexProps) {
   const [ticket, setTicket] = useState<CreateTicket>(defaultTicket);
+  const [enabled, setEnabled] = useState(true);
+  const [loading, setLoading] = useState(false);
   const user = useSelector((state: RootState) => state.user.value);
   const navigate = useNavigate();
 
   useEffect(() => {
+    //Fetch Enabled
+    setLoading(true);
     const serverId = process.env.NX_SERVER_ID;
     if (!serverId) throw EvalError('Unable to locate Server ID');
-
-    setTicket({
-      creatorId: user.id,
-      serverId: serverId,
-      type: typeItems[0].value.toString(),
-      subject: subjectItems[0].value.toString(),
-      education: educationItems[0].value.toString(),
-      budget: 50,
-      due: new Date(),
-      additionalInfo: '',
-    });
+    fetchTicketStatus(serverId)
+      .then(({ data }) => {
+        if (data)
+          setTicket({
+            creatorId: user.id,
+            serverId: serverId,
+            type: typeItems[0].value.toString(),
+            subject: subjectItems[0].value.toString(),
+            education: educationItems[0].value.toString(),
+            budget: 50,
+            due: new Date(),
+            additionalInfo: '',
+          });
+        setTimeout(() => {
+          setEnabled(data);
+          setLoading(false);
+        }, 300);
+      })
+      .catch(console.error);
   }, [user.id]);
 
   const handleCreate = async () => {
@@ -103,84 +116,97 @@ export function CreateTicketPage(props: IndexProps) {
 
   return (
     <Page>
+      <LoadingSpinner loading={loading} message="Loading..." />
       <Content>
-        <SettingsContainer>
-          <InfoTitle title={'Create Ticket Form'} header={true} center={true} />
-
-          <FormRow>
-            <FormRowGroup>
-              <DropDown
-                title="Type"
-                items={typeItems}
-                value={ticket.type}
-                onChange={handleChangeType}
-              />
-            </FormRowGroup>
-
-            <FormRowGroup>
-              <DropDown
-                title="Subject"
-                items={subjectItems}
-                value={ticket.subject}
-                onChange={handleChangeSubject}
-              />
-            </FormRowGroup>
-
-            <FormRowGroup>
-              <DropDown
-                title="Education"
-                items={educationItems}
-                value={ticket.education}
-                onChange={handleChangeEducation}
-              />
-            </FormRowGroup>
-          </FormRow>
-
-          <InputBox
-            message="Username"
-            value={`${user.username}#${user.discriminator}`}
-            disabled={true}
-          />
-
-          <InputBox
-            message="Budget"
-            prefix="$"
-            value={ticket.budget}
-            type="number"
-            onChange={(e) => handleTicketInput(Number(e.target.value))}
-          />
-
-          <TextArea
-            message="Additional Notes"
-            placeholder="Enter Additional Info"
-            value={ticket.additionalInfo}
-            onChange={(e) => {
-              if (!ticket) return;
-              setTicket({ ...ticket, additionalInfo: e.target.value });
-            }}
-            textLimit={300}
-          />
-
-          <FormRow>
-            <InputDate
-              message="Due Date"
-              value={ticket.due}
-              onChange={(e) => setTicket({ ...ticket, due: e })}
+        {!enabled && !loading && (
+          <div>
+            We aren't accepting anymore tickets right now. Check our discord or
+            come back later!
+          </div>
+        )}
+        {enabled && (
+          <SettingsContainer>
+            <InfoTitle
+              title={'Create Ticket Form'}
+              header={true}
+              center={true}
             />
 
-            <InputTime
-              message="Due Time"
-              value={ticket.due}
+            <FormRow>
+              <FormRowGroup>
+                <DropDown
+                  title="Type"
+                  items={typeItems}
+                  value={ticket.type}
+                  onChange={handleChangeType}
+                />
+              </FormRowGroup>
+
+              <FormRowGroup>
+                <DropDown
+                  title="Subject"
+                  items={subjectItems}
+                  value={ticket.subject}
+                  onChange={handleChangeSubject}
+                />
+              </FormRowGroup>
+
+              <FormRowGroup>
+                <DropDown
+                  title="Education"
+                  items={educationItems}
+                  value={ticket.education}
+                  onChange={handleChangeEducation}
+                />
+              </FormRowGroup>
+            </FormRow>
+
+            <InputBox
+              message="Username"
+              value={`${user.username}#${user.discriminator}`}
+              disabled={true}
+            />
+
+            <InputBox
+              message="Budget"
+              prefix="$"
+              value={ticket.budget}
+              type="number"
+              onChange={(e) => handleTicketInput(Number(e.target.value))}
+            />
+
+            <TextArea
+              message="Additional Notes"
+              placeholder="Enter Additional Info"
+              value={ticket.additionalInfo}
               onChange={(e) => {
-                setTicket({ ...ticket, due: e });
+                if (!ticket) return;
+                setTicket({ ...ticket, additionalInfo: e.target.value });
               }}
+              textLimit={300}
             />
-          </FormRow>
 
-          <CenterDiv>
-            <Button onClick={handleCreate}>Create</Button>
-          </CenterDiv>
-        </SettingsContainer>
+            <FormRow>
+              <InputDate
+                message="Due Date"
+                value={ticket.due}
+                onChange={(e) => setTicket({ ...ticket, due: e })}
+              />
+
+              <InputTime
+                message="Due Time"
+                value={ticket.due}
+                onChange={(e) => {
+                  setTicket({ ...ticket, due: e });
+                }}
+              />
+            </FormRow>
+
+            <CenterDiv>
+              <Button onClick={handleCreate}>Create</Button>
+            </CenterDiv>
+          </SettingsContainer>
+        )}
       </Content>
     </Page>
   );

@@ -159,4 +159,17 @@ export class GuildService {
       data: { result: action, reviewedAt: new Date() },
     });
   }
+
+  async ticketsEnabled(serverId: string) {
+    //Cant Call this as Normal User doesnt have access
+    // const config = await this.getConfig(serverId, user);
+
+    const config = await this.prismaService.discordConfig.findUnique({
+      where: { id: serverId },
+    });
+
+    if (!config) throw new NotFoundException();
+
+    return config.ticketSystem;
+  }
 }
