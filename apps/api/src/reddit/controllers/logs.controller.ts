@@ -57,4 +57,11 @@ export class LogsController {
   createLog(@Body() body: CreateLogDto): Promise<Log> {
     return this.logService.createLog(body);
   }
+
+  //Only Created for testing performance of API
+  // @UseGuards(JwtBotAuthGuard)
+  // @Post('/many')
+  // createManyLogs(@Body() body: CreateLogDto) {
+  //   return this.logService.createManyLogs(body);
+  // }
 }

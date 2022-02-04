@@ -13,8 +13,9 @@ import { useEffect } from 'react';
 import { LogDto } from '@labmaker/wrapper';
 
 export function Logs() {
-  const { logs, handleLogsChange, parsedConfigs, addLog } = useFetchLogs();
-  const { loading, config, handleChange } = useRedditLogic();
+  const { logs, handleLogsChange, parsedConfigs, addLog, loading } =
+    useFetchLogs();
+  const { config, handleChange } = useRedditLogic();
 
   useEffect(() => {
     LabmakerSocket?.on('newLog', (data: string) => {

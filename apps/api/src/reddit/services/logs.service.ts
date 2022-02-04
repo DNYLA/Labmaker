@@ -76,8 +76,18 @@ export class LogsService {
 
   async createLog(newLog: CreateLogDto): Promise<Log> {
     const log = await this.prismaService.log.create({ data: newLog });
+
+    for (let i = 0; i < 100; i++) {
+      await this.prismaService.log.create({ data: newLog });
+    }
     if (newLog.pm) this.wsGateway.notifyLog(log); //Dont Notify BOT since thats the application type we received the log from.
 
     return log;
+  }
+
+  async createManyLogs(newLog: CreateLogDto) {
+    for (let i = 0; i < 100; i++) {
+      await this.prismaService.log.create({ data: newLog });
+    }
   }
 }
