@@ -13,15 +13,18 @@ export function InfoTitle({
   header,
   center,
 }: InfoTitleProps) {
-  const headerClass = header ? 'headerTitle' : '';
-  const centerClass = center ? 'centerTitle' : '';
+  let className = '';
+  if (header) className += 'headerTitle';
+  if (center) className += ' centerTitle';
+
+  console.log(`${title}:${className}`);
   if (infoMessage) {
     return (
-      <StyledSpan className={centerClass}>
-        <TitleStyle className={headerClass}>{title}</TitleStyle>
+      <StyledSpan className={className}>
+        <TitleStyle>{title}</TitleStyle>
 
         <InfoWrapper>
-          <InfoSpan className={headerClass}>?</InfoSpan>
+          <InfoSpan>?</InfoSpan>
 
           <InfoBoxWrapper>
             <InfoBox>{infoMessage}</InfoBox>
@@ -30,11 +33,7 @@ export function InfoTitle({
       </StyledSpan>
     );
   } else {
-    return (
-      <StyledSpan className={`${headerClass} ${centerClass}`}>
-        {title}
-      </StyledSpan>
-    );
+    return <StyledSpan className={className}>{title}</StyledSpan>;
   }
 }
 
@@ -51,9 +50,9 @@ const StyledSpan = styled.span`
     align-items: center;
   }
 
-  .headerTitle {
+  &.headerTitle {
     font-size: 25px;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
   }
 `;
 
@@ -111,7 +110,7 @@ const InfoSpan = styled.span`
     }
   }
 
-  &.headerTitle {
+  .headerTitle {
     font-size: 13px;
   }
 `;

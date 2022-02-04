@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { PaymentBox } from './payment';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
 import { useNavigate } from 'react-router-dom';
-import { Button, SettingsContainer } from '@labmaker/ui';
+import { Button, InfoTitle, SettingsContainer } from '@labmaker/ui';
 import { Payment } from '@labmaker/shared';
 
 /* eslint-disable-next-line */
@@ -63,7 +63,7 @@ export function PaymentSettings(props: PaymentSettingsProps) {
   } else {
     return (
       <SettingsContainer>
-        <h1>Payment</h1>
+        <InfoTitle title={'Payment'} header={true} />
 
         <PaymentsContainer>{renderPayments(payments)}</PaymentsContainer>
 

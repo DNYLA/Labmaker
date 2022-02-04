@@ -73,7 +73,7 @@ export function TicketMessage(props: TicketMessageProps) {
           <InputBox
             message="New Ticket Message"
             infoMessage={createInfoMessage(
-              'Listing Created {subject} {type} paying ${budget} {tutor_role}.',
+              'Listing Created {subject} {type} paying $ {budget} {tutor_role}.',
               InfoType.New
             )}
             value={config.newMessage ? config.newMessage : ''}

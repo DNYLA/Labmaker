@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   DropDown,
+  InfoTitle,
   InputBox,
   Item,
   SettingsContainer,
@@ -32,7 +33,7 @@ export function TicketSettings({
 
   return (
     <SettingsContainer id="GeneralSettings">
-      <h1>Ticket</h1>
+      <InfoTitle title={'Ticket'} header={true} />
 
       {config.id !== '-1' && (
         <div>

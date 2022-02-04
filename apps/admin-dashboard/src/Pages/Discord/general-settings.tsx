@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import {
   DropDown,
+  InfoTitle,
   InputBox,
   SettingsContainer,
   SwitchToggle,
@@ -28,7 +29,7 @@ export function GeneralSettings(props: GeneralSettingsProps) {
 
   return (
     <SettingsContainer id="GeneralSettings">
-      <h1>General</h1>
+      <InfoTitle title={'General'} header={true} />
 
       <StyledSpan>Payment Config</StyledSpan>
       {config.id !== '-1' && (
