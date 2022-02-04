@@ -15,7 +15,8 @@ model User {
   accessToken    String
   refreshToken   String
   tokenVersion   Int            @default(0)
-  role           Role?          @default(USER)
+  nextApply      DateTime?
+  role           Role          @default(USER)
   subjects       Subjects[]
   nodes          RedditConfig[]
   studentTickets Ticket[]       @relation("student")
