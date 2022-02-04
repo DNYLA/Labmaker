@@ -73,6 +73,7 @@ export type UserDto = {
   avatar?: string;
   role: UserRole;
   subjects: string[];
+  nextApply?: Date;
 };
 
 export type AdminUser = {
