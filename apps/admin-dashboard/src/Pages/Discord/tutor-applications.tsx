@@ -1,32 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-  DropDown,
-  InputBox,
-  Item,
-  Page,
-  SettingsContainer,
-  SwitchToggle,
-} from '@labmaker/ui';
-import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
-import {
-  ChannelType,
-  CreateApplication,
-  PartialGuildChannel,
-  PartialRole,
-  TutorApplication,
-} from '@labmaker/shared';
-import { getApplications, getChannels, getRoles } from '@labmaker/wrapper';
-import { parseChannels, parseRoles } from '../../utils/helpers';
+import { ModalPopup, MultiModalWrapper, Page } from '@labmaker/ui';
+import { TutorApplication } from '@labmaker/shared';
+import { getApplications } from '@labmaker/wrapper';
 import { useParams } from 'react-router-dom';
 
 /* eslint-disable-next-line */
-export interface TutorApplicationsProps {}
+export interface TutorApplicationsProps {
+  design: React.ReactNode;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export function TutorApplications(props: TutorApplicationsProps) {
+export function TutorApplications({
+  design,
+  open,
+  setOpen,
+}: TutorApplicationsProps) {
   const [loading, setLoading] = useState(false);
   const [applications, setApplications] = useState<TutorApplication[]>([]);
   const { id } = useParams();
+
+  console.log('TUTOR APPLICATIONS');
 
   useEffect(() => {
     setLoading(true);
@@ -40,30 +35,33 @@ export function TutorApplications(props: TutorApplicationsProps) {
   }, [id]);
 
   return (
-    <Page>
+    <div>
+      <StyledSpan onClick={() => setOpen(true)}>{design}</StyledSpan>
+
       {applications.length > 0 && (
-        <div>
+        <MultiModalWrapper open={open} setOpen={setOpen}>
           {applications.map((app) => {
             return (
               //Covert to Modal OnClick Which allows you to accept or Decline
-              <div>
+              <ModalPopup title={app.userId} key={app.id}>
                 <p>User ID: {app.userId}</p>
                 <p>Message: {app.applicationMessage}</p>
                 <p>Vouches: {app.vouchesLink}</p>
-                <p>Reddit Username: {app.redditUsername}</p>
+                <p>Reddit: {app.redditUsername}</p>
                 <p>Subejcts: {app.subjects.toString()}</p>
                 <p>Created: {app.createdAt}</p>
-              </div>
+              </ModalPopup>
             );
           })}
-        </div>
+        </MultiModalWrapper>
       )}
-    </Page>
+    </div>
   );
 }
 
 const StyledSpan = styled.span`
-  padding-right: 5px;
-  margin-left: 2px;
-  margin-bottom: 5px;
+  :hover {
+    color: ${(p) => p.theme.navbar.title};
+    cursor: pointer;
+  }
 `;

@@ -5,9 +5,12 @@ import {
   InputBox,
   SettingsContainer,
   SwitchToggle,
+  ModalPopup,
 } from '@labmaker/ui';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
 import { useNavigate } from 'react-router-dom';
+import { TutorApplications } from './tutor-applications';
+import { useState } from 'react';
 
 /* eslint-disable-next-line */
 export interface GeneralSettingsProps {
@@ -23,8 +26,10 @@ export function GeneralSettings(props: GeneralSettingsProps) {
 
   const navigate = useNavigate();
 
+  const [tutorAppsOpen, setTutorAppsOpen] = useState(false);
+
   const handleTutorApps = () => {
-    navigate('applications');
+    // navigate('applications');
   };
 
   return (
@@ -61,6 +66,7 @@ export function GeneralSettings(props: GeneralSettingsProps) {
               });
             }}
           />
+
           {/* 
           <SwitchToggle
             message="Advanced User Switcher"
@@ -72,9 +78,13 @@ export function GeneralSettings(props: GeneralSettingsProps) {
               });
             }}
           /> */}
-          <StyledLink onClick={handleTutorApps}>
-            View Tutor Applications
-          </StyledLink>
+
+          <TutorApplications
+            design={<span>Tutor Applications</span>}
+            open={tutorAppsOpen}
+            setOpen={setTutorAppsOpen}
+          />
+
           <SwitchToggle
             message="Enable Tickets"
             toggled={config.ticketSystem}

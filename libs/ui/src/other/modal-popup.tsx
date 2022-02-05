@@ -5,30 +5,34 @@ import styled from 'styled-components';
 
 /* eslint-disable-next-line */
 export interface ModalPopupProps {
-  title: string;
-  design: any;
+  title?: string;
+  design?: any;
   children: ReactNode;
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-//Currently Broken Fix CSS
 export function ModalPopup({
   title,
   design,
   children,
-  open,
+  open = true,
   setOpen,
 }: ModalPopupProps) {
   return (
     <StyledTagInputBox>
-      <StyledSpan onClick={() => setOpen(true)}>{design}</StyledSpan>
+      {design && (
+        <StyledSpan onClick={() => setOpen && setOpen(true)}>
+          {design}
+        </StyledSpan>
+      )}
+
       {open && (
         <DialogContainer>
           <DialogBox>
             <TitleContainer>
               <h1>{title}</h1>
-              <span onClick={() => setOpen(false)}>X</span>
+              {setOpen && <span onClick={() => setOpen(false)}>X</span>}
             </TitleContainer>
 
             <div className="childItems">{children}</div>
@@ -53,9 +57,9 @@ const StyledSpan = styled.span`
 const TitleContainer = styled.span`
   display: flex;
   align-items: center;
-  padding-top: 5px;
   justify-content: center;
   align-content: center;
+  padding-top: 5px;
 
   h1 {
     margin-bottom: 10px;
@@ -82,6 +86,7 @@ const DialogContainer = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
+  z-index: 1;
   background: rgba(0, 0, 0, 0.5);
 `;
 
@@ -103,5 +108,63 @@ const DialogBox = styled.div`
     & > *:not(:last-child) {
       margin-bottom: 15px;
     }
+  }
+`;
+
+export interface MultiModalProps {
+  children: React.ReactNode;
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function MultiModalWrapper({
+  children,
+  open,
+  setOpen,
+}: MultiModalProps) {
+  return (
+    <div>
+      {open && (
+        <StyledMultiModalWrapper className="multi-modal">
+          {children}
+        </StyledMultiModalWrapper>
+      )}
+    </div>
+  );
+}
+
+const StyledMultiModalWrapper = styled.div`
+  display: flex;
+  flex-flow: column;
+  flex-grow: 0;
+  align-items: center;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  padding: 25px;
+
+  & > ${StyledTagInputBox} {
+    margin-bottom: 25px;
+  }
+
+  ${DialogContainer} {
+    display: unset;
+    position: unset;
+    top: unset;
+    bottom: unset;
+    left: unset;
+    right: unset;
+    max-height: unset;
+    background: transparent;
+  }
+
+  ${DialogBox} {
+    position: unset;
+    max-height: unset;
   }
 `;
