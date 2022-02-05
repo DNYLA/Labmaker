@@ -1,11 +1,15 @@
 import { PartialGuildChannel, PartialRole } from '@labmaker/shared';
 import { Injectable } from '@nestjs/common';
-import { UserDetails } from '../../auth/userDetails.dto';
+import { UserService } from '../../user/user.service';
+import { UserDetails } from '../../utils/types';
 import { DiscordHttpService } from './discord-http.service';
 
 @Injectable()
 export class DiscordService {
-  constructor(private readonly discordHttpService: DiscordHttpService) {}
+  constructor(
+    private readonly discordHttpService: DiscordHttpService,
+    private userService: UserService
+  ) {}
 
   getBotGuilds() {
     return this.discordHttpService.fetchBotGuilds();
@@ -24,7 +28,9 @@ export class DiscordService {
   }
 
   async fetchGuilds(user: UserDetails) /*: Promise<Guild[]> */ {
-    const { data: userGuilds } = await this.getUserGuilds(user.accessToken);
+    const _user = await this.userService.getLocalUser(user.id);
+
+    const { data: userGuilds } = await this.getUserGuilds(_user.accessToken);
     const { data: botGuilds } = await this.getBotGuilds();
     const adminGuilds = userGuilds.filter(
       ({ permissions }) => (parseInt(permissions) & 0x8) === 0x8

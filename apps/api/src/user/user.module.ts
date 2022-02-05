@@ -6,7 +6,7 @@ import { AuthModule } from '../auth/auth.module';
 import { DiscordModule } from '../discord/discord.module';
 
 @Module({
-  imports: [HttpModule, AuthModule, DiscordModule],
+  imports: [HttpModule],
   providers: [UserService],
   controllers: [UserController],
   exports: [UserService],

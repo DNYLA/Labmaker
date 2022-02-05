@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { Ticket } from '@prisma/client';
 import { JwtAuthGuard } from '../../auth/guards/Jwt.guard';
-import { UserDetails } from '../../auth/userDetails.dto';
+import { UserDetails } from '../../utils/types';
 import { CurrentUser } from '../../utils/decorators';
 import { CreateTicketDto } from '../dtos/create-ticket.dto';
 import { TicketService } from '../services/ticket.service';

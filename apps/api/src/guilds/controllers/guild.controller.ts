@@ -13,7 +13,7 @@ import { UpdateConfigDto } from '../dtos/create-guildconfig.dto';
 import { ApplicationResult, DiscordConfig } from '@prisma/client';
 import { JwtAuthGuard, JwtBotAuthGuard } from '../../auth/guards/Jwt.guard';
 import { CurrentUser } from '../../utils/decorators';
-import { UserDetails } from '../../auth/userDetails.dto';
+import { UserDetails } from '../../utils/types';
 import { GuildService } from '../services/guild.service';
 import { GuildData } from '@labmaker/shared';
 import { CreateApplicationDTO } from '../dtos/apply-tutor.dto';

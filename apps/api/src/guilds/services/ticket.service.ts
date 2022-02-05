@@ -9,7 +9,7 @@ import {
 import { CreateTicketDto } from '../dtos/create-ticket.dto';
 import { Role, Ticket } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { UserDetails } from '../../auth/userDetails.dto';
+import { UserDetails } from '../../utils/types';
 import {
   PartialTicket,
   TicketAction,

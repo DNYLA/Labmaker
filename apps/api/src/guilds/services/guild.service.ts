@@ -12,7 +12,7 @@ import {
   Role,
 } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { UserDetails } from '../../auth/userDetails.dto';
+import { UserDetails } from '../../utils/types';
 import { PaymentService } from './payment.service';
 import { UserRole } from '@labmaker/wrapper';
 import { WebsocketGateway } from '../../websockets/socket';

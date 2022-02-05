@@ -1,14 +1,16 @@
 import { JwtService } from '@nestjs/jwt';
-import { UserPayload, UserDetails } from './userDetails.dto';
+import { OAuthDiscordUser, UserDetails, UserPayload } from '../utils/types';
 import { Response, Request } from 'express';
 import { Role, User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prismaService: PrismaService,
+    private userService: UserService,
     private jwtService: JwtService
   ) {}
   private readonly logger = new Logger(AuthService.name);
@@ -29,7 +31,7 @@ export class AuthService {
     }
   }
 
-  async validateUser(details: UserDetails) {
+  async validateUser(details: OAuthDiscordUser) {
     const userData = {
       id: details.id,
       username: details.username,
@@ -37,7 +39,6 @@ export class AuthService {
       avatar: details.avatar,
       accessToken: details.accessToken,
       refreshToken: details.refreshToken,
-      tokenVersion: details.tokenVersion,
     };
 
     const user = await this.prismaService.user.upsert({

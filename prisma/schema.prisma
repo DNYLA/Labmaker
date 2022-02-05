@@ -8,20 +8,22 @@ datasource db {
 }
 
 model User {
-  id             String         @id
+  id             String          @id
   username       String
   discriminator  String
-  avatar         String?        @default("")
+  avatar         String?         @default("")
   accessToken    String
   refreshToken   String
-  tokenVersion   Int            @default(0)
+  tokenVersion   Int             @default(0)
   nextApply      DateTime?
-  role           Role          @default(USER)
+  role           Role            @default(USER)
   subjects       Subjects[]
   nodes          RedditConfig[]
-  studentTickets Ticket[]       @relation("student")
-  tutorTickets   Ticket[]       @relation("tutor")
+  studentTickets Ticket[]        @relation("student")
+  tutorTickets   Ticket[]        @relation("tutor")
   applications   Applications[]
+  // logs           UserLogs[]
+  notifications  Notifications[]
 }
 
 model RedditConfig {
@@ -137,29 +139,38 @@ model Log {
 }
 
 // Complete Later
-// model UserLogs {
-//   id         Int         @id @default(autoincrement())
-//   fromUserId String
-//   toUserId   String?
-//   action     UserLogType
-//   //Add Relations
-// }
+model UserLogs {
+  id            Int         @id @default(autoincrement())
+  userId        String      @map("user_Id")
+  componentName String      @map("component_name")
+  componentType String      @map("component_type")
+  ipAddress     String      @map("ip_address")
+  userAgent     String      @map("user_agent")
+  referer String?
+  path String
+  action        UserLogType
+  information   String?
+  timestamp     DateTime    @default(now())
+  numRows        Int         @default(1) @map("num_rows")
+  // user          User        @relation(fields: [userId], references: [id]) //Removed Because BOTS dont have UserAccounts
+}
 
-// model Notifications {
-//   id         Int      @id @default(autoincrement())
-//   fromUserId String
-//   toUserIds  String[] //If type === Created We Could batch it out to all users with subject Role?
-//   message    String
-//   viewed     Boolean
-//   hidden     Boolean
-// }
+model Notifications {
+  id         Int      @id @default(autoincrement())
+  fromUserId String
+  toUserIds  String[] //If type === Created We Could batch it out to all users with subject Role?
+  message    String
+  viewed     Boolean
+  hidden     Boolean
+  user       User     @relation(fields: [fromUserId], references: [id])
+}
 
-// enum UserLogType {
-//   CREATED
-//   ACCEPTED
-//   RESIGNED
-//   DELETED
-// }
+enum UserLogType {
+  GET
+  PUT
+  POST
+  DELETE
+}
 
 enum Role {
   USER

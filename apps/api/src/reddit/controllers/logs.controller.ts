@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Log } from '@prisma/client';
-import { UserDetails } from '../../auth/userDetails.dto';
+import { UserDetails } from '../../utils/types';
 import { CurrentUser } from '../../utils/decorators';
 import { JwtAuthGuard, JwtBotAuthGuard } from '../../auth/guards/Jwt.guard';
 import { CreateLogDto } from '../dtos/create-log.dto';

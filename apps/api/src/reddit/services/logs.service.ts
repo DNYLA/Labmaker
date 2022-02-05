@@ -4,7 +4,7 @@ import { LogQueryParms } from '../controllers/logs.controller';
 import { Log } from '.prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { WebsocketGateway } from '../../websockets/socket';
-import { UserDetails } from '../../auth/userDetails.dto';
+import { UserDetails } from '../../utils/types';
 import { UserService } from '../../user/user.service';
 
 @Injectable()

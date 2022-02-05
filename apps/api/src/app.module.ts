@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { WebsocketModule } from './websockets/websocket.module';
 import { GuildsModule } from './guilds/guilds.module';
+import { LogsModule } from './logs/logs.module';
 
 Logger.log(`Running in ${process.env.ENVIRONMENT ?? 'Development'}`);
 
@@ -20,6 +21,7 @@ Logger.log(`Running in ${process.env.ENVIRONMENT ?? 'Development'}`);
     PrismaModule,
     WebsocketModule,
     GuildsModule,
+    LogsModule,
   ],
   controllers: [],
   providers: [],

@@ -1,4 +1,4 @@
-import { RedditConfig } from '.prisma/client';
+import { RedditConfig, UserLogType } from '.prisma/client';
 import {
   ForbiddenException,
   Injectable,
@@ -11,22 +11,34 @@ import {
   CreateConfigDto,
   UpdateConfigDto,
 } from '../dtos/create-redditconfig.dto';
-import { UserDetails } from '../../auth/userDetails.dto';
+import { UserDetails } from '../../utils/types';
 import { UserService } from '../../user/user.service';
 import { UserRole } from '@labmaker/wrapper';
+import { UserLogsService } from '../../logs/logs.service';
 
 @Injectable()
 export class ConfigService {
   constructor(
     private prismaService: PrismaService,
     private userService: UserService,
+    private userLogs: UserLogsService,
     private wsGateway: WebsocketGateway
   ) {}
   private readonly logger = new Logger(ConfigService.name);
 
-  async getConfig(id: number, userDetails: UserDetails): Promise<RedditConfig> {
-    await this.userService.validNode(userDetails, id);
-    return await this.prismaService.redditConfig.findUnique({ where: { id } });
+  async getConfig(id: number, user: UserDetails): Promise<RedditConfig> {
+    await this.userService.validNode(user, id);
+    const config = await this.prismaService.redditConfig.findUnique({
+      where: { id },
+    });
+
+    // this.userLogs.createLog(
+    //   user.id,
+    //   UserLogType.GET,
+    //   `${config.id} - Reddit Config`
+    // );
+
+    return config;
   }
 
   async getConfigs(): Promise<RedditConfig[]> {
@@ -75,6 +87,13 @@ export class ConfigService {
     if (!updatedConfig) throw new NotFoundException('Unable to locate config');
 
     this.wsGateway.notifyConfig(updatedConfig);
+
+    // this.userLogs.createLog(
+    //   user.id,
+    //   UserLogType.PUT,
+    //   `ID: ${config.id} - Reddit Config`
+    // );
+
     return updatedConfig;
   }
 
@@ -84,7 +103,8 @@ export class ConfigService {
    * @returns The deleted config.
    */
   async deleteConfig(id: number, user: UserDetails): Promise<RedditConfig> {
-    await this.userService.validNode(user, id);
+    const c = await this.getConfig(id, user); //Valid Node Check done inside here.
+    if (c.userId !== user.id) throw new ForbiddenException(); //Only Owner can Delete
 
     const config = await this.prismaService.redditConfig.delete({
       where: { id },

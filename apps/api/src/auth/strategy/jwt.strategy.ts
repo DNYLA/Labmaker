@@ -1,12 +1,12 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { UserDetails, UserPayload } from '../../auth/userDetails.dto';
+import { UserDetails, UserPayload } from '../../utils/types';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Role } from '@prisma/client';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(private readonly prismaService: PrismaService) {
+  constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -18,14 +18,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (payload.type === Role.BOT)
       return { id: payload.id, role: payload.type }; //Bots dont have accounts in DB
 
-    const user = await this.prismaService.user.findUnique({
-      where: { id: payload.id },
-    });
+    // const user = await this.prismaService.user.findUnique({
+    //   where: { id: payload.id },
+    // });
 
-    if (!user)
-      throw new ForbiddenException(`You don't permission to access this data`);
-
-    return user;
+    // if (!user)
+    //   throw new ForbiddenException(`You don't permission to access this data`);
+    const { id, username, discriminator, type } = payload;
+    return { id, username, discriminator, role: type };
   }
 }
 

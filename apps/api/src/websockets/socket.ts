@@ -40,7 +40,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
       return client.join('bot');
     }
 
-    const user = await this.userService.getUserDetails(result.id);
+    const user = await this.userService.getAdminUserDetails(result.id);
     user.nodes.forEach((node) => {
       console.log(`Joined Room ${node.id}`);
       client.join(node.id.toString());
