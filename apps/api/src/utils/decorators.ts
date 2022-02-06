@@ -10,6 +10,9 @@ export const CurrentUser = createParamDecorator(
     const userAgent = request.headers['user-agent'];
     const referer = request.headers['referer'];
     const route = request.route;
-    return { ...request.user, ipAddress, userAgent, referer, path: route.path };
+    const path = request.originalUrl;
+    const method = request.method;
+
+    return { ...request.user, ipAddress, userAgent, referer, path, method };
   }
 );

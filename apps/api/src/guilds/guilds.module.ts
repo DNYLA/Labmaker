@@ -7,9 +7,10 @@ import { PaymentController } from '../guilds/controllers/payment.controller';
 import { PaymentService } from './services/payment.service';
 import { DiscordModule } from '../discord/discord.module';
 import { WebsocketModule } from '../websockets/websocket.module';
+import { LogsModule } from '../logs/logs.module';
 
 @Module({
-  imports: [DiscordModule, WebsocketModule],
+  imports: [DiscordModule, LogsModule, WebsocketModule],
   controllers: [GuildController, TicketController, PaymentController],
   providers: [GuildService, TicketService, PaymentService],
   exports: [PaymentService],

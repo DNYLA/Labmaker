@@ -1,9 +1,4 @@
-import {
-  RedditConfig,
-  Role,
-  User as PrismaUser,
-  UserLogType,
-} from '@prisma/client';
+import { RedditConfig, ResponseType, Role, RequestType } from '@prisma/client';
 
 export type UserDto = {
   id: string;
@@ -56,6 +51,7 @@ export type UserDetails = {
   userAgent: string;
   referer?: string;
   path: string;
+  method: RequestType;
 };
 
 export type UserPayload = {
@@ -67,16 +63,17 @@ export type UserPayload = {
 
 export type CreateLog = {
   fromUserId: string;
-  action: UserLogType;
+  method: RequestType;
   actionMessage: string;
 };
 
 export type LogInfo = {
   componentName: string;
   componentType: string;
-  action: UserLogType;
+  componentId?: string;
   information?: string;
   numRows: number;
+  response?: ResponseType;
 };
 
 // const userWithNodes = Prisma.validator<Prisma.UserArgs>()({

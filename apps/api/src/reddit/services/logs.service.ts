@@ -6,12 +6,14 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { WebsocketGateway } from '../../websockets/socket';
 import { UserDetails } from '../../utils/types';
 import { UserService } from '../../user/user.service';
+import { UserLogsService } from '../../logs/logs.service';
 
 @Injectable()
 export class LogsService {
   constructor(
     private prismaService: PrismaService,
     private userService: UserService,
+    private userLogs: UserLogsService,
     private wsGateway: WebsocketGateway
   ) {}
 
@@ -22,7 +24,7 @@ export class LogsService {
   ): Promise<Log[]> {
     this.userService.validNode(user, nodeId);
 
-    let filter;
+    let filter: { nodeId: number; pm?: true };
     if (didPm) filter = { nodeId, pm: didPm };
     else filter = { nodeId };
 
@@ -30,6 +32,20 @@ export class LogsService {
       take: 250,
       orderBy: { id: 'desc' },
       where: filter,
+    });
+
+    const len = logs.length;
+    let componentId = null;
+
+    if (logs.length > 0) {
+      componentId = `${logs[len - 1].id} - ${logs[0].id}`; //List is sorted DESC so firstID = 250 last = 0
+    }
+
+    this.userLogs.createLog(user, {
+      componentName: 'REDDIT',
+      componentType: LogsService.name,
+      componentId,
+      numRows: len,
     });
 
     return logs;

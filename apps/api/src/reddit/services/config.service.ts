@@ -1,4 +1,4 @@
-import { RedditConfig, UserLogType } from '.prisma/client';
+import { RedditConfig } from '.prisma/client';
 import {
   ForbiddenException,
   Injectable,
@@ -11,7 +11,7 @@ import {
   CreateConfigDto,
   UpdateConfigDto,
 } from '../dtos/create-redditconfig.dto';
-import { UserDetails } from '../../utils/types';
+import { LogInfo, UserDetails } from '../../utils/types';
 import { UserService } from '../../user/user.service';
 import { UserRole } from '@labmaker/wrapper';
 import { UserLogsService } from '../../logs/logs.service';
@@ -32,12 +32,7 @@ export class ConfigService {
       where: { id },
     });
 
-    // this.userLogs.createLog(
-    //   user.id,
-    //   UserLogType.GET,
-    //   `${config.id} - Reddit Config`
-    // );
-
+    this.submitLog(user, id);
     return config;
   }
 
@@ -60,6 +55,7 @@ export class ConfigService {
       data: newConfig,
     });
     this.wsGateway.newConfig(config);
+    this.submitLog(user, config.id);
 
     return config;
   }
@@ -87,12 +83,7 @@ export class ConfigService {
     if (!updatedConfig) throw new NotFoundException('Unable to locate config');
 
     this.wsGateway.notifyConfig(updatedConfig);
-
-    // this.userLogs.createLog(
-    //   user.id,
-    //   UserLogType.PUT,
-    //   `ID: ${config.id} - Reddit Config`
-    // );
+    this.submitLog(user, config.id);
 
     return updatedConfig;
   }
@@ -110,6 +101,23 @@ export class ConfigService {
       where: { id },
     });
     this.wsGateway.deleteConfig(id.toString());
+    this.submitLog(user, config.id);
+
     return config;
+  }
+
+  private async submitLog(
+    user: UserDetails,
+    id: number | string,
+    rows?: number,
+    info?: string
+  ) {
+    this.userLogs.createLog(user, {
+      componentName: 'REDDIT',
+      componentType: ConfigService.name,
+      componentId: id.toString(),
+      numRows: rows,
+      information: info,
+    });
   }
 }

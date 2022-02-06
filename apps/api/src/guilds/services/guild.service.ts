@@ -9,6 +9,7 @@ import {
   ApplicationResult,
   Applications,
   DiscordConfig,
+  ResponseType,
   Role,
 } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -20,6 +21,8 @@ import { UpdateConfigDto } from '../dtos/create-guildconfig.dto';
 import { GuildData, PartialGuildChannel, PartialRole } from '@labmaker/shared';
 import { DiscordHttpService } from '../../discord/services/discord-http.service';
 import { CreateApplicationDTO } from '../dtos/apply-tutor.dto';
+import { UserLogsService } from '../../logs/logs.service';
+import { NOTFOUND } from 'dns';
 
 @Injectable()
 export class GuildService {
@@ -27,16 +30,17 @@ export class GuildService {
     private prismaService: PrismaService,
     private paymentService: PaymentService,
     private discordHttpService: DiscordHttpService,
+    private userLogs: UserLogsService,
     private wsGateway: WebsocketGateway
   ) {}
   private readonly logger = new Logger(GuildService.name);
-
   /**
    * Gets Guild Config
    * @param {string} id - string,
    * @param {UserDetails} user - UserDetails
    * @returns DiscordConfig
    */
+  //Realistically this should be two seperate EndPoints since this can return two types
   async getConfig(
     id: string,
     payments: boolean,
@@ -44,16 +48,24 @@ export class GuildService {
     user: UserDetails
   ): Promise<DiscordConfig | GuildData> {
     //Add Authorization to see if user has access to this data. ( This can be done via fetching mutual guilds )
-    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT)
+    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT) {
+      this.submitLog(user, id, 'FORBIDDEN', 0);
       throw new ForbiddenException();
-
+    }
     const config = await this.prismaService.discordConfig.findUnique({
       where: { id },
     });
 
     // if (!config) return this.createConfigFromId(id);
-    if (!config) throw new NotFoundException('Unable to find config');
-    if (!payments) return config;
+    if (!config) {
+      this.submitLog(user, id, 'NOTFOUND');
+      throw new NotFoundException('Unable to find config');
+    }
+    if (!payments) {
+      this.submitLog(user, id);
+      return config;
+    }
+
     let channels: PartialGuildChannel[] = [];
     let roles: PartialRole[] = [];
 
@@ -63,7 +75,9 @@ export class GuildService {
       roles = (await this.discordHttpService.fetchGuildRoles(config.id)).data;
       channels;
     }
+
     const fetchedPayments = await this.paymentService.getPayments(id);
+    this.submitLog(user, id);
     return {
       config,
       channels,
@@ -73,10 +87,12 @@ export class GuildService {
   }
 
   async getConfigs(): Promise<DiscordConfig[]> {
+    //Add Logging
     return await this.prismaService.discordConfig.findMany();
   }
 
   async createConfig(id: string, name: string): Promise<DiscordConfig> {
+    //Add Logging
     return await this.prismaService.discordConfig.create({
       data: { id, name, paymentConfigId: id },
     });
@@ -86,16 +102,25 @@ export class GuildService {
     config: UpdateConfigDto,
     user: UserDetails
   ): Promise<DiscordConfig> {
+    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT) {
+      this.submitLog(user, config.id, 'FORBIDDEN', 0);
+      throw new ForbiddenException();
+    }
     const c = await this.prismaService.discordConfig.update({
       where: { id: config.id },
       data: config,
     });
     if (user.role !== UserRole.BOT) this.wsGateway.notifyGuildConfig(c);
+    this.submitLog(user, config.id);
     return c;
   }
 
   async canApply(user: UserDetails) {
-    if (user.role !== UserRole.USER) throw new ForbiddenException();
+    if (user.role !== UserRole.USER) {
+      this.submitLog(user, 'SERVER_ID', 'FORBIDDEN', 0, 'User Already Tutor'); //Change SERVER_ID to actual serverID
+      throw new ForbiddenException();
+    }
+
     const date = new Date();
     date.setDate(date.getDate() - 7);
 
@@ -106,6 +131,7 @@ export class GuildService {
       },
     });
 
+    this.submitLog(user, 1);
     if (applications.length > 0) return false;
     return true;
   }
@@ -118,7 +144,16 @@ export class GuildService {
     //Some people may manually make requests to EndPoint so we re-check if they can apply
     //On API aswell
     const canApply = await this.canApply(user);
-    if (!canApply) throw new ForbiddenException();
+    if (!canApply) {
+      this.submitLog(
+        user,
+        serverId,
+        'FORBIDDEN',
+        0,
+        `Application Already Pending`
+      );
+      throw new ForbiddenException();
+    }
     await this.prismaService.applications.create({
       data: {
         ...application,
@@ -127,40 +162,55 @@ export class GuildService {
         createdAt: new Date(),
       },
     });
-
+    this.submitLog(user, 1);
     return HttpStatus.OK;
   }
 
   async getApplications(serverId: string, user: UserDetails) {
-    if (user.role !== UserRole.ADMIN) return;
+    if (user.role !== UserRole.ADMIN) {
+      this.submitLog(user, serverId, 'FORBIDDEN', 0);
+      throw new ForbiddenException();
+    }
 
-    return await this.prismaService.applications.findMany({
+    const apps = await this.prismaService.applications.findMany({
       where: { serverId, reviewedAt: null },
     });
+    this.submitLog(user, apps.length);
+    return apps;
   }
 
-  async updateApplication(
+  async reviewApplication(
     id: number,
     action: ApplicationResult,
     user: UserDetails
   ) {
-    if (user.role !== UserRole.ADMIN) throw new ForbiddenException();
+    if (user.role !== UserRole.ADMIN) {
+      this.submitLog(user, id, 'FORBIDDEN', 0);
+      throw new ForbiddenException();
+    }
 
     const applic = await this.prismaService.applications.findUnique({
       where: { id },
     });
-    if (!applic) throw new NotFoundException();
+    if (!applic) {
+      this.submitLog(user, id, 'NOTFOUND', 0);
+      throw new NotFoundException();
+    }
 
-    //Add Log Notifying that user attempted to access this
-    if (applic.reviewedAt) throw new ForbiddenException();
+    //Add Log Notifying that someone attempted to access this
+    if (applic.reviewedAt) {
+      this.submitLog(user, id, 'FORBIDDEN', 0, 'Already Reviewed');
+      throw new ForbiddenException();
+    }
 
     await this.prismaService.applications.update({
       where: { id },
       data: { result: action, reviewedAt: new Date() },
     });
+    this.submitLog(user, id, 'COMPLETED', 1, `${action} application ${id}`);
   }
 
-  async ticketsEnabled(serverId: string) {
+  async ticketsEnabled(serverId: string, user: UserDetails) {
     //Cant Call this as Normal User doesnt have access
     // const config = await this.getConfig(serverId, user);
 
@@ -168,8 +218,29 @@ export class GuildService {
       where: { id: serverId },
     });
 
-    if (!config) throw new NotFoundException();
+    if (!config) {
+      this.submitLog(user, serverId, 'NOTFOUND');
+      throw new NotFoundException();
+    }
 
+    this.submitLog(user, serverId);
     return config.ticketSystem;
+  }
+
+  private async submitLog(
+    user: UserDetails,
+    id?: number | string,
+    response?: ResponseType,
+    rows?: number,
+    info?: string
+  ) {
+    this.userLogs.createLog(user, {
+      componentName: 'GUILD',
+      componentType: GuildService.name,
+      componentId: id ? id.toString() : null,
+      numRows: rows,
+      information: info,
+      response,
+    });
   }
 }

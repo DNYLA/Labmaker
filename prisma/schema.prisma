@@ -22,7 +22,7 @@ model User {
   studentTickets Ticket[]        @relation("student")
   tutorTickets   Ticket[]        @relation("tutor")
   applications   Applications[]
-  // logs           UserLogs[]
+  logs           UserLogs[]
   notifications  Notifications[]
 }
 
@@ -138,21 +138,22 @@ model Log {
   redditConfig RedditConfig @relation(fields: [nodeId], references: [id])
 }
 
-// Complete Later
 model UserLogs {
-  id            Int         @id @default(autoincrement())
-  userId        String      @map("user_Id")
-  componentName String      @map("component_name")
-  componentType String      @map("component_type")
-  ipAddress     String      @map("ip_address")
-  userAgent     String      @map("user_agent")
-  referer String?
-  path String
-  action        UserLogType
+  id            Int          @id @default(autoincrement())
+  userId        String?      @map("user_Id") //If Not UserID=== Bot
+  componentName String       @map("component_name")
+  componentType String       @map("component_type")
+  componentId   String?      @map("component_id") //The Attrobite OD
+  ipAddress     String       @map("ip_address")
+  userAgent     String       @map("user_agent") //This should help identify what BOT. (Could store JWT token aswell)
+  referer       String?
   information   String?
-  timestamp     DateTime    @default(now())
-  numRows        Int         @default(1) @map("num_rows")
-  // user          User        @relation(fields: [userId], references: [id]) //Removed Because BOTS dont have UserAccounts
+  timestamp     DateTime     @default(now())
+  numRows       Int          @default(1) @map("num_rows")
+  path          String
+  method        RequestType
+  response      ResponseType @default(COMPLETED)
+  user          User?        @relation(fields: [userId], references: [id])
 }
 
 model Notifications {
@@ -165,7 +166,14 @@ model Notifications {
   user       User     @relation(fields: [fromUserId], references: [id])
 }
 
-enum UserLogType {
+enum ResponseType {
+  COMPLETED
+  FORBIDDEN
+  GONE
+  NOTFOUND
+}
+
+enum RequestType {
   GET
   PUT
   POST
