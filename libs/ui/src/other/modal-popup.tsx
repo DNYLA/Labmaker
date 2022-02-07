@@ -123,15 +123,29 @@ export function MultiModalWrapper({
   setOpen,
 }: MultiModalProps) {
   return (
-    <div>
+    <StyledMultiModalContainer>
+      <StyledClose onClick={() => setOpen && setOpen(false)}>X</StyledClose>
+
       {open && (
         <StyledMultiModalWrapper className="multi-modal">
           {children}
         </StyledMultiModalWrapper>
       )}
-    </div>
+    </StyledMultiModalContainer>
   );
 }
+
+const StyledClose = styled.span`
+  position: absolute;
+  top: 15px;
+  right: 30px;
+  font-size: 28px;
+  text-shadow: 1px 1px 4px #000;
+  z-index: 3;
+  cursor: pointer;
+`;
+
+const StyledMultiModalContainer = styled.div``;
 
 const StyledMultiModalWrapper = styled.div`
   display: flex;
@@ -139,7 +153,6 @@ const StyledMultiModalWrapper = styled.div`
   flex-grow: 0;
   align-items: center;
   position: absolute;
-  z-index: 1;
   top: 0;
   left: 0;
   width: 100vw;
@@ -147,6 +160,7 @@ const StyledMultiModalWrapper = styled.div`
   background: rgba(0, 0, 0, 0.5);
   overflow-y: auto;
   padding: 25px;
+  z-index: 1;
 
   & > ${StyledTagInputBox} {
     margin-bottom: 25px;
