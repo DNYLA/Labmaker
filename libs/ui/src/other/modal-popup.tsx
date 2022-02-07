@@ -122,6 +122,9 @@ export function MultiModalWrapper({
   open,
   setOpen,
 }: MultiModalProps) {
+  if (open) document.body.style.overflow = 'hidden';
+  else document.body.style.overflow = 'unset';
+
   return (
     <div>
       {open && (
