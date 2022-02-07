@@ -48,7 +48,7 @@ export function TutorApplications({
                 <p>Message: {app.applicationMessage}</p>
                 <p>Vouches: {app.vouchesLink}</p>
                 <p>Reddit: {app.redditUsername}</p>
-                <p>Subejcts: {app.subjects.toString()}</p>
+                <p>Subejcts: {app.subjects.join(', ')}</p>
                 <p>Created: {app.createdAt}</p>
               </ModalPopup>
             );
