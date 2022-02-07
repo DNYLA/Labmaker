@@ -28,22 +28,22 @@ export function ModalPopup({
       )}
 
       {open && (
-        <DialogContainer>
-          <DialogBox>
-            <TitleContainer>
+        <StyledDialogContainer>
+          <StyledDialogBox>
+            <StyledTitleContainer>
               <h1>{title}</h1>
               {setOpen && <span onClick={() => setOpen(false)}>X</span>}
-            </TitleContainer>
+            </StyledTitleContainer>
 
             <div className="childItems">{children}</div>
-          </DialogBox>
-        </DialogContainer>
+          </StyledDialogBox>
+        </StyledDialogContainer>
       )}
     </StyledTagInputBox>
   );
 }
 
-const StyledTagInputBox = styled.div`
+export const StyledTagInputBox = styled.div`
   color: #eee;
 `;
 
@@ -54,7 +54,7 @@ const StyledSpan = styled.span`
   }
 `;
 
-const TitleContainer = styled.span`
+const StyledTitleContainer = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,7 +77,7 @@ const TitleContainer = styled.span`
   }
 `;
 
-const DialogContainer = styled.div`
+export const StyledDialogContainer = styled.div`
   position: absolute;
   display: flex;
   justify-content: center;
@@ -90,7 +90,7 @@ const DialogContainer = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-const DialogBox = styled.div`
+export const StyledDialogBox = styled.div`
   position: fixed;
   width: 450px;
   max-height: 90%;
@@ -108,88 +108,5 @@ const DialogBox = styled.div`
     & > *:not(:last-child) {
       margin-bottom: 15px;
     }
-  }
-`;
-
-export interface MultiModalProps {
-  children: React.ReactNode;
-  open?: boolean;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export function MultiModalWrapper({
-  children,
-  open,
-  setOpen,
-}: MultiModalProps) {
-  if (open) document.body.style.overflow = 'hidden';
-  else document.body.style.overflow = 'unset';
-
-  return (
-    <div>
-      {open && (
-        <StyledMultiModalWrapper className="multi-modal">
-          <div>
-            <StyledRel>
-              <StyledClose onClick={() => setOpen && setOpen(false)}>
-                X
-              </StyledClose>
-            </StyledRel>
-
-            {children}
-          </div>
-        </StyledMultiModalWrapper>
-      )}
-    </div>
-  );
-}
-
-const StyledRel = styled.div`
-  position: relative;
-  top: 0px;
-  left: calc(100% + 20px);
-`;
-
-const StyledClose = styled.span`
-  position: fixed;
-  font-size: 28px;
-  text-shadow: 1px 1px 4px #000;
-  z-index: 3;
-  cursor: pointer;
-`;
-
-const StyledMultiModalWrapper = styled.div`
-  display: flex;
-  flex-flow: column;
-  flex-grow: 0;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  overflow-y: auto;
-  padding: 25px;
-  z-index: 1;
-
-  & div > ${StyledTagInputBox} {
-    margin-bottom: 25px;
-  }
-
-  ${DialogContainer} {
-    display: unset;
-    position: unset;
-    top: unset;
-    bottom: unset;
-    left: unset;
-    right: unset;
-    max-height: unset;
-    background: transparent;
-  }
-
-  ${DialogBox} {
-    position: unset;
-    max-height: unset;
   }
 `;
