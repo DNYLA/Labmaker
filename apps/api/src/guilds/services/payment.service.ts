@@ -5,10 +5,14 @@ import {
 } from '../dtos/create-payment.dto';
 import { Payment } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { UserLogsService } from '../../logs/logs.service';
 
 @Injectable()
 export class PaymentService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private userLogs: UserLogsService
+  ) {}
   private readonly logger = new Logger(PaymentService.name);
 
   async getPayments(serverId: string): Promise<Payment[]> {
