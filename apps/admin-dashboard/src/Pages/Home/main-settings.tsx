@@ -66,6 +66,7 @@ export function MainSettings({ config, setConfig }: MainSettingsProps) {
 
         <TagInputBox
           title={'Editors'}
+          infoMessage="Enter the Discord UserID for collabartors"
           items={config.nodeEditors}
           onChange={(updatedValues: string[]) =>
             setConfig({ ...config, nodeEditors: updatedValues })

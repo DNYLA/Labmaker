@@ -1,5 +1,6 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { InfoTitle } from './info-box';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -10,11 +11,17 @@ export interface IOnTagChange {
 export interface TagInputBoxProps {
   title: string;
   items: string[];
+  infoMessage?: string | React.ReactNode;
   onChange: IOnTagChange;
 }
 
 //Currently Broken Fix CSS
-export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
+export function TagInputBox({
+  title,
+  onChange,
+  items,
+  infoMessage,
+}: TagInputBoxProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -40,11 +47,20 @@ export function TagInputBox({ title, onChange, items }: TagInputBoxProps) {
 
   return (
     <StyledTagInputBox>
-      <StyledSpan onClick={() => setIsOpen(true)}>{title}</StyledSpan>
+      <StyledTitle onClick={() => setIsOpen(true)}>
+        <InfoTitle title={title} />
+      </StyledTitle>
+      {/* <StyledSpan onClick={() => setIsOpen(true)}>{title}</StyledSpan> */}
       {isOpen && (
         <DialogContainer>
           <DialogBox>
             <TitleContainer>
+              {/* <InfoTitle
+                title={title}
+                infoMessage={infoMessage}
+                header={true}
+              /> */}
+
               <h1>{title}</h1>
               <span onClick={() => setIsOpen(false)}>X</span>
             </TitleContainer>
@@ -76,8 +92,8 @@ const StyledTagInputBox = styled.div`
   color: #eee;
 `;
 
-const StyledSpan = styled.span`
-  :hover {
+const StyledTitle = styled.span`
+  *:hover {
     color: ${(p) => p.theme.navbar.title};
     cursor: pointer;
   }
