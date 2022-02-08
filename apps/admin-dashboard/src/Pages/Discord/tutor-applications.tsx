@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { InfoTitle, ModalPopup, MultiModalWrapper, Page } from '@labmaker/ui';
+import {
+  Button,
+  ComboContainer,
+  InfoTitle,
+  ModalPopup,
+  MultiModalWrapper,
+  Page,
+} from '@labmaker/ui';
 import { TutorApplication } from '@labmaker/shared';
 import { getApplications } from '@labmaker/wrapper';
 import { useParams } from 'react-router-dom';
@@ -75,6 +82,7 @@ export function TutorApplications() {
       );
     }
 
+    // todo: center this
     return <div>No Tutor Applications</div>;
   };
 
@@ -96,6 +104,11 @@ export function TutorApplications() {
           <p>Reddit: {activeApp.redditUsername}</p>
           <p>Subejcts: {activeApp.subjects.join(', ')}</p>
           <p>Created: {activeApp.createdAt}</p>
+
+          <ComboContainer>
+            <Button>Accept</Button>
+            <Button>Deny</Button>
+          </ComboContainer>
         </ModalPopup>
       )}
     </StyledTutorAppsPage>
