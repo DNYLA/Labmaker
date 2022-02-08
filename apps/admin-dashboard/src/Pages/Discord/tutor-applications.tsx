@@ -1,31 +1,18 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-  DropDown,
-  InputBox,
-  Item,
-  Page,
-  SettingsContainer,
-  SwitchToggle,
-} from '@labmaker/ui';
-import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
-import {
-  ChannelType,
-  CreateApplication,
-  PartialGuildChannel,
-  PartialRole,
-  TutorApplication,
-} from '@labmaker/shared';
-import { getApplications, getChannels, getRoles } from '@labmaker/wrapper';
-import { parseChannels, parseRoles } from '../../utils/helpers';
+import { Button, ComboContainer, InfoTitle, ModalPopup } from '@labmaker/ui';
+import { TutorApplication } from '@labmaker/shared';
+import { getApplications } from '@labmaker/wrapper';
 import { useParams } from 'react-router-dom';
 
 /* eslint-disable-next-line */
 export interface TutorApplicationsProps {}
 
-export function TutorApplications(props: TutorApplicationsProps) {
+export function TutorApplications() {
   const [loading, setLoading] = useState(false);
   const [applications, setApplications] = useState<TutorApplication[]>([]);
+  const [modalShown, setModalShown] = useState(false);
+  const [activeApp, setActiveApp] = useState<TutorApplication>(); // Active application for modal
   const { id } = useParams();
 
   useEffect(() => {
@@ -39,31 +26,115 @@ export function TutorApplications(props: TutorApplicationsProps) {
     setLoading(false);
   }, [id]);
 
-  return (
-    <Page>
-      {applications.length > 0 && (
-        <div>
+  const renderTutorApps = () => {
+    if (applications.length > 0) {
+      return (
+        <StyledTutorAppsContainer>
           {applications.map((app) => {
             return (
-              //Covert to Modal OnClick Which allows you to accept or Decline
-              <div>
-                <p>User ID: {app.userId}</p>
-                <p>Message: {app.applicationMessage}</p>
-                <p>Vouches: {app.vouchesLink}</p>
-                <p>Reddit Username: {app.redditUsername}</p>
-                <p>Subejcts: {app.subjects.toString()}</p>
-                <p>Created: {app.createdAt}</p>
-              </div>
+              <StyledTutorApp
+                key={app.id}
+                onClick={() => {
+                  setActiveApp(app);
+                  setModalShown(true);
+                }}
+              >
+                <p>
+                  <b>User ID:</b> {app.userId}
+                </p>
+                <p>
+                  <b>Message:</b> {app.applicationMessage}
+                </p>
+                <p>
+                  <b>Vouches:</b> {app.vouchesLink}
+                </p>
+                <p>
+                  <b>Reddit:</b> {app.redditUsername}
+                </p>
+                <p>
+                  <b>Subejcts:</b> {app.subjects.join(', ')}
+                </p>
+                <p>
+                  <b>Created:</b> {app.createdAt}
+                </p>
+              </StyledTutorApp>
             );
           })}
-        </div>
+        </StyledTutorAppsContainer>
+      );
+    }
+
+    // todo: center this
+    return <div>No Tutor Applications</div>;
+  };
+
+  return (
+    <StyledTutorAppsPage>
+      <InfoTitle title={'Tutor Applications'} header={true} />
+
+      {renderTutorApps()}
+
+      {activeApp && (
+        <ModalPopup
+          title={activeApp.userId}
+          open={modalShown}
+          setOpen={setModalShown}
+        >
+          <p>User ID: {activeApp.userId}</p>
+          <p>Message: {activeApp.applicationMessage}</p>
+          <p>Vouches: {activeApp.vouchesLink}</p>
+          <p>Reddit: {activeApp.redditUsername}</p>
+          <p>Subejcts: {activeApp.subjects.join(', ')}</p>
+          <p>Created: {activeApp.createdAt}</p>
+
+          <ComboContainer>
+            <Button>Accept</Button>
+            <Button>Deny</Button>
+          </ComboContainer>
+        </ModalPopup>
       )}
-    </Page>
+    </StyledTutorAppsPage>
   );
 }
 
-const StyledSpan = styled.span`
-  padding-right: 5px;
-  margin-left: 2px;
-  margin-bottom: 5px;
+const StyledTutorAppsPage = styled.div`
+  & > * {
+    margin-bottom: 15px;
+  }
+`;
+
+const StyledTutorAppsContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  border-radius: 5px;
+`;
+
+const StyledTutorApp = styled.div`
+  padding: 10px 15px;
+  max-width: 350px;
+  border-radius: 5px;
+  background-color: ${(p) => p.theme.input.backCol};
+  font-family: 'Roboto';
+  cursor: pointer;
+  transition: background-color 100ms ease-in;
+
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &:hover {
+    background-color: ${(p) => p.theme.input.activeCol};
+  }
+
+  & > * {
+    margin-bottom: 1px;
+  }
+
+  &:not(:last-child) {
+    margin-right: 15px;
+  }
 `;
