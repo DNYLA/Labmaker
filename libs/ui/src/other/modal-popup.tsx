@@ -60,6 +60,7 @@ const StyledTitleContainer = styled.span`
   margin: 0 10px;
 
   h1 {
+    text-align: left;
     max-width: 300px;
     white-space: nowrap;
     overflow: hidden;

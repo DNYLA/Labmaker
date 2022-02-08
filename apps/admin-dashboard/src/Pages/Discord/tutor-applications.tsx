@@ -1,13 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-  Button,
-  ComboContainer,
-  InfoTitle,
-  ModalPopup,
-  MultiModalWrapper,
-  Page,
-} from '@labmaker/ui';
+import { Button, ComboContainer, InfoTitle, ModalPopup } from '@labmaker/ui';
 import { TutorApplication } from '@labmaker/shared';
 import { getApplications } from '@labmaker/wrapper';
 import { useParams } from 'react-router-dom';

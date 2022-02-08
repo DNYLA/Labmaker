@@ -23,4 +23,3 @@ export * from './themes';
 export * from './login';
 
 export * from './other/modal-popup';
-export * from './other/multi-modal-wrapper';
