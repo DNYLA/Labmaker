@@ -1,6 +1,4 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
@@ -19,6 +17,9 @@ export function ModalPopup({
   open = true,
   setOpen,
 }: ModalPopupProps) {
+  if (open) document.body.style.overflow = 'hidden';
+  else document.body.style.overflow = 'unset';
+
   return (
     <StyledTagInputBox>
       {design && (
@@ -55,20 +56,22 @@ const StyledSpan = styled.span`
 `;
 
 const StyledTitleContainer = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
   padding-top: 5px;
+  margin: 0 10px;
 
   h1 {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin-bottom: 10px;
   }
 
+  /* X Button */
   span {
-    right: 30px;
-    top: 30px;
     position: absolute;
+    right: 30px;
+    top: 28px;
   }
 
   span:hover {
@@ -78,7 +81,7 @@ const StyledTitleContainer = styled.span`
 `;
 
 export const StyledDialogContainer = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;

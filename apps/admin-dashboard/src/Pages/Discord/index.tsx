@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
 import { TicketSettings } from './ticket-settings';
 import { TicketMessage } from './ticket-message-settings';
+import { TutorApplications } from './tutor-applications';
 
 /* eslint-disable-next-line */
 export interface DiscordProps {}
@@ -41,6 +42,8 @@ export function Discord(props: DiscordProps) {
           <ControlsContainer>
             <UserControls onCreate={createPayment} onSave={saveData} />
           </ControlsContainer>
+
+          <TutorApplications />
 
           <ComboContainer>
             <GeneralSettings />
@@ -81,4 +84,5 @@ const SelectorContainer = styled.div`
 const ControlsContainer = styled.div`
   display: flex;
   position: relative;
+  margin-bottom: 15px;
 `;

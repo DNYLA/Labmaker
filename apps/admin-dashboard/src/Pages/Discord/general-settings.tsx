@@ -79,11 +79,11 @@ export function GeneralSettings(props: GeneralSettingsProps) {
             }}
           /> */}
 
-          <TutorApplications
+          {/* <TutorApplications
             design={<span>Tutor Applications</span>}
             open={tutorAppsOpen}
             setOpen={setTutorAppsOpen}
-          />
+          /> */}
 
           <SwitchToggle
             message="Enable Tickets"

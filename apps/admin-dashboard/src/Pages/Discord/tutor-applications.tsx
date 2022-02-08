@@ -1,24 +1,27 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ModalPopup, MultiModalWrapper, Page } from '@labmaker/ui';
+import { InfoTitle, ModalPopup, MultiModalWrapper, Page } from '@labmaker/ui';
 import { TutorApplication } from '@labmaker/shared';
 import { getApplications } from '@labmaker/wrapper';
 import { useParams } from 'react-router-dom';
 
 /* eslint-disable-next-line */
 export interface TutorApplicationsProps {
-  design: React.ReactNode;
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  // design: React.ReactNode;
+  // open: boolean;
+  // setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function TutorApplications({
-  design,
-  open,
-  setOpen,
-}: TutorApplicationsProps) {
+// export function TutorApplications({
+//   design,
+//   open,
+//   setOpen,
+// }: TutorApplicationsProps) {
+export function TutorApplications() {
   const [loading, setLoading] = useState(false);
   const [applications, setApplications] = useState<TutorApplication[]>([]);
+  const [modalShown, setModalShown] = useState(false);
+  const [activeApp, setActiveApp] = useState<TutorApplication>(); // Active application for modal
   const { id } = useParams();
 
   console.log('TUTOR APPLICATIONS');
@@ -34,34 +37,109 @@ export function TutorApplications({
     setLoading(false);
   }, [id]);
 
-  return (
-    <div>
-      <StyledSpan onClick={() => setOpen(true)}>{design}</StyledSpan>
-
-      {applications.length > 0 && (
-        <MultiModalWrapper open={open} setOpen={setOpen}>
+  const renderTutorApps = () => {
+    if (applications.length > 0) {
+      return (
+        <StyledTutorAppsContainer>
           {applications.map((app) => {
             return (
-              //Covert to Modal OnClick Which allows you to accept or Decline
-              <ModalPopup title={app.userId} key={app.id}>
-                <p>User ID: {app.userId}</p>
-                <p>Message: {app.applicationMessage}</p>
-                <p>Vouches: {app.vouchesLink}</p>
-                <p>Reddit: {app.redditUsername}</p>
-                <p>Subejcts: {app.subjects.join(', ')}</p>
-                <p>Created: {app.createdAt}</p>
-              </ModalPopup>
+              <StyledTutorApp
+                key={app.id}
+                onClick={() => {
+                  setActiveApp(app);
+                  setModalShown(true);
+                }}
+              >
+                <p>
+                  <b>User ID:</b> {app.userId}
+                </p>
+                <p>
+                  <b>Message:</b> {app.applicationMessage}
+                </p>
+                <p>
+                  <b>Vouches:</b> {app.vouchesLink}
+                </p>
+                <p>
+                  <b>Reddit:</b> {app.redditUsername}
+                </p>
+                <p>
+                  <b>Subejcts:</b> {app.subjects.join(', ')}
+                </p>
+                <p>
+                  <b>Created:</b> {app.createdAt}
+                </p>
+              </StyledTutorApp>
             );
           })}
-        </MultiModalWrapper>
+        </StyledTutorAppsContainer>
+      );
+    }
+
+    return <div>No Tutor Applications</div>;
+  };
+
+  return (
+    <StyledTutorAppsPage>
+      <InfoTitle title={'Tutor Applications'} header={true} />
+
+      {renderTutorApps()}
+
+      {activeApp && (
+        <ModalPopup
+          title={activeApp.userId}
+          open={modalShown}
+          setOpen={setModalShown}
+        >
+          <p>User ID: {activeApp.userId}</p>
+          <p>Message: {activeApp.applicationMessage}</p>
+          <p>Vouches: {activeApp.vouchesLink}</p>
+          <p>Reddit: {activeApp.redditUsername}</p>
+          <p>Subejcts: {activeApp.subjects.join(', ')}</p>
+          <p>Created: {activeApp.createdAt}</p>
+        </ModalPopup>
       )}
-    </div>
+    </StyledTutorAppsPage>
   );
 }
 
-const StyledSpan = styled.span`
-  :hover {
-    color: ${(p) => p.theme.navbar.title};
-    cursor: pointer;
+const StyledTutorAppsPage = styled.div`
+  & > * {
+    margin-bottom: 15px;
+  }
+`;
+
+const StyledTutorAppsContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  border-radius: 5px;
+`;
+
+const StyledTutorApp = styled.div`
+  padding: 10px 15px;
+  max-width: 350px;
+  border-radius: 5px;
+  background-color: ${(p) => p.theme.input.backCol};
+  font-family: 'Roboto';
+  cursor: pointer;
+  transition: background-color 100ms ease-in;
+
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &:hover {
+    background-color: ${(p) => p.theme.input.activeCol};
+  }
+
+  & > * {
+    margin-bottom: 1px;
+  }
+
+  &:not(:last-child) {
+    margin-right: 15px;
   }
 `;
