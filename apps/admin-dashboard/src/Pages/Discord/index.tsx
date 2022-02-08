@@ -4,9 +4,8 @@ import {
   LoadingSpinner,
   Page,
   Content,
-  Item,
 } from '@labmaker/ui';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { GeneralSettings } from './general-settings';
 import { PaymentSettings } from './payment-settings';

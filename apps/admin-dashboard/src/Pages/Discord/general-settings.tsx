@@ -5,12 +5,8 @@ import {
   InputBox,
   SettingsContainer,
   SwitchToggle,
-  ModalPopup,
 } from '@labmaker/ui';
 import { useGuildLogic } from '../../utils/hooks/useGuildLogic';
-import { useNavigate } from 'react-router-dom';
-import { TutorApplications } from './tutor-applications';
-import { useState } from 'react';
 
 /* eslint-disable-next-line */
 export interface GeneralSettingsProps {
@@ -23,14 +19,6 @@ export interface GeneralSettingsProps {
 export function GeneralSettings(props: GeneralSettingsProps) {
   const { config, parsedGuilds, onConfigIdChanged, setConfig } =
     useGuildLogic();
-
-  const navigate = useNavigate();
-
-  const [tutorAppsOpen, setTutorAppsOpen] = useState(false);
-
-  const handleTutorApps = () => {
-    // navigate('applications');
-  };
 
   return (
     <SettingsContainer id="GeneralSettings">
@@ -77,12 +65,6 @@ export function GeneralSettings(props: GeneralSettingsProps) {
                 autoSwitcher: !config.autoSwitcher,
               });
             }}
-          /> */}
-
-          {/* <TutorApplications
-            design={<span>Tutor Applications</span>}
-            open={tutorAppsOpen}
-            setOpen={setTutorAppsOpen}
           /> */}
 
           <SwitchToggle

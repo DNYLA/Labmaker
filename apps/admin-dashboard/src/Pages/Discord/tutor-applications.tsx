@@ -6,25 +6,14 @@ import { getApplications } from '@labmaker/wrapper';
 import { useParams } from 'react-router-dom';
 
 /* eslint-disable-next-line */
-export interface TutorApplicationsProps {
-  // design: React.ReactNode;
-  // open: boolean;
-  // setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+export interface TutorApplicationsProps {}
 
-// export function TutorApplications({
-//   design,
-//   open,
-//   setOpen,
-// }: TutorApplicationsProps) {
 export function TutorApplications() {
   const [loading, setLoading] = useState(false);
   const [applications, setApplications] = useState<TutorApplication[]>([]);
   const [modalShown, setModalShown] = useState(false);
   const [activeApp, setActiveApp] = useState<TutorApplication>(); // Active application for modal
   const { id } = useParams();
-
-  console.log('TUTOR APPLICATIONS');
 
   useEffect(() => {
     setLoading(true);
