@@ -11,6 +11,7 @@ export const Content = styled.div`
   display: flex;
   flex-flow: column;
   min-width: 750px;
+  max-width: 750px;
   transition: min-width 200ms ease;
 
   @media (min-width: 1000px) {

@@ -171,6 +171,8 @@ enum ResponseType {
   FORBIDDEN
   GONE
   NOTFOUND
+  UNAVAILBLE
+  CONFLICT
 }
 
 enum RequestType {

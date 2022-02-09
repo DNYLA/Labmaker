@@ -1,45 +1,50 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
 export interface ModalPopupProps {
-  title: string;
-  design: any;
+  title?: string;
+  design?: any;
   children: ReactNode;
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-//Currently Broken Fix CSS
 export function ModalPopup({
   title,
   design,
   children,
-  open,
+  open = true,
   setOpen,
 }: ModalPopupProps) {
+  if (open) document.body.style.overflow = 'hidden';
+  else document.body.style.overflow = 'unset';
+
   return (
     <StyledTagInputBox>
-      <StyledSpan onClick={() => setOpen(true)}>{design}</StyledSpan>
+      {design && (
+        <StyledSpan onClick={() => setOpen && setOpen(true)}>
+          {design}
+        </StyledSpan>
+      )}
+
       {open && (
-        <DialogContainer>
-          <DialogBox>
-            <TitleContainer>
+        <StyledDialogContainer>
+          <StyledDialogBox>
+            <StyledTitleContainer>
               <h1>{title}</h1>
-              <span onClick={() => setOpen(false)}>X</span>
-            </TitleContainer>
+              {setOpen && <span onClick={() => setOpen(false)}>X</span>}
+            </StyledTitleContainer>
 
             <div className="childItems">{children}</div>
-          </DialogBox>
-        </DialogContainer>
+          </StyledDialogBox>
+        </StyledDialogContainer>
       )}
     </StyledTagInputBox>
   );
 }
 
-const StyledTagInputBox = styled.div`
+export const StyledTagInputBox = styled.div`
   color: #eee;
 `;
 
@@ -50,21 +55,24 @@ const StyledSpan = styled.span`
   }
 `;
 
-const TitleContainer = styled.span`
-  display: flex;
-  align-items: center;
+const StyledTitleContainer = styled.span`
   padding-top: 5px;
-  justify-content: center;
-  align-content: center;
+  margin: 0 10px;
 
   h1 {
+    text-align: left;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin-bottom: 10px;
   }
 
+  /* X Button */
   span {
-    right: 30px;
-    top: 30px;
     position: absolute;
+    right: 30px;
+    top: 28px;
   }
 
   span:hover {
@@ -73,8 +81,8 @@ const TitleContainer = styled.span`
   }
 `;
 
-const DialogContainer = styled.div`
-  position: absolute;
+export const StyledDialogContainer = styled.div`
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,10 +90,11 @@ const DialogContainer = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
+  z-index: 1;
   background: rgba(0, 0, 0, 0.5);
 `;
 
-const DialogBox = styled.div`
+export const StyledDialogBox = styled.div`
   position: fixed;
   width: 450px;
   max-height: 90%;
