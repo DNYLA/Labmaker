@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, ComboContainer, InfoTitle, ModalPopup } from '@labmaker/ui';
 import { TutorApplication } from '@labmaker/shared';
-import { getApplications } from '@labmaker/wrapper';
+import { getApplications, reviewApplication } from '@labmaker/wrapper';
 import { useParams } from 'react-router-dom';
 
 /* eslint-disable-next-line */
@@ -68,6 +68,15 @@ export function TutorApplications() {
     return <div>No Tutor Applications</div>;
   };
 
+  const proceedApplication = () => {
+    console.log('opk', activeApp);
+    const app = activeApp;
+
+    if (app) {
+      reviewApplication(activeApp?.id, 'INTERVIEW');
+    }
+  };
+
   return (
     <StyledTutorAppsPage>
       <InfoTitle title={'Tutor Applications'} header={true} />
@@ -88,7 +97,7 @@ export function TutorApplications() {
           <p>Created: {activeApp.createdAt}</p>
 
           <ComboContainer>
-            <Button>Accept</Button>
+            <Button onClick={() => proceedApplication()}>Interview</Button>
             <Button>Deny</Button>
           </ComboContainer>
         </ModalPopup>

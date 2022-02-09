@@ -123,6 +123,7 @@ model Applications {
 enum ApplicationResult {
   ACCEPTED
   REJECTED
+  INTERVIEW
   HOLD //Probably wont get used but ill include it incase we have a use for it in the future
 }
 

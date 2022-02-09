@@ -6,12 +6,19 @@ import {
   SubscribeMessage,
   MessageBody,
 } from '@nestjs/websockets';
-
 import {} from '@nestjs/platform-socket.io';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user/user.service';
 import { Server, Socket } from 'socket.io';
-import { DiscordConfig, Log, RedditConfig, Role, Ticket } from '@prisma/client';
+import {
+  Applications,
+  DiscordConfig,
+  Log,
+  RedditConfig,
+  Role,
+  Ticket,
+  User,
+} from '@prisma/client';
 import { TicketChannelInfo, TicketInfo, TicketNotif } from '@labmaker/shared';
 import { UseGuards } from '@nestjs/common';
 import { WSGuard } from '../auth/guards/WSAuth.guard';
@@ -83,6 +90,14 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
   notifyTicket(ticket: Ticket, type: TicketNotif) {
     const info: TicketInfo = { ticket, type };
     this.ws.to('bot').emit('ticket', JSON.stringify(info));
+  }
+
+  notifyTutorApplication(
+    application: Applications & {
+      user: User;
+    }
+  ) {
+    this.ws.to('bot').emit('tutorApplication', JSON.stringify(application));
   }
 
   deleteConfig(id: string) {

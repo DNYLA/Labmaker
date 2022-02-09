@@ -189,24 +189,36 @@ export class GuildService {
       throw new ForbiddenException();
     }
 
-    const applic = await this.prismaService.applications.findUnique({
+    let applic = await this.prismaService.applications.findUnique({
       where: { id },
+      include: { user: true },
     });
+
     if (!applic) {
       this.submitLog(user, id, 'NOTFOUND', 0);
       throw new NotFoundException();
     }
 
     //Add Log Notifying that someone attempted to access this
-    if (applic.reviewedAt) {
+    if (applic.result == 'ACCEPTED' || applic.result == 'REJECTED') {
       this.submitLog(user, id, 'FORBIDDEN', 0, 'Already Reviewed');
       throw new ForbiddenException();
     }
 
-    await this.prismaService.applications.update({
+    // Update application with new result and reviewedAt date.
+    // Also updates the `applic` var with the new application.
+    applic = await this.prismaService.applications.update({
       where: { id },
       data: { result: action, reviewedAt: new Date() },
+      include: { user: true },
     });
+
+    // If application is being set to INTERVIEW result,
+    // notify discord bot to create a channel for the interview.
+    if (action == 'INTERVIEW') {
+      this.wsGateway.notifyTutorApplication(applic);
+    }
+
     this.submitLog(user, id, 'COMPLETED', 1, `${action} application ${id}`);
   }
 

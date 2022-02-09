@@ -18,7 +18,6 @@ Logger.log(`Running in ${process.env.ENVIRONMENT ?? 'Development'}`);
     AuthModule,
     UserModule,
     // PayModule,
-    PrismaModule,
     WebsocketModule,
     GuildsModule,
     LogsModule,

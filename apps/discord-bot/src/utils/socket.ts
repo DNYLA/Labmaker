@@ -77,6 +77,12 @@ export const listen = (accessToken: string, client: DiscordClient) => {
         );
     }
   });
+
+  socket.on('tutorApplication', async (json: string) => {
+    const application = JSON.parse(json);
+
+    console.log(application);
+  });
 };
 
 const handleCreate = async (client: DiscordClient, ticket: Ticket) => {
