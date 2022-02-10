@@ -224,6 +224,10 @@ const handleTutorApplicationInterview = async (
   channel.send(
     `Congratulations <@${application.user.id}>! Your application for the Tutor role have been moved to the interview stage. Head over to the server and get back to us with when you are available for the interview. Good luck!`
   );
+
+  channel.send({
+    embeds: [await Logs.GenerateTutorApplicationEmbed(application, applicant)],
+  });
 };
 
 const hideChannel = async (client: DiscordClient, ticket: Ticket) => {
