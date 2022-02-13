@@ -138,6 +138,25 @@ export function showConfirmation(
   });
 }
 
+export function showReviewBtns(channel: TextChannel, msg?: string) {
+  if (!msg) msg = 'Accept or reject the application using the buttons below.';
+
+  const acceptBtn = new MessageButton()
+    .setStyle('SUCCESS')
+    .setLabel('Accept')
+    .setCustomId(`test2`);
+
+  const rejectBtn = new MessageButton()
+    .setStyle('DANGER')
+    .setLabel('Reject')
+    .setCustomId(`test`);
+
+  return channel.send({
+    content: msg,
+    components: [new MessageActionRow().addComponents([acceptBtn, rejectBtn])],
+  });
+}
+
 export function parseTicketMessage(
   toParse: string,
   config: GuildConfig,

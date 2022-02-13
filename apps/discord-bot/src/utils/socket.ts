@@ -9,7 +9,7 @@ import DiscordClient from './client';
 import { io } from 'socket.io-client';
 import { Permissions } from 'discord.js';
 import Logs from './Logs';
-import { parseTicketMessage } from './Helpers';
+import { parseTicketMessage, showReviewBtns } from './Helpers';
 import { ApplicationResult, Applications, User } from '@prisma/client';
 
 export const listen = (accessToken: string, client: DiscordClient) => {
@@ -225,9 +225,18 @@ const handleTutorApplicationInterview = async (
     `Congratulations <@${application.user.id}>! Your application for the Tutor role have been moved to the interview stage. Head over to the server and get back to us with when you are available for the interview. Good luck!`
   );
 
-  channel.send({
-    embeds: [await Logs.GenerateTutorApplicationEmbed(application, applicant)],
-  });
+  channel
+    .send({
+      embeds: [
+        await Logs.GenerateTutorApplicationEmbed(application, applicant),
+      ],
+    })
+    .then((msg) => msg.pin());
+
+  showReviewBtns(
+    channel,
+    'Use the `!review` command to bring up the accept/reject buttons again!'
+  );
 };
 
 const hideChannel = async (client: DiscordClient, ticket: Ticket) => {
