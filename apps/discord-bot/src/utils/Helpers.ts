@@ -8,6 +8,7 @@ import {
   TextChannel,
 } from 'discord.js';
 import DiscordClient from './client';
+import { InteractionInfo, InteractionArea } from '../events/InteractionCreated';
 
 /**
  * Checks if member has any of the required roles/perms.
@@ -144,7 +145,12 @@ export function showReviewBtns(channel: TextChannel, msg?: string) {
   const acceptBtn = new MessageButton()
     .setStyle('SUCCESS')
     .setLabel('Accept')
-    .setCustomId(`test2`);
+    .setCustomId(
+      JSON.stringify(<InteractionInfo>{
+        areaId: InteractionArea.TutorInterviewReview,
+        payload: 'hello',
+      })
+    );
 
   const rejectBtn = new MessageButton()
     .setStyle('DANGER')

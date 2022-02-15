@@ -9,14 +9,47 @@ import {
 import Event from '../utils/Base/Event';
 import DiscordClient from '../utils/client';
 
-export default class MessageEvent extends Event {
+export enum InteractionArea {
+  PaymentOption,
+  CreatePPOrder,
+  TutorInterviewReview,
+}
+
+// All customIds for MessageButtons should use this
+// interface for setting it, then JSON stringify it.
+// It will be parsed again in the InteractionCreated event.
+export interface InteractionInfo {
+  areaId: InteractionArea;
+  payload: string;
+}
+
+export default class InteractionCreatedEvent extends Event {
   constructor() {
     super('interactionCreate');
   }
 
   async run(client: DiscordClient, interaction: Interaction) {
     if (!interaction.isButton()) return;
-    console.log('Interactions Disabled');
+
+    const { areaId, payload } = JSON.parse(
+      interaction.customId
+    ) as InteractionInfo;
+
+    switch (areaId) {
+      case InteractionArea.PaymentOption:
+        console.log('Payment Option');
+        break;
+      case InteractionArea.CreatePPOrder:
+        console.log('Create PP Order');
+        break;
+      case InteractionArea.TutorInterviewReview:
+        await this.handleTutorInterviewReview(payload);
+        break;
+      default:
+        console.log('InteractionCreated: Invalid case encountered.');
+        break;
+    }
+
     // // Split interaction id by ":".
     // // The should only be one colon, the left side being the
     // // type and the right being its value (eg: area:value).
@@ -68,6 +101,10 @@ export default class MessageEvent extends Event {
     //     );
     //     break;
     // }
+  }
+
+  private async handleTutorInterviewReview(payload) {
+    console.log(payload);
   }
 
   // private async handlePaymentOptionEv(
