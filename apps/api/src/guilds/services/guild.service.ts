@@ -5,13 +5,7 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  ApplicationResult,
-  Applications,
-  DiscordConfig,
-  ResponseType,
-  Role,
-} from '@prisma/client';
+import { ApplicationResult, DiscordConfig, ResponseType } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserDetails } from '../../utils/types';
 import { PaymentService } from './payment.service';
@@ -22,7 +16,6 @@ import { GuildData, PartialGuildChannel, PartialRole } from '@labmaker/shared';
 import { DiscordHttpService } from '../../discord/services/discord-http.service';
 import { CreateApplicationDTO } from '../dtos/apply-tutor.dto';
 import { UserLogsService } from '../../logs/logs.service';
-import { NOTFOUND } from 'dns';
 
 @Injectable()
 export class GuildService {
@@ -52,15 +45,24 @@ export class GuildService {
       this.submitLog(user, id, 'FORBIDDEN', 0);
       throw new ForbiddenException();
     }
-    const config = await this.prismaService.discordConfig.findUnique({
+
+    let config = await this.prismaService.discordConfig.findUnique({
       where: { id },
     });
 
-    // if (!config) return this.createConfigFromId(id);
     if (!config) {
-      this.submitLog(user, id, 'NOTFOUND');
-      throw new NotFoundException('Unable to find config');
+      this.submitLog(
+        user,
+        id,
+        'COMPLETED',
+        undefined,
+        'Created missing discord config'
+      );
+
+      const guild = (await this.discordHttpService.fetchGuildById(id)).data;
+      config = await this.createConfig(id, guild.name);
     }
+
     if (!payments) {
       this.submitLog(user, id);
       return config;
