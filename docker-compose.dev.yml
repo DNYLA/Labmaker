@@ -14,5 +14,6 @@ services:
     ports:
       - '5432:5432'
     environment:
+      # First db name is same as username
       POSTGRES_USER: lbmkr
       POSTGRES_PASSWORD: 1234
