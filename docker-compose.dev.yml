@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  # ONLY USED FOR LOCAL DEVELOPMENT!
+  # If used for any live db, would be a good idea to move
+  # password to an env var.
+  # On first open of db, run prisma migrate dev task to sync db.
+  db:
+    container_name: lbmkr-postgres
+    image: postgres:14
+    restart: unless-stopped
+    volumes:
+      - ./lbmkr-containers/postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: lbmkr
+      POSTGRES_PASSWORD: 1234
