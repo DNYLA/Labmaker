@@ -40,7 +40,7 @@ export class GuildController {
     return this.guildService.getConfigs();
   }
 
-  @Post('/:id')
+  @Post('/config/:id')
   createConfig(
     @Param('id') id: string,
     @Query('name') name: string

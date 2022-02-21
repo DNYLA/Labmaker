@@ -18,7 +18,7 @@ export const getGuildConfig = (serverId: string) =>
   AXIOS.get<GuildConfig>(`/guilds/${serverId}?payments=false`);
 
 export const createGuildConfig = (serverId: string, name: string) =>
-  AXIOS.post<GuildConfig>(`/guilds/${serverId}?name=${name}`);
+  AXIOS.post<GuildConfig>(`/guilds/config/${serverId}?name=${name}`);
 
 export const updateGuildConfig = (config: GuildConfig) =>
   AXIOS.put<GuildConfig>(`guilds`, config);
