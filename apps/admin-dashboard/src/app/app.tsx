@@ -7,9 +7,11 @@ import { Logs } from '../Pages/Logs';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFetchUser } from '../utils/hooks/useFetchUser';
-import { routes } from '../utils/routes';
+import { routes, superRoutes } from '../utils/routes';
 import { GuildsMenu } from '../Pages/Discord/guilds-menu';
 import { Discord } from '../Pages/Discord';
+import { UserRole } from '@labmaker/wrapper';
+import { ClientsPage } from '../Pages/Clients';
 
 const StyledApp = styled.div`
   /* background-color: ${(p) => p.theme.base.backCol};
@@ -50,7 +52,7 @@ export function App() {
         <>
           <Navbar
             title={'LABMAKER'}
-            items={routes}
+            items={user.role === 'SUPERADMIN' ? superRoutes : routes}
             avatarUrl={
               user.avatar
                 ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`
@@ -62,6 +64,7 @@ export function App() {
             <Route path="/discord" element={<GuildsMenu />} />
             <Route path="/discord/:id" element={<Discord />} />
             <Route path="/logs" element={<Logs />} />
+            <Route path="/clients" element={<ClientsPage />} />
           </Routes>
         </>
       )}

@@ -181,3 +181,17 @@ export enum ChannelType {
   GUILD_PRIVATE_THREAD = 9,
   GUILD_STAGE_VOICE = 10,
 }
+
+export type Client = {
+  clientId: string;
+  username: string;
+  description: string;
+  token: string;
+  scopes: string[];
+  creatorId: string;
+};
+
+export type CreateClient = {
+  username: string;
+  description: string;
+};

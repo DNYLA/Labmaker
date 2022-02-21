@@ -76,6 +76,15 @@ export type LogInfo = {
   response?: ResponseType;
 };
 
+export type CreateUserLog = {
+  componentName: string;
+  componentType: string;
+  componentId?: string;
+  information?: string;
+  numRows?: number;
+  response?: ResponseType;
+};
+
 // const userWithNodes = Prisma.validator<Prisma.UserArgs>()({
 //   include: { nodes: true },
 // });

@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Log, Role, Ticket } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserDetails } from '../utils/types';
+import { CreateUserLog, UserDetails } from '../utils/types';
 import { LogInfo } from '../utils/types';
 
 @Injectable()
 export class UserLogsService {
   constructor(private prismaService: PrismaService) {}
 
-  async createLog(user: UserDetails, info: LogInfo): Promise<void> {
+  async createLog(user: UserDetails, info: CreateUserLog): Promise<void> {
     const {
       componentName,
       componentType,
