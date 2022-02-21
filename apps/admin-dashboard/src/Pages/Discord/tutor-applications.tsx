@@ -17,7 +17,9 @@ export function TutorApplications() {
 
   useEffect(() => {
     setLoading(true);
+
     if (!id) return;
+
     getApplications(id)
       .then(({ data }) => {
         setApplications(data);

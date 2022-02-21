@@ -114,7 +114,7 @@ export function ApplyTutorPage(props: ApplyTutor) {
         {canApply && (
           <SettingsContainer>
             <InfoTitle
-              title={'Create Ticket Form'}
+              title={'Tutor Application'}
               header={true}
               center={true}
             />
