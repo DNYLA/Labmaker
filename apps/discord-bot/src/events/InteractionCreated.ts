@@ -1,3 +1,5 @@
+import { reviewApplication } from '@labmaker/wrapper';
+import { ApplicationResult } from '@prisma/client';
 import {
   ButtonInteraction,
   Interaction,
@@ -15,12 +17,18 @@ export enum InteractionArea {
   TutorInterviewReview,
 }
 
+export interface InteractionInfoPayload {
+  status: string;
+  data?: string | number;
+}
+
 // All customIds for MessageButtons should use this
 // interface for setting it, then JSON stringify it.
 // It will be parsed again in the InteractionCreated event.
 export interface InteractionInfo {
   areaId: InteractionArea;
-  payload: string;
+  payload: InteractionInfoPayload;
+  // add roles/ fields
 }
 
 export default class InteractionCreatedEvent extends Event {
@@ -43,7 +51,7 @@ export default class InteractionCreatedEvent extends Event {
         console.log('Create PP Order');
         break;
       case InteractionArea.TutorInterviewReview:
-        await this.handleTutorInterviewReview(payload);
+        await this.handleTutorInterviewReview(interaction, payload);
         break;
       default:
         console.log('InteractionCreated: Invalid case encountered.');
@@ -61,10 +69,10 @@ export default class InteractionCreatedEvent extends Event {
 
     // // Ensure areaId and customId were set correctly.
     // if (!roleIds || !areaId || !customId) {
-    //   interaction.update({
-    //     content: 'Unable to correctly get splitId of option.',
-    //     components: [],
-    //   });
+    // interaction.update({
+    //   content: 'Unable to correctly get splitId of option.',
+    //   components: [],
+    // });
     //   return;
     // }
 
@@ -103,8 +111,31 @@ export default class InteractionCreatedEvent extends Event {
     // }
   }
 
-  private async handleTutorInterviewReview(payload) {
-    console.log(payload);
+  private async handleTutorInterviewReview(
+    interaction: ButtonInteraction,
+    payload: InteractionInfoPayload
+  ) {
+    const applicationStatus = payload.status.toUpperCase() as ApplicationResult;
+    const applicationId = Number(payload.data);
+
+    // Return if applicationStatus doesn't conform to the ApplicationResult type.
+    if (!Object.values(ApplicationResult).includes(applicationStatus)) return;
+
+    // Only accepted statuses are accepted/rejected. These are the only options given in interview review.
+    if (applicationStatus !== 'ACCEPTED' && applicationStatus !== 'REJECTED')
+      return;
+
+    await reviewApplication(applicationId, applicationStatus);
+
+    interaction.update({
+      content: `**Application ${applicationStatus.toLowerCase()}.** This channel will be archived shortly.`,
+      components: [],
+    });
+
+    if (applicationStatus == 'REJECTED')
+      interaction.channel.send(
+        "Hopefully we haven't put you off being a tutor on this server. Check out the application page to see when you can reapply!"
+      );
   }
 
   // private async handlePaymentOptionEv(

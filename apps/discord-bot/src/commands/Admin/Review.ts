@@ -16,6 +16,6 @@ export default class Review extends Command {
       return;
     }
 
-    showReviewBtns(message.channel);
+    // showReviewBtns(message.channel);
   }
 }

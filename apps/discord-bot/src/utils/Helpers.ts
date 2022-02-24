@@ -139,7 +139,11 @@ export function showConfirmation(
   });
 }
 
-export function showReviewBtns(channel: TextChannel, msg?: string) {
+export function showReviewBtns(
+  applicationId: number,
+  channel: TextChannel,
+  msg?: string
+) {
   if (!msg) msg = 'Accept or reject the application using the buttons below.';
 
   const acceptBtn = new MessageButton()
@@ -148,14 +152,22 @@ export function showReviewBtns(channel: TextChannel, msg?: string) {
     .setCustomId(
       JSON.stringify(<InteractionInfo>{
         areaId: InteractionArea.TutorInterviewReview,
-        payload: 'hello',
+        payload: { status: 'accepted', data: applicationId },
       })
     );
 
   const rejectBtn = new MessageButton()
     .setStyle('DANGER')
     .setLabel('Reject')
-    .setCustomId(`test`);
+    .setCustomId(
+      JSON.stringify(<InteractionInfo>{
+        areaId: InteractionArea.TutorInterviewReview,
+        payload: {
+          status: 'rejected',
+          data: applicationId,
+        },
+      })
+    );
 
   return channel.send({
     content: msg,

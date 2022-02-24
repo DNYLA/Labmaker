@@ -50,15 +50,21 @@ export default class Logs {
       .addFields(
         {
           name: 'Message',
-          value: application.applicationMessage,
+          value: application.applicationMessage ?? 'None',
           inline: false,
         },
         {
           name: 'Subjects',
-          value: application.subjects.join(', '),
+          value: application.subjects
+            ? application.subjects.join(', ')
+            : 'None',
           inline: true,
         },
-        { name: 'Vouches', value: application.vouchesLink, inline: true },
+        {
+          name: 'Vouches',
+          value: application.vouchesLink ? application.vouchesLink : 'None',
+          inline: true,
+        },
         {
           name: 'Applied',
           value: new Date(application.createdAt).toLocaleDateString(),

@@ -234,6 +234,7 @@ const handleTutorApplicationInterview = async (
     .then((msg) => msg.pin());
 
   showReviewBtns(
+    application.id,
     channel,
     'Use the `!review` command to bring up the accept/reject buttons again!'
   );

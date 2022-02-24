@@ -186,7 +186,7 @@ export class GuildService {
     action: ApplicationResult,
     user: UserDetails
   ) {
-    if (user.role !== UserRole.ADMIN) {
+    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT) {
       this.submitLog(user, id, 'FORBIDDEN', 0);
       throw new ForbiddenException();
     }
