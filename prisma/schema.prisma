@@ -109,6 +109,7 @@ model Applications {
   id                 Int                @id @default(autoincrement())
   userId             String
   serverId           String
+  channelId          String?
   applicationMessage String
   vouchesLink        String
   redditUsername     String?

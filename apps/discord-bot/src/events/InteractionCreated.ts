@@ -1,13 +1,6 @@
 import { reviewApplication } from '@labmaker/wrapper';
 import { ApplicationResult } from '@prisma/client';
-import {
-  ButtonInteraction,
-  Interaction,
-  Message,
-  MessageActionRow,
-  MessageButton,
-  Permissions,
-} from 'discord.js';
+import { ButtonInteraction, Interaction } from 'discord.js';
 import Event from '../utils/Base/Event';
 import DiscordClient from '../utils/client';
 

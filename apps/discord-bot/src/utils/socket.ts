@@ -61,7 +61,11 @@ export const listen = (accessToken: string, client: DiscordClient) => {
         return handleCreate(client, ticketInfo.ticket);
       case TicketNotif.Accepted: {
         const data = await handleAccepted(client, ticketInfo.ticket);
-        socket.emit('ticketChannelId', data);
+        socket.emit('updateChannelId', {
+          which: 'ticket',
+          id: data.id,
+          newChannelId: data.channelId,
+        });
         break;
       }
       case TicketNotif.Resigned:
@@ -84,12 +88,19 @@ export const listen = (accessToken: string, client: DiscordClient) => {
       user: User;
     } = JSON.parse(json);
 
-    console.log(application);
-
     switch (application.result) {
-      case ApplicationResult.INTERVIEW:
-        handleTutorApplicationInterview(client, application);
+      case ApplicationResult.INTERVIEW: {
+        const appChannel = await handleTutorApplicationInterview(
+          client,
+          application
+        );
+        socket.emit('updateChannelId', {
+          which: 'application',
+          id: application.id,
+          newChannelId: appChannel.id,
+        });
         break;
+      }
     }
   });
 };
@@ -238,6 +249,8 @@ const handleTutorApplicationInterview = async (
     channel,
     'Use the `!review` command to bring up the accept/reject buttons again!'
   );
+
+  return channel;
 };
 
 const hideChannel = async (client: DiscordClient, ticket: Ticket) => {

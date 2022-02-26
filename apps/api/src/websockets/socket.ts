@@ -20,7 +20,7 @@ import {
   User,
 } from '@prisma/client';
 import { TicketChannelInfo, TicketInfo, TicketNotif } from '@labmaker/shared';
-import { UseGuards } from '@nestjs/common';
+import { BadRequestException, Param, UseGuards } from '@nestjs/common';
 import { WSGuard } from '../auth/guards/WSAuth.guard';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -109,18 +109,27 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection {
   }
 
   @UseGuards(WSGuard)
-  @SubscribeMessage('ticketChannelId')
-  async handleConfig(
-    // @ConnectedSocket() client: Socket,
-    @MessageBody() ticket: TicketChannelInfo
+  @SubscribeMessage('updateChannelId')
+  async updateChannelId(
+    @MessageBody()
+    data: {
+      which: 'ticket' | 'application';
+      id: number;
+      newChannelId: string;
+    }
   ) {
-    // console.log(tJson);
-    // this.server.emit('message', message);
-    // const ticket: TicketChannelInfo = JSON.parse(tJson);
-    console.log(ticket);
-    await this.prismaService.ticket.update({
-      where: { id: ticket.id },
-      data: { channelId: ticket.channelId },
-    });
+    if (data.which === 'ticket') {
+      await this.prismaService.ticket.update({
+        where: { id: data.id },
+        data: { channelId: data.newChannelId },
+      });
+    } else if (data.which === 'application') {
+      await this.prismaService.applications.update({
+        where: { id: data.id },
+        data: { channelId: data.newChannelId },
+      });
+    } else {
+      return new BadRequestException();
+    }
   }
 }

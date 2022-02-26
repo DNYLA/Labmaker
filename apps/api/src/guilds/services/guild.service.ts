@@ -4,6 +4,7 @@ import {
   Injectable,
   Logger,
   NotFoundException,
+  NotImplementedException,
 } from '@nestjs/common';
 import { ApplicationResult, DiscordConfig, ResponseType } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
