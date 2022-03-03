@@ -182,6 +182,33 @@ export class GuildService {
     return apps;
   }
 
+  async getApplicationByChannelId(channelId: string, user: UserDetails) {
+    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT) {
+      this.submitLog(
+        user,
+        channelId,
+        'FORBIDDEN',
+        0,
+        '403 Attempting to retreive application by channelId.'
+      );
+      throw new ForbiddenException();
+    }
+
+    const app = await this.prismaService.applications.findFirst({
+      where: { channelId: channelId },
+    });
+
+    this.submitLog(
+      user,
+      channelId,
+      'COMPLETED',
+      app ? 1 : 0,
+      'Successfully retreived application by channelId'
+    );
+
+    return app;
+  }
+
   async reviewApplication(
     id: number,
     action: ApplicationResult,

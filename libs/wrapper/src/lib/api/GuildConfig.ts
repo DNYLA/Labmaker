@@ -60,5 +60,8 @@ export const getApplications = (serverId: string) =>
 export const reviewApplication = (id: number, action: string) =>
   AXIOS.put(`guilds/${id}/review?action=${action}`);
 
+export const getApplicationByChannelId = (channelId: string) =>
+  AXIOS.get(`guilds/application/by/channelid/${channelId}`);
+
 export const fetchTicketStatus = (serverId: string) =>
   AXIOS.get<boolean>(`guilds/tickets/${serverId}/enabled`);

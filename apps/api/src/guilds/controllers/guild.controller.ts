@@ -101,6 +101,15 @@ export class GuildController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/application/by/channelid/:channelId')
+  getApplicationByChannelId(
+    @Param('channelId') channelId: string,
+    @CurrentUser() user: UserDetails
+  ) {
+    return this.guildService.getApplicationByChannelId(channelId, user);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Put('/:id/review') //For Students Applying ID = ServerID for Admins ID = ApplicationID
   reviewApplication(
     @Param('id') id: number,
