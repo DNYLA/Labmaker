@@ -5,14 +5,32 @@ import {
   Message,
   MessageActionRow,
   MessageButton,
+  Permissions,
   TextChannel,
 } from 'discord.js';
 import DiscordClient from './client';
 import { InteractionInfo, InteractionArea } from '../events/InteractionCreated';
 
 /**
+ * Make custom id for anything that will cause an
+ * InteractionEvent to fire when used.
+ *
+ * To be used mainly so that when adding perms,
+ * it won't error out when stringifying the obj.
+ * Only easy fix I could find.
+ *
+ * @param info InteractionInfo.
+ * @returns Stringified version of input, but bigints work (used for perms).
+ */
+export function makeCustomId(info: InteractionInfo) {
+  return JSON.stringify(info, (_, v) =>
+    typeof v === 'bigint' ? v.toString() : v
+  );
+}
+
+/**
  * Checks if member has any of the required roles/perms.
- * @param message TextMessage they sent.
+ * @param msgori Message or Interaction. Needed so we can check the user's perms.
  * @param roles Array of roles - member needs to have at least one.
  * @param perms Array of perms - member needs to have at least one, unless they have a role from `roles`.
  * @param errResp Error message to send to channel if user doesn't have perms.
@@ -20,8 +38,8 @@ import { InteractionInfo, InteractionArea } from '../events/InteractionCreated';
  */
 export function hasAnyPerms(
   msgori: Message | Interaction,
-  roles: string[],
-  perms: bigint[],
+  roles?: string[],
+  perms?: bigint[],
   errResp?: string
 ): boolean {
   const member = msgori.member as GuildMember;
@@ -37,17 +55,20 @@ export function hasAnyPerms(
   }
 
   // Check perms
-  for (const permission in perms) {
-    if (Object.prototype.hasOwnProperty.call(perms, permission)) {
-      const perm = perms[permission];
+  if (perms) {
+    for (const permission in perms) {
+      if (Object.prototype.hasOwnProperty.call(perms, permission)) {
+        const perm = perms[permission];
 
-      if (member.permissions.has(perm)) {
-        return true;
+        if (member.permissions.has(perm)) {
+          return true;
+        }
       }
     }
   }
 
   if (errResp) channel.send(errResp);
+
   return false;
 }
 
@@ -150,9 +171,10 @@ export function showReviewBtns(
     .setStyle('SUCCESS')
     .setLabel('Accept')
     .setCustomId(
-      JSON.stringify(<InteractionInfo>{
+      makeCustomId({
         areaId: InteractionArea.TutorInterviewReview,
         payload: { status: 'accepted', data: applicationId },
+        perms: [Permissions.FLAGS.ADMINISTRATOR],
       })
     );
 
@@ -160,12 +182,13 @@ export function showReviewBtns(
     .setStyle('DANGER')
     .setLabel('Reject')
     .setCustomId(
-      JSON.stringify(<InteractionInfo>{
+      makeCustomId({
         areaId: InteractionArea.TutorInterviewReview,
         payload: {
           status: 'rejected',
           data: applicationId,
         },
+        perms: [Permissions.FLAGS.ADMINISTRATOR],
       })
     );
 

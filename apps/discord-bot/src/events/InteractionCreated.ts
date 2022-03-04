@@ -3,6 +3,7 @@ import { ApplicationResult } from '@prisma/client';
 import { ButtonInteraction, Interaction } from 'discord.js';
 import Event from '../utils/Base/Event';
 import DiscordClient from '../utils/client';
+import { hasAnyPerms } from '../utils/Helpers';
 
 export enum InteractionArea {
   PaymentOption,
@@ -21,7 +22,22 @@ export interface InteractionInfoPayload {
 export interface InteractionInfo {
   areaId: InteractionArea;
   payload: InteractionInfoPayload;
-  // add roles/ fields
+
+  /**
+   * Roles needed for interaction to work for user.
+   * This will work if user has any of the roles input,
+   * they do not need to have all of them.
+   */
+  roles?: string[];
+
+  /**
+   * Perms needed for interaction to work for user.
+   * This will work if user has any of the perms input,
+   * they do not need to have all of them.
+   *
+   * Use with discordjs perms (eg for admin: Permissions.FLAGS.ADMINISTRATOR)
+   */
+  perms?: bigint[];
 }
 
 export default class InteractionCreatedEvent extends Event {
@@ -32,9 +48,14 @@ export default class InteractionCreatedEvent extends Event {
   async run(client: DiscordClient, interaction: Interaction) {
     if (!interaction.isButton()) return;
 
-    const { areaId, payload } = JSON.parse(
+    const { areaId, payload, roles, perms } = JSON.parse(
       interaction.customId
     ) as InteractionInfo;
+
+    // Return if user has none of the roles/perms listed.
+    if (roles || perms) {
+      if (!hasAnyPerms(interaction, roles, perms)) return;
+    }
 
     switch (areaId) {
       case InteractionArea.PaymentOption:
