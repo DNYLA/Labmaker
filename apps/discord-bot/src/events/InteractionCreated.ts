@@ -11,17 +11,12 @@ export enum InteractionArea {
   TutorInterviewReview,
 }
 
-export interface InteractionInfoPayload {
-  status: string;
-  data?: string | number;
-}
-
 // All customIds for MessageButtons should use this
 // interface for setting it, then JSON stringify it.
 // It will be parsed again in the InteractionCreated event.
 export interface InteractionInfo {
   areaId: InteractionArea;
-  payload: InteractionInfoPayload;
+  payload: any;
 
   /**
    * Roles needed for interaction to work for user.
@@ -40,6 +35,21 @@ export interface InteractionInfo {
   perms?: bigint[];
 }
 
+/**
+ * For this event to work properly the InteractionInfo interface
+ * should be used when making the customId for your button or anything
+ * else that will cause this event to trigger.
+ *
+ * Currently the `makeCustomId` helper func should be used to set
+ * your custom id. Example:
+ *   [...].setCustomId(
+ *     makeCustomId({
+ *       areaId: InteractionArea.RandomAreaThatDoesntExist,
+ *       payload: { status: 'accepted', data: applicationId },
+ *       perms: [Permissions.FLAGS.ADMINISTRATOR],
+ *     })
+ *   );
+ */
 export default class InteractionCreatedEvent extends Event {
   constructor() {
     super('interactionCreate');
@@ -71,64 +81,19 @@ export default class InteractionCreatedEvent extends Event {
         console.log('InteractionCreated: Invalid case encountered.');
         break;
     }
-
-    // // Split interaction id by ":".
-    // // The should only be one colon, the left side being the
-    // // type and the right being its value (eg: area:value).
-    // const splitId = interaction.customId.split(':');
-
-    // const roleIds = splitId[0]; // Split by "/" for each role
-    // const areaId = splitId[1]?.toLowerCase();
-    // const customId = splitId[2];
-
-    // // Ensure areaId and customId were set correctly.
-    // if (!roleIds || !areaId || !customId) {
-    // interaction.update({
-    //   content: 'Unable to correctly get splitId of option.',
-    //   components: [],
-    // });
-    //   return;
-    // }
-
-    // if (
-    //   !hasAnyPerms(
-    //     interaction,
-    //     [...roleIds.split('/')],
-    //     [Permissions.FLAGS.ADMINISTRATOR]
-    //   )
-    // )
-    //   return;
-
-    // const guildId = interaction.guild.id;
-    // const { data: guildConfig } = await getGuildConfig(guildId);
-
-    // switch (areaId) {
-    //   // Normal pay commands that any one can interact with.
-    //   case 'paymentoption':
-    //     await this.handlePaymentOptionEv(
-    //       client,
-    //       interaction,
-    //       customId,
-    //       areaId,
-    //       roleIds,
-    //       guildConfig
-    //     );
-    //     break;
-    //   case 'createpporder':
-    //     await this.createPayPalOrderEv(
-    //       client,
-    //       interaction,
-    //       customId,
-    //       guildConfig
-    //     );
-    //     break;
-    // }
   }
 
   private async handleTutorInterviewReview(
     interaction: ButtonInteraction,
-    payload: InteractionInfoPayload
+    payload: any
   ) {
+    if (!payload.status || !payload.data) {
+      console.error(
+        'Need to define status and data in payload for handleTutorInterviewReview to work.'
+      );
+      return;
+    }
+
     const applicationStatus = payload.status.toUpperCase() as ApplicationResult;
     const applicationId = Number(payload.data);
 
