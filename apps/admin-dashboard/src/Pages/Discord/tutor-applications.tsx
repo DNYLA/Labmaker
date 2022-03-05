@@ -4,6 +4,8 @@ import { Button, ComboContainer, InfoTitle, ModalPopup } from '@labmaker/ui';
 import { TutorApplication } from '@labmaker/shared';
 import { getApplications, reviewApplication } from '@labmaker/wrapper';
 import { useParams } from 'react-router-dom';
+import { AxiosError, AxiosResponse } from 'axios';
+import { toast } from 'react-toastify';
 
 /* eslint-disable-next-line */
 export interface TutorApplicationsProps {}
@@ -12,7 +14,7 @@ export function TutorApplications() {
   const [loading, setLoading] = useState(false);
   const [applications, setApplications] = useState<TutorApplication[]>([]);
   const [modalShown, setModalShown] = useState(false);
-  const [activeApp, setActiveApp] = useState<TutorApplication>(); // Active application for modal
+  const [activeApp, setActiveApp] = useState<TutorApplication | null>(); // Active application for modal
   const { id } = useParams();
 
   useEffect(() => {
@@ -73,11 +75,37 @@ export function TutorApplications() {
    * Update application result, to INTERVIEW or REJECTED.
    * @param toInterview If true, will proceed application to interview, otherwise will deny.
    */
-  const updateAppResult = (toInterview: boolean) => {
+  const updateAppResult = async (toInterview: boolean) => {
     const app = activeApp;
 
     if (app) {
-      reviewApplication(activeApp?.id, toInterview ? 'INTERVIEW' : 'REJECTED');
+      await reviewApplication(
+        activeApp?.id,
+        toInterview ? 'INTERVIEW' : 'REJECTED'
+      )
+        .catch((r: AxiosError) => {
+          if (r.response?.data.message) {
+            toast.error(r.response?.data.message);
+          }
+        })
+        .then((r) => {
+          // Only close modal if result is OK.
+          // User might need to note down application id if an error is thrown,
+          // closing the modal wouldn't allow them to do that.
+          if (r && r.status === 200) {
+            // Remove the app from applications list
+            setApplications(applications.filter((e) => e.id !== activeApp.id));
+
+            setModalShown(false);
+            setActiveApp(null);
+
+            toast.success(
+              `${
+                toInterview ? 'Interviewing applicant' : 'Rejected application'
+              }.`
+            );
+          }
+        });
     }
   };
 

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   HttpStatus,
   Injectable,
@@ -226,13 +227,43 @@ export class GuildService {
 
     if (!applic) {
       this.submitLog(user, id, 'NOTFOUND', 0);
-      throw new NotFoundException();
+      throw new NotFoundException(undefined, "Couldn't find the application!");
+    }
+
+    // Don't allow rejecting application when it has already been set to interview and vice versa.
+    if (
+      (action == 'INTERVIEW' && applic.result == 'REJECTED') ||
+      (action == 'REJECTED' && applic.result == 'INTERVIEW')
+    ) {
+      throw new BadRequestException(
+        undefined,
+        `Can't change application result to ${action.toLowerCase()} when it has already been set to ${applic.result.toLowerCase()}.`
+      );
     }
 
     //Add Log Notifying that someone attempted to access this
     if (applic.result == 'ACCEPTED' || applic.result == 'REJECTED') {
       this.submitLog(user, id, 'FORBIDDEN', 0, 'Already Reviewed');
-      throw new ForbiddenException();
+      throw new ForbiddenException(
+        undefined,
+        'This application has already been reviewed!'
+      );
+    }
+
+    // If current application result is same as result wanting to change to.
+    if (applic.result == action) {
+      this.submitLog(
+        user,
+        id,
+        'FORBIDDEN',
+        0,
+        'Attempted to change result to same result'
+      );
+
+      throw new BadRequestException(
+        undefined,
+        `Application is already set to ${action.toLowerCase()}!`
+      );
     }
 
     // Update application with new result and reviewedAt date.
