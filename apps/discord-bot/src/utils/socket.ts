@@ -9,7 +9,7 @@ import DiscordClient from './client';
 import { io } from 'socket.io-client';
 import { Permissions } from 'discord.js';
 import Logs from './Logs';
-import { parseTicketMessage, showReviewBtns } from './Helpers';
+import { parseTicketMessage, sendDM, showReviewBtns } from './Helpers';
 import { ApplicationResult, Applications, User } from '@prisma/client';
 
 export const listen = (accessToken: string, client: DiscordClient) => {
@@ -228,15 +228,10 @@ const handleTutorApplicationInterview = async (
   // TODO: Replace all these hardcoded messages with parsed msgs from config
 
   // PM User to notify them of their interview
-  applicant
-    .send(
-      `Congratulations <@${application.user.id}>! Your application for the Tutor role have been moved to the interview stage. Head over to <#${channel.id}> and get back to us with when you are available for the interview. Good luck!`
-    )
-    .catch(() =>
-      console.info(
-        `${application.user.username}#${application.user.discriminator} does not accept private messages.`
-      )
-    );
+  sendDM(
+    applicant.user,
+    `Congratulations <@${application.user.id}>! Your application for the Tutor role have been moved to the interview stage. Head over to <#${channel.id}> and get back to us with when you are available for the interview. Good luck!`
+  );
 
   // Send same message in application channel.
   // Some users may have PMs disabled for non-friends so there
@@ -273,15 +268,10 @@ const handleTutorApplicationRejection = async (
     (m) => m.id === application.user.id
   );
 
-  applicant
-    .send(
-      `Hi <@${application.user.id}>. Unfortunately your tutor application was denied. You can still check your dashboard for when you are able to apply again! We look forward to seeing you soon!`
-    )
-    .catch(() =>
-      console.info(
-        `${application.user.username}#${application.user.discriminator} does not accept private messages.`
-      )
-    );
+  sendDM(
+    applicant.user,
+    `Hi <@${application.user.id}>. Unfortunately your tutor application was denied. You can still check your dashboard for when you are able to apply again! We look forward to seeing you soon!`
+  );
 };
 
 const hideChannel = async (client: DiscordClient, ticket: Ticket) => {

@@ -7,6 +7,7 @@ import {
   MessageButton,
   Permissions,
   TextChannel,
+  User,
 } from 'discord.js';
 import DiscordClient from './client';
 import { InteractionInfo, InteractionArea } from '../events/InteractionCreated';
@@ -26,6 +27,24 @@ export function makeCustomId(info: InteractionInfo) {
   return JSON.stringify(info, (_, v) =>
     typeof v === 'bigint' ? v.toString() : v
   );
+}
+
+/**
+ * Send a direct message to a user.
+ * This will simplify sending a DM, since we need to have a catch for if
+ * sending the DM fails. Sending a DM will cause an error if the user
+ * has direct messages disabled for non-friends.
+ * @param user User to send message to.
+ * @param msg Message content.
+ */
+export async function sendDM(user: User, msg: string) {
+  await user
+    .send(msg)
+    .catch(() =>
+      console.info(
+        `${user.username}#${user.discriminator} does not accept private messages.`
+      )
+    );
 }
 
 /**
