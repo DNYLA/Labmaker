@@ -226,7 +226,7 @@ const handleTutorApplicationInterview = async (
   // PM User to notify them of their interview
   applicant
     .send(
-      `Congratulations <@${application.user.id}>! Your application for the Tutor role have been moved to the interview stage. Head over to the server and get back to us with when you are available for the interview. Good luck!`
+      `Congratulations <@${application.user.id}>! Your application for the Tutor role have been moved to the interview stage. Head over to <#${channel.id}> and get back to us with when you are available for the interview. Good luck!`
     )
     .catch(() =>
       console.info(
