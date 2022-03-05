@@ -101,6 +101,10 @@ export const listen = (accessToken: string, client: DiscordClient) => {
         });
         break;
       }
+      case ApplicationResult.REJECTED: {
+        handleTutorApplicationRejection(client, application);
+        break;
+      }
     }
   });
 };
@@ -256,6 +260,28 @@ const handleTutorApplicationInterview = async (
   );
 
   return channel;
+};
+
+const handleTutorApplicationRejection = async (
+  client: DiscordClient,
+  application: Applications & { user: User }
+) => {
+  await client.guilds.fetch();
+  const guild = client.guilds.cache.find((g) => g.id === application.serverId);
+  await guild.members.fetch();
+  const applicant = guild.members.cache.find(
+    (m) => m.id === application.user.id
+  );
+
+  applicant
+    .send(
+      `Hi <@${application.user.id}>. Unfortunately your tutor application was denied. You can still check your dashboard for when you are able to apply again! We look forward to seeing you soon!`
+    )
+    .catch(() =>
+      console.info(
+        `${application.user.username}#${application.user.discriminator} does not accept private messages.`
+      )
+    );
 };
 
 const hideChannel = async (client: DiscordClient, ticket: Ticket) => {

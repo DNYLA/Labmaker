@@ -245,7 +245,8 @@ export class GuildService {
 
     // If application is being set to INTERVIEW result,
     // notify discord bot to create a channel for the interview.
-    if (action == 'INTERVIEW') {
+    // If application is rejected, message applicant with the rejected app msg.
+    if (action == 'INTERVIEW' || action == 'REJECTED') {
       this.wsGateway.notifyTutorApplication(applic);
     }
 

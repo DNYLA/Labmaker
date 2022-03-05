@@ -66,16 +66,18 @@ export function TutorApplications() {
       );
     }
 
-    // todo: center this
     return <div>No Tutor Applications</div>;
   };
 
-  const proceedApplication = () => {
-    console.log('opk', activeApp);
+  /**
+   * Update application result, to INTERVIEW or REJECTED.
+   * @param toInterview If true, will proceed application to interview, otherwise will deny.
+   */
+  const updateAppResult = (toInterview: boolean) => {
     const app = activeApp;
 
     if (app) {
-      reviewApplication(activeApp?.id, 'INTERVIEW');
+      reviewApplication(activeApp?.id, toInterview ? 'INTERVIEW' : 'REJECTED');
     }
   };
 
@@ -99,8 +101,8 @@ export function TutorApplications() {
           <p>Created: {activeApp.createdAt}</p>
 
           <ComboContainer>
-            <Button onClick={() => proceedApplication()}>Interview</Button>
-            <Button>Deny</Button>
+            <Button onClick={() => updateAppResult(true)}>Interview</Button>
+            <Button onClick={() => updateAppResult(false)}>Deny</Button>
           </ComboContainer>
         </ModalPopup>
       )}
