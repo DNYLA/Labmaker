@@ -41,7 +41,7 @@ export interface InteractionInfo {
  * else that will cause this event to trigger.
  *
  * Currently the `makeCustomId` helper func should be used to set
- * your custom id. Example:
+ * your custom id. **Example:**
  *   [...].setCustomId(
  *     makeCustomId({
  *       areaId: InteractionArea.RandomAreaThatDoesntExist,
@@ -75,7 +75,7 @@ export default class InteractionCreatedEvent extends Event {
         console.log('Create PP Order');
         break;
       case InteractionArea.TutorInterviewReview:
-        await this.handleTutorInterviewReview(interaction, payload);
+        this.handleTutorInterviewReview(interaction, payload);
         break;
       default:
         console.log('InteractionCreated: Invalid case encountered.');

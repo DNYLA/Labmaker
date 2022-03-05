@@ -209,7 +209,12 @@ const handleTutorApplicationInterview = async (
   const channel = await guild.channels.create('application-1', {
     type: 'GUILD_TEXT',
     permissionOverwrites: [
+      // Remove view channel from everyone
       { id: guild.roles.everyone, deny: [Permissions.FLAGS.VIEW_CHANNEL] },
+
+      // Allow applicant to view channel
+      { id: applicant, allow: [Permissions.FLAGS.VIEW_CHANNEL] },
+
       // Only admins to review applications currently,
       // if a role is added for reviewers then can be added here.
     ],
