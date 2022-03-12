@@ -106,10 +106,12 @@ export default class InteractionCreatedEvent extends Event {
       return;
 
     let msg = `**Application ${applicationStatus.toLowerCase()}.** This channel will be archived shortly.`;
-    let reviewFailed = false;
+
+    if (applicationStatus === 'REJECTED')
+      msg += `\n\nHopefully we haven't put you off being a tutor on this server. Check out the application page to see when you can reapply!`;
+
     await reviewApplication(applicationId, applicationStatus).catch(
       (r: AxiosError) => {
-        reviewFailed = true;
         msg = "Couldn't review application!";
 
         if (r.response?.data?.message) {
@@ -122,11 +124,6 @@ export default class InteractionCreatedEvent extends Event {
       content: msg,
       components: [],
     });
-
-    if (!reviewFailed && applicationStatus == 'REJECTED')
-      interaction.channel.send(
-        "Hopefully we haven't put you off being a tutor on this server. Check out the application page to see when you can reapply!"
-      );
   }
 
   // private async handlePaymentOptionEv(
