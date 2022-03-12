@@ -101,7 +101,9 @@ export function TutorApplications() {
 
             toast.success(
               `${
-                toInterview ? 'Interviewing applicant' : 'Rejected application'
+                toInterview
+                  ? 'Interviewing applicant. Check discord for the newly created application channel'
+                  : 'Rejected application'
               }.`
             );
           }

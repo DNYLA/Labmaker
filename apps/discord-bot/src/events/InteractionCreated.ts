@@ -1,5 +1,6 @@
 import { reviewApplication } from '@labmaker/wrapper';
 import { ApplicationResult } from '@prisma/client';
+import axios, { AxiosError } from 'axios';
 import { ButtonInteraction, Interaction } from 'discord.js';
 import Event from '../utils/Base/Event';
 import DiscordClient from '../utils/client';
@@ -104,14 +105,25 @@ export default class InteractionCreatedEvent extends Event {
     if (applicationStatus !== 'ACCEPTED' && applicationStatus !== 'REJECTED')
       return;
 
-    await reviewApplication(applicationId, applicationStatus);
+    let msg = `**Application ${applicationStatus.toLowerCase()}.** This channel will be archived shortly.`;
+    let reviewFailed = false;
+    await reviewApplication(applicationId, applicationStatus).catch(
+      (r: AxiosError) => {
+        reviewFailed = true;
+        msg = "Couldn't review application!";
+
+        if (r.response?.data?.message) {
+          msg = r.response.data.message;
+        }
+      }
+    );
 
     interaction.update({
-      content: `**Application ${applicationStatus.toLowerCase()}.** This channel will be archived shortly.`,
+      content: msg,
       components: [],
     });
 
-    if (applicationStatus == 'REJECTED')
+    if (!reviewFailed && applicationStatus == 'REJECTED')
       interaction.channel.send(
         "Hopefully we haven't put you off being a tutor on this server. Check out the application page to see when you can reapply!"
       );
