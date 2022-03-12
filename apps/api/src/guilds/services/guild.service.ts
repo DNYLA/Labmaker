@@ -231,14 +231,18 @@ export class GuildService {
     }
 
     // Don't allow rejecting application when it has already been set to interview and vice versa.
-    if (
-      (action == 'INTERVIEW' && applic.result == 'REJECTED') ||
-      (action == 'REJECTED' && applic.result == 'INTERVIEW')
-    ) {
-      throw new BadRequestException(
-        undefined,
-        `Can't change application result to ${action.toLowerCase()} when it has already been set to ${applic.result.toLowerCase()}.`
-      );
+    // Only allow this to happen when request is coming from the bot, because when reviewer clicks
+    // reject button through `!review` command, we want it to actually reject the application.
+    if (user.role !== 'BOT') {
+      if (
+        (action == 'INTERVIEW' && applic.result == 'REJECTED') ||
+        (action == 'REJECTED' && applic.result == 'INTERVIEW')
+      ) {
+        throw new BadRequestException(
+          undefined,
+          `Can't change application result to ${action.toLowerCase()} when it has already been set to ${applic.result.toLowerCase()}.`
+        );
+      }
     }
 
     //Add Log Notifying that someone attempted to access this
