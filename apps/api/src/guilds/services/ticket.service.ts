@@ -89,7 +89,6 @@ export class TicketService {
       this.submitLog(user, serverId, 'FORBIDDEN', 0);
       throw new ForbiddenException();
     }
-
     const tickets = await this.prismaService.ticket.findMany({
       orderBy: [{ id: 'desc' }],
       where: {

@@ -79,3 +79,4 @@ export * from './reddit';
 export * from './logs';
 export * from './GuildConfig';
 export * from './ticket';
+export * from './clients';

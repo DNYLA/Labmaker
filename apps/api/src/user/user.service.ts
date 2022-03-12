@@ -2,8 +2,9 @@ import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto, AdminUser, UserDetails } from '../utils/types';
 import { DiscordHttpService } from '../discord/services/discord-http.service';
-import { RedditConfig, User } from '@prisma/client';
+import { ClientApplications, RedditConfig, User } from '@prisma/client';
 import { UserRole } from '@labmaker/wrapper';
+import { CreateClient, UpdateClient } from './client.dto';
 
 @Injectable()
 export class UserService {
@@ -126,17 +127,48 @@ export class UserService {
   }
 
   async validNode(user: UserDetails, nodeId: number) {
-    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT)
-      throw new ForbiddenException();
+    if (
+      user.role !== UserRole.ADMIN &&
+      user.role !== UserRole.BOT &&
+      user.role !== UserRole.SUPERADMIN
+    )
+      return false;
 
     if (user.role === UserRole.BOT) return; //We Trust Anything from a JWT bot Token as they are allowed acess to any data.
 
     const fetchedUser = await this.getAdminUser(user.id);
     const node = fetchedUser.nodes.filter((n) => n.id === nodeId);
-    if (!node) throw new ForbiddenException();
+    if (!node) return false;
+
+    return true;
   }
 
-  // createUser(details: UserDetails) {
-  //   // return this.prismaService.user.create(details);
-  // }
+  async getClients(user: UserDetails): Promise<ClientApplications[]> {
+    if (user.role !== 'SUPERADMIN') throw new ForbiddenException();
+
+    return await this.prismaService.clientApplications.findMany();
+  }
+
+  async createClient(
+    client: CreateClient,
+    user: UserDetails
+  ): Promise<ClientApplications> {
+    if (user.role !== 'SUPERADMIN') throw new ForbiddenException();
+
+    return await this.prismaService.clientApplications.create({
+      data: { ...client, creatorId: user.id },
+    });
+  }
+
+  async updateClient(
+    client: UpdateClient,
+    user: UserDetails
+  ): Promise<ClientApplications> {
+    if (user.role !== 'SUPERADMIN') throw new ForbiddenException();
+
+    return await this.prismaService.clientApplications.update({
+      where: { clientId: client.clientId },
+      data: client,
+    });
+  }
 }

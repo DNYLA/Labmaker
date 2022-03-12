@@ -240,30 +240,39 @@ export function parseTicketMessage(
   let parsed = toParse;
   let sender = '';
   let recipient = '';
+
   if (action === TicketNotif.Resigned) {
-    sender = `<@${ticket.tutorId}>`;
-    recipient = `<@${ticket.creatorId}>`;
+    sender = tagUser(ticket.tutorId);
+    recipient = tagUser(ticket.creatorId);
   } else if (action === TicketNotif.Deleted) {
-    sender = `<@${ticket.creatorId}>`;
-    recipient = `<@${ticket.tutorId}>`;
+    sender = tagUser(ticket.creatorId);
+    recipient = tagUser(ticket.tutorId);
   }
 
   parseKeys.forEach((key) => {
     let replaceVal = ticket[key];
-    if (key === 'student') {
-      replaceVal = `<@${ticket.creatorId}>`;
-    } else if (key === 'tutor') {
-      replaceVal = `<@${ticket.tutorId}>`;
-    } else if (key === 'tutor_role') {
-      replaceVal = `<@&${config.tutorRole}>`;
-    } else if (key === 'admin_role') {
-      replaceVal = `<@&${config.staffRole}>`;
-    } else if (key === 'action') {
-      replaceVal = action;
-    } else if (key === 'sender') {
-      replaceVal = sender;
-    } else if (key === 'recipient') {
-      replaceVal = recipient;
+    switch (key) {
+      case 'student':
+        replaceVal = tagUser(ticket.creatorId);
+        break;
+      case 'tutor':
+        replaceVal = tagUser(ticket.tutorId);
+        break;
+      case 'tutor_role':
+        replaceVal = tagRole(config.tutorRole);
+        break;
+      case 'admin_role':
+        replaceVal = tagRole(config.staffRole);
+        break;
+      case 'action':
+        replaceVal = action;
+        break;
+      case 'sender':
+        replaceVal = sender;
+        break;
+      case 'recipient':
+        replaceVal = recipient;
+        break;
     }
 
     parsed = parsed.replace(`{${key}}`, replaceVal);
@@ -271,3 +280,11 @@ export function parseTicketMessage(
 
   return parsed;
 }
+
+export const tagUser = (userId: string) => {
+  return `<@${userId}>`;
+};
+
+export const tagRole = (roleId: string) => {
+  return `<@&${roleId}>`;
+};

@@ -19,11 +19,22 @@ model User {
   role           Role            @default(USER)
   subjects       Subjects[]
   nodes          RedditConfig[]
+  clients ClientApplications[]
   studentTickets Ticket[]        @relation("student")
   tutorTickets   Ticket[]        @relation("tutor")
   applications   Applications[]
   logs           UserLogs[]
   notifications  Notifications[]
+}
+
+model ClientApplications {
+  clientId String @id @default(uuid())
+  username String
+  description String
+  token String @default(uuid()) //Possibbly Generate this Internally Similar to JWT where it has a payload
+  scopes String[] //Convert into Enum || Currently not used so im leaving it as String[] for now
+  creatorId String
+  creator        User     @relation(fields: [creatorId], references: [id])
 }
 
 model RedditConfig {
@@ -188,6 +199,7 @@ enum Role {
   USER
   TUTOR
   ADMIN
+  SUPERADMIN
   BOT
 }
 

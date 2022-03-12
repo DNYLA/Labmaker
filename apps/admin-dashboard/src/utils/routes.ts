@@ -6,3 +6,5 @@ export const routes = [
   { name: 'discord' },
   { name: 'logs' },
 ];
+
+export const superRoutes = [...routes, { name: 'Clients', to: 'clients' }];

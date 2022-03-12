@@ -172,12 +172,7 @@ const handleResignOrDelete = async (
   if (!channel || !channel.isText()) return;
 
   await channel.send(
-    parseTicketMessage(
-      config.deleteMessage,
-      config,
-      ticket,
-      TicketNotif.Resigned
-    )
+    parseTicketMessage(config.deleteMessage, config, ticket, type)
   );
 
   if (type === TicketNotif.Resigned) {
