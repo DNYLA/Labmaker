@@ -4,6 +4,7 @@ export const Page = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
+  justify-content: center;
   margin: 20px 50px;
 `;
 
