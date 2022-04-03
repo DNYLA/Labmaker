@@ -4,7 +4,7 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import './index.css'; //Move Into Styled Components?
+import '../../../libs/ui/src/norm.css';
 import App from './app/app';
 import { Provider } from 'react-redux';
 import { store } from './store';

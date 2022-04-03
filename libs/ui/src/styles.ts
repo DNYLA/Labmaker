@@ -5,11 +5,14 @@ export const Page = styled.div`
   flex-flow: column;
   align-items: center;
   justify-content: center;
+  height: 100%;
   margin: 20px 50px;
 `;
 
 export const Content = styled.div`
   display: flex;
+  flex: 1 0 auto;
+  height: 100%;
   flex-flow: column;
   min-width: 750px;
   max-width: 750px;
@@ -85,7 +88,7 @@ export const DisableDrag = styled.div`
 `;
 
 export const ContainerStyle = styled.div`
-  margin-top: 15px;
+  margin-bottom: 15px;
   width: 100%;
   border-radius: 5px;
   background-color: ${(props) => props.theme.base.backCol};
@@ -112,4 +115,8 @@ export const SettingsContainer = styled(ContainerStyle)`
     width: 100%;
     padding-bottom: 10px;
   }
+`;
+
+export const CenteredText = styled.div`
+  text-align: center;
 `;

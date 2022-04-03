@@ -78,6 +78,7 @@ const StyledLink = styled(NavLink)`
   p {
     margin: 0px;
     color: ${(p) => p.theme.navbar.item};
+    font-family: 'Archivo Black';
     transition: all 200ms ease-in-out;
 
     :hover {

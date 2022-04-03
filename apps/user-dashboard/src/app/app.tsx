@@ -12,7 +12,8 @@ import { UserRole } from '@labmaker/wrapper';
 import { ApplyTutorPage } from '../Pages/Tutor/apply';
 
 const StyledApp = styled.div`
-  // Your style here
+  display: flex;
+  flex-flow: column;
 `;
 
 export function App() {
