@@ -1,25 +1,5 @@
-import {
-  Button,
-  ButtonContainer,
-  InputBox,
-  InputDate,
-  InputTime,
-  ModalPopup,
-  SwitchToggle,
-  TextArea,
-} from '@labmaker/ui';
-import { Ticket, TicketAction } from '@labmaker/shared';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-  ConvertType,
-  ConvertEdu,
-  ConvertSbj,
-  getServerId,
-} from '../../utils/helpers';
-import { deleteTicket, updateTicket } from '@labmaker/wrapper';
-import { toast } from 'react-toastify';
 
 interface TicketContainerProps {
   subject: string;
@@ -27,13 +7,6 @@ interface TicketContainerProps {
   budget: number;
   due: Date;
   onClick?: (e: any) => void;
-}
-
-interface TicketModalProps {
-  ticket: Ticket;
-  student: boolean;
-  refresh: boolean;
-  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function TicketContainer({
@@ -45,22 +18,22 @@ export function TicketContainer({
 }: TicketContainerProps) {
   return (
     <TicketContainerStyle onClick={onClick}>
+      <p className="budget">${budget}</p>
       <h4>
-        {subject} - {type}
+        {subject} {type}
       </h4>
-      <h4>${budget}</h4>
-      <h4>Due in {moment(due, 'YYYYMMDD').toNow(true)}</h4>
+      <p>Due in {moment(due, 'YYYYMMDD').toNow(true)}</p>
     </TicketContainerStyle>
   );
 }
 
 const TicketContainerStyle = styled.div`
   display: flex;
+  position: relative;
   flex-grow: 1;
   flex-direction: column;
   justify-content: center;
   width: 25%;
-  /* width: 100%; */
   height: 100px;
   padding: 10px;
   margin: 10px;
@@ -70,6 +43,10 @@ const TicketContainerStyle = styled.div`
   text-align: center;
   cursor: pointer;
   user-select: none;
+
+  .budget {
+    color: lightgreen;
+  }
 
   &:hover {
     background-color: ${(p) => p.theme.input.activeCol};
