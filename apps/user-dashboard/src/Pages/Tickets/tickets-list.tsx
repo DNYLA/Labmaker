@@ -88,6 +88,8 @@ export default function TicketsList({
       {tickets.active.length > 0 && (
         <>
           <h1>Active: </h1>
+          <p>Tickets that are still being worked on for you.</p>
+
           <TicketWrapper>
             {tickets.active.map((ticket) => {
               return (
@@ -111,6 +113,8 @@ export default function TicketsList({
       {tickets.completed.length > 0 && (
         <>
           <h1>Completed: </h1>
+          <p>Tickets that have been completed for you in the past</p>
+
           <TicketWrapper>
             {tickets.completed.map((ticket) => {
               return (
