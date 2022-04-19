@@ -166,7 +166,6 @@ export function TutorTicketsList({
       ) : (
         <>
           <h1>Tickets Available: </h1>
-
           <p>Select tickets that interest you and accept them to work!</p>
         </>
       )}
@@ -248,7 +247,7 @@ function renderModal(
             `A tutor has to accept your ticket before you can go to it's channel.`
           );
         else if (!activeTicket.channelId)
-          toast.info("Woah Slow down, channel hasn't been created yet.");
+          toast.info("Woah slow down! The channel hasn't been created yet.");
         else {
           const id = getServerId();
           window.open(

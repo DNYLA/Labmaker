@@ -22,7 +22,7 @@ export function TicketContainer({
       <h4>
         {subject} {type}
       </h4>
-      <p>Due in {moment(due, 'YYYYMMDD').toNow(true)}</p>
+      <p>Due {moment(due, 'YYYYMMDD').fromNow()}</p>
     </TicketContainerStyle>
   );
 }
