@@ -23,6 +23,7 @@ import {
 } from '../../utils/helpers';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 
 interface TicketsListProps<T> {
   tickets: T;
@@ -322,6 +323,15 @@ function renderModal(
           value={activeTicket.budget.toString()}
           prefix={'$'}
           type={'number'}
+          disabled={true}
+        />
+
+        {/* For now, the date isn't updatable, when we have a 
+            suitable way to let users update the date it will be added back. */}
+        <InputBox
+          message="Due Date"
+          value={moment(activeTicket.due).format('LLLL')}
+          type={'text'}
           disabled={true}
         />
 
