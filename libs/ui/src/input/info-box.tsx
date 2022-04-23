@@ -14,14 +14,14 @@ export function InfoTitle({
   center,
 }: InfoTitleProps) {
   let className = '';
-  if (header) className += 'headerTitle';
-  if (center) className += ' centerTitle';
+  if (center) className += 'centerTitle';
 
-  console.log(`${title}:${className}`);
   if (infoMessage) {
     return (
       <StyledSpan className={className}>
-        <TitleStyle>{title}</TitleStyle>
+        <TitleStyle className={`${header ? 'headerTitle' : ''}`}>
+          {title}
+        </TitleStyle>
 
         <InfoWrapper>
           <InfoSpan>?</InfoSpan>
@@ -49,15 +49,14 @@ const StyledSpan = styled.span`
     justify-content: center;
     align-items: center;
   }
-
-  &.headerTitle {
-    font-size: 25px;
-    /* margin-bottom: 30px; */
-  }
 `;
 
 const TitleStyle = styled.span`
   user-select: none;
+
+  &.headerTitle {
+    font-size: 25px;
+  }
 `;
 
 const InfoWrapper = styled.div`

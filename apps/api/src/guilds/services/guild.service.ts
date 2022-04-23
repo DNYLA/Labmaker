@@ -1,17 +1,12 @@
 import {
+  BadRequestException,
   ForbiddenException,
   HttpStatus,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  ApplicationResult,
-  Applications,
-  DiscordConfig,
-  ResponseType,
-  Role,
-} from '@prisma/client';
+import { ApplicationResult, DiscordConfig, ResponseType } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserDetails } from '../../utils/types';
 import { PaymentService } from './payment.service';
@@ -22,7 +17,6 @@ import { GuildData, PartialGuildChannel, PartialRole } from '@labmaker/shared';
 import { DiscordHttpService } from '../../discord/services/discord-http.service';
 import { CreateApplicationDTO } from '../dtos/apply-tutor.dto';
 import { UserLogsService } from '../../logs/logs.service';
-import { NOTFOUND } from 'dns';
 
 @Injectable()
 export class GuildService {
@@ -52,15 +46,24 @@ export class GuildService {
       this.submitLog(user, id, 'FORBIDDEN', 0);
       throw new ForbiddenException();
     }
-    const config = await this.prismaService.discordConfig.findUnique({
+
+    let config = await this.prismaService.discordConfig.findUnique({
       where: { id },
     });
 
-    // if (!config) return this.createConfigFromId(id);
     if (!config) {
-      this.submitLog(user, id, 'NOTFOUND');
-      throw new NotFoundException('Unable to find config');
+      this.submitLog(
+        user,
+        id,
+        'COMPLETED',
+        undefined,
+        'Created missing discord config'
+      );
+
+      const guild = (await this.discordHttpService.fetchGuildById(id)).data;
+      config = await this.createConfig(id, guild.name);
     }
+
     if (!payments) {
       this.submitLog(user, id);
       return config;
@@ -179,34 +182,108 @@ export class GuildService {
     return apps;
   }
 
+  async getApplicationByChannelId(channelId: string, user: UserDetails) {
+    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT) {
+      this.submitLog(
+        user,
+        channelId,
+        'FORBIDDEN',
+        0,
+        '403 Attempting to retreive application by channelId.'
+      );
+      throw new ForbiddenException();
+    }
+
+    const app = await this.prismaService.applications.findFirst({
+      where: { channelId: channelId },
+    });
+
+    this.submitLog(
+      user,
+      channelId,
+      'COMPLETED',
+      app ? 1 : 0,
+      'Successfully retreived application by channelId'
+    );
+
+    return app;
+  }
+
   async reviewApplication(
     id: number,
     action: ApplicationResult,
     user: UserDetails
   ) {
-    if (user.role !== UserRole.ADMIN) {
+    if (user.role !== UserRole.ADMIN && user.role !== UserRole.BOT) {
       this.submitLog(user, id, 'FORBIDDEN', 0);
       throw new ForbiddenException();
     }
 
-    const applic = await this.prismaService.applications.findUnique({
+    let applic = await this.prismaService.applications.findUnique({
       where: { id },
+      include: { user: true },
     });
+
     if (!applic) {
       this.submitLog(user, id, 'NOTFOUND', 0);
-      throw new NotFoundException();
+      throw new NotFoundException(undefined, "Couldn't find the application!");
+    }
+
+    // Don't allow rejecting application when it has already been set to interview and vice versa.
+    // Only allow this to happen when request is coming from the bot, because when reviewer clicks
+    // reject button through `!review` command, we want it to actually reject the application.
+    if (user.role !== 'BOT') {
+      if (
+        (action == 'INTERVIEW' && applic.result == 'REJECTED') ||
+        (action == 'REJECTED' && applic.result == 'INTERVIEW')
+      ) {
+        throw new BadRequestException(
+          undefined,
+          `Can't change application result to ${action.toLowerCase()} when it has already been set to ${applic.result.toLowerCase()}.`
+        );
+      }
     }
 
     //Add Log Notifying that someone attempted to access this
-    if (applic.reviewedAt) {
+    if (applic.result == 'ACCEPTED' || applic.result == 'REJECTED') {
       this.submitLog(user, id, 'FORBIDDEN', 0, 'Already Reviewed');
-      throw new ForbiddenException();
+      throw new ForbiddenException(
+        undefined,
+        'This application has already been reviewed!'
+      );
     }
 
-    await this.prismaService.applications.update({
+    // If current application result is same as result wanting to change to.
+    if (applic.result == action) {
+      this.submitLog(
+        user,
+        id,
+        'FORBIDDEN',
+        0,
+        'Attempted to change result to same result'
+      );
+
+      throw new BadRequestException(
+        undefined,
+        `Application is already set to ${action.toLowerCase()}!`
+      );
+    }
+
+    // Update application with new result and reviewedAt date.
+    // Also updates the `applic` var with the new application.
+    applic = await this.prismaService.applications.update({
       where: { id },
       data: { result: action, reviewedAt: new Date() },
+      include: { user: true },
     });
+
+    // If application is being set to INTERVIEW result,
+    // notify discord bot to create a channel for the interview.
+    // If application is rejected, message applicant with the rejected app msg.
+    if (action == 'INTERVIEW' || action == 'REJECTED') {
+      this.wsGateway.notifyTutorApplication(applic);
+    }
+
     this.submitLog(user, id, 'COMPLETED', 1, `${action} application ${id}`);
   }
 

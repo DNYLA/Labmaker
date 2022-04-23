@@ -13,15 +13,17 @@ export interface IndexProps {}
 export function Tickets(props: IndexProps) {
   const { tickets, loading, setRefresh, refresh, error } = useFetchTickets();
   const user = useSelector((state: RootState) => state.user.value);
+  const isUser = user.role === UserRole.USER;
 
   const navigate = useNavigate();
   const handleCreate = () => navigate('/create');
   const handleFind = () => navigate('/tutor');
+
   return (
     <Page>
       <LoadingSpinner loading={loading} message="Loading Tickets" />
 
-      <Section>
+      <Content>
         {!loading &&
         tickets &&
         (tickets.active.length > 0 || tickets.completed.length > 0) ? (
@@ -33,28 +35,34 @@ export function Tickets(props: IndexProps) {
             setRefresh={setRefresh}
           />
         ) : (
-          <>
-            <h1>You Don't have Any Previous Tickets!</h1>
+          <StyledInfo>
+            <h1>
+              {isUser
+                ? "You Don't Have Any Previous Tickets!"
+                : "You Haven't Worked On Any Tickets Yet!"}
+            </h1>
             <p>
               Dont worry, we've made the process super simple, just click below
               to get started.
             </p>
-            <Button
-              onClick={user.role === UserRole.USER ? handleCreate : handleFind}
-            >
-              {user.role === UserRole.USER ? 'Create Ticket' : 'Find Work'}
+            <Button onClick={isUser ? handleCreate : handleFind}>
+              {isUser ? 'Create Ticket' : 'Find Work'}
             </Button>
-          </>
+          </StyledInfo>
         )}
-      </Section>
+      </Content>
     </Page>
   );
 }
 
-const Section = styled(Content)`
-  /* width: 200vh; */
-  height: 65vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const StyledInfo = styled.div`
+  text-align: center;
+
+  * {
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 20px;
+  }
 `;

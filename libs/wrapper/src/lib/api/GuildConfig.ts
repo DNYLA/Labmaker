@@ -18,7 +18,7 @@ export const getGuildConfig = (serverId: string) =>
   AXIOS.get<GuildConfig>(`/guilds/${serverId}?payments=false`);
 
 export const createGuildConfig = (serverId: string, name: string) =>
-  AXIOS.post<GuildConfig>(`/guilds/${serverId}?name=${name}`);
+  AXIOS.post<GuildConfig>(`/guilds/config/${serverId}?name=${name}`);
 
 export const updateGuildConfig = (config: GuildConfig) =>
   AXIOS.put<GuildConfig>(`guilds`, config);
@@ -58,7 +58,10 @@ export const getApplications = (serverId: string) =>
   AXIOS.get<TutorApplication[]>(`guilds/${serverId}/applications`);
 
 export const reviewApplication = (id: number, action: string) =>
-  AXIOS.put(`guilds/${id}?action=${action}`);
+  AXIOS.put(`guilds/${id}/review?action=${action}`);
+
+export const getApplicationByChannelId = (channelId: string) =>
+  AXIOS.get(`guilds/application/by/channelid/${channelId}`);
 
 export const fetchTicketStatus = (serverId: string) =>
   AXIOS.get<boolean>(`guilds/tickets/${serverId}/enabled`);

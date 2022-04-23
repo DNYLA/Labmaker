@@ -1,5 +1,6 @@
 import { Ticket } from '@labmaker/shared';
 import { Client, GuildMember, Message, MessageEmbed } from 'discord.js';
+import { ApplicationResult, Applications, User } from '@prisma/client';
 
 export default class Logs {
   static async GenerateEmbed(
@@ -12,6 +13,7 @@ export default class Logs {
     const avUrl = `${student.user.displayAvatarURL({
       dynamic: true,
     })}`;
+
     return new MessageEmbed()
       .setColor('#10F9AB')
       .setTitle(ticket.type)
@@ -26,6 +28,50 @@ export default class Logs {
         }
       )
       .setFooter({ text: 'Accepted' })
+      .setThumbnail(`https://i.imgur.com/E7PB9cr.gif`)
+      .setTimestamp();
+  }
+
+  static async GenerateTutorApplicationEmbed(
+    application: Applications & {
+      user: User;
+    },
+    applicant: GuildMember
+  ) {
+    const displayName = `${application.user.username}#${application.user.discriminator} - Application ${application.id}`;
+    const avUrl = `${applicant.displayAvatarURL({
+      dynamic: true,
+    })}`;
+
+    return new MessageEmbed()
+      .setColor('#10F9AB')
+      .setTitle(application.result)
+      .setAuthor({ name: displayName, iconURL: avUrl })
+      .addFields(
+        {
+          name: 'Message',
+          value: application.applicationMessage ?? 'None',
+          inline: false,
+        },
+        {
+          name: 'Subjects',
+          value: application.subjects
+            ? application.subjects.join(', ')
+            : 'None',
+          inline: true,
+        },
+        {
+          name: 'Vouches',
+          value: application.vouchesLink ? application.vouchesLink : 'None',
+          inline: true,
+        },
+        {
+          name: 'Applied',
+          value: new Date(application.createdAt).toLocaleDateString(),
+          inline: true,
+        }
+      )
+      .setFooter({ text: 'Interview Requested' })
       .setThumbnail(`https://i.imgur.com/E7PB9cr.gif`)
       .setTimestamp();
   }

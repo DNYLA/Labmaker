@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UpdateConfigDto } from '../dtos/create-guildconfig.dto';
-import { ApplicationResult, DiscordConfig } from '@prisma/client';
+import { ApplicationResult, Applications, DiscordConfig } from '@prisma/client';
 import { JwtAuthGuard, JwtBotAuthGuard } from '../../auth/guards/Jwt.guard';
 import { CurrentUser } from '../../utils/decorators';
 import { UserDetails } from '../../utils/types';
@@ -40,7 +40,7 @@ export class GuildController {
     return this.guildService.getConfigs();
   }
 
-  @Post('/:id')
+  @Post('/config/:id')
   createConfig(
     @Param('id') id: string,
     @Query('name') name: string
@@ -98,6 +98,15 @@ export class GuildController {
   @Get('/:id/applications')
   getApplications(@Param('id') id: string, @CurrentUser() user: UserDetails) {
     return this.guildService.getApplications(id, user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/application/by/channelid/:channelId')
+  getApplicationByChannelId(
+    @Param('channelId') channelId: string,
+    @CurrentUser() user: UserDetails
+  ) {
+    return this.guildService.getApplicationByChannelId(channelId, user);
   }
 
   @UseGuards(JwtAuthGuard)

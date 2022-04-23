@@ -19,6 +19,10 @@ export class DiscordService {
     return this.discordHttpService.fetchUserGuilds(accessToken);
   }
 
+  async fetchGuildById(guildId: string) {
+    return (await this.discordHttpService.fetchGuildById(guildId)).data;
+  }
+
   async fetchGuildChannels(guildId: string): Promise<PartialGuildChannel[]> {
     return (await this.discordHttpService.fetchGuildChannels(guildId)).data;
   }

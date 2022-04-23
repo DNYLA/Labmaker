@@ -5,13 +5,51 @@ import {
   Message,
   MessageActionRow,
   MessageButton,
+  Permissions,
   TextChannel,
+  User,
 } from 'discord.js';
 import DiscordClient from './client';
+import { InteractionInfo, InteractionArea } from '../events/InteractionCreated';
+
+/**
+ * Make custom id for anything that will cause an
+ * InteractionEvent to fire when used.
+ *
+ * To be used mainly so that when adding perms,
+ * it won't error out when stringifying the obj.
+ * Only easy fix I could find.
+ *
+ * @param info InteractionInfo.
+ * @returns Stringified version of input, but bigints work (used for perms).
+ */
+export function makeCustomId(info: InteractionInfo) {
+  return JSON.stringify(info, (_, v) =>
+    typeof v === 'bigint' ? v.toString() : v
+  );
+}
+
+/**
+ * Send a direct message to a user.
+ * This will simplify sending a DM, since we need to have a catch for if
+ * sending the DM fails. Sending a DM will cause an error if the user
+ * has direct messages disabled for non-friends.
+ * @param user User to send message to.
+ * @param msg Message content.
+ */
+export async function sendDM(user: User, msg: string) {
+  await user
+    .send(msg)
+    .catch(() =>
+      console.info(
+        `${user.username}#${user.discriminator} does not accept private messages.`
+      )
+    );
+}
 
 /**
  * Checks if member has any of the required roles/perms.
- * @param message TextMessage they sent.
+ * @param msgori Message or Interaction. Needed so we can check the user's perms.
  * @param roles Array of roles - member needs to have at least one.
  * @param perms Array of perms - member needs to have at least one, unless they have a role from `roles`.
  * @param errResp Error message to send to channel if user doesn't have perms.
@@ -19,8 +57,8 @@ import DiscordClient from './client';
  */
 export function hasAnyPerms(
   msgori: Message | Interaction,
-  roles: string[],
-  perms: bigint[],
+  roles?: string[],
+  perms?: bigint[],
   errResp?: string
 ): boolean {
   const member = msgori.member as GuildMember;
@@ -36,17 +74,20 @@ export function hasAnyPerms(
   }
 
   // Check perms
-  for (const permission in perms) {
-    if (Object.prototype.hasOwnProperty.call(perms, permission)) {
-      const perm = perms[permission];
+  if (perms) {
+    for (const permission in perms) {
+      if (Object.prototype.hasOwnProperty.call(perms, permission)) {
+        const perm = perms[permission];
 
-      if (member.permissions.has(perm)) {
-        return true;
+        if (member.permissions.has(perm)) {
+          return true;
+        }
       }
     }
   }
 
   if (errResp) channel.send(errResp);
+
   return false;
 }
 
@@ -135,6 +176,44 @@ export function showConfirmation(
   message.reply({
     content: confirmationMsg,
     components: [new MessageActionRow().addComponents([YES, NO])],
+  });
+}
+
+export function showReviewBtns(
+  applicationId: number,
+  channel: TextChannel,
+  msg?: string
+) {
+  if (!msg) msg = 'Accept or reject the application using the buttons below.';
+
+  const acceptBtn = new MessageButton()
+    .setStyle('SUCCESS')
+    .setLabel('Accept')
+    .setCustomId(
+      makeCustomId({
+        areaId: InteractionArea.TutorInterviewReview,
+        payload: { status: 'accepted', data: applicationId },
+        perms: [Permissions.FLAGS.ADMINISTRATOR],
+      })
+    );
+
+  const rejectBtn = new MessageButton()
+    .setStyle('DANGER')
+    .setLabel('Reject')
+    .setCustomId(
+      makeCustomId({
+        areaId: InteractionArea.TutorInterviewReview,
+        payload: {
+          status: 'rejected',
+          data: applicationId,
+        },
+        perms: [Permissions.FLAGS.ADMINISTRATOR],
+      })
+    );
+
+  return channel.send({
+    content: msg,
+    components: [new MessageActionRow().addComponents([acceptBtn, rejectBtn])],
   });
 }
 

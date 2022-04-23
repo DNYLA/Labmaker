@@ -9,7 +9,8 @@ import DiscordClient from './client';
 import { io } from 'socket.io-client';
 import { Permissions } from 'discord.js';
 import Logs from './Logs';
-import { parseTicketMessage } from './Helpers';
+import { parseTicketMessage, sendDM, showReviewBtns } from './Helpers';
+import { ApplicationResult, Applications, User } from '@prisma/client';
 
 export const listen = (accessToken: string, client: DiscordClient) => {
   const socket = io(process.env.API_URL, {
@@ -60,7 +61,11 @@ export const listen = (accessToken: string, client: DiscordClient) => {
         return handleCreate(client, ticketInfo.ticket);
       case TicketNotif.Accepted: {
         const data = await handleAccepted(client, ticketInfo.ticket);
-        socket.emit('ticketChannelId', data);
+        socket.emit('updateChannelId', {
+          which: 'ticket',
+          id: data.id,
+          newChannelId: data.channelId,
+        });
         break;
       }
       case TicketNotif.Resigned:
@@ -75,6 +80,31 @@ export const listen = (accessToken: string, client: DiscordClient) => {
           ticketInfo.ticket,
           TicketNotif.Deleted
         );
+    }
+  });
+
+  socket.on('tutorApplication', async (json: string) => {
+    const application: Applications & {
+      user: User;
+    } = JSON.parse(json);
+
+    switch (application.result) {
+      case ApplicationResult.INTERVIEW: {
+        const appChannel = await handleTutorApplicationInterview(
+          client,
+          application
+        );
+        socket.emit('updateChannelId', {
+          which: 'application',
+          id: application.id,
+          newChannelId: appChannel.id,
+        });
+        break;
+      }
+      case ApplicationResult.REJECTED: {
+        handleTutorApplicationRejection(client, application);
+        break;
+      }
     }
   });
 };
@@ -157,6 +187,86 @@ const handleResignOrDelete = async (
       `The student you were working with on Ticket ${ticket.id} has deleted the ticket and no longer needs help. Sorry for the inconvenience!`
     );
   }
+};
+
+const handleTutorApplicationInterview = async (
+  client: DiscordClient,
+  application: Applications & {
+    user: User;
+  }
+) => {
+  await client.guilds.fetch();
+  const guild = client.guilds.cache.find((g) => g.id === application.serverId);
+  await guild.members.fetch();
+  const applicant = guild.members.cache.find(
+    (m) => m.id === application.user.id
+  );
+  const config = await client.getConfig(application.serverId);
+
+  if (!guild) return;
+
+  const channel = await guild.channels.create('application-1', {
+    type: 'GUILD_TEXT',
+    permissionOverwrites: [
+      // Remove view channel from everyone
+      { id: guild.roles.everyone, deny: [Permissions.FLAGS.VIEW_CHANNEL] },
+
+      // Allow applicant to view channel
+      { id: applicant, allow: [Permissions.FLAGS.VIEW_CHANNEL] },
+
+      // Only admins to review applications currently,
+      // if a role is added for reviewers then can be added here.
+    ],
+    parent: '941188741790314496',
+  });
+
+  // TODO: Replace all these hardcoded messages with parsed msgs from config
+
+  // PM User to notify them of their interview
+  sendDM(
+    applicant.user,
+    `Congratulations <@${application.user.id}>! Your application for the Tutor role have been moved to the interview stage. Head over to <#${channel.id}> and get back to us with when you are available for the interview. Good luck!`
+  );
+
+  // Send same message in application channel.
+  // Some users may have PMs disabled for non-friends so there
+  // is a chance they don't reveice the PM above.
+  channel.send(
+    `Congratulations <@${application.user.id}>! Your application for the Tutor role have been moved to the interview stage. Head over to the server and get back to us with when you are available for the interview. Good luck!`
+  );
+
+  channel
+    .send({
+      embeds: [
+        await Logs.GenerateTutorApplicationEmbed(application, applicant),
+      ],
+    })
+    .then((msg) => msg.pin());
+
+  showReviewBtns(
+    application.id,
+    channel,
+    'Use the `!review` command to bring up the accept/reject buttons again!'
+  );
+
+  return channel;
+};
+
+const handleTutorApplicationRejection = async (
+  client: DiscordClient,
+  application: Applications & { user: User }
+) => {
+  await client.guilds.fetch();
+  const guild = client.guilds.cache.find((g) => g.id === application.serverId);
+  await guild.members.fetch();
+  const applicant = guild.members.cache.find(
+    (m) => m.id === application.user.id
+  );
+
+  sendDM(
+    applicant.user,
+    `Hi <@${application.user.id}>. Unfortunately your tutor application was denied. You can still check your dashboard for when you are able to apply again! We look forward to seeing you soon!`
+  );
 };
 
 const hideChannel = async (client: DiscordClient, ticket: Ticket) => {

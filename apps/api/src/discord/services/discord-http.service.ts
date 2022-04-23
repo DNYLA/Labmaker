@@ -25,6 +25,19 @@ an array of guilds that the user is a member of.
   }
 
   /**
+   * Fetch guild info by its id.
+   * @param id Guild id.
+   * @param userId Used to get guild info.
+   */
+  fetchGuildById(id: string): Promise<AxiosResponse<PartialGuild>> {
+    return axios.get<PartialGuild>(`${DISCORD_API_URL}/guilds/${id}`, {
+      headers: {
+        Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+      },
+    });
+  }
+
+  /**
    * `fetchBotGuilds` is a function that fetches the guilds that the bot is a member of.
    * @returns A list of guilds that the bot is in.
    */

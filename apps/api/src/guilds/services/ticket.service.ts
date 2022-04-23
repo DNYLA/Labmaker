@@ -89,6 +89,7 @@ export class TicketService {
       this.submitLog(user, serverId, 'FORBIDDEN', 0);
       throw new ForbiddenException();
     }
+
     const tickets = await this.prismaService.ticket.findMany({
       orderBy: [{ id: 'desc' }],
       where: {
@@ -96,7 +97,7 @@ export class TicketService {
         completed: false,
         deleted: false,
         tutor: null,
-        due: { gte: new Date() }, //Dont want posts that are already "Due" (Create Cron Job Which automatically Completes them? or do this manually via Admin Dashboard)
+        due: { gte: new Date() }, //Dont want posts that are already "Due"
       },
       select: {
         id: true,

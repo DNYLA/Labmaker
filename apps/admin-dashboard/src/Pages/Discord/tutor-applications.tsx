@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, ComboContainer, InfoTitle, ModalPopup } from '@labmaker/ui';
 import { TutorApplication } from '@labmaker/shared';
-import { getApplications } from '@labmaker/wrapper';
+import { getApplications, reviewApplication } from '@labmaker/wrapper';
 import { useParams } from 'react-router-dom';
+import { AxiosError, AxiosResponse } from 'axios';
+import { toast } from 'react-toastify';
 
 /* eslint-disable-next-line */
 export interface TutorApplicationsProps {}
@@ -12,12 +14,14 @@ export function TutorApplications() {
   const [loading, setLoading] = useState(false);
   const [applications, setApplications] = useState<TutorApplication[]>([]);
   const [modalShown, setModalShown] = useState(false);
-  const [activeApp, setActiveApp] = useState<TutorApplication>(); // Active application for modal
+  const [activeApp, setActiveApp] = useState<TutorApplication | null>(); // Active application for modal
   const { id } = useParams();
 
   useEffect(() => {
     setLoading(true);
+
     if (!id) return;
+
     getApplications(id)
       .then(({ data }) => {
         setApplications(data);
@@ -64,8 +68,47 @@ export function TutorApplications() {
       );
     }
 
-    // todo: center this
     return <div>No Tutor Applications</div>;
+  };
+
+  /**
+   * Update application result, to INTERVIEW or REJECTED.
+   * @param toInterview If true, will proceed application to interview, otherwise will deny.
+   */
+  const updateAppResult = async (toInterview: boolean) => {
+    const app = activeApp;
+
+    if (app) {
+      await reviewApplication(
+        activeApp?.id,
+        toInterview ? 'INTERVIEW' : 'REJECTED'
+      )
+        .catch((r: AxiosError) => {
+          if (r.response?.data.message) {
+            toast.error(r.response?.data.message);
+          }
+        })
+        .then((r) => {
+          // Only close modal if result is OK.
+          // User might need to note down application id if an error is thrown,
+          // closing the modal wouldn't allow them to do that.
+          if (r && r.status === 200) {
+            // Remove the app from applications list
+            setApplications(applications.filter((e) => e.id !== activeApp.id));
+
+            setModalShown(false);
+            setActiveApp(null);
+
+            toast.success(
+              `${
+                toInterview
+                  ? 'Interviewing applicant. Check discord for the newly created application channel'
+                  : 'Rejected application'
+              }.`
+            );
+          }
+        });
+    }
   };
 
   return (
@@ -88,8 +131,8 @@ export function TutorApplications() {
           <p>Created: {activeApp.createdAt}</p>
 
           <ComboContainer>
-            <Button>Accept</Button>
-            <Button>Deny</Button>
+            <Button onClick={() => updateAppResult(true)}>Interview</Button>
+            <Button onClick={() => updateAppResult(false)}>Deny</Button>
           </ComboContainer>
         </ModalPopup>
       )}
