@@ -24,12 +24,12 @@ export class PaymentController {
     return this.paymentService.getPayments(serverId);
   }
 
-  @Post('')
-  async createPayments(
-    @Body() body: CreatePaymentDtoArray
-  ): Promise<Payment[] | undefined> {
-    return await this.paymentService.createPayments(body);
-  }
+  //   @Post('')
+  //   async createPayments(
+  //     @Body() body: CreatePaymentDtoArray
+  //   ): Promise<Payment[] | undefined> {
+  //     return await this.paymentService.createPayments(body);
+  //   }
 
   @Put('')
   updatePayments(@Body() body: UpdatePaymentDtoArray): Promise<Payment[]> {

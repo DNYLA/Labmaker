@@ -48,7 +48,7 @@ export class TicketController {
     return this.ticketService.getServerTickets(serverId, user);
   }
 
-  @Post()
+  @Post('')
   @UseGuards(JwtAuthGuard)
   createTicket(
     @Body() body: CreateTicketDto,
