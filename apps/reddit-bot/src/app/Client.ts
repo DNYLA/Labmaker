@@ -154,7 +154,9 @@ export class Client {
     // const fetchedLogs = await Labmaker.Log.getLogs(this.config.id);
     // this.localLogs.push(fetchedLogs);
     this.resetListener();
-    const delay = CalculateMinimumDelay(this.config.subreddits.length, 5) * 3; //Minimum Delay is too little to poll anyways
+    //CalculatEMinumDFelaybroken.
+    // const delay = CalculateMinimumDelay(this.config.subreddits.length, 5) * 3; //Minimum Delay is too little to poll anyways
+    const delay = 30000; //hard coded to 30 seconds due to reddit API limitations banning users.
 
     this.config.subreddits.forEach((subreddit, index) => {
       this.streams.push(
@@ -183,6 +185,13 @@ export class Client {
 
 //Snoowrap delays Posts every second anyways but this option allows us to not constantly call subreddits
 //Calculates the minimum amount of delay to send a GET request every second at Worst Case scenario
+// FUNCTION CURRENTLY BROKEN
+/* Math is "wrong" for a config with one subreddit the minimumDelay is 0.6 seconds
+   delay which would result in 1000 calls every 10 minutes.
+   the new function should be optimised to take into account a minimumDelay set by the program
+   where u aren't requesting every <30 seconds as there is no need to poll a subreddit
+   that many times.
+*/
 function CalculateMinimumDelay(subredditLen: number, maxSubLimit: number) {
   const maxRateLimit = 600 - subredditLen * maxSubLimit; //Incase we PM every subreddit with the amount of submissions we retreive
   const maxRateMin = maxRateLimit / 10; //600 Requests every 10 minutes
